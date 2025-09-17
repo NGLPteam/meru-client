@@ -21,7 +21,7 @@ export default function AssetPDFPreview({ data }: Props) {
     ({ numPages }: { numPages: number }) => {
       setNumPages(numPages);
     },
-    [setNumPages]
+    [setNumPages],
   );
 
   return isMounted && file ? (

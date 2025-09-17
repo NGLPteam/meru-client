@@ -9,7 +9,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_FE_URL;
 
 export default async function generateCommunityMetadata(
   props: BasePageParams,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { slug } = await props.params;
 
@@ -33,11 +33,11 @@ export default async function generateCommunityMetadata(
         alt: community.heroImageMetadata?.alt ?? "",
       }
     : community?.thumbnail?.image?.webp?.url
-    ? {
-        url: community.thumbnail.image.webp.url,
-        alt: community.thumbnailMetadata?.alt ?? "",
-      }
-    : null;
+      ? {
+          url: community.thumbnail.image.webp.url,
+          alt: community.thumbnailMetadata?.alt ?? "",
+        }
+      : null;
 
   const images = image?.url ? [image] : [];
 

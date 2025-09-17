@@ -20,14 +20,14 @@ export default function ViewCounter({
 }) {
   const [_queryReference, loadQuery] = useQueryLoader<ViewCounterQuery>(
     query,
-    initialQueryRef
+    initialQueryRef,
   );
 
   const fetchQuery = useCallback(
     (variables: ViewCounterQuery$variables) => {
       loadQuery({ ...variables }, { fetchPolicy: "store-and-network" });
     },
-    [loadQuery]
+    [loadQuery],
   );
 
   useEffect(() => {

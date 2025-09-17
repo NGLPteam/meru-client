@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 
 const AssetInlinePDF = dynamic(
   () => import("@/components/composed/asset/AssetInlinePDF"),
-  { ssr: false }
+  { ssr: false },
 );
 
 type Props = PropsWithChildren & {

@@ -90,7 +90,7 @@ export default function SearchFilters({
 
   const coreProps = useMemo(
     () => filterSearchableProperties<FilterNode>(searchData.coreProperties),
-    [searchData]
+    [searchData],
   );
 
   return (

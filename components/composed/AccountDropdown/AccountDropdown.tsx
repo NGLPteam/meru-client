@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useCallback, useMemo } from "react";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import useViewerContext from "@/contexts/useViewerContext";
 import { Avatar, Dropdown, Link } from "@/components/atomic";
 import IconFactory from "@/components/factories/IconFactory";

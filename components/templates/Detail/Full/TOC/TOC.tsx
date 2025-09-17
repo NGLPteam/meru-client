@@ -43,7 +43,7 @@ export default function TOC({
         <h3
           className={classNames(
             "t-label-sm t-copy-light",
-            styles["toc__header"]
+            styles["toc__header"],
           )}
         >
           {t("glossary.table_of_contents")}

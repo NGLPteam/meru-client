@@ -16,7 +16,7 @@ export default function EntityAnnouncementLayout({ data }: Props) {
     <div
       className={classNames(
         styles.wrapper,
-        "t-rte l-container-wide a-bg-neutral00"
+        "t-rte l-container-wide a-bg-neutral00",
       )}
     >
       <h3>{announcement.header}</h3>

@@ -84,6 +84,7 @@
     "postcss-import": "^16.1.0",
     "postcss-mixins": "^11.0.3",
     "postcss-nested": "^7.0.2",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.0"
   },

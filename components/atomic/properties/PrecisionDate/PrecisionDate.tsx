@@ -10,7 +10,7 @@ export default function PrecisionDate({ data, label }: Props) {
   return date && date.value ? (
     <>{`${label ? t(label) : ""} ${getPrecisionDateDisplay(
       date.precision,
-      date.value
+      date.value,
     )}`}</>
   ) : null;
 }

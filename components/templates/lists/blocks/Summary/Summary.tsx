@@ -138,7 +138,8 @@ export default function SummaryListBlock({
                     <span>
                       {headerAside?.valid && !!headerAside.content && (
                         <span>
-                          <InlineSlotWrapper content={headerAside.content} />,{" "}
+                          <InlineSlotWrapper content={headerAside.content} />
+                          ,{" "}
                         </span>
                       )}
                       <InlineSlotWrapper content={header.content} />

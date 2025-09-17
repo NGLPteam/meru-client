@@ -159,14 +159,14 @@ interface GlobalProps {
 
 const fragment = graphql`
   fragment SearchLayoutFragment on Query
-    @refetchable(queryName: "SearchLayoutQuery")
-    @argumentDefinitions(
-      query: { type: "String", defaultValue: "" }
-      predicates: { type: "[SearchPredicateInput!]", defaultValue: [] }
-      page: { type: "Int", defaultValue: 1 }
-      order: { type: "EntityOrder", defaultValue: PUBLISHED_ASCENDING }
-      schema: { type: "[String!]", defaultValue: [] }
-    ) {
+  @refetchable(queryName: "SearchLayoutQuery")
+  @argumentDefinitions(
+    query: { type: "String", defaultValue: "" }
+    predicates: { type: "[SearchPredicateInput!]", defaultValue: [] }
+    page: { type: "Int", defaultValue: 1 }
+    order: { type: "EntityOrder", defaultValue: PUBLISHED_ASCENDING }
+    schema: { type: "[String!]", defaultValue: [] }
+  ) {
     search {
       results(
         query: $query
@@ -185,14 +185,14 @@ const fragment = graphql`
 
 const entityFragment = graphql`
   fragment SearchLayoutEntityFragment on Entity
-    @refetchable(queryName: "SearchLayoutEntityQuery")
-    @argumentDefinitions(
-      query: { type: "String", defaultValue: "" }
-      predicates: { type: "[SearchPredicateInput!]", defaultValue: [] }
-      page: { type: "Int", defaultValue: 1 }
-      order: { type: "EntityOrder", defaultValue: PUBLISHED_ASCENDING }
-      schema: { type: "[String!]", defaultValue: [] }
-    ) {
+  @refetchable(queryName: "SearchLayoutEntityQuery")
+  @argumentDefinitions(
+    query: { type: "String", defaultValue: "" }
+    predicates: { type: "[SearchPredicateInput!]", defaultValue: [] }
+    page: { type: "Int", defaultValue: 1 }
+    order: { type: "EntityOrder", defaultValue: PUBLISHED_ASCENDING }
+    schema: { type: "[String!]", defaultValue: [] }
+  ) {
     search {
       results(
         query: $query

@@ -9,7 +9,7 @@ import { getCurrentEnvironment } from "./environment";
 export default function RelayEnvironmentProvider(
   props: {
     initialRecords?: RecordMap;
-  } & PropsWithChildren
+  } & PropsWithChildren,
 ) {
   const session = useSession();
 
@@ -18,7 +18,7 @@ export default function RelayEnvironmentProvider(
   const env = useRef(
     getCurrentEnvironment({
       sessionToken: sessionRef.current?.accessToken,
-    })
+    }),
   );
 
   return (

@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 const BASE_URL = process.env.NEXT_PUBLIC_FE_URL;
 
 export default async function generateSiteMetadata(
-  _props: BasePageParams
+  _props: BasePageParams,
 ): Promise<Metadata> {
   const { data } = (await fetchQuery<Query>(query, {})) ?? {};
 

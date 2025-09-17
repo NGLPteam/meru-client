@@ -1,7 +1,7 @@
 import { SearchPredicateInput } from "@/types/graphql-schema";
 
 export function getPredicates(
-  filters: Record<string, string>
+  filters: Record<string, string>,
 ): [SearchPredicateInput] | undefined {
   const predicates: [SearchPredicateInput?] = [];
 
@@ -43,13 +43,13 @@ type Property = Readonly<{ readonly searchPath?: string | undefined }>;
 // Filter searchableProperties by their searchPath, using the above array.
 // Example: filterSearchableProperties<FilterNode>(searchData.coreProperties)
 export function filterSearchableProperties<T extends Property>(
-  properties: Readonly<T[]>
+  properties: Readonly<T[]>,
 ) {
   if (!properties) return [];
 
   return properties.filter(
     (prop: T) =>
-      prop.searchPath && FILTER_SEARCH_PATHS.includes(prop.searchPath)
+      prop.searchPath && FILTER_SEARCH_PATHS.includes(prop.searchPath),
   );
 }
 

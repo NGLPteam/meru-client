@@ -3,7 +3,7 @@ import { graphql, useFragment } from "react-relay";
 import { useTranslation } from "react-i18next";
 import startCase from "lodash/startCase";
 import classNames from "classnames";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import { Search } from "@/components/forms";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";

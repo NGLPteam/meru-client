@@ -17,12 +17,11 @@ export default function CoverPlaceholder({
   const nextBool: (state: AleaState) => boolean = nextT((n) => n < 0.5);
   const mkNext0toMax = (
     state: AleaState,
-    max: number
+    max: number,
   ): ((state: AleaState) => number) => nextT((n) => Math.floor(n * max));
 
   const { random } = mkAlea(seed);
 
-   
   const mkNextElement = <T,>(values: T[]): (() => T) => {
     const nextIndex = mkNext0toMax(randomState, values.length);
     return () => values[nextIndex(randomState)];
@@ -87,10 +86,8 @@ export default function CoverPlaceholder({
   if (titleHeight < gridSize) titleHeight = gridSize;
   const titlePositionY = titlePositionTop ? 0 : height - titleHeight;
 
-   
   let nw, ne, se, sw, circle, halfCircle;
 
-   
   nw = {
     path: <path d={`M 0, 90 a 90,90 0 1,0 180,0 a 90,90 0 1,0 -180, 0`} />,
     debug: "nw",
@@ -131,7 +128,7 @@ export default function CoverPlaceholder({
       w: null,
     },
   };
-   
+
   circle = {
     path: <circle cx="45" cy="45" r="45" />,
     debug: "circle",

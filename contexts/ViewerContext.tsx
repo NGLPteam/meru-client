@@ -66,7 +66,7 @@ export { ViewerContextProvider };
 
 const fragment = graphql`
   fragment ViewerContextFragment on Query
-    @refetchable(queryName: "ViewerRefetchQuery") {
+  @refetchable(queryName: "ViewerRefetchQuery") {
     viewer {
       name
       allowedActions

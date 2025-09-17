@@ -39,7 +39,7 @@ export default function BrowseTreeLayout({
         </TreeAccordion>
       ) : (
         <BrowseTreeItem key={node.id} data={node} />
-      )
+      ),
     );
   }
 

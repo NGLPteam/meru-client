@@ -21,7 +21,6 @@ import StatBlocks from "../StatBlocks";
 import { chartSettingsReducer } from "./settingsReducer";
 import styles from "./ArticleAnalyticsBlock.module.css";
 
-
 type Props = {
   data: ArticleAnalyticsBlockFragment$key;
 };
@@ -59,12 +58,12 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
         return;
       });
     },
-    [startTransition, refetch]
+    [startTransition, refetch],
   );
 
   const [settings, dispatchSettingsUpdate] = useReducer(
     chartSettingsReducer,
-    initalSettings
+    initalSettings,
   );
 
   useEffect(() => {
@@ -110,12 +109,12 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
 
 const fragment = graphql`
   fragment ArticleAnalyticsBlockFragment on Item
-    @refetchable(queryName: "ArticleAnalyticsBlockQuery")
-    @argumentDefinitions(
-      dateRange: { type: "DateFilterInput", defaultValue: {} }
-      precision: { type: "AnalyticsPrecision", defaultValue: YEAR }
-      usOnly: { type: "Boolean", defaultValue: false }
-    ) {
+  @refetchable(queryName: "ArticleAnalyticsBlockQuery")
+  @argumentDefinitions(
+    dateRange: { type: "DateFilterInput", defaultValue: {} }
+    precision: { type: "AnalyticsPrecision", defaultValue: YEAR }
+    usOnly: { type: "Boolean", defaultValue: false }
+  ) {
     downloadsByDate: assetDownloads(
       dateFilter: $dateRange
       precision: $precision
