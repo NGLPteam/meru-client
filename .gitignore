@@ -8,20 +8,14 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 !.yarn/releases
-
 # testing
-/packages/admin/coverage
-/packages/frontend/coverage
+/coverage
 
 # next.js
-/packages/admin/.next/
-/packages/frontend/.next/
-/packages/admin/out
-/packages/frontend/out
+/.next/
 
 # production
-/packages/admin/build
-/packages/frontend/build
+/build
 
 # misc
 .DS_Store
@@ -42,13 +36,4 @@ yarn-error.log*
 # vercel
 .vercel
 
-# IDEs
-.idea
-
-# Eslint
-.eslintcache
-
 tsconfig.tsbuildinfo
-
-# Turbo
-.turbo

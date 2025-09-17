@@ -1,0 +1,60 @@
+import { getCurrentEnvironment as environment } from "@/lib/relay/environment";
+import { GetServerSidePropsContext } from "next";
+import { fetchQuery, graphql } from "relay-runtime";
+import { buildSiteMap, EXTERNAL_DATA_URL } from "@/helpers";
+import {
+  sitemapPagesQuery,
+  sitemapPagesQuery$data,
+} from "@/relay/sitemapPagesQuery.graphql";
+
+function generateSiteMap(data: sitemapPagesQuery$data) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     <url>
+       <loc>${EXTERNAL_DATA_URL}</loc>
+     </url>
+     <url>
+       <loc>${EXTERNAL_DATA_URL}/search</loc>
+     </url>
+     ${data?.communities?.nodes
+       .map(({ slug }) => {
+         return `
+       <url>
+          <loc>${`${EXTERNAL_DATA_URL}/communities/${slug}`}</loc>
+       </url>
+     `;
+       })
+       .join("")}
+   </urlset>
+ `;
+}
+
+function SiteMap() {
+  // getServerSideProps will do the heavy lifting
+}
+
+export async function getServerSideProps({ res }: GetServerSidePropsContext) {
+  const env = environment();
+  const data = await fetchQuery<sitemapPagesQuery>(env, query, {}).toPromise();
+
+  if (data) {
+    const sitemap = generateSiteMap(data);
+    buildSiteMap(res, sitemap);
+  }
+
+  return {
+    props: {},
+  };
+}
+
+export default SiteMap;
+
+const query = graphql`
+  query sitemapPagesQuery {
+    communities {
+      nodes {
+        slug
+      }
+    }
+  }
+`;

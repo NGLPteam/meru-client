@@ -1,0 +1,25 @@
+ignores: [
+  "typescript",
+  "tailwindcss",
+
+  # postcss.config.js references plugins by string name
+  "@csstools/postcss-oklab-function",
+  "postcss-import",
+  "postcss-mixins",
+  "autoprefixer",
+  "postcss-assign-layer",
+
+  # ignore depcheck!
+  "depcheck",
+
+  # used only as annotation on component files
+  "client-only",
+
+  "mdx",
+  "@mdx-js/mdx",
+
+  # browserslist config package; referenced as a string in package.json
+  "browserslist-config-baseline",
+
+  "i18n"
+]
