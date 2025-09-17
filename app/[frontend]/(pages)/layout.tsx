@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import getStaticGlobalContextData from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
 import { GlobalStaticContextProvider } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
+import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
 import fetchQuery from "@/lib/relay/fetchQuery";
 import RelayEnvironmentProvider from "@/lib/relay/RelayClientEnvProvider";
 import { layoutAllPagesQuery as Query } from "@/relay/layoutAllPagesQuery.graphql";
@@ -11,12 +12,13 @@ import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
 import { ViewerContextProvider } from "@/contexts/ViewerContext";
 import AppBody from "@/components/global/AppBody";
 import { BasePageParams } from "@/types/page";
+import ProgressBar from "@/components/atomic/loading/ProgressBar";
 import generateSiteMetadata from "./_metadata/site";
 
 export const revalidate = 3600;
 
 export async function generateMetadata(
-  props: BasePageParams,
+  props: BasePageParams
 ): Promise<Metadata> {
   return generateSiteMetadata(props);
 }
@@ -33,7 +35,10 @@ export default async function PageLayout({ children }: PropsWithChildren) {
           <RelayEnvironmentProvider>
             <ViewerContextProvider data={data}>
               <UpdateClientEnvironment records={records}>
-                <AppBody data={data}>{children}</AppBody>
+                <ProgressBarProvider>
+                  <ProgressBar />
+                  <AppBody data={data}>{children}</AppBody>
+                </ProgressBarProvider>
               </UpdateClientEnvironment>
             </ViewerContextProvider>
           </RelayEnvironmentProvider>
