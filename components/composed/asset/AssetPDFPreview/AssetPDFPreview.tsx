@@ -6,7 +6,13 @@ import { LoadingBlock } from "@/components/atomic";
 import { AssetPDFPreviewFragment$key } from "@/relay/AssetPDFPreviewFragment.graphql";
 import AssetPDFPage from "../AssetPDFPage";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import "react-pdf/dist/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url,
+).toString();
 
 export default function AssetPDFPreview({ data }: Props) {
   const pdf = useFragment(fragment, data);

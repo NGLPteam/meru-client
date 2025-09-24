@@ -12,8 +12,13 @@ import AssetInlinePDFNav from "./AssetInlinePDFNav";
 import AssetInlinePDFPage from "./AssetInlinePDFPage";
 import styles from "./AssetInlinePDF.module.css";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import "react-pdf/dist/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
 
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url,
+).toString();
 type Props = {
   url?: string | null;
   size?: string | null;
@@ -126,6 +131,7 @@ export default function AssetInlinePDF({ url, size }: Props) {
                   components={{
                     downloadLink: (
                       <a
+                        key="no-content"
                         className="no-hover-shadow hover:text-neutral-90"
                         style={{
                           marginInlineStart: "5px",
