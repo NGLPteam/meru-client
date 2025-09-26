@@ -25,7 +25,7 @@
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "graphql": "^16.8.1",
-    "i18next": "^24.2.2",
+    "i18next": "^25.5.2",
     "i18next-browser-languagedetector": "^8.0.4",
     "lodash": "^4.17.21",
     "markdown-to-txt": "^2.0.1",
