@@ -1,0 +1,6 @@
+*.swp
+.env.development
+.env.local
+.github
+.git
+node_modules
