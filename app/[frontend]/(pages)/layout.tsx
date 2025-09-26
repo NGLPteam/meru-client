@@ -15,7 +15,7 @@ import { BasePageParams } from "@/types/page";
 import ProgressBar from "@/components/atomic/loading/ProgressBar";
 import generateSiteMetadata from "./_metadata/site";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export async function generateMetadata(
   props: BasePageParams,
