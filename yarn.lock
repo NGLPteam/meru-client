@@ -193,7 +193,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.26.10":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.26.10":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
   checksum: 10c0/792ce7af9750fb9b93879cc9d1db175701c4689da890e6ced242ea0207c9da411ccf16dc04e689cc01158b28d7898c40d75598f4559109f761c12ce01e959bf7
@@ -5634,7 +5634,7 @@ __metadata:
     regenerator-runtime: "npm:^0.14.1"
     rehype-raw: "npm:^7.0.0"
     relay-compiler: "npm:^16.2.0"
-    relay-runtime: "npm:^16.2.0"
+    relay-runtime: "npm:^20.1.1"
     remark-gfm: "npm:^4.0.0"
     sharp: "npm:^0.33.4"
     tailwindcss: "npm:^3.4.15"
@@ -7374,7 +7374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"relay-runtime@npm:16.2.0, relay-runtime@npm:^16.2.0":
+"relay-runtime@npm:16.2.0":
   version: 16.2.0
   resolution: "relay-runtime@npm:16.2.0"
   dependencies:
@@ -7382,6 +7382,17 @@ __metadata:
     fbjs: "npm:^3.0.2"
     invariant: "npm:^2.2.4"
   checksum: 10c0/770dc36203a3d0a7c285ac446ac601cfa8a87da2af8ee9a9cc3c5533c506655e457b276bc40c6e0f274556dce258b2407a5d17e6582bbc9902af5f1dd9081c3a
+  languageName: node
+  linkType: hard
+
+"relay-runtime@npm:^20.1.1":
+  version: 20.1.1
+  resolution: "relay-runtime@npm:20.1.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.0"
+    fbjs: "npm:^3.0.2"
+    invariant: "npm:^2.2.4"
+  checksum: 10c0/c12bc83902f6b93f9f2f855f6dd2c16ae4aaa3915c79819b6d5ab923c025856f43763959bea6054826f9d6f1f8006df09f260eb5b6bead8c4b20f79304fbae86
   languageName: node
   linkType: hard
 
