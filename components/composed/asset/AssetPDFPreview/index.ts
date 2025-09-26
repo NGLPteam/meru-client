@@ -1,1 +1,5 @@
-export { default } from "./AssetPDFPreview";
+"use client";
+
+import dynamic from "next/dynamic";
+
+export default dynamic(() => import("./AssetPDFPreview"), { ssr: false });
