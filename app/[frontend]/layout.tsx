@@ -11,7 +11,7 @@ import { layoutThemeQuery as Query } from "@/relay/layoutThemeQuery.graphql";
 import { getThemeClasses } from "@/styles/theme-helpers";
 import type { PropsWithChildren } from "react";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const { data } = await fetchQuery<Query>(query, {});
