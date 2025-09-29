@@ -33,7 +33,7 @@ export default async function ItemPage({ params }: BasePageParams) {
     <UpdateClientEnvironment records={records}>
       <MetadataTemplate data={template} />
       <FullTextFallback>
-        <MainLayout data={main} />
+        <MainLayout data={main} fallback />
       </FullTextFallback>
     </UpdateClientEnvironment>
   ) : null;

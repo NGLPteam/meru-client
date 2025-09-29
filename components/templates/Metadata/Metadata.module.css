@@ -11,7 +11,7 @@
   padding-block-start: var(--padding-xl);
   grid-column-gap: var(--padding-xl);
   grid-row-gap: var(--padding-lg);
-  grid-template-rows: repeat(8, auto);
+  grid-template-rows: auto;
 
   @mixin respond theme("screens.100") {
     --grid-col-count: 2;

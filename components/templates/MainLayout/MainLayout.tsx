@@ -14,9 +14,11 @@ import styles from "./MainLayout.module.css";
 export default function MainLayout({
   data,
   computedBgStart,
+  fallback = false,
 }: {
   data?: MainLayoutFragment$key | null;
   computedBgStart?: HeroBackground;
+  fallback?: boolean;
 }) {
   const { allHidden, templates, entity } = useFragment(fragment, data) ?? {};
 
@@ -25,14 +27,18 @@ export default function MainLayout({
       ? generateBgMap(computedBgStart, templates[0], templates[1])
       : null;
 
-  return allHidden || !templates ? (
+  const renderedTemplates = fallback
+    ? templates?.filter((t) => t.templateKind !== "DETAIL")
+    : templates;
+
+  return allHidden || !renderedTemplates ? (
     <Container className="my-5">
       <ProcessingMessage entityType={entity?.__typename.toLowerCase()} />
     </Container>
   ) : (
     <div className={styles.grid}>
-      {!!templates?.length &&
-        templates.map((t, i) => {
+      {!!renderedTemplates?.length &&
+        renderedTemplates.map((t, i) => {
           const bgOverride = bgMap?.[i];
           return (
             <TemplateFactory
@@ -58,6 +64,7 @@ const fragment = graphql`
     templates {
       ... on TemplateInstance {
         hidden
+        templateKind
         prevSiblings {
           dark
           hidden

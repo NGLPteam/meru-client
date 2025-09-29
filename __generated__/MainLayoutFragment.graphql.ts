@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<721acbac1fe63e73f72352dd9d9cbfe6>>
+ * @generated SignedSource<<3a30b87ba6bda2c592beb8c72f3a0f29>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -30,6 +30,7 @@ export type MainLayoutFragment$data = {
       readonly position: number;
       readonly templateKind: TemplateKind;
     }>;
+    readonly templateKind?: TemplateKind;
     readonly " $fragmentSpreads": FragmentRefs<"FactoryTemplatesFragment">;
   }>;
   readonly " $fragmentType": "MainLayoutFragment";
@@ -47,7 +48,14 @@ var v0 = {
   "name": "hidden",
   "storageKey": null
 },
-v1 = [
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "templateKind",
+  "storageKey": null
+},
+v2 = [
   {
     "alias": null,
     "args": null,
@@ -63,13 +71,7 @@ v1 = [
     "name": "position",
     "storageKey": null
   },
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "templateKind",
-    "storageKey": null
-  }
+  (v1/*: any*/)
 ];
 return {
   "argumentDefinitions": [],
@@ -114,6 +116,7 @@ return {
           "kind": "InlineFragment",
           "selections": [
             (v0/*: any*/),
+            (v1/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -121,7 +124,7 @@ return {
               "kind": "LinkedField",
               "name": "prevSiblings",
               "plural": true,
-              "selections": (v1/*: any*/),
+              "selections": (v2/*: any*/),
               "storageKey": null
             },
             {
@@ -131,7 +134,7 @@ return {
               "kind": "LinkedField",
               "name": "nextSiblings",
               "plural": true,
-              "selections": (v1/*: any*/),
+              "selections": (v2/*: any*/),
               "storageKey": null
             }
           ],
@@ -152,6 +155,6 @@ return {
 };
 })();
 
-(node as any).hash = "515364d7c7a8aa7aac1c15f01676d153";
+(node as any).hash = "f207b317ebb00e1736c18a2aa7c9db87";
 
 export default node;
