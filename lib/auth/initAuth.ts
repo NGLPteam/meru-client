@@ -12,6 +12,7 @@ export const config = {
     logo: "https://next-auth.js.org/img/logo/logo-sm.png",
   },
   providers: [makeKeycloakProvider()],
+  trustHost: true,
   callbacks: {
     // Declared types can likely be removed here once we're past next-auth v5 beta 4.
     // See https://github.com/nextauthjs/next-auth/issues/9633
