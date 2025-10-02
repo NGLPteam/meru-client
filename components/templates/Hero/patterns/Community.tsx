@@ -19,7 +19,7 @@ export default function CommunityHeroHeader({
   const pathname = usePathname();
   const mainRegex = /^\/communities\/[A-Za-z0-9]{30,32}$/;
 
-  const isMain = mainRegex.test(pathname);
+  const isMain = mainRegex.test(pathname) || pathname.startsWith("/permalink");
 
   const layout = useFragment(fragment, data);
 
