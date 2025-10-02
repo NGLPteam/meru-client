@@ -5,7 +5,6 @@ ENV NODE_ENV=production
 ENV WDP_APP=frontend
 WORKDIR /app
 COPY package.json yarn.lock* .yarnrc.yml ./
-COPY .yarn ./.yarn/
 
 RUN corepack enable
 RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn install
@@ -34,7 +33,6 @@ ENV NEXT_PUBLIC_ADMIN_URL="NP--ADMIN--URL"
 ENV NEXT_PUBLIC_API_URL="NP--API--URL"
 ENV NEXT_PUBLIC_TUS_URL="NP--TUS--URL"
 
-COPY --from=deps /app/.yarn ./.yarn
 COPY --from=deps /app/node_modules ./node_modules
 COPY . ./
 
