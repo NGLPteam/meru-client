@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { graphql, useFragment } from "react-relay";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -33,7 +34,8 @@ export default function AppHeader({ data, searchData }: Props) {
 
   const { t } = useTranslation();
 
-  const dialog = useDialogState({ animated: true });
+  const { baseId: _baseId, ...dialog } = useDialogState({ animated: true });
+  const baseId = useId();
 
   const totalCommunities = appData?.communities?.pageInfo.totalCount || 0;
 
@@ -68,13 +70,17 @@ export default function AppHeader({ data, searchData }: Props) {
             <AccountDropdown condensed={!isCommunityRoot} />
           </div>
           <div className={styles.mobileRight}>
-            <DialogDisclosure as={MobileMenuToggle} {...dialog} />
+            <DialogDisclosure
+              as={MobileMenuToggle}
+              baseId={baseId}
+              {...dialog}
+            />
           </div>
         </div>
         <BaseDrawer
           header={<CommunityPicker data={appData} />}
           footer={<InstallationName data={appData?.globalConfiguration} />}
-          dialog={dialog}
+          dialog={{ ...dialog, baseId }}
           label={t("nav.menu")}
         >
           <div className={styles.mobileList}>

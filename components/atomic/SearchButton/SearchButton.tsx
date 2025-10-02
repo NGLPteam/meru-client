@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import { graphql, useFragment } from "react-relay";
@@ -13,7 +14,8 @@ export default function SearchButton({ data, size = "sm" }: Props) {
   const style = {
     "--search-button-size": `${pxToRem(imageSize)}`,
   } as React.CSSProperties;
-  const dialog = useDialogState({ modal: true });
+  const { baseId: _baseId, ...dialog } = useDialogState({ modal: true });
+  const baseId = useId();
   const searchData = useFragment(fragment, data);
 
   return (
@@ -22,6 +24,7 @@ export default function SearchButton({ data, size = "sm" }: Props) {
         as={"button"}
         className={styles.button}
         style={style}
+        baseId={baseId}
         {...dialog}
       >
         <IconFactory
@@ -30,7 +33,7 @@ export default function SearchButton({ data, size = "sm" }: Props) {
         />
         <span className="sr-only">{t("search.label")}</span>
       </DialogDisclosure>
-      <SearchModal dialog={dialog} data={searchData} />
+      <SearchModal dialog={{ ...dialog, baseId }} data={searchData} />
     </>
   );
 }
