@@ -24,9 +24,15 @@ export default function BreadcrumbsBar({
   const url = useMemo(() => {
     if (!breadcrumbData) return null;
 
-    const { slug, __typename: type } = breadcrumbData;
+    const { slug, __typename: type, permalinks } = breadcrumbData;
 
     const origin = getOrigin();
+
+    if (permalinks?.length) {
+      const canonical = permalinks.find((p) => p.canonical);
+
+      if (canonical) return `${origin}/permalink/${canonical.uri}`;
+    }
 
     const route = getRouteByEntityType(type);
 
@@ -95,6 +101,12 @@ export const fragment = graphql`
     title
     ... on Sluggable {
       slug
+    }
+    ... on Permalinkable {
+      permalinks {
+        canonical
+        uri
+      }
     }
     ...BreadcrumbsFragment
   }
