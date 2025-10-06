@@ -6,6 +6,7 @@ import { useSharedInlineFragment } from "@/components/templates/shared/shared.sl
 import InlineSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import Container from "@/components/layout/Container";
 import type { HeroBackground } from "@/types/graphql-schema";
+import SeeAll from "@/components/templates/lists/SeeAll";
 import Contributor from "./Contributor";
 import styles from "./Contributors.module.css";
 
@@ -34,10 +35,12 @@ export default function ContributorsTemplate({
 
   const shouldRender = !!attributions?.length;
 
-  const renderedContributors =
-    limit && typeof limit === "number"
-      ? attributions?.slice(0, limit)
-      : attributions;
+  const renderedContributors = limit
+    ? attributions?.slice(0, limit)
+    : attributions;
+
+  const showSeeAll =
+    limit && attributions?.length > limit && entity.__typename === "Collection";
 
   const backParams =
     entity.__typename !== "%other"
@@ -66,6 +69,15 @@ export default function ContributorsTemplate({
           <Contributor key={i} data={c} backParams={backParams} />
         ))}
       </ul>
+      {showSeeAll && (
+        <SeeAll
+          alignment="left"
+          size="sm"
+          icon="linkExternal"
+          href={`/collections/${entity.slug}/contributors`}
+          className={styles.seeAll}
+        />
+      )}
     </Container>
   ) : null;
 }

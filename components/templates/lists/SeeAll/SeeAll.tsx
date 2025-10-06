@@ -9,6 +9,8 @@ export type SeeAllProps = {
   href: string;
   alignment: "center" | "left";
   className?: string;
+  icon?: React.ComponentProps<typeof Button>["icon"];
+  size?: "sm" | "lg";
 };
 
 export default function SeeAll(props: SeeAllProps) {
@@ -21,7 +23,7 @@ export default function SeeAll(props: SeeAllProps) {
       })}
     >
       <NamedLink href={props.href}>
-        <Button as="div">
+        <Button as="div" icon={props.icon} size={props.size}>
           <span className="t-capitalize">
             {props.buttonLabel ?? t("nav.see_all")}
           </span>
