@@ -6,12 +6,15 @@ const BaseContributionsBlock = ({
   children,
   background = "custom10",
   header,
+  innerClassName,
 }: Props) => {
   const { t } = useTranslation();
 
   return (
     <section className={`a-bg-${background}`} id="contributors">
-      <div className={classNames("l-container-wide", styles.inner)}>
+      <div
+        className={classNames("l-container-wide", innerClassName, styles.inner)}
+      >
         <h3 className="t-capitalize">
           {t(header || "glossary.contributor_other")}
         </h3>
@@ -27,6 +30,7 @@ interface Props {
   background?: string;
   /** Header, default is Contributors */
   header?: string;
+  innerClassName?: string;
 }
 
 export default BaseContributionsBlock;
