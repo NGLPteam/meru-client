@@ -1,0 +1,7 @@
+.container {
+  display: grid;
+}
+
+.inner {
+  --Inner-padding-inline: 0;
+}
