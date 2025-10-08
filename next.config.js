@@ -52,7 +52,7 @@ const images = {
     {
       protocol: "http",
       hostname: "localhost",
-      port: "6224"
+      port: "6224",
     },
   ],
   deviceSizes: [640, 750, 828, 1080, 1200, 1310, 1920],
@@ -89,6 +89,12 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;
+  },
+  experimental: {
+    staleTimes: {
+      dynamic: 180,
+      static: 180,
+    },
   },
   async headers() {
     return [
