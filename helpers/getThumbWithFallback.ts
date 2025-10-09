@@ -30,6 +30,7 @@ const fragment = graphql`
           }
         }
         ...CoverImageFragment
+        ...CoverCardListFragment
       }
       breadcrumbs {
         crumb {
@@ -41,6 +42,7 @@ const fragment = graphql`
                 }
               }
               ...CoverImageFragment
+              ...CoverCardListFragment
             }
           }
         }
@@ -54,6 +56,7 @@ const fragment = graphql`
           }
         }
         ...CoverImageFragment
+        ...CoverCardListFragment
       }
       breadcrumbs {
         crumb {
@@ -65,6 +68,7 @@ const fragment = graphql`
                 }
               }
               ...CoverImageFragment
+              ...CoverCardListFragment
             }
           }
           ... on Item {
@@ -75,6 +79,7 @@ const fragment = graphql`
                 }
               }
               ...CoverImageFragment
+              ...CoverCardListFragment
             }
           }
         }

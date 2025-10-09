@@ -1,11 +1,11 @@
 import classNames from "classnames";
-import CoverImage from "@/components/atomic/images/CoverImage";
 import { useSharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
 import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import { getRouteByEntityType } from "@/helpers/routes";
 import { getThumbWithFallback } from "@/helpers";
+import CoverImage from "./Cover";
 import styles from "./Card.module.css";
 
 export default function CardListItem({
@@ -35,8 +35,6 @@ export default function CardListItem({
                 title={entity.title}
                 id={entity.id}
                 data={thumbnailData.thumbnail}
-                maxWidth={225}
-                maxHeight={300}
               />
             </div>
           </div>
@@ -48,7 +46,7 @@ export default function CardListItem({
                 </span>
               )}
               {header?.valid && !!header.content && (
-                <h4 className="line-clamp-2">
+                <h4 className={classNames("line-clamp-2", styles.header)}>
                   <InlineSlotWrapper content={header.content} />
                 </h4>
               )}
