@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3224ff2a308e31bae575eff606ed989e>>
+ * @generated SignedSource<<47af34c5513f4eaaf5ec37048241f450>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,7 +19,7 @@ export type getThumbWithFallbackFragment$data = {
             readonly url: string | null | undefined;
           };
         };
-        readonly " $fragmentSpreads": FragmentRefs<"CoverImageFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"CoverCardListFragment" | "CoverImageFragment">;
       };
     };
   }>;
@@ -29,7 +29,7 @@ export type getThumbWithFallbackFragment$data = {
         readonly url: string | null | undefined;
       };
     };
-    readonly " $fragmentSpreads": FragmentRefs<"CoverImageFragment">;
+    readonly " $fragmentSpreads": FragmentRefs<"CoverCardListFragment" | "CoverImageFragment">;
   };
   readonly " $fragmentType": "getThumbWithFallbackFragment";
 };
@@ -43,6 +43,6 @@ const node: ReaderInlineDataFragment = {
   "name": "getThumbWithFallbackFragment"
 };
 
-(node as any).hash = "a08ab825500c65250d7c166142e9cf51";
+(node as any).hash = "e81cb688699a58c46cdf6dce2e74a132";
 
 export default node;

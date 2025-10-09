@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d6b4880dd6afb5cc67fcb1b202ffed40>>
+ * @generated SignedSource<<1de4a32b7fb19e10ffb0b0bb0b5f071e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -99,6 +99,11 @@ v4 = {
       "args": null,
       "kind": "FragmentSpread",
       "name": "CoverImageFragment"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "CoverCardListFragment"
     }
   ],
   "storageKey": null
