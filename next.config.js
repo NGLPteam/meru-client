@@ -105,6 +105,11 @@ const nextConfig = {
   },
 };
 
+if (process.env.NODE_ENV === "production" || process.env.REDIS_CACHE === "enabled") {
+  nextConfig.cacheHandler = require.resolve("./customized-cache-handler.cjs");
+  nextConfig.cacheMaxMemorySize = 0;
+}
+
 const withMDX = createMDX();
 
 module.exports = withMDX(nextConfig);

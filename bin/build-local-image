@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# This image will build a local version of the meru-frontend image
+# that can be used for local development and testing.
+# You can actually run it with the other scripts in this directory.
+
+docker buildx build --platform linux/amd64 -t meru/meru-frontend-local .

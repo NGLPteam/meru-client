@@ -3,4 +3,6 @@
 .env.local
 .github
 .git
+docker/local.env
+docker/sandbox.env
 node_modules
