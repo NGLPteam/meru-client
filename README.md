@@ -1,10 +1,10 @@
-# NGLP Frontend
+# Meru Frontend
 
 ## Development Environment
 
 ```sh
 yarn install
-yarn run dev # to start dev client
+yarn dev -p 3001 # to start dev client
 ```
 
 That's it! Now go to http://localhost:3001/
@@ -39,6 +39,38 @@ index.tsx // Exports the component
 Header.tsx // Defines the component
 styles.ts // Styled components
 ```
+
+### Cache Testing
+
+`meru-frontend` is designed to use Valkey for caching when running in production. To test this, you may also run it locally with the provided docker-compose.yml and some scripts in `bin`.
+
+First, ensure that Valkey is running locally on port 36379:
+
+```bash
+docker compose up -d
+```
+
+Then, build a local version of the image. You will need to do this on any change to the application code. Since we need to test how it works in production, there's no live-reloading of changes. Once it has been built, you can run it against one of two versions of the API with some scripts.
+
+```bash
+bin/build-local-image
+```
+
+To run against the local API, which supports testing revalidation:
+
+```bash
+bin/run-local-against-local-api
+```
+
+This will be available on [localhost:14700](http://localhost:14700).
+
+To run against the Sandbox API, which _does not_ support testing revalidation:
+
+```bash
+bin/run-local-against-sandbox
+```
+
+This will be available on [localhost:14800](http://localhost:14800).
 
 ### Browser support
 

@@ -1,0 +1,21 @@
+services:
+  redis:
+    image: valkey/valkey:8.0
+    environment:
+      - "ALLOW_EMPTY_PASSWORD=yes"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "10"
+    restart: unless-stopped
+    ports:
+      - "36379:6379"
+    volumes:
+      - ./docker/valkey:/usr/local/etc/valkey
+    command: ["valkey-server", "/usr/local/etc/valkey/valkey.conf"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
