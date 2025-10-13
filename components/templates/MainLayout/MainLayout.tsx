@@ -1,7 +1,7 @@
 "use client";
 
 import { graphql, useFragment } from "react-relay";
-import { ProcessingMessage } from "@/components/templates/ProcessingCheck";
+import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
 import Container from "@/components/layout/Container";
 import TemplateFactory from "@/components/templates/Factory";
 import {
@@ -33,7 +33,7 @@ export default function MainLayout({
 
   return allHidden || !renderedTemplates ? (
     <Container className="my-5">
-      <ProcessingMessage entityType={entity?.__typename.toLowerCase()} />
+      <EmptyMessage entityType={entity?.__typename.toLowerCase()} />
     </Container>
   ) : (
     <div className={styles.grid}>

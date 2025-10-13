@@ -41,10 +41,10 @@ export default async function CommunityLayout({
   return (
     <UpdateClientEnvironment records={records}>
       <SetCommunity data={community}>
+        {showNavBar && (
+          <CommunityNavBar data={community} entityData={community} />
+        )}
         <ProcessingCheck data={layouts} entityType="community">
-          {showNavBar && (
-            <CommunityNavBar data={community} entityData={community} />
-          )}
           {layouts.hero && <HeroTemplate data={layouts.hero} />}
           {children}
         </ProcessingCheck>

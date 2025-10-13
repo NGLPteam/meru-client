@@ -39,9 +39,9 @@ export default async function CollectionTemplateLayout({
   return (
     <UpdateClientEnvironment records={records}>
       <SetCommunity data={community}>
+        {layouts.hero && <HeroTemplate data={layouts.hero} />}
         <ProcessingCheck data={layouts} entityType="collection">
           {slug && <ViewCounter slug={slug} />}
-          {layouts.hero && <HeroTemplate data={layouts.hero} />}
           <EntityNavBar data={collection} />
           {children}
         </ProcessingCheck>
