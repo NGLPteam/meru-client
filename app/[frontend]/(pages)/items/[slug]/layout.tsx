@@ -46,12 +46,12 @@ export default async function ItemLayout({
   return (
     <UpdateClientEnvironment records={records}>
       <SetCommunity data={community}>
+        {hero && <HeroTemplate data={hero} />}
         <ProcessingCheck data={layouts} entityType="item">
           {googleScholarData && (
             <GoogleScholarMetaTags entity={googleScholarData} />
           )}
           {slug && <ViewCounter slug={slug} />}
-          {hero && <HeroTemplate data={hero} />}
           <EntityNavBar data={item} />
           <FullTextCheck data={layouts}>
             <NavigationTemplate data={navigation} />

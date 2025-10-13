@@ -6,7 +6,7 @@ import Container from "@/components/layout/Container";
 import { FullDetailFragment$key } from "@/relay/FullDetailFragment.graphql";
 import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
-import { ProcessingMessage } from "@/components/templates/ProcessingCheck";
+import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
 import type { HeroBackground } from "@/types/graphql-schema";
 import TOC from "./TOC";
 import styles from "./Full.module.css";
@@ -41,7 +41,7 @@ export default function FullVariant({
           {body?.valid && !!body.content ? (
             <BlockSlotWrapper content={body.content} />
           ) : (
-            <ProcessingMessage entityType={entity?.__typename.toLowerCase()} />
+            <EmptyMessage entityType={entity?.__typename.toLowerCase()} />
           )}
         </div>
       ) : (
@@ -61,9 +61,7 @@ export default function FullVariant({
               </div>
             ) : (
               <div className={styles.noContent}>
-                <ProcessingMessage
-                  entityType={entity?.__typename.toLowerCase()}
-                />
+                <EmptyMessage entityType={entity?.__typename.toLowerCase()} />
               </div>
             )}
           </div>

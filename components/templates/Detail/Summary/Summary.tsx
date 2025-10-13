@@ -8,7 +8,6 @@ import Container from "@/components/layout/Container";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import { SummaryDetailFragment$key } from "@/relay/SummaryDetailFragment.graphql";
-import { ProcessingMessage } from "@/components/templates/ProcessingCheck";
 import type { HeroBackground } from "@/types/graphql-schema";
 import Announcements from "./Announcements";
 import styles from "./Summary.module.css";
@@ -28,7 +27,7 @@ export default function Summary({
   const subheader = useSharedInlineFragment(slots?.subheader);
   const summary = useSharedBlockFragment(slots?.summary);
 
-  const showNoContent =
+  const hideTemplate =
     !detailDefinition?.showAnnouncements &&
     (!header || header?.empty) &&
     (!subheader || subheader?.empty) &&
@@ -36,40 +35,32 @@ export default function Summary({
 
   if (entity?.__typename === "%other") return null;
 
-  return (
+  return !hideTemplate ? (
     <Container width="wide" bgColor={bgColor}>
-      {showNoContent ? (
-        <div className={styles.noContent}>
-          <ProcessingMessage entityType={entity?.__typename.toLowerCase()} />
+      <div className={styles.grid}>
+        <div className={classNames("t-rte", styles.content)}>
+          {header?.valid && !!header.content && (
+            <h3>
+              <InlineSlotWrapper content={header.content} />
+            </h3>
+          )}
+          {subheader?.valid && !!subheader.content && (
+            <h4>
+              <InlineSlotWrapper content={subheader.content} />
+            </h4>
+          )}
+          {summary?.valid && !!summary.content && (
+            <BlockSlotWrapper content={summary.content} />
+          )}
         </div>
-      ) : (
-        <>
-          <div className={styles.grid}>
-            <div className={classNames("t-rte", styles.content)}>
-              {header?.valid && !!header.content && (
-                <h3>
-                  <InlineSlotWrapper content={header.content} />
-                </h3>
-              )}
-              {subheader?.valid && !!subheader.content && (
-                <h4>
-                  <InlineSlotWrapper content={subheader.content} />
-                </h4>
-              )}
-              {summary?.valid && !!summary.content && (
-                <BlockSlotWrapper content={summary.content} />
-              )}
-            </div>
-            {detailDefinition?.showAnnouncements && !!entity?.announcements && (
-              <div className={styles.announcements}>
-                <Announcements data={entity.announcements} />
-              </div>
-            )}
+        {detailDefinition?.showAnnouncements && !!entity?.announcements && (
+          <div className={styles.announcements}>
+            <Announcements data={entity.announcements} />
           </div>
-        </>
-      )}
+        )}
+      </div>
     </Container>
-  );
+  ) : null;
 }
 
 const fragment = graphql`

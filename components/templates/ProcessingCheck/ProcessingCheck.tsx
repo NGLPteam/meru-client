@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 import { graphql, useFragment } from "react-relay";
 import { ProcessingCheckFragment$key } from "@/relay/ProcessingCheckFragment.graphql";
 import Container from "@/components/layout/Container";
-import ProcessingMessage from "./ProcessingMessage";
+import EmptyMessage from "./EmptyMessage";
 import styles from "./ProcessingCheck.module.css";
 
 type Props = PropsWithChildren & {
@@ -19,7 +19,7 @@ export default function ProcessingCheck({ data, children, entityType }: Props) {
 
   return allHidden || !templates?.length ? (
     <Container className={styles.container}>
-      <ProcessingMessage entityType={entityType} />
+      <EmptyMessage entityType={entityType} />
     </Container>
   ) : (
     children
