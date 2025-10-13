@@ -168,4 +168,18 @@
         drop-shadow(-1px 0px white);
     }
   }
+
+  svg {
+    a:hover & {
+      transform: scale(101%);
+      transition: scale 170ms ease-in;
+      @mixin a-image-hover;
+    }
+
+    a:focus-visible & {
+      transform: scale(101%);
+      transition: scale 170ms ease-in;
+      @mixin a-image-focus;
+    }
+  }
 }
