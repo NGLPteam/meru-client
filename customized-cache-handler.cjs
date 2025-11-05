@@ -38,7 +38,7 @@ module.exports = class CustomizedCacheHandler {
         sharedTagsKey: '__sharedTags__',
         avgResyncIntervalMs: 10_000 * 60,
         redisGetDeduplication: false,
-        inMemoryCachingTime: 3000,
+        inMemoryCachingTime: 0,
         defaultStaleAge: 1209600,
         estimateExpireAge: (staleAge) => staleAge * 2,
         socketOptions,
