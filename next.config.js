@@ -93,6 +93,17 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: "/:path*", // Match all routes
+        headers: [
+          { key: "Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store, no-cache, must-revalidate, proxy-revalidate" },
+          { key: "Pragma", value: "no-cache" },
+          { key: "Expires", value: "0" },
+        ],
+      },
+
+      {
         source: "/fonts/(.*)",
         headers: [
           {
