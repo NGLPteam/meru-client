@@ -38,7 +38,7 @@ interface Props {
 export default AssetsBlock;
 
 const fragment = graphql`
-  fragment AssetsBlockFragment on AnyAssetConnection {
+  fragment AssetsBlockFragment on AssetConnection {
     edges {
       node {
         ...AssetBlockItemFragment

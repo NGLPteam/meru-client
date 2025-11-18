@@ -138,8 +138,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -1872,8 +1872,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -2354,159 +2354,6 @@
         ]
       },
       {
-        "kind": "OBJECT",
-        "name": "AnyAssetConnection",
-        "description": "The connection type for AnyAsset.",
-        "isOneOf": null,
-        "fields": [
-          {
-            "name": "edges",
-            "description": "A list of edges.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "AnyAssetEdge",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nodes",
-            "description": "A list of nodes.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyAsset",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pageInfo",
-            "description": "Information to aid in pagination.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "PageInfo",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [
-          {
-            "kind": "INTERFACE",
-            "name": "Paginated",
-            "ofType": null
-          }
-        ],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "AnyAssetEdge",
-        "description": "An edge in a connection.",
-        "isOneOf": null,
-        "fields": [
-          {
-            "name": "cursor",
-            "description": "A cursor for use in pagination.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "node",
-            "description": "The item at the end of the edge.",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "UNION",
-                "name": "AnyAsset",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "UNION",
-        "name": "AnyAttachable",
-        "description": "Something that can be attached to",
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "Collection",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Community",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Item",
-            "ofType": null
-          }
-        ]
-      },
-      {
         "kind": "UNION",
         "name": "AnyChildEntity",
         "description": "Any entity that can have a parent.",
@@ -2826,6 +2673,28 @@
       },
       {
         "kind": "UNION",
+        "name": "AnyContributable",
+        "description": "A union of types that can be contributed to",
+        "isOneOf": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "CollectionContribution",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ItemContribution",
+            "ofType": null
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
         "name": "AnyContribution",
         "description": "A union of possible contribution types",
         "isOneOf": null,
@@ -3079,28 +2948,6 @@
       },
       {
         "kind": "UNION",
-        "name": "AnyLinkTarget",
-        "description": "Used by a LinkTargetCandidate, this describes any type of model that can act as a target for an EntityLink",
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "Collection",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Item",
-            "ofType": null
-          }
-        ]
-      },
-      {
-        "kind": "UNION",
         "name": "AnyListItemTemplateDefinition",
         "description": "Encompasses all the possible template definition types that can fall under a `LIST_ITEM` layout.\n",
         "isOneOf": null,
@@ -3291,38 +3138,6 @@
           {
             "kind": "OBJECT",
             "name": "NavigationTemplateInstance",
-            "ofType": null
-          }
-        ]
-      },
-      {
-        "kind": "UNION",
-        "name": "AnyOrderingEntry",
-        "description": "The various types an OrderingEntry can refer to",
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "Collection",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Community",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "EntityLink",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "Item",
             "ofType": null
           }
         ]
@@ -3609,73 +3424,6 @@
           {
             "kind": "OBJECT",
             "name": "UnknownProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "VariableDateProperty",
-            "ofType": null
-          }
-        ]
-      },
-      {
-        "kind": "UNION",
-        "name": "AnySearchableProperty",
-        "description": "`AnySearchableProperty` represents a property that can be searched on.\n\nAny property underneath this can be assured to implement `SearchableProperty`.\n",
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": [
-          {
-            "kind": "OBJECT",
-            "name": "BooleanProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "DateProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "FloatProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "FullTextProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "IntegerProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "MarkdownProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "MultiselectProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "SelectProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "StringProperty",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
-            "name": "TimestampProperty",
             "ofType": null
           },
           {
@@ -4375,8 +4123,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -4545,7 +4293,18 @@
           }
         ],
         "inputFields": null,
-        "interfaces": [],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "Sluggable",
+            "ofType": null
+          }
+        ],
         "enumValues": null,
         "possibleTypes": [
           {
@@ -4688,8 +4447,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -4904,6 +4663,88 @@
           {
             "kind": "INTERFACE",
             "name": "Sluggable",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AssetConnection",
+        "description": "The connection type for Asset.",
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "edges",
+            "description": "A list of edges.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "AssetEdge",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": "A list of nodes.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INTERFACE",
+                    "name": "Asset",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pageInfo",
+            "description": "Information to aid in pagination.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Paginated",
             "ofType": null
           }
         ],
@@ -5018,8 +4859,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -5242,6 +5083,50 @@
       },
       {
         "kind": "OBJECT",
+        "name": "AssetEdge",
+        "description": "An edge in a connection.",
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "cursor",
+            "description": "A cursor for use in pagination.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "node",
+            "description": "The item at the end of the edge.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INTERFACE",
+                "name": "Asset",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "AssetImage",
         "description": null,
         "isOneOf": null,
@@ -5348,8 +5233,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -5786,8 +5671,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -6175,8 +6060,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "UNION",
-              "name": "AnyAsset",
+              "kind": "INTERFACE",
+              "name": "Asset",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6523,8 +6408,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -6853,8 +6738,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyAttachable",
+                "kind": "INTERFACE",
+                "name": "Attachable",
                 "ofType": null
               }
             },
@@ -7111,8 +6996,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyAsset",
+                    "kind": "INTERFACE",
+                    "name": "Asset",
                     "ofType": null
                   }
                 }
@@ -7418,7 +7303,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AnyAssetConnection",
+                "name": "AssetConnection",
                 "ofType": null
               }
             },
@@ -7897,8 +7782,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -8762,8 +8647,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8791,8 +8676,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10272,7 +10157,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -10284,8 +10169,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -10678,13 +10563,13 @@
         "enumValues": [
           {
             "name": "ADMIN",
-            "description": "The admin client (https://admin.sandbox.meru.host).\n",
+            "description": "The admin client (http://localhost:3000).\n",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FRONTEND",
-            "description": "The frontend client (https://sandbox.meru.host).\n",
+            "description": "The frontend client (http://localhost:14700).\n",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -11005,8 +10890,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11034,8 +10919,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11447,7 +11332,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AnyAssetConnection",
+                "name": "AssetConnection",
                 "ofType": null
               }
             },
@@ -11621,7 +11506,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -13905,7 +13790,7 @@
           },
           {
             "name": "schemaInstanceContext",
-            "description": "The context for our schema instance. Includes form values and necessary referents.",
+            "description": "The context for our schema instance. Includes form values and necessary referents.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -13921,7 +13806,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -13933,8 +13818,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -13949,7 +13834,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -13965,8 +13850,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnySchemaProperty",
+              "kind": "INTERFACE",
+              "name": "SchemaProperty",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14549,6 +14434,11 @@
           },
           {
             "kind": "INTERFACE",
+            "name": "OrderingEntryable",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
             "name": "Permalinkable",
             "ofType": null
           },
@@ -14853,8 +14743,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyContributor",
+                "kind": "INTERFACE",
+                "name": "Contributor",
                 "ofType": null
               }
             },
@@ -15962,7 +15852,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AnyAssetConnection",
+                "name": "AssetConnection",
                 "ofType": null
               }
             },
@@ -16112,7 +16002,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -17534,7 +17424,7 @@
           },
           {
             "name": "schemaInstanceContext",
-            "description": "The context for our schema instance. Includes form values and necessary referents.",
+            "description": "The context for our schema instance. Includes form values and necessary referents.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -17550,7 +17440,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -17562,8 +17452,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -17578,7 +17468,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -17594,8 +17484,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnySchemaProperty",
+              "kind": "INTERFACE",
+              "name": "SchemaProperty",
               "ofType": null
             },
             "isDeprecated": false,
@@ -18075,6 +17965,11 @@
           },
           {
             "kind": "INTERFACE",
+            "name": "OrderingEntryable",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
             "name": "Permalinkable",
             "ofType": null
           },
@@ -18231,7 +18126,7 @@
         "fields": [
           {
             "name": "accessControlList",
-            "description": "Derived access control list",
+            "description": "The derived access control list for this user and entity.\n",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -18243,7 +18138,7 @@
           },
           {
             "name": "accessGrants",
-            "description": "The access grants that correspond to this contextual permission",
+            "description": "The access grants that correspond to this contextual permission.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -18255,8 +18150,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyUserAccessGrant",
+                    "kind": "INTERFACE",
+                    "name": "UserAccessGrant",
                     "ofType": null
                   }
                 }
@@ -18347,7 +18242,7 @@
           },
           {
             "name": "roles",
-            "description": "The roles that correspond to this contextual permission",
+            "description": "The roles that correspond to this contextual permission.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -18403,7 +18298,7 @@
           },
           {
             "name": "user",
-            "description": null,
+            "description": "The user that has the contextual permission.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -18819,8 +18714,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyContributor",
+                "kind": "INTERFACE",
+                "name": "Contributor",
                 "ofType": null
               }
             },
@@ -20313,7 +20208,7 @@
       {
         "kind": "OBJECT",
         "name": "ContributorAttributionConnection",
-        "description": "The connection type for AnyContributorAttribution.",
+        "description": "The connection type for ContributorAttribution.",
         "isOneOf": null,
         "fields": [
           {
@@ -20354,8 +20249,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyContributorAttribution",
+                    "kind": "INTERFACE",
+                    "name": "ContributorAttribution",
                     "ofType": null
                   }
                 }
@@ -20422,8 +20317,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyContributorAttribution",
+                "kind": "INTERFACE",
+                "name": "ContributorAttribution",
                 "ofType": null
               }
             },
@@ -21742,8 +21637,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -22095,8 +21990,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "UNION",
-              "name": "AnyContributor",
+              "kind": "INTERFACE",
+              "name": "Contributor",
               "ofType": null
             },
             "isDeprecated": false,
@@ -22371,8 +22266,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyContributor",
+                    "kind": "INTERFACE",
+                    "name": "Contributor",
                     "ofType": null
                   }
                 }
@@ -28453,8 +28348,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -31422,8 +31317,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -32172,8 +32067,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyEntity",
+                    "kind": "INTERFACE",
+                    "name": "Entity",
                     "ofType": null
                   }
                 }
@@ -33736,7 +33631,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -33748,8 +33643,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -34085,8 +33980,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -34199,8 +34094,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -34697,8 +34592,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -34749,8 +34644,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -34815,6 +34710,11 @@
           {
             "kind": "INTERFACE",
             "name": "Node",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "OrderingEntryable",
             "ofType": null
           },
           {
@@ -35379,8 +35279,8 @@
             "description": "A single reference to another entity within the system.\n",
             "args": [],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -35881,8 +35781,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -37572,7 +37472,7 @@
       {
         "kind": "OBJECT",
         "name": "GroupProperty",
-        "description": null,
+        "description": "A schema property that groups other schema properties together underneath a `path`.\n",
         "isOneOf": null,
         "fields": [
           {
@@ -37637,7 +37537,7 @@
           },
           {
             "name": "legend",
-            "description": null,
+            "description": "The legend / label for this group property.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -37681,7 +37581,7 @@
           },
           {
             "name": "properties",
-            "description": null,
+            "description": "The list of (scalar) schema properties contained within this group.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -37693,8 +37593,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyScalarProperty",
+                    "kind": "INTERFACE",
+                    "name": "ScalarProperty",
                     "ofType": null
                   }
                 }
@@ -37705,7 +37605,7 @@
           },
           {
             "name": "required",
-            "description": null,
+            "description": "Whether this property is required to have a value.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -47227,7 +47127,7 @@
         "fields": [
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -47239,8 +47139,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -47536,8 +47436,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -48261,8 +48161,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -50890,8 +50790,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -50919,8 +50819,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyEntity",
+              "kind": "INTERFACE",
+              "name": "Entity",
               "ofType": null
             },
             "isDeprecated": false,
@@ -51332,7 +51232,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AnyAssetConnection",
+                "name": "AssetConnection",
                 "ofType": null
               }
             },
@@ -51506,7 +51406,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -53560,7 +53460,7 @@
           },
           {
             "name": "schemaInstanceContext",
-            "description": "The context for our schema instance. Includes form values and necessary referents.",
+            "description": "The context for our schema instance. Includes form values and necessary referents.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -53576,7 +53476,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -53588,8 +53488,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -53604,7 +53504,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -53620,8 +53520,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnySchemaProperty",
+              "kind": "INTERFACE",
+              "name": "SchemaProperty",
               "ofType": null
             },
             "isDeprecated": false,
@@ -54199,6 +54099,11 @@
           },
           {
             "kind": "INTERFACE",
+            "name": "OrderingEntryable",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
             "name": "Permalinkable",
             "ofType": null
           },
@@ -54487,8 +54392,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyContributor",
+                "kind": "INTERFACE",
+                "name": "Contributor",
                 "ofType": null
               }
             },
@@ -55030,8 +54935,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -55995,8 +55900,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -56474,8 +56379,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyLinkTarget",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -56958,8 +56863,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -57695,8 +57600,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -58314,8 +58219,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -59009,8 +58914,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -59458,8 +59363,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -59873,7 +59778,7 @@
           },
           {
             "name": "options",
-            "description": null,
+            "description": "The list of predefined options available for this property.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -62151,8 +62056,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -62465,8 +62370,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -62878,8 +62783,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -63718,12 +63623,12 @@
       {
         "kind": "INTERFACE",
         "name": "OptionableProperty",
-        "description": null,
+        "description": "An interface for properties that have a set of predefined options to choose from.\n",
         "isOneOf": null,
         "fields": [
           {
             "name": "options",
-            "description": null,
+            "description": "The list of predefined options available for this property.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -64121,8 +64026,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -64858,8 +64763,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyOrderingEntry",
+                "kind": "INTERFACE",
+                "name": "OrderingEntryable",
                 "ofType": null
               }
             },
@@ -65184,6 +65089,61 @@
           }
         ],
         "possibleTypes": null
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "OrderingEntryable",
+        "description": "An entity or link which can appear in an ordering.\n",
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": "ID of the object.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Collection",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Community",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "EntityLink",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Item",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -66146,8 +66106,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -67235,8 +67195,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -67925,8 +67885,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -68195,11 +68155,6 @@
           },
           {
             "kind": "OBJECT",
-            "name": "AnyAssetConnection",
-            "ofType": null
-          },
-          {
-            "kind": "OBJECT",
             "name": "AnyCollectionAccessGrantConnection",
             "ofType": null
           },
@@ -68221,6 +68176,11 @@
           {
             "kind": "OBJECT",
             "name": "AnyUserGroupAccessGrantConnection",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "AssetConnection",
             "ofType": null
           },
           {
@@ -70837,8 +70797,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyContributor",
+              "kind": "INTERFACE",
+              "name": "Contributor",
               "ofType": null
             },
             "isDeprecated": false,
@@ -70898,8 +70858,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyContributor",
+              "kind": "INTERFACE",
+              "name": "Contributor",
               "ofType": null
             },
             "isDeprecated": false,
@@ -71495,8 +71455,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyAsset",
+              "kind": "INTERFACE",
+              "name": "Asset",
               "ofType": null
             },
             "isDeprecated": false,
@@ -72927,8 +72887,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyOrderingPath",
+                    "kind": "INTERFACE",
+                    "name": "OrderingPath",
                     "ofType": null
                   }
                 }
@@ -73917,8 +73877,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyAsset",
+              "kind": "INTERFACE",
+              "name": "Asset",
               "ofType": null
             },
             "isDeprecated": false,
@@ -74216,8 +74176,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyContributor",
+              "kind": "INTERFACE",
+              "name": "Contributor",
               "ofType": null
             },
             "isDeprecated": false,
@@ -74277,8 +74237,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnyContributor",
+              "kind": "INTERFACE",
+              "name": "Contributor",
               "ofType": null
             },
             "isDeprecated": false,
@@ -75743,8 +75703,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyOrderingPath",
+                    "kind": "INTERFACE",
+                    "name": "OrderingPath",
                     "ofType": null
                   }
                 }
@@ -78937,7 +78897,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -78974,7 +78934,7 @@
           },
           {
             "name": "schemaInstanceContext",
-            "description": "The context for our schema instance. Includes form values and necessary referents.",
+            "description": "The context for our schema instance. Includes form values and necessary referents.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -78990,7 +78950,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -79002,8 +78962,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -79018,7 +78978,7 @@
             "args": [
               {
                 "name": "fullPath",
-                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.",
+                "description": "The full path to the schema property. Please note, paths are snake_case, not camelCase.\n",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -79034,8 +78994,8 @@
               }
             ],
             "type": {
-              "kind": "UNION",
-              "name": "AnySchemaProperty",
+              "kind": "INTERFACE",
+              "name": "SchemaProperty",
               "ofType": null
             },
             "isDeprecated": false,
@@ -80395,7 +80355,7 @@
           },
           {
             "name": "schemaProperties",
-            "description": "A list of schema properties associated with this instance or version.",
+            "description": "A list of schema properties associated with this instance or version.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -80407,8 +80367,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySchemaProperty",
+                    "kind": "INTERFACE",
+                    "name": "SchemaProperty",
                     "ofType": null
                   }
                 }
@@ -80472,8 +80432,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnySearchableProperty",
+                    "kind": "INTERFACE",
+                    "name": "SearchableProperty",
                     "ofType": null
                   }
                 }
@@ -81090,8 +81050,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -81787,7 +81747,7 @@
       {
         "kind": "INTERFACE",
         "name": "SearchableProperty",
-        "description": null,
+        "description": "An interface for properties that can be searched.\n",
         "isOneOf": null,
         "fields": [
           {
@@ -81928,12 +81888,12 @@
       {
         "kind": "OBJECT",
         "name": "SelectOption",
-        "description": null,
+        "description": "An option for a select-type property.",
         "isOneOf": null,
         "fields": [
           {
             "name": "label",
-            "description": null,
+            "description": "The display label for the option.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -81949,7 +81909,7 @@
           },
           {
             "name": "value",
-            "description": null,
+            "description": "The underlying value for the option.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -82097,7 +82057,7 @@
           },
           {
             "name": "options",
-            "description": null,
+            "description": "The list of predefined options available for this property.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -84297,8 +84257,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -84710,8 +84670,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -84956,7 +84916,7 @@
       {
         "kind": "OBJECT",
         "name": "SystemInfo",
-        "description": "A helper field that can look up various information about the WDP-API Ecosystem.\n",
+        "description": "A helper field that can look up various information about the Meru-API Ecosystem.\n",
         "isOneOf": null,
         "fields": [
           {
@@ -85640,8 +85600,8 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "UNION",
-                    "name": "AnyEntity",
+                    "kind": "INTERFACE",
+                    "name": "Entity",
                     "ofType": null
                   }
                 }
@@ -85918,8 +85878,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -93863,8 +93823,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -93987,8 +93947,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -94290,8 +94250,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -95637,8 +95597,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -95761,8 +95721,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -96064,8 +96024,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -96351,8 +96311,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },
@@ -96654,8 +96614,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "UNION",
-                "name": "AnyEntity",
+                "kind": "INTERFACE",
+                "name": "Entity",
                 "ofType": null
               }
             },

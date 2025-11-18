@@ -21,7 +21,7 @@ export default function getThumbWithFallback(
 }
 
 const fragment = graphql`
-  fragment getThumbWithFallbackFragment on AnyEntity @inline {
+  fragment getThumbWithFallbackFragment on Entity @inline {
     ... on Collection {
       thumbnail {
         image: medium {

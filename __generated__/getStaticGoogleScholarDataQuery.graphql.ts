@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<25ecbd8cca8e8000f54fc13c08cdb1c8>>
+ * @generated SignedSource<<a2f6f7c7c25eb3908eb030f9da1dc469>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -521,8 +521,8 @@ return {
                     "abstractKey": null
                   }
                 ],
-                "type": "AnyEntity",
-                "abstractKey": "__isAnyEntity"
+                "type": "Entity",
+                "abstractKey": "__isEntity"
               }
             ],
             "args": null,
@@ -593,7 +593,7 @@ return {
                             "selections": [
                               (v9/*: any*/),
                               (v6/*: any*/),
-                              (v29/*: any*/)
+                              (v28/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -760,8 +760,8 @@ return {
                 "abstractKey": null
               }
             ],
-            "type": "AnyEntity",
-            "abstractKey": "__isAnyEntity"
+            "type": "Entity",
+            "abstractKey": "__isEntity"
           }
         ],
         "storageKey": null
@@ -769,12 +769,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "96b8646b59f9417b32f701e1028ded0a",
+    "cacheID": "075666d1570d6b74412561e2e4d4a592",
     "id": null,
     "metadata": {},
     "name": "getStaticGoogleScholarDataQuery",
     "operationKind": "query",
-    "text": "query getStaticGoogleScholarDataQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    ...getStaticGoogleScholarDataFragment\n    id\n  }\n}\n\nfragment getStaticGoogleScholarDataFragment on AnyEntity {\n  __isAnyEntity: __typename\n  ... on Item {\n    title\n    schemaDefinition {\n      identifier\n      id\n    }\n    published {\n      precision\n      value\n    }\n    pdf: schemaProperty(fullPath: \"pdf_version\") {\n      __typename\n      ... on AssetProperty {\n        asset {\n          __typename\n          ... on AssetPDF {\n            downloadUrl\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n      }\n    }\n    community {\n      title\n      id\n    }\n    contributions {\n      nodes {\n        role\n        contributor {\n          __typename\n          ... on PersonContributor {\n            __typename\n            familyName\n            givenName\n          }\n          ... on OrganizationContributor {\n            __typename\n            legalName\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n        id\n      }\n    }\n    issueNumber: schemaProperty(fullPath: \"issue.number\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    volumeNumber: schemaProperty(fullPath: \"volume.id\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    startPage: schemaProperty(fullPath: \"issue.fpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    endPage: schemaProperty(fullPath: \"issue.lpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    institution: schemaProperty(fullPath: \"degree.grantor\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    journal: ancestorOfType(schema: \"nglp:journal\") {\n      __typename\n      ... on Collection {\n        title\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n    volume: ancestorOfType(schema: \"nglp:journal_volume\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n    issue: ancestorOfType(schema: \"nglp:journal_issue\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n  }\n}\n"
+    "text": "query getStaticGoogleScholarDataQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    ...getStaticGoogleScholarDataFragment\n    id\n  }\n}\n\nfragment getStaticGoogleScholarDataFragment on Entity {\n  __isEntity: __typename\n  ... on Item {\n    title\n    schemaDefinition {\n      identifier\n      id\n    }\n    published {\n      precision\n      value\n    }\n    pdf: schemaProperty(fullPath: \"pdf_version\") {\n      __typename\n      ... on AssetProperty {\n        asset {\n          __typename\n          ... on AssetPDF {\n            downloadUrl\n          }\n          id\n        }\n      }\n    }\n    community {\n      title\n      id\n    }\n    contributions {\n      nodes {\n        role\n        contributor {\n          __typename\n          ... on PersonContributor {\n            __typename\n            familyName\n            givenName\n          }\n          ... on OrganizationContributor {\n            __typename\n            legalName\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n        id\n      }\n    }\n    issueNumber: schemaProperty(fullPath: \"issue.number\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    volumeNumber: schemaProperty(fullPath: \"volume.id\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    startPage: schemaProperty(fullPath: \"issue.fpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    endPage: schemaProperty(fullPath: \"issue.lpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    institution: schemaProperty(fullPath: \"degree.grantor\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    journal: ancestorOfType(schema: \"nglp:journal\") {\n      __typename\n      ... on Collection {\n        title\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n    volume: ancestorOfType(schema: \"nglp:journal_volume\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n    issue: ancestorOfType(schema: \"nglp:journal_issue\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();

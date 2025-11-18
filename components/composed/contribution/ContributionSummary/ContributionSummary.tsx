@@ -61,7 +61,7 @@ interface Props {
 }
 
 const fragment = graphql`
-  fragment ContributionSummaryFragment on AnyContributorAttribution {
+  fragment ContributionSummaryFragment on ContributorAttribution {
     ... on ContributorItemAttribution {
       roles {
         identifier

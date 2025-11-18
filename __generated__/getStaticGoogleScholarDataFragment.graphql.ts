@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2bbc48e85c4e69ef9f4109609f875180>>
+ * @generated SignedSource<<25e79d3e5ab88e857fda0f192d4193b8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -85,6 +85,6 @@ const node: ReaderInlineDataFragment = {
   "name": "getStaticGoogleScholarDataFragment"
 };
 
-(node as any).hash = "190e2c17c4184792a1d2cda27b293c22";
+(node as any).hash = "c390d7d4a14d1d326837bfa8783a0395";
 
 export default node;

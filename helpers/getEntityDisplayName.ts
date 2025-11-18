@@ -27,7 +27,7 @@ export default function getEntityDisplayName(
 }
 
 const fragment = graphql`
-  fragment getEntityDisplayNameFragment on AnyEntity @inline {
+  fragment getEntityDisplayNameFragment on Entity @inline {
     ... on Collection {
       title
       vol: ancestorByName(name: "volume") {

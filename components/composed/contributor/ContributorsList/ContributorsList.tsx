@@ -86,7 +86,7 @@ interface Props {
 }
 
 const fragment = graphql`
-  fragment ContributorsListFragment on AnyEntity {
+  fragment ContributorsListFragment on Entity {
     ... on Item {
       attributions {
         roles {

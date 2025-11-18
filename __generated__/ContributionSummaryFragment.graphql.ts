@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c0a9ead88ac90c0e32f96380c999edf5>>
+ * @generated SignedSource<<7b6be4b6b1d641e116b2f59e5c40d433>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -101,11 +101,11 @@ return {
       "abstractKey": null
     }
   ],
-  "type": "AnyContributorAttribution",
-  "abstractKey": "__isAnyContributorAttribution"
+  "type": "ContributorAttribution",
+  "abstractKey": "__isContributorAttribution"
 };
 })();
 
-(node as any).hash = "a077c2ff7db1b41ac9d7c9b5c95b4440";
+(node as any).hash = "62c5e23ede39d8f2f2261dc7f92362aa";
 
 export default node;

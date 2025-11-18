@@ -29,7 +29,7 @@ const query = graphql`
 `;
 
 const fragment = graphql`
-  fragment getStaticCommunityDataFragment on AnyEntity @inline {
+  fragment getStaticCommunityDataFragment on Entity @inline {
     ... on Entity {
       title
       summary

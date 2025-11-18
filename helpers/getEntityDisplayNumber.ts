@@ -15,7 +15,7 @@ export default function getEntityDisplayNumber(
 }
 
 const fragment = graphql`
-  fragment getEntityDisplayNumberFragment on AnyEntity @inline {
+  fragment getEntityDisplayNumberFragment on Entity @inline {
     ... on Collection {
       issueNumber: schemaProperty(fullPath: "number") {
         ... on StringProperty {

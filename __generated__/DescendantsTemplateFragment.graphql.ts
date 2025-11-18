@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1de4a32b7fb19e10ffb0b0bb0b5f071e>>
+ * @generated SignedSource<<ead10b4c44c20f19af981a4736282dda>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -193,8 +193,8 @@ v7 = {
           "abstractKey": null
         }
       ],
-      "type": "AnyEntity",
-      "abstractKey": "__isAnyEntity"
+      "type": "Entity",
+      "abstractKey": "__isEntity"
     }
   ],
   "args": null,

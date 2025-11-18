@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9c9db1217c7e3242a7facb455a9baf45>>
+ * @generated SignedSource<<e4adab4082da0ad52b7ba19e4d67efaf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -164,7 +164,7 @@ v2 = [
 v3 = {
   "alias": null,
   "args": null,
-  "concreteType": "AnyAssetConnection",
+  "concreteType": "AssetConnection",
   "kind": "LinkedField",
   "name": "assets",
   "plural": false,

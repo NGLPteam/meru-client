@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d4115079be285dde594278a8240c8cec>>
+ * @generated SignedSource<<c16e4f74975b436b79126fe8a9f52815>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -141,8 +141,8 @@ v8 = {
       "abstractKey": null
     }
   ],
-  "type": "AnyEntity",
-  "abstractKey": "__isAnyEntity"
+  "type": "Entity",
+  "abstractKey": "__isEntity"
 };
 return {
   "fragment": {
@@ -203,12 +203,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "39f28151de2aded21e38bd1f182f7a99",
+    "cacheID": "b9e33ccb45f2058b5faaab0875cb7abb",
     "id": null,
     "metadata": {},
     "name": "sitemapCommunityQuery",
     "operationKind": "query",
-    "text": "query sitemapCommunityQuery(\n  $slug: Slug!\n) {\n  community(slug: $slug) {\n    ...getEntitySitemapFragment\n    id\n  }\n}\n\nfragment getEntitySitemapFragment on AnyEntity {\n  __isAnyEntity: __typename\n  __typename\n  ... on Community {\n    slug\n    updatedAt\n    collections(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n  }\n  ... on Collection {\n    slug\n    updatedAt\n    collections(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n    items(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n  }\n  ... on Item {\n    slug\n    updatedAt\n    items(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n  }\n}\n"
+    "text": "query sitemapCommunityQuery(\n  $slug: Slug!\n) {\n  community(slug: $slug) {\n    ...getEntitySitemapFragment\n    id\n  }\n}\n\nfragment getEntitySitemapFragment on Entity {\n  __isEntity: __typename\n  __typename\n  ... on Community {\n    slug\n    updatedAt\n    collections(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n  }\n  ... on Collection {\n    slug\n    updatedAt\n    collections(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n    items(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n  }\n  ... on Item {\n    slug\n    updatedAt\n    items(perPage: 50) {\n      pageInfo {\n        pageCount\n      }\n    }\n  }\n}\n"
   }
 };
 })();

@@ -10,4 +10,5 @@ docker compose up -d
 
 docker run -it --rm -p 14800:3000 -w /app \
   --env-file docker/sandbox.env \
+  --platform linux/amd64 \
   meru/meru-frontend-local
