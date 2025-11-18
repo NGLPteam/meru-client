@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a962294b3c98b324c906b57b16cf2dcc>>
+ * @generated SignedSource<<09086fbfa35b07ba2ca76f2937f12840>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -32,7 +32,7 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
-      "concreteType": "AnyAssetEdge",
+      "concreteType": "AssetEdge",
       "kind": "LinkedField",
       "name": "edges",
       "plural": true,
@@ -57,10 +57,10 @@ const node: ReaderFragment = {
       "storageKey": null
     }
   ],
-  "type": "AnyAssetConnection",
+  "type": "AssetConnection",
   "abstractKey": null
 };
 
-(node as any).hash = "207dd06b9edb73a6f266bb6b82dc2529";
+(node as any).hash = "0ee6f0bdd6e125c57009324ff7112456";
 
 export default node;

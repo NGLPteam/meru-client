@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f7b9dbbe17e8195b35db67e86f761fa8>>
+ * @generated SignedSource<<aed4e6f261edf00d90906bf7bef07108>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -109,69 +109,62 @@ v4 = {
   "kind": "InlineFragment",
   "selections": [
     {
-      "kind": "InlineFragment",
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "title",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "summary",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "ImageAttachment",
-          "kind": "LinkedField",
-          "name": "thumbnail",
-          "plural": false,
-          "selections": (v2/*: any*/),
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "ImageMetadata",
-          "kind": "LinkedField",
-          "name": "thumbnailMetadata",
-          "plural": false,
-          "selections": (v3/*: any*/),
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "ImageAttachment",
-          "kind": "LinkedField",
-          "name": "heroImage",
-          "plural": false,
-          "selections": (v2/*: any*/),
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "ImageMetadata",
-          "kind": "LinkedField",
-          "name": "heroImageMetadata",
-          "plural": false,
-          "selections": (v3/*: any*/),
-          "storageKey": null
-        }
-      ],
-      "type": "Entity",
-      "abstractKey": "__isEntity"
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "title",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "summary",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ImageAttachment",
+      "kind": "LinkedField",
+      "name": "thumbnail",
+      "plural": false,
+      "selections": (v2/*: any*/),
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ImageMetadata",
+      "kind": "LinkedField",
+      "name": "thumbnailMetadata",
+      "plural": false,
+      "selections": (v3/*: any*/),
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ImageAttachment",
+      "kind": "LinkedField",
+      "name": "heroImage",
+      "plural": false,
+      "selections": (v2/*: any*/),
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ImageMetadata",
+      "kind": "LinkedField",
+      "name": "heroImageMetadata",
+      "plural": false,
+      "selections": (v3/*: any*/),
+      "storageKey": null
     }
   ],
-  "type": "AnyEntity",
-  "abstractKey": "__isAnyEntity"
+  "type": "Entity",
+  "abstractKey": "__isEntity"
 },
 v5 = [
   {
@@ -274,12 +267,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0cf9ce2aefc5f1b78e5fddf2aaef3f15",
+    "cacheID": "b93593f74ad450f36e77088f11924668",
     "id": null,
     "metadata": {},
     "name": "getStaticEntityDataQuery",
     "operationKind": "query",
-    "text": "query getStaticEntityDataQuery(\n  $slug: Slug!\n) {\n  community(slug: $slug) {\n    ...getStaticEntityDataFragment\n    id\n  }\n  collection(slug: $slug) {\n    ...getStaticEntityDataFragment\n    id\n  }\n  item(slug: $slug) {\n    ...getStaticEntityDataFragment\n    id\n  }\n}\n\nfragment getStaticEntityDataFragment on AnyEntity {\n  __isAnyEntity: __typename\n  ... on Entity {\n    __isEntity: __typename\n    title\n    summary\n    thumbnail {\n      storage\n      medium {\n        webp {\n          url\n          width\n          height\n        }\n      }\n    }\n    thumbnailMetadata {\n      alt\n    }\n    heroImage {\n      storage\n      medium {\n        webp {\n          url\n          width\n          height\n        }\n      }\n    }\n    heroImageMetadata {\n      alt\n    }\n  }\n}\n"
+    "text": "query getStaticEntityDataQuery(\n  $slug: Slug!\n) {\n  community(slug: $slug) {\n    ...getStaticEntityDataFragment\n    id\n  }\n  collection(slug: $slug) {\n    ...getStaticEntityDataFragment\n    id\n  }\n  item(slug: $slug) {\n    ...getStaticEntityDataFragment\n    id\n  }\n}\n\nfragment getStaticEntityDataFragment on Entity {\n  __isEntity: __typename\n  title\n  summary\n  thumbnail {\n    storage\n    medium {\n      webp {\n        url\n        width\n        height\n      }\n    }\n  }\n  thumbnailMetadata {\n    alt\n  }\n  heroImage {\n    storage\n    medium {\n      webp {\n        url\n        width\n        height\n      }\n    }\n  }\n  heroImageMetadata {\n    alt\n  }\n}\n"
   }
 };
 })();

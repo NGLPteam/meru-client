@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7a526f866eedb14f3aea209ac7c7f5e6>>
+ * @generated SignedSource<<efb7ce49698c9274e1ba4725f53c0b9a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,6 @@ const node: ReaderInlineDataFragment = {
   "name": "getEntityDisplayNameFragment"
 };
 
-(node as any).hash = "5700f256fee3b182bb4c3859fcf9873f";
+(node as any).hash = "836e70c5c71f764a1eac3cfba0579644";
 
 export default node;

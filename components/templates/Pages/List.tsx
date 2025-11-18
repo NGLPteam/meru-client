@@ -36,7 +36,7 @@ export default function List({
 }
 
 const fragment = graphql`
-  fragment ListPagesTemplateFragment on AnyEntity {
+  fragment ListPagesTemplateFragment on Entity {
     ... on Item {
       pages {
         edges {

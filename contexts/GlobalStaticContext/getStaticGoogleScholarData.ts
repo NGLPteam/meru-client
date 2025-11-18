@@ -29,7 +29,7 @@ const query = graphql`
 `;
 
 const fragment = graphql`
-  fragment getStaticGoogleScholarDataFragment on AnyEntity @inline {
+  fragment getStaticGoogleScholarDataFragment on Entity @inline {
     ... on Item {
       title
 

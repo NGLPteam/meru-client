@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<255c92664351ea98d1b18e1640214582>>
+ * @generated SignedSource<<3685db27857586be1f0490abf187bc68>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,7 @@ export type EntityDescendantsLayoutFragment$data = {
   readonly edges: ReadonlyArray<{
     readonly node: {
       readonly descendant: {
-        readonly schemaDefinition?: {
+        readonly schemaDefinition: {
           readonly identifier: string;
           readonly name: string;
         };

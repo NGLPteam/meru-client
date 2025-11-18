@@ -34,7 +34,7 @@ const query = graphql`
 `;
 
 const fragment = graphql`
-  fragment getStaticEntityDataFragment on AnyEntity @inline {
+  fragment getStaticEntityDataFragment on Entity @inline {
     ... on Entity {
       title
       summary

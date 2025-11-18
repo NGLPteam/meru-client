@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<902694addc325a3b2f40f97d562e860c>>
+ * @generated SignedSource<<4973851183b4a30cd632ff83ea413470>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,7 @@ import { FragmentRefs } from "relay-runtime";
 export type ContributorDetailNavFragment$data = {
   readonly __typename: string;
   readonly slug?: string;
-  readonly title?: string;
+  readonly title: string;
   readonly " $fragmentType": "ContributorDetailNavFragment";
 };
 export type ContributorDetailNavFragment$key = {
@@ -35,18 +35,11 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
-      "kind": "InlineFragment",
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "title",
-          "storageKey": null
-        }
-      ],
-      "type": "Entity",
-      "abstractKey": "__isEntity"
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "title",
+      "storageKey": null
     },
     {
       "kind": "InlineFragment",
@@ -63,10 +56,10 @@ const node: ReaderFragment = {
       "abstractKey": "__isSluggable"
     }
   ],
-  "type": "AnyEntity",
-  "abstractKey": "__isAnyEntity"
+  "type": "Entity",
+  "abstractKey": "__isEntity"
 };
 
-(node as any).hash = "54ed1310929b7b0ad967f509bd3bf1b7";
+(node as any).hash = "44f8398f53026a06b540cefda44eb7f4";
 
 export default node;

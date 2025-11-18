@@ -64,7 +64,7 @@ type Props = {
 };
 
 const fragment = graphql`
-  fragment EntityNavBarFragment on AnyEntity {
+  fragment EntityNavBarFragment on Entity {
     ... on Node {
       id
     }

@@ -26,7 +26,7 @@ export default function DetailCoverImage({
 }
 
 const fragment = graphql`
-  fragment DetailCoverImageFragment on AnyEntity {
+  fragment DetailCoverImageFragment on Entity {
     ... on Collection {
       id
       title

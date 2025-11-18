@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3337f24939ae89b13b4f93a2bb3d3e65>>
+ * @generated SignedSource<<274942a2a2c4c6018aa4c094ca1172c5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -74,7 +74,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "AnyAssetConnection",
+            "concreteType": "AssetConnection",
             "kind": "LinkedField",
             "name": "assets",
             "plural": false,
@@ -111,7 +111,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "AnyAssetConnection",
+            "concreteType": "AssetConnection",
             "kind": "LinkedField",
             "name": "assets",
             "plural": false,
@@ -119,7 +119,7 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "AnyAssetEdge",
+                "concreteType": "AssetEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
@@ -140,110 +140,108 @@ return {
                         "storageKey": null
                       },
                       {
-                        "kind": "InlineFragment",
+                        "kind": "TypeDiscriminator",
+                        "abstractKey": "__isAsset"
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "caption",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "contentType",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "downloadUrl",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "fileSize",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "kind",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "name",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "slug",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "altText",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "ImageAttachment",
+                        "kind": "LinkedField",
+                        "name": "preview",
+                        "plural": false,
                         "selections": [
                           {
                             "alias": null,
                             "args": null,
                             "kind": "ScalarField",
-                            "name": "caption",
+                            "name": "storage",
                             "storageKey": null
                           },
                           {
-                            "alias": null,
+                            "alias": "image",
                             "args": null,
-                            "kind": "ScalarField",
-                            "name": "contentType",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "downloadUrl",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "fileSize",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "kind",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "name",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "slug",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "altText",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "ImageAttachment",
+                            "concreteType": "ImageSize",
                             "kind": "LinkedField",
-                            "name": "preview",
+                            "name": "small",
                             "plural": false,
                             "selections": [
                               {
                                 "alias": null,
                                 "args": null,
-                                "kind": "ScalarField",
-                                "name": "storage",
-                                "storageKey": null
-                              },
-                              {
-                                "alias": "image",
-                                "args": null,
-                                "concreteType": "ImageSize",
+                                "concreteType": "ImageDerivative",
                                 "kind": "LinkedField",
-                                "name": "small",
+                                "name": "webp",
                                 "plural": false,
                                 "selections": [
                                   {
                                     "alias": null,
                                     "args": null,
-                                    "concreteType": "ImageDerivative",
-                                    "kind": "LinkedField",
-                                    "name": "webp",
-                                    "plural": false,
-                                    "selections": [
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "alt",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "url",
-                                        "storageKey": null
-                                      }
-                                    ],
+                                    "kind": "ScalarField",
+                                    "name": "alt",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "url",
                                     "storageKey": null
                                   }
                                 ],
@@ -251,49 +249,41 @@ return {
                               }
                             ],
                             "storageKey": null
-                          },
-                          {
-                            "kind": "InlineFragment",
-                            "selections": (v2/*: any*/),
-                            "type": "AssetDocument",
-                            "abstractKey": null
-                          },
-                          {
-                            "kind": "InlineFragment",
-                            "selections": (v2/*: any*/),
-                            "type": "AssetImage",
-                            "abstractKey": null
-                          },
-                          {
-                            "kind": "InlineFragment",
-                            "selections": (v2/*: any*/),
-                            "type": "AssetPDF",
-                            "abstractKey": null
-                          },
-                          {
-                            "kind": "InlineFragment",
-                            "selections": (v2/*: any*/),
-                            "type": "AssetAudio",
-                            "abstractKey": null
-                          },
-                          {
-                            "kind": "InlineFragment",
-                            "selections": (v2/*: any*/),
-                            "type": "AssetVideo",
-                            "abstractKey": null
                           }
                         ],
-                        "type": "Asset",
-                        "abstractKey": "__isAsset"
+                        "storageKey": null
                       },
                       {
                         "kind": "InlineFragment",
-                        "selections": [
-                          (v3/*: any*/)
-                        ],
-                        "type": "Node",
-                        "abstractKey": "__isNode"
-                      }
+                        "selections": (v2/*: any*/),
+                        "type": "AssetDocument",
+                        "abstractKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": (v2/*: any*/),
+                        "type": "AssetImage",
+                        "abstractKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": (v2/*: any*/),
+                        "type": "AssetPDF",
+                        "abstractKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": (v2/*: any*/),
+                        "type": "AssetAudio",
+                        "abstractKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": (v2/*: any*/),
+                        "type": "AssetVideo",
+                        "abstractKey": null
+                      },
+                      (v3/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -310,12 +300,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "419ac77bc77143e757462f5ea34706ef",
+    "cacheID": "ee10b9fa8b4815ddd48e0b2f020c3670",
     "id": null,
     "metadata": {},
     "name": "pageTemplatesItemFilesQuery",
     "operationKind": "query",
-    "text": "query pageTemplatesItemFilesQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    assets {\n      ...AssetsBlockFragment\n    }\n    id\n  }\n}\n\nfragment AssetBlockItemFragment on Asset {\n  __isAsset: __typename\n  caption\n  contentType\n  downloadUrl\n  fileSize\n  kind\n  name\n  slug\n  ...AssetThumbnailFragment\n  ... on AssetDocument {\n    updatedAt\n  }\n  ... on AssetImage {\n    updatedAt\n  }\n  ... on AssetPDF {\n    updatedAt\n  }\n  ... on AssetAudio {\n    updatedAt\n  }\n  ... on AssetVideo {\n    updatedAt\n  }\n}\n\nfragment AssetThumbnailFragment on Asset {\n  __isAsset: __typename\n  kind\n  slug\n  altText\n  preview {\n    storage\n    image: small {\n      webp {\n        alt\n        url\n      }\n    }\n  }\n}\n\nfragment AssetsBlockFragment on AnyAssetConnection {\n  edges {\n    node {\n      __typename\n      ...AssetBlockItemFragment\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n  }\n}\n"
+    "text": "query pageTemplatesItemFilesQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    assets {\n      ...AssetsBlockFragment\n    }\n    id\n  }\n}\n\nfragment AssetBlockItemFragment on Asset {\n  __isAsset: __typename\n  caption\n  contentType\n  downloadUrl\n  fileSize\n  kind\n  name\n  slug\n  ...AssetThumbnailFragment\n  ... on AssetDocument {\n    updatedAt\n  }\n  ... on AssetImage {\n    updatedAt\n  }\n  ... on AssetPDF {\n    updatedAt\n  }\n  ... on AssetAudio {\n    updatedAt\n  }\n  ... on AssetVideo {\n    updatedAt\n  }\n}\n\nfragment AssetThumbnailFragment on Asset {\n  __isAsset: __typename\n  kind\n  slug\n  altText\n  preview {\n    storage\n    image: small {\n      webp {\n        alt\n        url\n      }\n    }\n  }\n}\n\nfragment AssetsBlockFragment on AssetConnection {\n  edges {\n    node {\n      __typename\n      ...AssetBlockItemFragment\n      id\n    }\n  }\n}\n"
   }
 };
 })();

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2f97822d70140aa10bc3cf10c20d54fe>>
+ * @generated SignedSource<<c985611dd0468705f03096575b9b0ece>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,7 @@ export type SearchModalFragment$data = {
     readonly crumb: {
       readonly __typename: string;
       readonly slug?: string;
-      readonly title?: string;
+      readonly title: string;
     };
   }>;
   readonly slug?: string;
@@ -84,14 +84,7 @@ return {
           "selections": [
             (v0/*: any*/),
             (v1/*: any*/),
-            {
-              "kind": "InlineFragment",
-              "selections": [
-                (v2/*: any*/)
-              ],
-              "type": "Entity",
-              "abstractKey": "__isEntity"
-            }
+            (v2/*: any*/)
           ],
           "storageKey": null
         }

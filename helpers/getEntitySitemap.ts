@@ -51,7 +51,7 @@ export default function getEntitySitemap(data: getEntitySitemapFragment$key) {
 }
 
 const fragment = graphql`
-  fragment getEntitySitemapFragment on AnyEntity @inline {
+  fragment getEntitySitemapFragment on Entity @inline {
     __typename
 
     ... on Community {

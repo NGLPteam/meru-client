@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<26a73769fde3f17a5724c660423dedba>>
+ * @generated SignedSource<<b1bca768444db7f062d9b01969498d64>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,7 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EntityNavBarFragment$data = {
   readonly id?: string;
-  readonly layouts?: {
+  readonly layouts: {
     readonly hero: {
       readonly template: {
         readonly definition: {
@@ -28,7 +28,7 @@ export type EntityNavBarFragment$data = {
     } | null | undefined;
   };
   readonly slug?: string;
-  readonly title?: string;
+  readonly title: string;
   readonly " $fragmentSpreads": FragmentRefs<"EntityNavListFragment">;
   readonly " $fragmentType": "EntityNavBarFragment";
 };
@@ -72,92 +72,86 @@ const node: ReaderFragment = {
       "abstractKey": "__isSluggable"
     },
     {
-      "kind": "InlineFragment",
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "title",
+      "storageKey": null
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "EntityNavListFragment"
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "EntityLayouts",
+      "kind": "LinkedField",
+      "name": "layouts",
+      "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
-          "kind": "ScalarField",
-          "name": "title",
-          "storageKey": null
-        },
-        {
-          "args": null,
-          "kind": "FragmentSpread",
-          "name": "EntityNavListFragment"
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "EntityLayouts",
+          "concreteType": "HeroLayoutInstance",
           "kind": "LinkedField",
-          "name": "layouts",
+          "name": "hero",
           "plural": false,
           "selections": [
             {
               "alias": null,
               "args": null,
-              "concreteType": "HeroLayoutInstance",
+              "concreteType": "HeroTemplateInstance",
               "kind": "LinkedField",
-              "name": "hero",
+              "name": "template",
               "plural": false,
               "selections": [
                 {
                   "alias": null,
                   "args": null,
-                  "concreteType": "HeroTemplateInstance",
+                  "concreteType": "HeroTemplateDefinition",
                   "kind": "LinkedField",
-                  "name": "template",
+                  "name": "definition",
                   "plural": false,
                   "selections": [
                     {
                       "alias": null,
                       "args": null,
-                      "concreteType": "HeroTemplateDefinition",
-                      "kind": "LinkedField",
-                      "name": "definition",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "enableDescendantBrowsing",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "enableDescendantSearch",
-                          "storageKey": null
-                        }
-                      ],
+                      "kind": "ScalarField",
+                      "name": "enableDescendantBrowsing",
                       "storageKey": null
                     },
                     {
                       "alias": null,
                       "args": null,
-                      "concreteType": "HeroTemplateInstanceSlots",
+                      "kind": "ScalarField",
+                      "name": "enableDescendantSearch",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "HeroTemplateInstanceSlots",
+                  "kind": "LinkedField",
+                  "name": "slots",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "TemplateSlotInlineInstance",
                       "kind": "LinkedField",
-                      "name": "slots",
+                      "name": "descendantSearchPrompt",
                       "plural": false,
                       "selections": [
                         {
-                          "alias": null,
                           "args": null,
-                          "concreteType": "TemplateSlotInlineInstance",
-                          "kind": "LinkedField",
-                          "name": "descendantSearchPrompt",
-                          "plural": false,
-                          "selections": [
-                            {
-                              "args": null,
-                              "kind": "FragmentSpread",
-                              "name": "sharedInlineSlotFragment"
-                            }
-                          ],
-                          "storageKey": null
+                          "kind": "FragmentSpread",
+                          "name": "sharedInlineSlotFragment"
                         }
                       ],
                       "storageKey": null
@@ -172,14 +166,13 @@ const node: ReaderFragment = {
           "storageKey": null
         }
       ],
-      "type": "Entity",
-      "abstractKey": "__isEntity"
+      "storageKey": null
     }
   ],
-  "type": "AnyEntity",
-  "abstractKey": "__isAnyEntity"
+  "type": "Entity",
+  "abstractKey": "__isEntity"
 };
 
-(node as any).hash = "29deb7fbf2c9ad4dceff6975a2e21184";
+(node as any).hash = "65b16545fdba9f80a765864b94c62349";
 
 export default node;

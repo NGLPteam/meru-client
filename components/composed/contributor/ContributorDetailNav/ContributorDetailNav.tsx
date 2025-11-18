@@ -35,7 +35,7 @@ interface Props {
 }
 
 const fragment = graphql`
-  fragment ContributorDetailNavFragment on AnyEntity {
+  fragment ContributorDetailNavFragment on Entity {
     __typename
 
     ... on Entity {
