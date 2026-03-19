@@ -12,20 +12,13 @@ export default async function fetchQuery<Q extends OperationType>(
 ) {
   const env = getCurrentEnvironment();
 
-  let data;
-
-  try {
-    data = await relayFetch<Q>(env, query, vars, {
-      networkCacheConfig: { force: false },
-    })
-      .toPromise()
-      .then((result) => {
-        return result;
-      });
-  } catch (error) {
-    /* eslint-disable-next-line no-console */
-    console.log(error);
-  }
+  const data = await relayFetch<Q>(env, query, vars, {
+    networkCacheConfig: { force: false },
+  })
+    .toPromise()
+    .then((result) => {
+      return result;
+    });
 
   const records = env.getStore().getSource().toJSON();
 
