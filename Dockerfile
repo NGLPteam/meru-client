@@ -1,4 +1,4 @@
-FROM node:22-bullseye AS base
+FROM node:24-bullseye AS base
 
 FROM base AS deps
 ENV NODE_ENV=production
