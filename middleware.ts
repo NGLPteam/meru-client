@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { NextRequest } from "next/server";
+import { auth } from "@/lib/auth/initAuth";
 import { fetchPermalink } from "@/lib/actions/fetchPermalink";
+import { fetchPreviewAccess } from "@/lib/actions/fetchPreviewAccess";
 import { getRouteByEntityKind } from "@/helpers/routes";
 
 export const config = {
@@ -24,8 +26,30 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.redirect(
       `https://${host}${pathname}${paramsString}`,
-      301,
+      301
     );
+  }
+
+  if (pathname.startsWith("/preview/")) {
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.rewrite(
+        new URL("/dynamic/unauthorized?reason=unauthenticated", request.url)
+      );
+    }
+
+    const slug = pathname.split("/")?.[2];
+
+    if (slug) {
+      const canUpdate = await fetchPreviewAccess(slug);
+
+      if (!canUpdate) {
+        return NextResponse.rewrite(
+          new URL("/dynamic/unauthorized?reason=forbidden", request.url)
+        );
+      }
+    }
   }
 
   if (pathname.startsWith("/permalink")) {
@@ -36,10 +60,10 @@ export async function middleware(request: NextRequest) {
 
       if (kind && permalinkableSlug) {
         const entityPath = `/${getRouteByEntityKind(
-          kind,
+          kind
         )}/${permalinkableSlug}`;
         return NextResponse.rewrite(
-          new URL(`/dynamic${entityPath}${paramsString}`, request.url),
+          new URL(`/dynamic${entityPath}${paramsString}`, request.url)
         );
       }
     }
@@ -49,6 +73,6 @@ export async function middleware(request: NextRequest) {
   // buildtime. This (or any) top-level dyanmic segment ensures we opt all
   // routes out of Next's buildtime generation.
   return NextResponse.rewrite(
-    new URL(`/dynamic${pathname}${paramsString}`, request.url),
+    new URL(`/dynamic${pathname}${paramsString}`, request.url)
   );
 }
