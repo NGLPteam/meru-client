@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, PropsWithChildren } from "react";
-import { useSession } from "next-auth/react";
 import { RelayEnvironmentProvider as RelayProvider } from "react-relay";
 import { RecordMap } from "relay-runtime/lib/store/RelayStoreTypes";
 import { getCurrentEnvironment } from "./environment";
@@ -11,15 +10,7 @@ export default function RelayEnvironmentProvider(
     initialRecords?: RecordMap;
   } & PropsWithChildren,
 ) {
-  const session = useSession();
-
-  const sessionRef = useRef(session?.data || undefined);
-
-  const env = useRef(
-    getCurrentEnvironment({
-      sessionToken: sessionRef.current?.accessToken,
-    }),
-  );
+  const env = useRef(getCurrentEnvironment());
 
   return (
     <>

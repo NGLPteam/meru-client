@@ -1,35 +1,30 @@
 import { useTranslation } from "react-i18next";
-import { useCallback, useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { useCallback } from "react";
 import useViewerContext from "@/contexts/useViewerContext";
 import { Avatar, Dropdown, Link } from "@/components/atomic";
+import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import IconFactory from "@/components/factories/IconFactory";
+import { removeToken } from "@/lib/auth/token";
 import styles from "./AccountDropdown.module.css";
 import { signIn, signOut } from "./actions";
 
 export default function AccountDropdown({ condensed }: Props) {
-  const { avatarUrl, name } = useViewerContext();
-  const { status } = useSession();
+  const { avatarUrl, name, isAuthenticated } = useViewerContext();
 
   const { t } = useTranslation();
 
   const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL;
 
-  const handleClick = useCallback(() => {
-    if (status === "unauthenticated") {
-      signIn();
-    } else {
-      signOut();
-    }
-  }, [status]);
-
-  const isAuthenticated = useMemo(() => status === "authenticated", [status]);
+  const handleSignOut = useCallback(() => {
+    removeToken();
+    signOut();
+  }, []);
 
   const menuItems = [
     ...(adminUrl
       ? [<Dropdown.Link key={1} href={adminUrl} label={t("nav.admin")} />]
       : []),
-    <Link as="button" key={2} onClick={handleClick}>
+    <Link as="button" key={2} onClick={handleSignOut}>
       {t("common.sign_out")}
     </Link>,
   ];
@@ -52,7 +47,11 @@ export default function AccountDropdown({ condensed }: Props) {
           label={t("nav.account")}
           menuItems={menuItems}
         />
-      ) : null}
+      ) : (
+        <NavMenuLink as="button" className="t-label-lg" onClick={signIn}>
+          {t("common.sign_in")}
+        </NavMenuLink>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { draftMode } from "next/headers";
 import { signIn as doSignIn, signOut as doSignOut } from "@/lib/auth/initAuth";
 
 export async function signIn() {
@@ -8,5 +8,6 @@ export async function signIn() {
 }
 
 export async function signOut() {
-  await doSignOut().then(() => revalidatePath("/"));
+  (await draftMode()).disable();
+  await doSignOut();
 }

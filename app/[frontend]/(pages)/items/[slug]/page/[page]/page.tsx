@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 export default async function ItemPagePage({ params }: BasePageParams) {
   const { slug, page } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
     pageSlug: page,
   });
@@ -23,7 +23,7 @@ export default async function ItemPagePage({ params }: BasePageParams) {
   if (!item) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <EntityPageLayout data={item.page} />
     </UpdateClientEnvironment>
   );

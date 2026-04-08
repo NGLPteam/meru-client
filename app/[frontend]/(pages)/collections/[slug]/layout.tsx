@@ -26,7 +26,7 @@ export default async function CollectionTemplateLayout({
 }: BasePageParams & PropsWithChildren) {
   const { slug } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
   });
 
@@ -37,7 +37,7 @@ export default async function CollectionTemplateLayout({
   const { community, layouts } = collection;
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <SetCommunity data={community}>
         {layouts.hero && <HeroTemplate data={layouts.hero} />}
         <ProcessingCheck data={layouts} entityType="collection">

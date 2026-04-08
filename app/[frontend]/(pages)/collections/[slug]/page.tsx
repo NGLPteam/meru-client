@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 export default async function TemplatePage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records } =
+  const { data, records, sessionToken } =
     (await fetchQuery<Query>(query, {
       slug,
     })) ?? {};
@@ -28,7 +28,7 @@ export default async function TemplatePage({ params }: BasePageParams) {
     main?.templates?.[0]?.templateKind === "DETAIL" ? "LIGHT" : undefined;
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <MainLayout data={main} computedBgStart={computedBgStart} />
     </UpdateClientEnvironment>
   );

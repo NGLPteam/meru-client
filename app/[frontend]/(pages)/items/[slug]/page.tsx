@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 
 export default async function TemplatePage({ params }: BasePageParams) {
   const { slug } = await params;
-  const { data, records } =
+  const { data, records, sessionToken } =
     (await fetchQuery<Query>(query, {
       slug,
     })) ?? {};
@@ -25,7 +25,7 @@ export default async function TemplatePage({ params }: BasePageParams) {
   const { main } = item.layouts;
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <FullTextCheckRedirect redirectPath={`/items/${slug}/metadata`}>
         <MainLayout data={main} />
       </FullTextCheckRedirect>

@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 export default async function ItemFileDetailPage({ params }: BasePageParams) {
   const { file } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     file,
   });
 
@@ -22,7 +22,7 @@ export default async function ItemFileDetailPage({ params }: BasePageParams) {
   if (!asset) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <AssetDetailBlock data={asset} />
     </UpdateClientEnvironment>
   );

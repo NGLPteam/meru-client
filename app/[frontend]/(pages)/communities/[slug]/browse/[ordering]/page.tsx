@@ -15,18 +15,21 @@ export default async function CommunityBrowsePage({
   const { slug, ordering } = await params;
   const { page } = await searchParams;
 
-  const { data, records } = await fetchQuery<OrderingQuery>(orderingQuery, {
-    slug,
-    page: parseInt(page) || 1,
-    identifier: ordering,
-  });
+  const { data, records, sessionToken } = await fetchQuery<OrderingQuery>(
+    orderingQuery,
+    {
+      slug,
+      page: parseInt(page) || 1,
+      identifier: ordering,
+    },
+  );
 
   const { community } = data ?? {};
 
   if (!community) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <Suspense fallback={<LoadingBlock />}>
         <EntityOrderingLayout data={community?.ordering} showContext="FULL" />
       </Suspense>

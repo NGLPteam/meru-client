@@ -12,7 +12,11 @@ export async function generateStaticParams() {
 }
 
 export default async function HomePage() {
-  const { data: instance, records } = await fetchQuery<Query>(query, {});
+  const {
+    data: instance,
+    records,
+    sessionToken,
+  } = await fetchQuery<Query>(query, {});
 
   const total = instance?.communities?.pageInfo?.totalCount ?? 0;
   const firstSlug = instance?.communities?.edges[0]?.node?.slug ?? null;
@@ -25,7 +29,7 @@ export default async function HomePage() {
   if (!instance) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <SetCommunity>
         <InstanceHero data={instance} />
         <InstanceCommunities data={instance.communities} />

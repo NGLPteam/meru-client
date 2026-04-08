@@ -25,7 +25,7 @@ export default async function CommunityLayout({
 }: BasePageParams & PropsWithChildren) {
   const { slug } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
   });
 
@@ -39,7 +39,7 @@ export default async function CommunityLayout({
     layouts?.hero?.template?.definition?.enableDescendantBrowsing;
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <SetCommunity data={community}>
         {showNavBar && (
           <CommunityNavBar data={community} entityData={community} />

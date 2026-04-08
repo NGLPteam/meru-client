@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 export default async function ItemContributorsPage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
   });
 
@@ -22,7 +22,7 @@ export default async function ItemContributorsPage({ params }: BasePageParams) {
   if (!item || !slug) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <ContributionsBlock data={item} slug={slug} background="neutral00" />
     </UpdateClientEnvironment>
   );

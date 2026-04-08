@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 export default async function ItemMetricsPage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
     dateRange: {},
     precision: "YEAR" as AnalyticsPrecision,
@@ -28,7 +28,7 @@ export default async function ItemMetricsPage({ params }: BasePageParams) {
   if (!item) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <Suspense fallback={<LoadingBlock />}>
         <ArticleAnalyticsBlock data={item} />
       </Suspense>
