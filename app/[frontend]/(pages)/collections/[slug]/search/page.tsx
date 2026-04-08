@@ -18,7 +18,7 @@ export default async function CollectionSearchPage({
 
   const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
     ...(q && { query: q }),
     predicates,
@@ -32,7 +32,7 @@ export default async function CollectionSearchPage({
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <Suspense fallback={<LoadingBlock />}>
         <SearchLayout data={collection} scoped />
       </Suspense>

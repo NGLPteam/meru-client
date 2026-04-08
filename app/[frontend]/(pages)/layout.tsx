@@ -1,15 +1,15 @@
 import { graphql } from "relay-runtime";
 import { PropsWithChildren } from "react";
 import { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
 import getStaticGlobalContextData from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
 import { GlobalStaticContextProvider } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
+import { auth } from "@/lib/auth/initAuth";
 import fetchQuery from "@/lib/relay/fetchQuery";
 import RelayEnvironmentProvider from "@/lib/relay/RelayClientEnvProvider";
 import { layoutAllPagesQuery as Query } from "@/relay/layoutAllPagesQuery.graphql";
 import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
-import { ViewerContextProvider } from "@/contexts/ViewerContext";
+import { ViewerContextProvider, resolveViewer } from "@/contexts/ViewerContext";
 import AppBody from "@/components/global/AppBody";
 import { BasePageParams } from "@/types/page";
 import ProgressBar from "@/components/atomic/loading/ProgressBar";
@@ -26,31 +26,32 @@ export async function generateMetadata(
 export default async function PageLayout({ children }: PropsWithChildren) {
   const globalData = await getStaticGlobalContextData();
 
-  const { data, records } = await fetchQuery<Query>(query, {});
+  const session = await auth();
+  const viewer = await resolveViewer(session?.accessToken);
+
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {});
 
   return (
-    <>
-      <SessionProvider>
-        <GlobalStaticContextProvider globalData={globalData}>
-          <RelayEnvironmentProvider>
-            <ViewerContextProvider data={data}>
-              <UpdateClientEnvironment records={records}>
-                <ProgressBarProvider>
-                  <ProgressBar />
-                  <AppBody data={data}>{children}</AppBody>
-                </ProgressBarProvider>
-              </UpdateClientEnvironment>
-            </ViewerContextProvider>
-          </RelayEnvironmentProvider>
-        </GlobalStaticContextProvider>
-      </SessionProvider>
-    </>
+    <GlobalStaticContextProvider globalData={globalData}>
+      <RelayEnvironmentProvider>
+        <ViewerContextProvider {...viewer}>
+          <UpdateClientEnvironment
+            records={records}
+            sessionToken={sessionToken}
+          >
+            <ProgressBarProvider>
+              <ProgressBar />
+              <AppBody data={data}>{children}</AppBody>
+            </ProgressBarProvider>
+          </UpdateClientEnvironment>
+        </ViewerContextProvider>
+      </RelayEnvironmentProvider>
+    </GlobalStaticContextProvider>
   );
 }
 
 const query = graphql`
   query layoutAllPagesQuery {
-    ...ViewerContextFragment
     ...AppBodyFragment
   }
 `;

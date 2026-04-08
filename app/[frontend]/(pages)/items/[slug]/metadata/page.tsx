@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 export default async function ItemPage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
   });
 
@@ -30,7 +30,7 @@ export default async function ItemPage({ params }: BasePageParams) {
   const { template } = metadata ?? {};
 
   return template ? (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <MetadataTemplate data={template} />
       <FullTextFallback>
         <MainLayout data={main} fallback />

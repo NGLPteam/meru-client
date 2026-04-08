@@ -27,7 +27,7 @@ export default async function ContributorPage({
       ? collectionQuery
       : detailQuery;
 
-  const { data, records } = await fetchQuery<
+  const { data, records, sessionToken } = await fetchQuery<
     DetailQuery | ItemQuery | CollectionQuery
   >(query, {
     slug,
@@ -50,7 +50,7 @@ export default async function ContributorPage({
       : undefined;
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <SetCommunity data={community}>
         {item && <ContributorDetailNav data={item} />}
         {collection && <ContributorDetailNav data={collection} />}

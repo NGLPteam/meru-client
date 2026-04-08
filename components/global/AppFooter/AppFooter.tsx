@@ -3,7 +3,7 @@ import { graphql, useFragment } from "react-relay";
 import { useTranslation } from "react-i18next";
 import startCase from "lodash/startCase";
 import classNames from "classnames";
-import { useSession } from "next-auth/react";
+import useViewerContext from "@/contexts/useViewerContext";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import { Search } from "@/components/forms";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
@@ -34,7 +34,7 @@ export default function AppFooter({ data, communityData }: Props) {
 
   const { t } = useTranslation();
 
-  const { status } = useSession();
+  const { isAuthenticated } = useViewerContext();
 
   function renderRoute(href: string, label: string) {
     return (
@@ -96,7 +96,7 @@ export default function AppFooter({ data, communityData }: Props) {
           <h5 className="t-label-lg">{t("nav.explore")}</h5>
           <ul className={classNames("t-unstyled-list", styles.navList)}>
             {renderRoute("/", "nav.home")}
-            {status === "authenticated" ? (
+            {isAuthenticated ? (
               process.env.NEXT_PUBLIC_ADMIN_URL &&
               renderRoute(process.env.NEXT_PUBLIC_ADMIN_URL, "nav.admin")
             ) : (

@@ -29,7 +29,7 @@ export default async function ItemLayout({
   params,
 }: BasePageParams & PropsWithChildren) {
   const { slug } = await params;
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
   });
 
@@ -44,7 +44,7 @@ export default async function ItemLayout({
   const { hero, navigation } = layouts ?? {};
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <SetCommunity data={community}>
         {hero && <HeroTemplate data={hero} />}
         <ProcessingCheck data={layouts} entityType="item">

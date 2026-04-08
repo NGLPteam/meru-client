@@ -9,8 +9,15 @@ import { getCurrentEnvironment } from "./environment";
 export default async function fetchQuery<Q extends OperationType>(
   query: GraphQLTaggedNode,
   vars: Record<string, any>,
+  includeToken?: boolean,
 ) {
-  const env = getCurrentEnvironment();
+  const { draftMode } = await import("next/headers");
+  const { auth } = await import("@/lib/auth/initAuth");
+  const isPreview = (await draftMode()).isEnabled;
+  const session = await auth();
+  const sessionToken =
+    isPreview || includeToken ? session?.accessToken : undefined;
+  const env = getCurrentEnvironment({ sessionToken });
 
   const data = await relayFetch<Q>(env, query, vars, {
     networkCacheConfig: { force: false },
@@ -22,5 +29,5 @@ export default async function fetchQuery<Q extends OperationType>(
 
   const records = env.getStore().getSource().toJSON();
 
-  return { data, records };
+  return { data, records, sessionToken };
 }

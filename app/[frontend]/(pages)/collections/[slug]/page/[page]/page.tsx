@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 export default async function CollectionPagePage({ params }: BasePageParams) {
   const { slug, page: pageSlug } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
     pageSlug,
   });
@@ -25,7 +25,7 @@ export default async function CollectionPagePage({ params }: BasePageParams) {
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <Suspense fallback={<LoadingBlock />}>
         <EntityPageLayout data={collection.page} />
       </Suspense>

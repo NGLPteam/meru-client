@@ -18,7 +18,7 @@ export default async function SearchPage({
 
   const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     ...(q && { query: q }),
     predicates,
     page: page ? parseInt(page) : 1,
@@ -29,7 +29,7 @@ export default async function SearchPage({
   if (!data) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <SetCommunity>
         <Suspense fallback={<LoadingBlock />}>
           <SearchLayout data={data} />

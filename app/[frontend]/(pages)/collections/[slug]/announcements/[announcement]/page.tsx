@@ -17,7 +17,7 @@ export default async function CollectionAnnouncementPage({
 }: BasePageParams) {
   const { slug, announcement } = await params;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     slug,
     announcementSlug: announcement,
   });
@@ -27,7 +27,7 @@ export default async function CollectionAnnouncementPage({
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <Suspense fallback={<LoadingBlock />}>
         <EntityAnnouncementLayout data={collection.announcement} />
       </Suspense>

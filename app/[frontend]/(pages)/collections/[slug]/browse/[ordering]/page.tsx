@@ -19,7 +19,7 @@ export default async function CollectionBrowsePage({
   const { slug, ordering } = await params;
   const { context, page } = await searchParams;
 
-  const { data, records } = await fetchQuery<Query>(query, {
+  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
     identifier: ordering,
     page: parseInt(page) || 1,
     slug,
@@ -30,7 +30,7 @@ export default async function CollectionBrowsePage({
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records}>
+    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
       <Suspense fallback={<LoadingBlock />}>
         <EntityOrderingLayout
           data={collection.ordering}
