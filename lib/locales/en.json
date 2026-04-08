@@ -272,7 +272,11 @@
       "admin_content": "There was an error rendering this content: {{error}}",
       "processing": "<0>Content Currently Being Processed</0><1>This {{entity}} was recently updated and is being processed before it can be displayed. Please check back in a few minutes.</1><2>If this message persists, please contact support for assistance.</2>",
       "empty": "<0>This {{entity}} is empty.</0><1>Please check back soon for updates.</1><2>If this message persists, please contact support for assistance.</2>",
-      "empty_item": "<0>This {{entity}} has no content.</0><1>Please check back soon for updates.</1><2>If this message persists, please contact support for assistance.</2>"
+      "empty_item": "<0>This {{entity}} has no content.</0><1>Please check back soon for updates.</1><2>If this message persists, please contact support for assistance.</2>",
+      "unauthorized": "You must be logged in to preview.",
+      "unauthorized_body": "Please sign in and try again.",
+      "forbidden": "You do not have permission to preview this item.",
+      "forbidden_body": "Please contact an administrator if you believe this is an error."
     },
     "analytics": {
       "regions": {
