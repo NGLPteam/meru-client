@@ -41,9 +41,21 @@ const query = graphql`
   query ViewCounterQuery($slug: Slug!) {
     item(slug: $slug) {
       __typename
+      entityViews {
+        total
+      }
+      assetDownloads {
+        total
+      }
     }
     collection(slug: $slug) {
       __typename
+      entityViews {
+        total
+      }
+      assetDownloads {
+        total
+      }
     }
     community(slug: $slug) {
       __typename
