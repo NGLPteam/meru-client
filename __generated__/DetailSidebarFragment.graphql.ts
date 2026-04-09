@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1ea719ed1709c9e89d48268f3435e71a>>
+ * @generated SignedSource<<60d33ad74701a52c793d93767b84166e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -35,40 +35,22 @@ export type DetailSidebarFragment$key = {
 };
 
 const node: ReaderFragment = (function(){
-var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "AnalyticsEventCountSummary",
-    "kind": "LinkedField",
-    "name": "entityViews",
-    "plural": false,
-    "selections": [
-      {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "ViewCountFragment"
-      }
-    ],
-    "storageKey": null
-  },
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "AnalyticsEventCountSummary",
-    "kind": "LinkedField",
-    "name": "assetDownloads",
-    "plural": false,
-    "selections": [
-      {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "DownloadCountFragment"
-      }
-    ],
-    "storageKey": null
-  }
-];
+var v0 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "AnalyticsEventCountSummary",
+  "kind": "LinkedField",
+  "name": "entityViews",
+  "plural": false,
+  "selections": [
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "ViewCountFragment"
+    }
+  ],
+  "storageKey": null
+};
 return {
   "argumentDefinitions": [],
   "kind": "Fragment",
@@ -85,13 +67,33 @@ return {
       "selections": [
         {
           "kind": "InlineFragment",
-          "selections": (v0/*: any*/),
+          "selections": [
+            (v0/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "AnalyticsEventCountSummary",
+              "kind": "LinkedField",
+              "name": "assetDownloads",
+              "plural": false,
+              "selections": [
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "DownloadCountFragment"
+                }
+              ],
+              "storageKey": null
+            }
+          ],
           "type": "Item",
           "abstractKey": null
         },
         {
           "kind": "InlineFragment",
-          "selections": (v0/*: any*/),
+          "selections": [
+            (v0/*: any*/)
+          ],
           "type": "Collection",
           "abstractKey": null
         }
@@ -149,6 +151,6 @@ return {
 };
 })();
 
-(node as any).hash = "647d60137461dbeb387c1724235e1534";
+(node as any).hash = "0329427bb0af55f417f83147e1bb7947";
 
 export default node;

@@ -54,9 +54,6 @@ const fragment = graphql`
         entityViews {
           ...ViewCountFragment
         }
-        assetDownloads {
-          ...DownloadCountFragment
-        }
       }
     }
     definition {
