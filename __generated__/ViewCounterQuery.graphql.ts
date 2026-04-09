@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a342b8878608416ea7ff722c1581f080>>
+ * @generated SignedSource<<7d30c2aeed0a6acac9b59077b8188666>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,12 +15,24 @@ export type ViewCounterQuery$variables = {
 export type ViewCounterQuery$data = {
   readonly collection: {
     readonly __typename: "Collection";
+    readonly assetDownloads: {
+      readonly total: number;
+    };
+    readonly entityViews: {
+      readonly total: number;
+    };
   } | null | undefined;
   readonly community: {
     readonly __typename: "Community";
   } | null | undefined;
   readonly item: {
     readonly __typename: "Item";
+    readonly assetDownloads: {
+      readonly total: number;
+    };
+    readonly entityViews: {
+      readonly total: number;
+    };
   } | null | undefined;
 };
 export type ViewCounterQuery = {
@@ -51,17 +63,51 @@ v2 = {
   "storageKey": null
 },
 v3 = [
-  (v2/*: any*/)
-],
-v4 = [
-  (v2/*: any*/),
   {
     "alias": null,
     "args": null,
     "kind": "ScalarField",
-    "name": "id",
+    "name": "total",
     "storageKey": null
   }
+],
+v4 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "AnalyticsEventCountSummary",
+  "kind": "LinkedField",
+  "name": "entityViews",
+  "plural": false,
+  "selections": (v3/*: any*/),
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "AnalyticsEventCountSummary",
+  "kind": "LinkedField",
+  "name": "assetDownloads",
+  "plural": false,
+  "selections": (v3/*: any*/),
+  "storageKey": null
+},
+v6 = [
+  (v2/*: any*/),
+  (v4/*: any*/),
+  (v5/*: any*/)
+],
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v8 = [
+  (v2/*: any*/),
+  (v4/*: any*/),
+  (v5/*: any*/),
+  (v7/*: any*/)
 ];
 return {
   "fragment": {
@@ -77,7 +123,7 @@ return {
         "kind": "LinkedField",
         "name": "item",
         "plural": false,
-        "selections": (v3/*: any*/),
+        "selections": (v6/*: any*/),
         "storageKey": null
       },
       {
@@ -87,7 +133,7 @@ return {
         "kind": "LinkedField",
         "name": "collection",
         "plural": false,
-        "selections": (v3/*: any*/),
+        "selections": (v6/*: any*/),
         "storageKey": null
       },
       {
@@ -97,7 +143,9 @@ return {
         "kind": "LinkedField",
         "name": "community",
         "plural": false,
-        "selections": (v3/*: any*/),
+        "selections": [
+          (v2/*: any*/)
+        ],
         "storageKey": null
       }
     ],
@@ -117,7 +165,7 @@ return {
         "kind": "LinkedField",
         "name": "item",
         "plural": false,
-        "selections": (v4/*: any*/),
+        "selections": (v8/*: any*/),
         "storageKey": null
       },
       {
@@ -127,7 +175,7 @@ return {
         "kind": "LinkedField",
         "name": "collection",
         "plural": false,
-        "selections": (v4/*: any*/),
+        "selections": (v8/*: any*/),
         "storageKey": null
       },
       {
@@ -137,22 +185,25 @@ return {
         "kind": "LinkedField",
         "name": "community",
         "plural": false,
-        "selections": (v4/*: any*/),
+        "selections": [
+          (v2/*: any*/),
+          (v7/*: any*/)
+        ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "811bf249cf708f3fb2c76479d1a9285a",
+    "cacheID": "c3174bcccb33b6c1121ff79dae3ee444",
     "id": null,
     "metadata": {},
     "name": "ViewCounterQuery",
     "operationKind": "query",
-    "text": "query ViewCounterQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    __typename\n    id\n  }\n  collection(slug: $slug) {\n    __typename\n    id\n  }\n  community(slug: $slug) {\n    __typename\n    id\n  }\n}\n"
+    "text": "query ViewCounterQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    __typename\n    entityViews {\n      total\n    }\n    assetDownloads {\n      total\n    }\n    id\n  }\n  collection(slug: $slug) {\n    __typename\n    entityViews {\n      total\n    }\n    assetDownloads {\n      total\n    }\n    id\n  }\n  community(slug: $slug) {\n    __typename\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d2bad520736297e1f208bd846da52a52";
+(node as any).hash = "56e69258d5565b3ef528b4bde75652a4";
 
 export default node;

@@ -7,12 +7,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import {
-  graphql,
-  useRefetchableFragment,
-  useRelayEnvironment,
-  commitLocalUpdate,
-} from "react-relay";
+import { graphql, useRefetchableFragment } from "react-relay";
 import dynamic from "next/dynamic";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { ArticleAnalyticsBlockFragment$key } from "@/relay/ArticleAnalyticsBlockFragment.graphql";
@@ -54,8 +49,6 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
     updated: false,
   };
 
-  const environment = useRelayEnvironment();
-
   const [isPending, startTransition] = useTransition();
 
   const doRefetch = useCallback(
@@ -76,31 +69,6 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
   useEffect(() => {
     doRefetch(settings);
   }, [doRefetch, settings]);
-
-  useEffect(() => {
-    const viewsTotal = chartData.viewsByDate.unfilteredTotal;
-    const downloadsTotal = chartData.downloadsByDate.unfilteredTotal;
-
-    commitLocalUpdate(environment, (store) => {
-      const itemRecord = store.get(chartData.id);
-      if (!itemRecord) return;
-
-      const entityViews = itemRecord.getLinkedRecord("entityViews");
-      if (entityViews) {
-        entityViews.setValue(viewsTotal, "total");
-      }
-
-      const assetDownloads = itemRecord.getLinkedRecord("assetDownloads");
-      if (assetDownloads) {
-        assetDownloads.setValue(downloadsTotal, "total");
-      }
-    });
-  }, [
-    environment,
-    chartData.id,
-    chartData.viewsByDate.unfilteredTotal,
-    chartData.downloadsByDate.unfilteredTotal,
-  ]);
 
   const region = settings.usOnly ? "US" : "world";
 
