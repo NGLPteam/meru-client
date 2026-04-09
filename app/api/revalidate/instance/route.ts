@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET;
 
-export async function DELETE(_request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   if (!REVALIDATE_SECRET)
     return Response.json(
       {
@@ -35,10 +35,17 @@ export async function DELETE(_request: NextRequest) {
       },
     );
 
-  revalidatePath("/", "layout");
+  const { homepage } = await request.json().catch(() => ({ homepage: false }));
+
+  if (homepage) {
+    revalidatePath("/", "page");
+  } else {
+    revalidatePath("/", "layout");
+  }
 
   return Response.json({
     revalidated: true,
     now: Date.now(),
+    scope: homepage ? "homepage" : "instance",
   });
 }
