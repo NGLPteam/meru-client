@@ -10,18 +10,23 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const host = (await headers()).get("host");
+
+  const pathname = request.nextUrl.pathname;
+
+  const searchParams = request.nextUrl.searchParams;
+  const paramsString =
+    searchParams.size > 0 ? `?${request.nextUrl.searchParams}` : "";
+
   if (
     process.env.NODE_ENV === "production" &&
     (await headers()).get("x-forwarded-proto") !== "https" &&
     !host?.includes("localhost")
   ) {
     return NextResponse.redirect(
-      `https://${host}${request.nextUrl.pathname}`,
+      `https://${host}${pathname}${paramsString}`,
       301,
     );
   }
-
-  const pathname = request.nextUrl.pathname;
 
   if (pathname.startsWith("/permalink")) {
     const permalink = pathname.split("/")?.[2];
@@ -34,7 +39,7 @@ export async function middleware(request: NextRequest) {
           kind,
         )}/${permalinkableSlug}`;
         return NextResponse.rewrite(
-          new URL(`/dynamic${entityPath}`, request.url),
+          new URL(`/dynamic${entityPath}${paramsString}`, request.url),
         );
       }
     }
@@ -43,5 +48,7 @@ export async function middleware(request: NextRequest) {
   // Because we need runtime env vars, we need to avoid generating any pages at
   // buildtime. This (or any) top-level dyanmic segment ensures we opt all
   // routes out of Next's buildtime generation.
-  return NextResponse.rewrite(new URL(`/dynamic${pathname}`, request.url));
+  return NextResponse.rewrite(
+    new URL(`/dynamic${pathname}${paramsString}`, request.url),
+  );
 }
