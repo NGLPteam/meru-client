@@ -49,6 +49,7 @@ function Button({
   const linkProps = {
     href: "href" in props ? props.href : undefined,
     download: "download" in props ? props.download : undefined,
+    target: "target" in props ? props.target : undefined,
   };
 
   return Tag ? (
