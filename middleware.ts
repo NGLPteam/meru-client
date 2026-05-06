@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.redirect(
       `https://${host}${pathname}${paramsString}`,
-      301
+      301,
     );
   }
 
@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
 
     if (!session) {
       return NextResponse.rewrite(
-        new URL("/dynamic/unauthorized?reason=unauthenticated", request.url)
+        new URL("/dynamic/unauthorized?reason=unauthenticated", request.url),
       );
     }
 
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
 
       if (!canUpdate) {
         return NextResponse.rewrite(
-          new URL("/dynamic/unauthorized?reason=forbidden", request.url)
+          new URL("/dynamic/unauthorized?reason=forbidden", request.url),
         );
       }
     }
@@ -60,10 +60,10 @@ export async function middleware(request: NextRequest) {
 
       if (kind && permalinkableSlug) {
         const entityPath = `/${getRouteByEntityKind(
-          kind
+          kind,
         )}/${permalinkableSlug}`;
         return NextResponse.rewrite(
-          new URL(`/dynamic${entityPath}${paramsString}`, request.url)
+          new URL(`/dynamic${entityPath}${paramsString}`, request.url),
         );
       }
     }
@@ -73,6 +73,6 @@ export async function middleware(request: NextRequest) {
   // buildtime. This (or any) top-level dyanmic segment ensures we opt all
   // routes out of Next's buildtime generation.
   return NextResponse.rewrite(
-    new URL(`/dynamic${pathname}${paramsString}`, request.url)
+    new URL(`/dynamic${pathname}${paramsString}`, request.url),
   );
 }
