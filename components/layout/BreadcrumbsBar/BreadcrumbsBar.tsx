@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { graphql, useFragment } from "react-relay";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
+import capitalize from "lodash/capitalize";
 import { Breadcrumbs, Button, Dropdown } from "@/components/atomic";
 import { getOrigin, getRouteByEntityType } from "@/helpers";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
@@ -48,42 +49,58 @@ export default function BreadcrumbsBar({
     <nav className={classNames(className ?? "a-bg-custom10", styles.outer)}>
       <div className={classNames("l-container-wide", styles.inner)}>
         <Breadcrumbs data={breadcrumbData} />
-        {showShare && (
-          <Dropdown
-            label={t("share.label")}
-            disclosure={
-              <Button as="div" size="sm" icon="share" secondary>
-                {t("share.label")}
-              </Button>
-            }
-            menuItems={[
-              <Dropdown.Link
-                key="fb"
-                href={`mailto:?subject=${breadcrumbData.title} - ${installation}&body=View ${breadcrumbData.title} published on ${installation}.%0d%0a%0d%0a${url}`}
-                icon="email"
-                iconLeft
-                label={t("share.email")}
-                className={classNames(styles.shareLink, "share-link")}
-              />,
-              <Dropdown.Link
-                key="fb"
-                href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
-                icon="facebook"
-                iconLeft
-                label={t("share.facebook")}
-                className={classNames(styles.shareLink, "share-link")}
-              />,
-              <Dropdown.Link
-                key="x"
-                href={`https://x.com/share?text=&url=${url}`}
-                icon="x"
-                iconLeft
-                label={t("share.x")}
-                className={classNames(styles.shareLink, "share-link")}
-              />,
-            ]}
-          />
-        )}
+        <div className={styles.buttons}>
+          {breadcrumbData.submissionTarget?.state === "OPEN" && (
+            <Button
+              as="a"
+              size="sm"
+              icon="linkExternal"
+              href={`${process.env.NEXT_PUBLIC_ADMIN_URL}my-submissions/new?collection=${breadcrumbData.slug}`}
+              target="_blank"
+              secondary
+            >
+              {`Submit to ${capitalize(
+                breadcrumbData.schemaVersion.identifier,
+              )}`}
+            </Button>
+          )}
+          {showShare && (
+            <Dropdown
+              label={t("share.label")}
+              disclosure={
+                <Button as="div" size="sm" icon="share" secondary>
+                  {t("share.label")}
+                </Button>
+              }
+              menuItems={[
+                <Dropdown.Link
+                  key="fb"
+                  href={`mailto:?subject=${breadcrumbData.title} - ${installation}&body=View ${breadcrumbData.title} published on ${installation}.%0d%0a%0d%0a${url}`}
+                  icon="email"
+                  iconLeft
+                  label={t("share.email")}
+                  className={classNames(styles.shareLink, "share-link")}
+                />,
+                <Dropdown.Link
+                  key="fb"
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
+                  icon="facebook"
+                  iconLeft
+                  label={t("share.facebook")}
+                  className={classNames(styles.shareLink, "share-link")}
+                />,
+                <Dropdown.Link
+                  key="x"
+                  href={`https://x.com/share?text=&url=${url}`}
+                  icon="x"
+                  iconLeft
+                  label={t("share.x")}
+                  className={classNames(styles.shareLink, "share-link")}
+                />,
+              ]}
+            />
+          )}
+        </div>
       </div>
     </nav>
   ) : null;
@@ -107,6 +124,13 @@ export const fragment = graphql`
         canonical
         uri
       }
+    }
+    schemaVersion {
+      name
+      identifier
+    }
+    submissionTarget {
+      state
     }
     ...BreadcrumbsFragment
   }
