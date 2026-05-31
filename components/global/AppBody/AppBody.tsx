@@ -8,6 +8,7 @@ import { AppBodyFragment$key } from "@/relay/AppBodyFragment.graphql";
 import { SearchButtonFragment$key } from "@/relay/SearchButtonFragment.graphql";
 import { SetCommunityContextProvider } from "@/contexts/CommunityContext";
 import SkipLink from "@/components/global/SkipLink";
+import DraftModeBanner from "@/components/global/DraftModeBanner";
 import AppHeader from "../AppHeader";
 import AppFooter from "../AppFooter";
 import styles from "./AppBody.module.css";
@@ -16,9 +17,10 @@ interface Props {
   children: React.ReactNode;
   data?: AppBodyFragment$key | null;
   searchData?: SearchButtonFragment$key | null;
+  draftModeEnabled?: boolean;
 }
 
-function AppBody({ children, data, searchData }: Props) {
+function AppBody({ children, data, searchData, draftModeEnabled }: Props) {
   updateI18n("en");
 
   const globalData = useFragment(fragment, data);
@@ -27,6 +29,7 @@ function AppBody({ children, data, searchData }: Props) {
 
   return (
     <div className={classNames("a-bg-neutral00", styles.content)}>
+      {draftModeEnabled && <DraftModeBanner />}
       <SkipLink toId="main" label={t("nav.skip_to_content")} />
       <SetCommunityContextProvider>
         <AppHeader data={globalData} searchData={searchData} />
