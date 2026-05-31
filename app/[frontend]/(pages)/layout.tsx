@@ -1,6 +1,7 @@
 import { graphql } from "relay-runtime";
 import { PropsWithChildren } from "react";
 import { Metadata } from "next";
+import { draftMode } from "next/headers";
 import getStaticGlobalContextData from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
 import { GlobalStaticContextProvider } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
@@ -29,6 +30,8 @@ export default async function PageLayout({ children }: PropsWithChildren) {
   const session = await auth();
   const viewer = await resolveViewer(session?.accessToken);
 
+  const { isEnabled: draftModeEnabled } = await draftMode();
+
   const { data, records, sessionToken } = await fetchQuery<Query>(query, {});
 
   return (
@@ -41,7 +44,9 @@ export default async function PageLayout({ children }: PropsWithChildren) {
           >
             <ProgressBarProvider>
               <ProgressBar />
-              <AppBody data={data}>{children}</AppBody>
+              <AppBody data={data} draftModeEnabled={draftModeEnabled}>
+                {children}
+              </AppBody>
             </ProgressBarProvider>
           </UpdateClientEnvironment>
         </ViewerContextProvider>

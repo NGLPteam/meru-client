@@ -1,0 +1,18 @@
+.banner {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 100;
+  min-block-size: 2.75rem;
+}
+
+.content {
+  position: relative;
+  padding-block: 0.75rem;
+  text-align: center;
+}
+
+.exit {
+  position: absolute;
+  inset-block-start: 0.4rem;
+  inset-inline-end: 0.5rem;
+}

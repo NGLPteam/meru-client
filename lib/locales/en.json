@@ -312,6 +312,10 @@
       "email": "Email",
       "facebook": "Facebook",
       "x": "X"
+    },
+    "preview": {
+      "draft_mode_message": "Preview Mode",
+      "exit_draft_mode": "Exit"
     }
   }
 }
