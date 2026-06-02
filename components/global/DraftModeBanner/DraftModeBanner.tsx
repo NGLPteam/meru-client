@@ -5,16 +5,19 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Button } from "@/components/atomic";
+import { useProgress } from "@/lib/vendor/react-transition-progress";
 import { exitDraftMode } from "./actions";
 import styles from "./DraftModeBanner.module.css";
 
 export default function DraftModeBanner() {
   const { t } = useTranslation();
   const router = useRouter();
+  const startProgress = useProgress();
   const [pending, startTransition] = useTransition();
 
   const handleExit = () => {
     startTransition(async () => {
+      startProgress();
       await exitDraftMode();
       router.refresh();
     });

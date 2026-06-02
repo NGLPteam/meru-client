@@ -6,10 +6,14 @@ import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import IconFactory from "@/components/factories/IconFactory";
 import { removeToken } from "@/lib/auth/token";
 import styles from "./AccountDropdown.module.css";
+import PreviewModeButton from "./PreviewModeButton";
 import { signIn, signOut } from "./actions";
 
+const PREVIEW_ROLES = ["ADMIN", "EDITOR", "MANAGER", "AUTHOR"];
+
 export default function AccountDropdown({ condensed }: Props) {
-  const { avatarUrl, name, isAuthenticated } = useViewerContext();
+  const { avatarUrl, name, isAuthenticated, primaryRole, isPreview } =
+    useViewerContext();
 
   const { t } = useTranslation();
 
@@ -20,9 +24,14 @@ export default function AccountDropdown({ condensed }: Props) {
     signOut();
   }, []);
 
+  const canPreview = !!primaryRole && PREVIEW_ROLES.includes(primaryRole);
+
   const menuItems = [
     ...(adminUrl
       ? [<Dropdown.Link key={1} href={adminUrl} label={t("nav.admin")} />]
+      : []),
+    ...(!isPreview && canPreview
+      ? [<PreviewModeButton key={3} label={t("preview.preview_mode")} />]
       : []),
     <Link as="button" key={2} onClick={handleSignOut}>
       {t("common.sign_out")}
