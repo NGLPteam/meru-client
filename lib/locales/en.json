@@ -274,9 +274,9 @@
       "empty": "<0>This {{entity}} is empty.</0><1>Please check back soon for updates.</1><2>If this message persists, please contact support for assistance.</2>",
       "empty_item": "<0>This {{entity}} has no content.</0><1>Please check back soon for updates.</1><2>If this message persists, please contact support for assistance.</2>",
       "unauthorized": "You must be logged in to preview.",
-      "unauthorized_body": "Please sign in and try again.",
-      "forbidden": "You do not have permission to preview this item.",
-      "forbidden_body": "Please contact an administrator if you believe this is an error."
+      "unauthorized_body": "<p>Please sign in and try again.</p>",
+      "forbidden": "You do not have permission to preview this {{entity}}.",
+      "forbidden_body": "<p>Please contact an administrator if you believe this is an error. To view the public version, exit Preview Mode above.</p>"
     },
     "analytics": {
       "regions": {
@@ -315,7 +315,8 @@
     },
     "preview": {
       "draft_mode_message": "Preview Mode",
-      "exit_draft_mode": "Exit"
+      "exit_draft_mode": "Exit",
+      "preview_mode": "Preview Mode"
     }
   }
 }

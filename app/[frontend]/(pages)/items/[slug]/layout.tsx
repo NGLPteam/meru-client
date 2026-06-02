@@ -1,7 +1,9 @@
 import { PropsWithChildren } from "react";
 import { graphql } from "relay-runtime";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 import getStaticGoogleScholarData from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import HeroTemplate from "@/components/templates/Hero";
@@ -39,6 +41,12 @@ export default async function ItemLayout({
 
   if (!item) return notFound();
 
+  const { isEnabled: draftModeEnabled } = await draftMode();
+
+  if (draftModeEnabled && !item.canUpdate?.value) {
+    return <UnauthorizedMessage reason="forbidden" entity="item" />;
+  }
+
   const { community, layouts } = item;
 
   const { hero, navigation } = layouts ?? {};
@@ -66,6 +74,9 @@ export default async function ItemLayout({
 const query = graphql`
   query layoutItemTemplateQuery($slug: Slug!) {
     item(slug: $slug) {
+      canUpdate {
+        value
+      }
       layouts {
         hero {
           ...HeroTemplateFragment

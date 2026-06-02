@@ -1,7 +1,9 @@
 import { PropsWithChildren } from "react";
 import { graphql } from "relay-runtime";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
@@ -33,6 +35,12 @@ export default async function CommunityLayout({
 
   if (!community) return notFound();
 
+  const { isEnabled: draftModeEnabled } = await draftMode();
+
+  if (draftModeEnabled && !community.canUpdate?.value) {
+    return <UnauthorizedMessage reason="forbidden" entity="community" />;
+  }
+
   const { layouts } = community;
 
   const showNavBar =
@@ -56,6 +64,9 @@ export default async function CommunityLayout({
 const query = graphql`
   query layoutCommunityTemplateQuery($slug: Slug!) {
     community(slug: $slug) {
+      canUpdate {
+        value
+      }
       layouts {
         hero {
           template {
