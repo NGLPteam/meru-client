@@ -39,10 +39,12 @@ export async function middleware(request: NextRequest) {
       );
     }
 
-    const slug = pathname.split("/")?.[2];
+    const parts = pathname.split("/");
+    const entity = parts?.[2];
+    const slug = parts?.[3];
 
-    if (slug) {
-      const canUpdate = await fetchPreviewAccess(slug);
+    if (entity && slug) {
+      const canUpdate = await fetchPreviewAccess(entity, slug);
 
       if (!canUpdate) {
         return NextResponse.rewrite(

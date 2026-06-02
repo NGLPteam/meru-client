@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import Button from "@/components/atomic/Button";
 
 const messages = {
@@ -14,7 +14,13 @@ const messages = {
   },
 };
 
-export default function UnauthorizedMessage({ reason }: { reason?: string }) {
+export default function UnauthorizedMessage({
+  reason,
+  entity,
+}: {
+  reason?: string;
+  entity?: string;
+}) {
   const { t } = useTranslation();
 
   const keys =
@@ -22,14 +28,16 @@ export default function UnauthorizedMessage({ reason }: { reason?: string }) {
       ? messages[reason as keyof typeof messages]
       : messages.forbidden;
 
+  const entityLabel = entity ? t(`glossary.${entity}`) : t("common.record");
+
   return (
     <div
       className="l-container-wide l-flex l-flex--align-center"
       style={{ minHeight: "40vh", justifyContent: "center" }}
     >
       <div className="t-rte t-align-center">
-        <h2 className="t-h3">{t(keys.heading)}</h2>
-        <p>{t(keys.body)}</p>
+        <h2 className="t-h3">{t(keys.heading, { entity: entityLabel })}</h2>
+        <Trans i18nKey={keys.body} values={{ entity: entityLabel }} />
         <Button size="sm" as="a" href="/">
           {t("nav.home")}
         </Button>

@@ -1,7 +1,9 @@
 import { PropsWithChildren } from "react";
 import { graphql } from "relay-runtime";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import { BasePageParams } from "@/types/page";
@@ -34,6 +36,12 @@ export default async function CollectionTemplateLayout({
 
   if (!collection) return notFound();
 
+  const { isEnabled: draftModeEnabled } = await draftMode();
+
+  if (draftModeEnabled && !collection.canUpdate?.value) {
+    return <UnauthorizedMessage reason="forbidden" entity="collection" />;
+  }
+
   const { community, layouts } = collection;
 
   return (
@@ -53,6 +61,9 @@ export default async function CollectionTemplateLayout({
 const query = graphql`
   query layoutCollectionTemplateQuery($slug: Slug!) {
     collection(slug: $slug) {
+      canUpdate {
+        value
+      }
       layouts {
         hero {
           ...HeroTemplateFragment
