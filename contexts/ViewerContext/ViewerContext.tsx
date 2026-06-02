@@ -6,6 +6,8 @@ export interface ViewerContextProps {
   isAuthenticated: boolean;
   name?: string | null;
   allowedActions: readonly string[];
+  primaryRole?: string | null;
+  isPreview?: boolean;
   uploadAccess?: boolean;
   uploadToken?: string | null;
   avatarUrl?: string | null;

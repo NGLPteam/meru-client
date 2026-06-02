@@ -1,12 +1,13 @@
-import { ComponentProps } from "react";
+import { ComponentProps, HTMLAttributes } from "react";
 import { MaybeLinkRef } from "@castiron/common-types";
 import { Link as NextLink } from "@/lib/vendor/react-transition-progress/link";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./Link.module.css";
 
-export type LinkProps = Omit<ComponentProps<typeof NextLink>, "href"> & {
+export type LinkProps = Omit<ComponentProps<typeof NextLink>, "href" | "as"> & {
   href?: string | null;
   ref?: MaybeLinkRef;
+  as?: "span" | "button";
 };
 
 type IconProps = ComponentProps<typeof IconFactory>;
@@ -23,6 +24,8 @@ function Link({
   ...props
 }: Props & LinkProps) {
   if (!children) return null;
+
+  const Tag = as ?? "span";
 
   return href ? (
     <NextLink
@@ -42,7 +45,7 @@ function Link({
       )}
     </NextLink>
   ) : (
-    <span {...props}>
+    <Tag {...(props as HTMLAttributes<HTMLElement>)}>
       {icon && iconLeft && (
         <IconFactory className={styles.icon} icon={icon} role="presentation" />
       )}
@@ -50,7 +53,7 @@ function Link({
       {icon && !iconLeft && (
         <IconFactory className={styles.icon} icon={icon} role="presentation" />
       )}
-    </span>
+    </Tag>
   );
 }
 

@@ -7,6 +7,9 @@ const VIEWER_QUERY = `
     viewer {
       name
       allowedActions
+      primaryRole {
+        identifier
+      }
       uploadAccess
       uploadToken
       avatar {
@@ -24,6 +27,9 @@ const VIEWER_QUERY = `
 export interface ViewerData {
   name?: string | null;
   allowedActions?: readonly string[];
+  primaryRole?: {
+    identifier?: string | null;
+  } | null;
   uploadAccess?: boolean;
   uploadToken?: string | null;
   avatar?: {
@@ -59,6 +65,7 @@ export async function resolveViewer(
       isAuthenticated: true,
       name: viewer.name,
       allowedActions: viewer.allowedActions ?? [],
+      primaryRole: viewer.primaryRole?.identifier ?? null,
       uploadAccess: viewer.uploadAccess ?? false,
       uploadToken: viewer.uploadToken ?? null,
       avatarUrl: viewer.avatar?.small?.png?.url ?? undefined,

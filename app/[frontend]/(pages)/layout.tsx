@@ -37,7 +37,7 @@ export default async function PageLayout({ children }: PropsWithChildren) {
   return (
     <GlobalStaticContextProvider globalData={globalData}>
       <RelayEnvironmentProvider>
-        <ViewerContextProvider {...viewer}>
+        <ViewerContextProvider {...viewer} isPreview={draftModeEnabled}>
           <UpdateClientEnvironment
             records={records}
             sessionToken={sessionToken}
