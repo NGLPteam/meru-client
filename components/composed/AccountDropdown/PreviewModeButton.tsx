@@ -27,7 +27,7 @@ export default function PreviewModeButton({ label }: { label: string }) {
   };
 
   return (
-    <Link as="button" onClick={handleClick}>
+    <Link as="button" type="button" onClick={handleClick}>
       {label}
     </Link>
   );

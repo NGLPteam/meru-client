@@ -317,6 +317,10 @@
       "draft_mode_message": "Preview Mode",
       "exit_draft_mode": "Exit",
       "preview_mode": "Preview Mode"
+    },
+    "submission": {
+      "submit_to": "Submit to {{target}}",
+      "default_target": "Collection"
     }
   }
 }

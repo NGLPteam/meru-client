@@ -59,9 +59,11 @@ export default function BreadcrumbsBar({
               target="_blank"
               secondary
             >
-              {`Submit to ${capitalize(
-                breadcrumbData.schemaVersion.identifier,
-              )}`}
+              {t("submission.submit_to", {
+                target: breadcrumbData.schemaVersion?.identifier
+                  ? capitalize(breadcrumbData.schemaVersion.identifier)
+                  : t("submission.default_target"),
+              })}
             </Button>
           )}
           {showShare && (
@@ -74,7 +76,7 @@ export default function BreadcrumbsBar({
               }
               menuItems={[
                 <Dropdown.Link
-                  key="fb"
+                  key="email"
                   href={`mailto:?subject=${breadcrumbData.title} - ${installation}&body=View ${breadcrumbData.title} published on ${installation}.%0d%0a%0d%0a${url}`}
                   icon="email"
                   iconLeft

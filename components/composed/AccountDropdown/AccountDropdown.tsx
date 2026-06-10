@@ -29,7 +29,7 @@ export default function AccountDropdown({ condensed }: Props) {
     ...(!isPreview && canAccessAdmin
       ? [<PreviewModeButton key={3} label={t("preview.preview_mode")} />]
       : []),
-    <Link as="button" key={2} onClick={handleSignOut}>
+    <Link as="button" type="button" key={2} onClick={handleSignOut}>
       {t("common.sign_out")}
     </Link>,
   ];
