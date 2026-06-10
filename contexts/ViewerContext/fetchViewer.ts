@@ -47,14 +47,18 @@ export interface ViewerData {
 export async function fetchViewer(
   sessionToken?: string,
 ): Promise<ViewerData | null> {
-  const resp = await fetch(getAPIURL(), {
-    method: "POST",
-    headers: getGQLHeaders(sessionToken),
-    body: JSON.stringify({ query: VIEWER_QUERY }),
-    cache: "no-store",
-  });
-  const json = await resp.json();
-  return json.data?.viewer ?? null;
+  try {
+    const resp = await fetch(getAPIURL(), {
+      method: "POST",
+      headers: getGQLHeaders(sessionToken),
+      body: JSON.stringify({ query: VIEWER_QUERY }),
+      cache: "no-store",
+    });
+    const json = await resp.json();
+    return json.data?.viewer ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function resolveViewer(
