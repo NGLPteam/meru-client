@@ -10,6 +10,7 @@ const VIEWER_QUERY = `
       primaryRole {
         identifier
       }
+      canAccessAdmin
       uploadAccess
       uploadToken
       avatar {
@@ -30,6 +31,7 @@ export interface ViewerData {
   primaryRole?: {
     identifier?: string | null;
   } | null;
+  canAccessAdmin?: boolean;
   uploadAccess?: boolean;
   uploadToken?: string | null;
   avatar?: {
@@ -69,6 +71,7 @@ export async function resolveViewer(
       uploadAccess: viewer.uploadAccess ?? false,
       uploadToken: viewer.uploadToken ?? null,
       avatarUrl: viewer.avatar?.small?.png?.url ?? undefined,
+      canAccessAdmin: viewer?.canAccessAdmin ?? false,
     };
   }
   return { isAuthenticated: false, allowedActions: [] };

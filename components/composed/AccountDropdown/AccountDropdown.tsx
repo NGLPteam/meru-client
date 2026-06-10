@@ -9,10 +9,8 @@ import styles from "./AccountDropdown.module.css";
 import PreviewModeButton from "./PreviewModeButton";
 import { signIn, signOut } from "./actions";
 
-const PREVIEW_ROLES = ["ADMIN", "EDITOR", "MANAGER", "AUTHOR"];
-
 export default function AccountDropdown({ condensed }: Props) {
-  const { avatarUrl, name, isAuthenticated, primaryRole, isPreview } =
+  const { avatarUrl, name, isAuthenticated, canAccessAdmin, isPreview } =
     useViewerContext();
 
   const { t } = useTranslation();
@@ -24,13 +22,11 @@ export default function AccountDropdown({ condensed }: Props) {
     signOut();
   }, []);
 
-  const canPreview = !!primaryRole && PREVIEW_ROLES.includes(primaryRole);
-
   const menuItems = [
-    ...(adminUrl
+    ...(adminUrl && canAccessAdmin
       ? [<Dropdown.Link key={1} href={adminUrl} label={t("nav.admin")} />]
       : []),
-    ...(!isPreview && canPreview
+    ...(!isPreview && canAccessAdmin
       ? [<PreviewModeButton key={3} label={t("preview.preview_mode")} />]
       : []),
     <Link as="button" key={2} onClick={handleSignOut}>
