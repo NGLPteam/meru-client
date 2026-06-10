@@ -34,7 +34,7 @@ export default function AppFooter({ data, communityData }: Props) {
 
   const { t } = useTranslation();
 
-  const { isAuthenticated } = useViewerContext();
+  const { isAuthenticated, canAccessAdmin } = useViewerContext();
 
   function renderRoute(href: string, label: string) {
     return (
@@ -96,10 +96,10 @@ export default function AppFooter({ data, communityData }: Props) {
           <h5 className="t-label-lg">{t("nav.explore")}</h5>
           <ul className={classNames("t-unstyled-list", styles.navList)}>
             {renderRoute("/", "nav.home")}
-            {isAuthenticated ? (
+            {canAccessAdmin &&
               process.env.NEXT_PUBLIC_ADMIN_URL &&
-              renderRoute(process.env.NEXT_PUBLIC_ADMIN_URL, "nav.admin")
-            ) : (
+              renderRoute(process.env.NEXT_PUBLIC_ADMIN_URL, "nav.admin")}
+            {!isAuthenticated && (
               <li
                 className={classNames("t-copy-sm t-copy-light", styles.navItem)}
               >

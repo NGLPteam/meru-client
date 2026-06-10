@@ -11,6 +11,7 @@ export interface ViewerContextProps {
   uploadAccess?: boolean;
   uploadToken?: string | null;
   avatarUrl?: string | null;
+  canAccessAdmin?: boolean;
 }
 
 const initialState: ViewerContextProps = {
