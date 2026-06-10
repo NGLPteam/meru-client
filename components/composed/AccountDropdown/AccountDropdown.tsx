@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { useCallback } from "react";
+import { useCallback, useTransition } from "react";
 import useViewerContext from "@/contexts/useViewerContext";
 import { Avatar, Dropdown, Link } from "@/components/atomic";
 import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import IconFactory from "@/components/factories/IconFactory";
+import { useProgress } from "@/lib/vendor/react-transition-progress";
 import { removeToken } from "@/lib/auth/token";
 import styles from "./AccountDropdown.module.css";
 import PreviewModeButton from "./PreviewModeButton";
@@ -15,12 +16,19 @@ export default function AccountDropdown({ condensed }: Props) {
 
   const { t } = useTranslation();
 
+  const startProgress = useProgress();
+
+  const [, startTransition] = useTransition();
+
   const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL;
 
   const handleSignOut = useCallback(() => {
-    removeToken();
-    signOut();
-  }, []);
+    startTransition(async () => {
+      startProgress();
+      removeToken();
+      await signOut();
+    });
+  }, [startProgress]);
 
   const menuItems = [
     ...(adminUrl && canAccessAdmin
