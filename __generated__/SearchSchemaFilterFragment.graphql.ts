@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7e895b493d4abf94fdc862b1819c9122>>
+ * @generated SignedSource<<a8dfa749a428e1ea9eaf103a92eeed19>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,7 @@ import { FragmentRefs } from "relay-runtime";
 export type SearchSchemaFilterFragment$data = {
   readonly schemas: ReadonlyArray<{
     readonly name: string;
+    readonly namespace: string;
     readonly schemaDefinition: {
       readonly slug: string;
     };
@@ -48,6 +49,13 @@ const node: ReaderFragment = {
         {
           "alias": null,
           "args": null,
+          "kind": "ScalarField",
+          "name": "namespace",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
           "concreteType": "SchemaDefinition",
           "kind": "LinkedField",
           "name": "schemaDefinition",
@@ -71,6 +79,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "7e9e58440599af9fccb929f5300055c4";
+(node as any).hash = "9be650acd0656597132aee451a08d4b2";
 
 export default node;

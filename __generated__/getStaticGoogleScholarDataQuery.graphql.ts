@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a2f6f7c7c25eb3908eb030f9da1dc469>>
+ * @generated SignedSource<<6303f4a4d23239e8cb5da154d2671ada>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -265,23 +265,15 @@ v28 = {
   "name": "id",
   "storageKey": null
 },
-v29 = {
-  "kind": "InlineFragment",
-  "selections": [
-    (v28/*: any*/)
-  ],
-  "type": "Node",
-  "abstractKey": "__isNode"
-},
-v30 = [
+v29 = [
   (v9/*: any*/),
   (v14/*: any*/)
 ],
-v31 = [
+v30 = [
   (v9/*: any*/),
   (v18/*: any*/)
 ],
-v32 = [
+v31 = [
   (v9/*: any*/),
   {
     "kind": "InlineFragment",
@@ -293,14 +285,14 @@ v32 = [
         "kind": "LinkedField",
         "name": "schemaProperty",
         "plural": false,
-        "selections": (v30/*: any*/),
+        "selections": (v29/*: any*/),
         "storageKey": "schemaProperty(fullPath:\"number\")"
       }
     ],
     "type": "Collection",
     "abstractKey": null
   },
-  (v29/*: any*/)
+  (v28/*: any*/)
 ];
 return {
   "fragment": {
@@ -660,7 +652,14 @@ return {
                                 "type": "OrganizationContributor",
                                 "abstractKey": null
                               },
-                              (v29/*: any*/)
+                              {
+                                "kind": "InlineFragment",
+                                "selections": [
+                                  (v28/*: any*/)
+                                ],
+                                "type": "Node",
+                                "abstractKey": "__isNode"
+                              }
                             ],
                             "storageKey": null
                           },
@@ -678,7 +677,7 @@ return {
                     "kind": "LinkedField",
                     "name": "schemaProperty",
                     "plural": false,
-                    "selections": (v30/*: any*/),
+                    "selections": (v29/*: any*/),
                     "storageKey": "schemaProperty(fullPath:\"issue.number\")"
                   },
                   {
@@ -688,7 +687,7 @@ return {
                     "kind": "LinkedField",
                     "name": "schemaProperty",
                     "plural": false,
-                    "selections": (v30/*: any*/),
+                    "selections": (v29/*: any*/),
                     "storageKey": "schemaProperty(fullPath:\"volume.id\")"
                   },
                   {
@@ -698,7 +697,7 @@ return {
                     "kind": "LinkedField",
                     "name": "schemaProperty",
                     "plural": false,
-                    "selections": (v31/*: any*/),
+                    "selections": (v30/*: any*/),
                     "storageKey": "schemaProperty(fullPath:\"issue.fpage\")"
                   },
                   {
@@ -708,7 +707,7 @@ return {
                     "kind": "LinkedField",
                     "name": "schemaProperty",
                     "plural": false,
-                    "selections": (v31/*: any*/),
+                    "selections": (v30/*: any*/),
                     "storageKey": "schemaProperty(fullPath:\"issue.lpage\")"
                   },
                   {
@@ -718,7 +717,7 @@ return {
                     "kind": "LinkedField",
                     "name": "schemaProperty",
                     "plural": false,
-                    "selections": (v30/*: any*/),
+                    "selections": (v29/*: any*/),
                     "storageKey": "schemaProperty(fullPath:\"degree.grantor\")"
                   },
                   {
@@ -731,7 +730,7 @@ return {
                     "selections": [
                       (v9/*: any*/),
                       (v23/*: any*/),
-                      (v29/*: any*/)
+                      (v28/*: any*/)
                     ],
                     "storageKey": "ancestorOfType(schema:\"nglp:journal\")"
                   },
@@ -742,7 +741,7 @@ return {
                     "kind": "LinkedField",
                     "name": "ancestorOfType",
                     "plural": false,
-                    "selections": (v32/*: any*/),
+                    "selections": (v31/*: any*/),
                     "storageKey": "ancestorOfType(schema:\"nglp:journal_volume\")"
                   },
                   {
@@ -752,7 +751,7 @@ return {
                     "kind": "LinkedField",
                     "name": "ancestorOfType",
                     "plural": false,
-                    "selections": (v32/*: any*/),
+                    "selections": (v31/*: any*/),
                     "storageKey": "ancestorOfType(schema:\"nglp:journal_issue\")"
                   }
                 ],
@@ -769,12 +768,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "075666d1570d6b74412561e2e4d4a592",
+    "cacheID": "4aa6fab6d0a54be92ee00a05ba3129ee",
     "id": null,
     "metadata": {},
     "name": "getStaticGoogleScholarDataQuery",
     "operationKind": "query",
-    "text": "query getStaticGoogleScholarDataQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    ...getStaticGoogleScholarDataFragment\n    id\n  }\n}\n\nfragment getStaticGoogleScholarDataFragment on Entity {\n  __isEntity: __typename\n  ... on Item {\n    title\n    schemaDefinition {\n      identifier\n      id\n    }\n    published {\n      precision\n      value\n    }\n    pdf: schemaProperty(fullPath: \"pdf_version\") {\n      __typename\n      ... on AssetProperty {\n        asset {\n          __typename\n          ... on AssetPDF {\n            downloadUrl\n          }\n          id\n        }\n      }\n    }\n    community {\n      title\n      id\n    }\n    contributions {\n      nodes {\n        role\n        contributor {\n          __typename\n          ... on PersonContributor {\n            __typename\n            familyName\n            givenName\n          }\n          ... on OrganizationContributor {\n            __typename\n            legalName\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n        id\n      }\n    }\n    issueNumber: schemaProperty(fullPath: \"issue.number\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    volumeNumber: schemaProperty(fullPath: \"volume.id\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    startPage: schemaProperty(fullPath: \"issue.fpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    endPage: schemaProperty(fullPath: \"issue.lpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    institution: schemaProperty(fullPath: \"degree.grantor\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    journal: ancestorOfType(schema: \"nglp:journal\") {\n      __typename\n      ... on Collection {\n        title\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n    volume: ancestorOfType(schema: \"nglp:journal_volume\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n    issue: ancestorOfType(schema: \"nglp:journal_issue\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      ... on Node {\n        __isNode: __typename\n        id\n      }\n    }\n  }\n}\n"
+    "text": "query getStaticGoogleScholarDataQuery(\n  $slug: Slug!\n) {\n  item(slug: $slug) {\n    ...getStaticGoogleScholarDataFragment\n    id\n  }\n}\n\nfragment getStaticGoogleScholarDataFragment on Entity {\n  __isEntity: __typename\n  ... on Item {\n    title\n    schemaDefinition {\n      identifier\n      id\n    }\n    published {\n      precision\n      value\n    }\n    pdf: schemaProperty(fullPath: \"pdf_version\") {\n      __typename\n      ... on AssetProperty {\n        asset {\n          __typename\n          ... on AssetPDF {\n            downloadUrl\n          }\n          id\n        }\n      }\n    }\n    community {\n      title\n      id\n    }\n    contributions {\n      nodes {\n        role\n        contributor {\n          __typename\n          ... on PersonContributor {\n            __typename\n            familyName\n            givenName\n          }\n          ... on OrganizationContributor {\n            __typename\n            legalName\n          }\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n        }\n        id\n      }\n    }\n    issueNumber: schemaProperty(fullPath: \"issue.number\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    volumeNumber: schemaProperty(fullPath: \"volume.id\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    startPage: schemaProperty(fullPath: \"issue.fpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    endPage: schemaProperty(fullPath: \"issue.lpage\") {\n      __typename\n      ... on IntegerProperty {\n        value: integerValue\n      }\n    }\n    institution: schemaProperty(fullPath: \"degree.grantor\") {\n      __typename\n      ... on StringProperty {\n        value: content\n      }\n    }\n    journal: ancestorOfType(schema: \"nglp:journal\") {\n      __typename\n      ... on Collection {\n        title\n      }\n      id\n    }\n    volume: ancestorOfType(schema: \"nglp:journal_volume\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      id\n    }\n    issue: ancestorOfType(schema: \"nglp:journal_issue\") {\n      __typename\n      ... on Collection {\n        number: schemaProperty(fullPath: \"number\") {\n          __typename\n          ... on StringProperty {\n            value: content\n          }\n        }\n      }\n      id\n    }\n  }\n}\n"
   }
 };
 })();

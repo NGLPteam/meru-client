@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1cabd36890194f9b4486e391ef107df4>>
+ * @generated SignedSource<<4ab16c1223c173df14811c45676e65f1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,7 @@
 // @ts-nocheck
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
-export type AssetKind = "audio" | "document" | "image" | "pdf" | "unknown" | "video" | "%future added value";
+export type AssetKind = "archive" | "audio" | "document" | "image" | "pdf" | "unknown" | "video" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type AssetBlockItemFragment$data = {
   readonly caption: string | null | undefined;
