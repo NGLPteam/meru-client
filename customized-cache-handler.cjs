@@ -39,7 +39,7 @@ module.exports = class CustomizedCacheHandler {
         avgResyncIntervalMs: 10_000 * 60,
         redisGetDeduplication: false,
         inMemoryCachingTime: 0,
-        defaultStaleAge: 1209600,
+        defaultStaleAge: 3600,
         estimateExpireAge: (staleAge) => staleAge * 2,
         socketOptions,
       });
