@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<577ab862d171f4f7fa4dc1a815c94602>>
+ * @generated SignedSource<<c83c0c3363d6f8ee8d6cfd5a941bc95c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type SearchLayoutEntityFragment$data = {
-  readonly id?: string;
+  readonly id: string;
   readonly search: {
     readonly results: {
       readonly " $fragmentSpreads": FragmentRefs<"SearchResultsFragment">;
@@ -133,18 +133,11 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
-      "kind": "InlineFragment",
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "id",
-          "storageKey": null
-        }
-      ],
-      "type": "Node",
-      "abstractKey": "__isNode"
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
     }
   ],
   "type": "Entity",

@@ -23,28 +23,30 @@ export default function SearchSchemaFilter({ data }: Props) {
   // schemaQuery should always return an array.
   return (
     <CheckboxGroup label={t("filter.type_header")}>
-      {schemaData.schemas.map(({ schemaDefinition, name }) => (
-        <Checkbox
-          key={`${schemaDefinition.slug}`}
-          label={name}
-          onChange={(e) => {
-            let valueCopy = field?.value ? [...field.value] : [];
+      {schemaData.schemas
+        .filter(({ namespace }) => namespace !== "default")
+        .map(({ schemaDefinition, name }) => (
+          <Checkbox
+            key={`${schemaDefinition.slug}`}
+            label={name}
+            onChange={(e) => {
+              let valueCopy = field?.value ? [...field.value] : [];
 
-            const { checked, value } = e.target;
+              const { checked, value } = e.target;
 
-            if (checked && !valueCopy.includes(value)) {
-              valueCopy.push(value);
-            } else {
-              valueCopy = valueCopy.filter((v) => v !== value);
-            }
+              if (checked && !valueCopy.includes(value)) {
+                valueCopy.push(value);
+              } else {
+                valueCopy = valueCopy.filter((v) => v !== value);
+              }
 
-            // send data to react hook form
-            field.onChange(valueCopy);
-          }}
-          checked={field.value?.includes(`${schemaDefinition.slug}`)}
-          value={`${schemaDefinition.slug}`}
-        />
-      ))}
+              // send data to react hook form
+              field.onChange(valueCopy);
+            }}
+            checked={field.value?.includes(`${schemaDefinition.slug}`)}
+            value={`${schemaDefinition.slug}`}
+          />
+        ))}
     </CheckboxGroup>
   );
 }
@@ -57,6 +59,7 @@ const fragment = graphql`
   fragment SearchSchemaFilterFragment on SearchScope {
     schemas: availableSchemaVersions {
       name
+      namespace
       schemaDefinition {
         slug
       }
