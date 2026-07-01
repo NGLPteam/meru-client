@@ -5,12 +5,11 @@ import { draftMode } from "next/headers";
 import getStaticGlobalContextData from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
 import { GlobalStaticContextProvider } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
-import { auth } from "@/lib/auth/initAuth";
 import fetchQuery from "@/lib/relay/fetchQuery";
 import RelayEnvironmentProvider from "@/lib/relay/RelayClientEnvProvider";
 import { layoutAllPagesQuery as Query } from "@/relay/layoutAllPagesQuery.graphql";
 import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
-import { ViewerContextProvider, resolveViewer } from "@/contexts/ViewerContext";
+import { ViewerContextProvider } from "@/contexts/ViewerContext";
 import AppBody from "@/components/global/AppBody";
 import { BasePageParams } from "@/types/page";
 import ProgressBar from "@/components/atomic/loading/ProgressBar";
@@ -27,9 +26,6 @@ export async function generateMetadata(
 export default async function PageLayout({ children }: PropsWithChildren) {
   const globalData = await getStaticGlobalContextData();
 
-  const session = await auth();
-  const viewer = await resolveViewer(session?.accessToken);
-
   const { isEnabled: draftModeEnabled } = await draftMode();
 
   const { data, records, sessionToken } = await fetchQuery<Query>(query, {});
@@ -37,7 +33,7 @@ export default async function PageLayout({ children }: PropsWithChildren) {
   return (
     <GlobalStaticContextProvider globalData={globalData}>
       <RelayEnvironmentProvider>
-        <ViewerContextProvider {...viewer} isPreview={draftModeEnabled}>
+        <ViewerContextProvider isPreview={draftModeEnabled}>
           <UpdateClientEnvironment
             records={records}
             sessionToken={sessionToken}

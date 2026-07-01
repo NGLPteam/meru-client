@@ -12,11 +12,11 @@ export default async function fetchQuery<Q extends OperationType>(
   includeToken?: boolean,
 ) {
   const { draftMode } = await import("next/headers");
-  const { auth } = await import("@/lib/auth/initAuth");
   const isPreview = (await draftMode()).isEnabled;
-  const session = await auth();
-  const sessionToken =
-    isPreview || includeToken ? session?.accessToken : undefined;
+  const needsToken = isPreview || includeToken;
+  const sessionToken = needsToken
+    ? (await (await import("@/lib/auth/initAuth")).auth())?.accessToken
+    : undefined;
   const env = getCurrentEnvironment({ sessionToken });
 
   const data = await relayFetch<Q>(env, query, vars, {
