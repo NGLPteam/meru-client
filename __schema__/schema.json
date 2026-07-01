@@ -10098,6 +10098,22 @@
             "deprecationReason": null
           },
           {
+            "name": "canPreview",
+            "description": "Whether the current user has permission to preview this entity.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthorizationResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canPurge",
             "description": "Whether the current user has permission to purge this entity.\n",
             "args": [],
@@ -12920,6 +12936,22 @@
           {
             "name": "canManageAccess",
             "description": "Whether the current user has permission to manage access to this entity.\n\nThis opens up `grantAccess` and `revokeAccess` mutations.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthorizationResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canPreview",
+            "description": "Whether the current user has permission to preview this entity.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -19226,6 +19258,22 @@
           {
             "name": "canManageAccess",
             "description": "Whether the current user has permission to manage access to this entity.\n\nThis opens up `grantAccess` and `revokeAccess` mutations.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthorizationResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canPreview",
+            "description": "Whether the current user has permission to preview this entity.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -41814,6 +41862,22 @@
             "deprecationReason": null
           },
           {
+            "name": "canPreview",
+            "description": "Whether the current user has permission to preview this entity.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthorizationResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canPurge",
             "description": "Whether the current user has permission to purge this entity.\n",
             "args": [],
@@ -44687,6 +44751,22 @@
           {
             "name": "canManageAccess",
             "description": "Whether the current user has permission to manage access to this entity.\n\nThis opens up `grantAccess` and `revokeAccess` mutations.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthorizationResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canPreview",
+            "description": "Whether the current user has permission to preview this entity.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -63341,6 +63421,22 @@
           {
             "name": "canManageAccess",
             "description": "Whether the current user has permission to manage access to this entity.\n\nThis opens up `grantAccess` and `revokeAccess` mutations.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthorizationResult",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canPreview",
+            "description": "Whether the current user has permission to preview this entity.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",

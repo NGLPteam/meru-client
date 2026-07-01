@@ -1853,6 +1853,11 @@ export type ChildEntity = {
    */
   canManageAccess: AuthorizationResult;
   /**
+   * Whether the current user has permission to preview this entity.
+   *
+   */
+  canPreview: AuthorizationResult;
+  /**
    * Whether the current user has permission to purge this entity.
    *
    */
@@ -2471,6 +2476,11 @@ export type Collection = Accessible & Attachable & Attributable & ChildEntity & 
    *
    */
   canManageAccess: AuthorizationResult;
+  /**
+   * Whether the current user has permission to preview this entity.
+   *
+   */
+  canPreview: AuthorizationResult;
   /**
    * Whether the current user has permission to purge this entity.
    *
@@ -3414,6 +3424,11 @@ export type Community = Accessible & Attachable & CommonModel & CommonPermission
    *
    */
   canManageAccess: AuthorizationResult;
+  /**
+   * Whether the current user has permission to preview this entity.
+   *
+   */
+  canPreview: AuthorizationResult;
   /**
    * Whether the current user has permission to purge this entity.
    *
@@ -8614,6 +8629,11 @@ export type Entity = {
    */
   canManageAccess: AuthorizationResult;
   /**
+   * Whether the current user has permission to preview this entity.
+   *
+   */
+  canPreview: AuthorizationResult;
+  /**
    * Whether the current user has permission to purge this entity.
    *
    */
@@ -9334,6 +9354,11 @@ export type EntityPermissions = {
    *
    */
   canManageAccess: AuthorizationResult;
+  /**
+   * Whether the current user has permission to preview this entity.
+   *
+   */
+  canPreview: AuthorizationResult;
   /**
    * Whether the current user has permission to purge this entity.
    *
@@ -13949,6 +13974,11 @@ export type Item = Accessible & Attachable & Attributable & ChildEntity & Common
    *
    */
   canManageAccess: AuthorizationResult;
+  /**
+   * Whether the current user has permission to preview this entity.
+   *
+   */
+  canPreview: AuthorizationResult;
   /**
    * Whether the current user has permission to purge this entity.
    *
@@ -32527,6 +32557,7 @@ export type CollectionResolvers<ContextType = any, ParentType extends ResolversP
   canDeposit?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canDestroy?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canManageAccess?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
+  canPreview?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canPurge?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canReparent?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canRevalidate?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
@@ -32710,6 +32741,7 @@ export type CommunityResolvers<ContextType = any, ParentType extends ResolversPa
   canDeposit?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canDestroy?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canManageAccess?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
+  canPreview?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canPurge?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canReparent?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canRevalidate?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
@@ -34924,6 +34956,7 @@ export type ItemResolvers<ContextType = any, ParentType extends ResolversParentT
   canDeposit?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canDestroy?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canManageAccess?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
+  canPreview?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canPurge?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canReparent?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;
   canRevalidate?: Resolver<ResolversTypes['AuthorizationResult'], ParentType, ContextType>;

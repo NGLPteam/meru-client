@@ -1985,6 +1985,11 @@ interface ChildEntity implements Accessible & CommonPermissions & Entity & Entit
   """
   canManageAccess: AuthorizationResult!
   """
+  Whether the current user has permission to preview this entity.
+  
+  """
+  canPreview: AuthorizationResult!
+  """
   Whether the current user has permission to purge this entity.
   
   """
@@ -2619,6 +2624,11 @@ type Collection implements Accessible & Attachable & Attributable & ChildEntity 
   
   """
   canManageAccess: AuthorizationResult!
+  """
+  Whether the current user has permission to preview this entity.
+  
+  """
+  canPreview: AuthorizationResult!
   """
   Whether the current user has permission to purge this entity.
   
@@ -3689,6 +3699,11 @@ type Community implements Accessible & Attachable & CommonModel & CommonPermissi
   
   """
   canManageAccess: AuthorizationResult!
+  """
+  Whether the current user has permission to preview this entity.
+  
+  """
+  canPreview: AuthorizationResult!
   """
   Whether the current user has permission to purge this entity.
   
@@ -8865,6 +8880,11 @@ interface Entity implements Accessible & CommonPermissions & EntityBase & Entity
   """
   canManageAccess: AuthorizationResult!
   """
+  Whether the current user has permission to preview this entity.
+  
+  """
+  canPreview: AuthorizationResult!
+  """
   Whether the current user has permission to purge this entity.
   
   """
@@ -9527,6 +9547,11 @@ interface EntityPermissions implements Submittable {
   
   """
   canManageAccess: AuthorizationResult!
+  """
+  Whether the current user has permission to preview this entity.
+  
+  """
+  canPreview: AuthorizationResult!
   """
   Whether the current user has permission to purge this entity.
   
@@ -14327,6 +14352,11 @@ type Item implements Accessible & Attachable & Attributable & ChildEntity & Comm
   
   """
   canManageAccess: AuthorizationResult!
+  """
+  Whether the current user has permission to preview this entity.
+  
+  """
+  canPreview: AuthorizationResult!
   """
   Whether the current user has permission to purge this entity.
   

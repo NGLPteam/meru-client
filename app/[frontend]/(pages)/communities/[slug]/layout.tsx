@@ -37,7 +37,7 @@ export default async function CommunityLayout({
 
   const { isEnabled: draftModeEnabled } = await draftMode();
 
-  if (draftModeEnabled && !community.canUpdate?.value) {
+  if (draftModeEnabled && !community.canPreview?.value) {
     return <UnauthorizedMessage reason="forbidden" entity="community" />;
   }
 
@@ -64,7 +64,7 @@ export default async function CommunityLayout({
 const query = graphql`
   query layoutCommunityTemplateQuery($slug: Slug!) {
     community(slug: $slug) {
-      canUpdate {
+      canPreview {
         value
       }
       layouts {

@@ -43,7 +43,7 @@ export default async function ItemLayout({
 
   const { isEnabled: draftModeEnabled } = await draftMode();
 
-  if (draftModeEnabled && !item.canUpdate?.value) {
+  if (draftModeEnabled && !item.canPreview?.value) {
     return <UnauthorizedMessage reason="forbidden" entity="item" />;
   }
 
@@ -74,7 +74,7 @@ export default async function ItemLayout({
 const query = graphql`
   query layoutItemTemplateQuery($slug: Slug!) {
     item(slug: $slug) {
-      canUpdate {
+      canPreview {
         value
       }
       layouts {
