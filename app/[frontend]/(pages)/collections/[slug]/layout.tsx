@@ -38,7 +38,7 @@ export default async function CollectionTemplateLayout({
 
   const { isEnabled: draftModeEnabled } = await draftMode();
 
-  if (draftModeEnabled && !collection.canUpdate?.value) {
+  if (draftModeEnabled && !collection.canPreview?.value) {
     return <UnauthorizedMessage reason="forbidden" entity="collection" />;
   }
 
@@ -61,7 +61,7 @@ export default async function CollectionTemplateLayout({
 const query = graphql`
   query layoutCollectionTemplateQuery($slug: Slug!) {
     collection(slug: $slug) {
-      canUpdate {
+      canPreview {
         value
       }
       layouts {
