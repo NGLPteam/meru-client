@@ -1,7 +1,6 @@
 "use server";
 
 import { draftMode } from "next/headers";
-import { revalidatePath } from "next/cache";
 import joinURL from "url-join";
 import {
   auth,
@@ -21,7 +20,6 @@ export async function signIn() {
 
 export async function enterPreviewMode() {
   (await draftMode()).enable();
-  revalidatePath("/", "layout");
 }
 
 export async function signOut() {
