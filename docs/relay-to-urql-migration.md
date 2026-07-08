@@ -27,6 +27,16 @@ client-initiated queries.
   state. The branch may run both codegens temporarily during migration (they coexist:
   relay-compiler reads `` graphql`...` `` tagged templates; codegen reads `graphql(`...`)`
   function calls). Nothing merges until the migration is complete.
+- **Big-bang on the branch (decided after Stage 0 discovery).** A GraphQL fragment must be
+  defined in the same tooling as every operation that spreads it. Shared leaf fragments
+  (`SetCommunityFragment` → 4 layouts; `ContributorNameFragment`, `BrowseListLayoutFragment`,
+  `ContributorAvatarFragment`, `ContentImageFragment`, thumbnails, avatars…) are spread
+  across the whole app, so true per-feature incremental migration collapses into a big-bang
+  unless we temporarily duplicate every shared fragment in both systems. We instead convert
+  the whole repo in one coordinated pass, committed in logical per-area batches for
+  reviewability. Intermediate commits are not expected to build; the **first green
+  `next build` + `tsc` is at the end**. The codegen `documents` glob widens to the whole repo
+  in the final batch (not incrementally).
 
 ## Target architecture
 
@@ -115,59 +125,79 @@ true under Relay), so the existing prop threading is unchanged.
   query on mount via `useQuery` (or `client.query()` from `useClient()`); it records a view
   and renders nothing.
 
-## Stages (simplest first)
+## Relay directive & API handling
 
-**Stage 0 — Scaffolding (no behavior change).**
-Add deps: `urql`, `@urql/core`, `@graphql-codegen/client-preset`; keep Relay installed for
-now. Build `lib/api/` (makeUrqlClient, measureQuery, client, queryApi). Add `codegen.ts`
-client-preset + `graphql` npm script; generate `lib/api/gql/`. Add `@/api/*` tsconfig alias
-if desired. Nothing consumes it yet.
+Beyond the mechanical `` graphql`` `` → `graphql()` + import/type swaps, these Relay-only
+constructs need real conversion (surveyed counts in parens):
 
-**Stage 1 — Pilot one simple leaf feature end-to-end.**
-Pick a self-contained, anonymous, no-interactivity subtree (e.g. `contributors/[slug]` or
-`files/[file]`): convert its `page.tsx` query to `queryApi` (drop `UpdateClientEnvironment`)
-and its fragment consumers to codegen `useFragment`. Verify render + types + build. This
-proves the whole pattern before the bulk.
+- **`@inline` + `readInlineData` (13 files)** — Relay's way to read masked fragment data
+  outside React (helpers, context builders, sitemap/metadata). codegen's `useFragment` is a
+  *pure identity function at runtime* (masking is TS-only), so it works fine in plain
+  functions: `readInlineData(FooFragment, ref)` → `useFragment(FooFragment, ref)` from
+  `@/lib/api/gql`, and drop the `@inline` directive. Files:
+  `contexts/GlobalStaticContext/getStatic*.ts`, `helpers/getThumbWithFallback.ts`,
+  `helpers/getEntity*.ts`, `helpers/get*Sitemap.ts`,
+  `components/templates/OrderingNavigation/routes.ts`,
+  `components/templates/shared/shared.list.graphql.ts`,
+  `components/composed/entity/EntityDescendantsLayout/EntityDescendantsLayout.tsx`.
+- **`@refetchable` + `@argumentDefinitions` (4 fragments)** — `SearchLayout`,
+  `EntityOrderingLayout`, `ContributorDetail`, `ArticleAnalyticsBlock`. codegen does **not**
+  support fragment arguments. Convert each to a standalone client query that declares the
+  args as operation variables and is driven by `useQuery` with variables held in `useState`
+  (replaces `refetch(vars)`). Child fragment spreads stay as fragment refs off the result.
+- **`@arguments` on fragment spreads (4 pages)** — `search/page.tsx`,
+  `communities|collections/[slug]/search/page.tsx`, `items/[slug]/metrics/page.tsx`. Drop the
+  `@arguments` directive; the page/operation defines the variables and the (now argument-less)
+  fragment references them directly. Every operation spreading such a fragment must define
+  those variables.
+- **`useSerializablePreloadedQuery` / `loadSerializableQuery` / `usePreloadedQuery` /
+  `loadQuery`** — the Relay-official Next SSR-preload helpers, effectively unused. Deleted
+  outright.
+- **`useQueryLoader` (ViewCounter)** — fire the view-recording query on mount via `useQuery`
+  (or `useClient().query()`); renders nothing.
+- No mutations, subscriptions, `usePaginationFragment`, `@connection`, or `ConnectionHandler`
+  exist — nothing to convert there.
 
-**Stage 2 — Convert all server-fetched queries + fragments (the bulk, ~155 files).**
-Feature by feature (collections, communities, items, metrics, metadata, search-shell, global
-layout/AppBody, GlobalStaticContext, `lib/actions/fetchPermalink.ts`,
-`lib/actions/fetchPreviewAccess.ts`). For each: swap query fetch to `queryApi`, remove the
-`UpdateClientEnvironment` wrapper, convert fragment consumers. Root layouts
-(`app/[frontend]/layout.tsx`, `app/[frontend]/(pages)/layout.tsx`) drop
-`RelayEnvironmentProvider` + `UpdateClientEnvironment`; keep `revalidate` and `ViewerContext`.
+## Batches (big-bang on the branch; commits are logical, not independently green)
 
-**Stage 3 — Client-initiated queries.**
-Add `UrqlProvider` (client) around the subtree that needs it (or at the page layout, client
-side). Convert the 4 refetchable fragments + ViewCounter to `useQuery`. Wire the client
-token from `ViewerContext`.
+**Batch 0 — Scaffolding (DONE).** Deps + `lib/api/` + `codegen.client.ts` + `lib/api/gql/`.
 
-**Stage 4 — Auth simplification + Relay machinery removal.**
+**Batch 1 — Shared leaf + `@inline` fragments.** Convert the widely-spread leaf fragments and
+all `@inline`/`readInlineData` helpers/contexts to codegen `useFragment`. These unblock
+everything downstream. (atomic components, `helpers/*`, `contexts/GlobalStaticContext/*`,
+`SetCommunity`/`CommunityContext`, thumbnails/avatars/ContentImage, ContributorName, etc.)
+
+**Batch 2 — Server-fetched pages/layouts + their fragment consumers.** Swap every
+`fetchQuery` → `queryApi`; remove `UpdateClientEnvironment` wrappers; convert the ~97
+`useFragment` consumers. Root layouts drop `RelayEnvironmentProvider` +
+`UpdateClientEnvironment` (keep `revalidate` + `ViewerContext`). Includes
+`lib/actions/fetchPermalink.ts`, `lib/actions/fetchPreviewAccess.ts`.
+
+**Batch 3 — Client-initiated queries + `UrqlProvider`.** Add `lib/api/UrqlProvider.tsx`
+(client) fed by `ViewerContext`; convert the 4 refetchable fragments + `ViewCounter` to
+`useQuery`.
+
+**Batch 4 — Auth simplification + Relay machinery removal.**
 - Delete `lib/auth/token.ts` (sessionStorage mirror) and all `setToken`/`getToken`/
-  `removeToken` uses (`lib/relay/environment.ts`, `UpdateClientEnvironment.tsx`,
-  `ViewerContext.tsx:55`, `AccountDropdown.tsx handleSignOut`).
-- `ViewerContext` keeps fetching `/api/viewer` but stores `accessToken` in context state
-  (consumed by `UrqlProvider`'s `fetchOptions`) instead of sessionStorage.
-- Delete the Relay network/env/hydration set: `lib/relay/environment.ts`, `network.ts`,
-  `apiHeaders.ts`, `fetchQuery.ts`, `RelayClientEnvProvider.tsx`,
-  `UpdateClientEnvironment.tsx`, `loadSerializableQuery.ts`,
-  `useSerializablePreloadedQuery.ts`, `types.d.ts`. (The `"zardoz"` placeholder token in
-  `loadSerializableQuery.ts` is dead code, removed with it.)
-- **Keep unchanged** (not Relay-coupled): `lib/auth/initAuth.ts`, `lib/auth/keycloak.ts`
-  (token refresh), `app/api/auth/[...nextauth]/route.ts`, `AccountDropdown/actions.ts`
-  (sign in/out/logout), `middleware.ts` gating, `draftMode` flows, `app/api/viewer/route.ts`
-  (still returns `accessToken`, now consumed via context), and the `ViewerContext` shape +
-  its consumers (`canAccessAdmin`, `canPreview`, `allowedActions`).
+  `removeToken` uses (`ViewerContext.tsx`, `AccountDropdown.tsx handleSignOut`, Relay env).
+- `ViewerContext` stores `accessToken` in context state (consumed by `UrqlProvider`'s
+  `fetchOptions`) instead of sessionStorage.
+- Delete the Relay network/env/hydration set: `lib/relay/*` (`environment.ts`, `network.ts`,
+  `apiHeaders.ts`, `fetchQuery.ts`, `RelayClientEnvProvider.tsx`, `UpdateClientEnvironment.tsx`,
+  `loadSerializableQuery.ts`, `useSerializablePreloadedQuery.ts`, `types.d.ts`). (The
+  `"zardoz"` placeholder token is dead code, removed with it.)
+- **Keep unchanged** (not Relay-coupled): `lib/auth/initAuth.ts`, `lib/auth/keycloak.ts`,
+  `app/api/auth/[...nextauth]/route.ts`, `AccountDropdown/actions.ts`, `middleware.ts`,
+  `draftMode` flows, `app/api/viewer/route.ts` (still returns `accessToken`), and the
+  `ViewerContext` shape + its consumers (`canAccessAdmin`, `canPreview`, `allowedActions`).
 
-**Stage 5 — Remove Relay entirely.**
-Delete `__generated__/`, `relay.config.js`, the `relay` block in `next.config.js`, the
-`@/relay/*` alias in `tsconfig.json`, and deps (`react-relay`, `relay-runtime`,
-`relay-compiler`, `@types/react-relay`, `@types/relay-runtime`, `eslint-plugin-relay`) and
-the `relay` npm script. Decide whether the schema-only codegen (`types/graphql-schema.d.ts`,
-used e.g. for `EntityOrder`) stays as a second codegen output or is subsumed — the
-client-preset already emits enum/scalar types, so most `@/types/graphql-schema` imports can
-repoint to `lib/api/gql`. Final `npm run build` + typecheck must be clean with zero Relay
-references.
+**Batch 5 — Remove Relay + finalize.** Widen `codegen.client.ts` `documents` to the whole
+repo; regenerate. Delete `__generated__/`, `relay.config.js`, the `relay` block in
+`next.config.js`, the `@/relay/*` alias in `tsconfig.json`, deps (`react-relay`,
+`relay-runtime`, `relay-compiler`, `@types/react-relay`, `@types/relay-runtime`,
+`eslint-plugin-relay`) and the `relay` script. Repoint `@/types/graphql-schema` imports
+(e.g. `EntityOrder`) at `lib/api/gql` where possible. **First full green `next build` + `tsc`
++ lint here.**
 
 ## Critical files
 
