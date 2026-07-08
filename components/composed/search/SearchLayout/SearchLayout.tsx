@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "urql";
 import classNames from "classnames";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
@@ -43,15 +43,21 @@ export default function SearchLayout({ data, scoped }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const vars = useMemo(
-    () => parseSearchVars(new URLSearchParams(searchParams)),
-    [searchParams],
+  // Query variables live in local state so a submit updates them synchronously
+  // (firing the query + spinner immediately), rather than waiting for the
+  // router.push navigation round-trip to update useSearchParams. The effect
+  // keeps them in sync with the URL for external changes (back/forward, direct
+  // loads with ?q=).
+  const [vars, setVars] = useState(() =>
+    parseSearchVars(new URLSearchParams(searchParams)),
   );
 
+  useEffect(() => {
+    setVars(parseSearchVars(new URLSearchParams(searchParams)));
+  }, [searchParams]);
+
   const noSearchQuery =
-    (!searchParams.get("q") || searchParams.get("q") === "") &&
-    !searchParams.get("filters") &&
-    !searchParams.get("schema");
+    !vars.query && !vars.predicates?.length && !vars.schema?.length;
 
   // The scoped entity id comes from the SSR fragment ref; the global search
   // needs no seed and is fetched entirely client-side off the URL params.
@@ -93,8 +99,10 @@ export default function SearchLayout({ data, scoped }: Props) {
     shouldUseNativeValidation: true,
   });
 
-  const pushSearch = (params: URLSearchParams) => {
-    router.push(`${pathname}?${params.toString()}`);
+  // Update the query immediately (shows the spinner now); SearchFilters already
+  // pushes the URL itself, so this only refreshes the client query state.
+  const applyVars = (params: URLSearchParams) => {
+    setVars(parseSearchVars(params));
   };
 
   const onQuerySubmit = (formData: { q?: string }) => {
@@ -104,7 +112,9 @@ export default function SearchLayout({ data, scoped }: Props) {
     } else {
       params.delete("q");
     }
-    pushSearch(params);
+    // Fire the query right away, then sync the URL in parallel.
+    applyVars(params);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
@@ -135,7 +145,7 @@ export default function SearchLayout({ data, scoped }: Props) {
             <SearchFilters
               id="sidebarFilters"
               data={search}
-              onSubmit={pushSearch}
+              onSubmit={applyVars}
             />
           )}
         </div>
@@ -153,7 +163,7 @@ export default function SearchLayout({ data, scoped }: Props) {
             id="mobileFilters"
             data={search}
             onSubmit={(params: URLSearchParams) => {
-              pushSearch(params);
+              applyVars(params);
               dialog.hide();
             }}
           />
