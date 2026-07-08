@@ -19,5 +19,8 @@ export default function makeUrqlClient(
     exchanges: [cacheExchange, fetchExchange],
     requestPolicy,
     fetchOptions,
+    // The Meru API only accepts POST; urql defaults queries to GET, so force
+    // POST for every operation (matches the old Relay network layer).
+    preferGetMethod: false,
   });
 }
