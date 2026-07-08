@@ -1,8 +1,8 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
+import { graphql, useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import EXTERNAL_DATA_URL from "./externalDataUrl";
 
 export default function getItemsSitemap(data: FragmentType<typeof fragment>) {
-  const entity = useFragment(fragment, data);
+  const entity = readFragment(fragment, data);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

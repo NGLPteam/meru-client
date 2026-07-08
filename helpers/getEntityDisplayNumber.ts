@@ -1,10 +1,10 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
+import { graphql, useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import getEntityVolumeNumber from "./getEntityVolumeNumber";
 
 export default function getEntityDisplayNumber(
   data: FragmentType<typeof fragment>,
 ) {
-  const entity = useFragment(fragment, data);
+  const entity = readFragment(fragment, data);
 
   const vol = getEntityVolumeNumber(entity);
 
