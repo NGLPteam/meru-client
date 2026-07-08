@@ -1,5 +1,50 @@
 # Migrate meru-client from Relay to urql
 
+## Progress status (living checklist)
+
+DONE (committed on branch `migrate-relay-to-urql`):
+- Batch 0 scaffold: `lib/api/` (makeUrqlClient, measureQuery, client, queryApi, clientToken,
+  UrqlProvider) + `codegen.client.ts` client-preset.
+- All ~158 `graphql` tag files converted `` graphql`` `` → `graphql()`, imports → `@/lib/api/gql`,
+  `$key` → `FragmentType<typeof X>`, `$data` → `DocumentType<typeof X>`, `@inline`/`readInlineData`
+  → `useFragment` (aliased `readFragment` in plain helpers), `@arguments`/`@argumentDefinitions`
+  removed.
+- 4 refetchable fragments → client `useQuery` via `node(id)` refetch (Search/Ordering/
+  ContributorDetail/Analytics); ViewCounter → `useQuery` on mount.
+- Server data path: every `fetchQuery` → `queryApi`; `UpdateClientEnvironment` removed; root
+  `(pages)/layout` swaps Relay providers for `UrqlProvider`; client token flows
+  ViewerContext → `clientToken` holder → UrqlProvider.
+- **codegen validates all GraphQL documents over the whole repo (glob widened).**
+
+REMAINING (TS-level plumbing + cleanup; no green build until all done):
+1. **Type-only `@/relay/` importers (~24 files)** — files with NO graphql tag that import a
+   sibling fragment's `$key`/`$data`/query `$data` type. Fix: `export` the referenced fragment
+   const from its defining file (rename to a descriptive exported name, fix internal refs),
+   then in the importer use `FragmentType<typeof X>` / `DocumentType<typeof X>`. Map:
+   `ArticleAnalyticsBlockFragment`→ChartBlock,StatBlocks; `CommunityNameFragment`→CommunityNameContent;
+   `ContributorNameFragment`→ContributorName/helpers.ts; `EntityNavListFragment`→BrowseButton,PagesList;
+   `getStaticGoogleScholarDataFragment`→GoogleScholarMetaTags; `SearchModalFragment`→SearchModalContent;
+   `CoverImageFragment`→lists.types.ts; `sharedListItemTemplateFragment`→lists/List/List.tsx;
+   `getStaticGlobalContextDataQuery`+`getStaticEntityDataFragment`→GlobalStaticContext.tsx;
+   `sharedListTemplateFragment`(already exported as `listTemplateFragment`)→lists/blocks/*,items/*.
+2. **4 files skipped by agents (cross-file $key):** AppBody, AppHeader, AppFooter,
+   BrowseListLayout — convert own fragment tag + own `$key`, and repoint the sibling-prop
+   `$key` (`SearchButtonFragment`, `CommunityPickerCommunityNameFragment`, `BackButtonFragment`)
+   to `FragmentType<typeof exportedSibling>`.
+3. **Auth/misc repoints:** `contexts/ViewerContext/fetchViewer.ts` (imports `@/lib/relay/apiHeaders`
+   → use `getAPIURL` from `lib/api/client` + build headers locally); `types/graphql-helpers.d.ts`
+   (imports `relay-runtime`).
+4. **Delete Relay machinery:** `lib/relay/*` (environment, network, apiHeaders, fetchQuery,
+   RelayClientEnvProvider, UpdateClientEnvironment, loadSerializableQuery,
+   useSerializablePreloadedQuery, types.d.ts), `lib/auth/token.ts` (+ `removeToken` use in
+   `AccountDropdown.tsx handleSignOut`).
+5. **Config/deps:** delete `__generated__/`, `relay.config.js`, `relay` block in `next.config.js`,
+   `@/relay/*` alias in `tsconfig.json`, Relay deps + `relay` script in `package.json`. Repoint
+   `@/types/graphql-schema` enum imports where useful.
+6. **Gate:** `yarn graphql` (done, green) → `npx tsc --noEmit` (fix boundary errors) →
+   `npm run lint` (watch react-hooks on any remaining `useFragment` in plain fns) →
+   `next build` → runtime verify (render, search, auth/draft-mode).
+
 ## Context
 
 `meru-client` is a Next.js 15 App Router / React 19 app that uses **Relay 16** purely for
