@@ -2,6 +2,10 @@
 
 ## Progress status (living checklist)
 
+**STATUS: COMPLETE.** Relay is fully removed; the app builds on urql + graphql-codegen
+client-preset. `yarn graphql`, `tsc --noEmit`, `yarn lint`, and `next build` all pass on
+branch `migrate-relay-to-urql`. Not yet merged (pending review + runtime QA).
+
 DONE (committed on branch `migrate-relay-to-urql`):
 - Batch 0 scaffold: `lib/api/` (makeUrqlClient, measureQuery, client, queryApi, clientToken,
   UrqlProvider) + `codegen.client.ts` client-preset.
