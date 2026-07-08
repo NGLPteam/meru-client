@@ -33,12 +33,13 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
   });
 
   // Analytics is always fetched client-side (views/downloads must not be
-  // counted for server fetches). Refetch whenever precision/usOnly change.
+  // counted for server fetches). Refetch whenever the selected range/precision/
+  // region change. `settings.dateRange` is undefined for "all time".
   const [result] = useQuery({
     query: analyticsQuery,
     variables: {
       id: id ?? "",
-      dateRange: {},
+      dateRange: settings.dateRange ?? {},
       precision: settings.precision,
       usOnly: settings.usOnly,
     },
