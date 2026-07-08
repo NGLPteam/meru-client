@@ -7,13 +7,16 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   ignoreNoDocuments: true,
   schema: "./schema.graphql",
-  // This glob GROWS as the Relay -> urql migration progresses (see
-  // docs/relay-to-urql-migration.md). Only files already migrated to the
-  // codegen `graphql()` tag may be listed here: codegen cannot parse the
-  // Relay-only constructs still present in unmigrated files (@inline,
-  // @arguments, @argumentDefinitions, @refetchable, readInlineData) and would
-  // emit broken types for them. Add a feature's paths here as you convert it.
-  documents: ["lib/api/**/*.{ts,tsx}"],
+  documents: [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "contexts/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "hooks/**/*.{ts,tsx}",
+    "helpers/**/*.{ts,tsx}",
+    "routes/**/*.{ts,tsx}",
+    "_sitemaps/**/*.{ts,tsx}",
+  ],
   generates: {
     "./lib/api/gql/": {
       preset: "client",

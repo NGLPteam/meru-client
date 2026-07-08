@@ -135,7 +135,9 @@ interface Props {
 
 const fragment = graphql(`
   fragment ContributorDetailFragment on Contributor {
-    id
+    ... on Node {
+      id
+    }
     ...ContributorNameFragment
     ... on Contributor {
       bio
