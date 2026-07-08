@@ -1,12 +1,10 @@
 import { Suspense } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import SearchLayout from "@/components/composed/search/SearchLayout";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { getPredicates } from "@/helpers/search";
-import { pageSearchQuery as Query } from "@/relay/pageSearchQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import queryApi from "@/lib/api/queryApi";
 import SetCommunity from "@/components/global/SetCommunity";
 
 export default async function SearchPage({
@@ -18,7 +16,7 @@ export default async function SearchPage({
 
   const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     ...(q && { query: q }),
     predicates,
     page: page ? parseInt(page) : 1,
@@ -29,17 +27,15 @@ export default async function SearchPage({
   if (!data) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <SetCommunity>
-        <Suspense fallback={<LoadingBlock />}>
-          <SearchLayout data={data} />
-        </Suspense>
-      </SetCommunity>
-    </UpdateClientEnvironment>
+    <SetCommunity>
+      <Suspense fallback={<LoadingBlock />}>
+        <SearchLayout data={data} />
+      </Suspense>
+    </SetCommunity>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageSearchQuery(
     $query: String
     $predicates: [SearchPredicateInput!]
@@ -48,12 +44,5 @@ const query = graphql`
     $schema: [String!]
   ) {
     ...SearchLayoutFragment
-      @arguments(
-        query: $query
-        predicates: $predicates
-        page: $page
-        order: $order
-        schema: $schema
-      )
   }
-`;
+`);

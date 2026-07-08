@@ -1,35 +1,30 @@
 import { ParsedUrlQuery } from "querystring";
-import { fetchQuery, graphql, readInlineData } from "relay-runtime";
+import { graphql, useFragment as readFragment } from "@/lib/api/gql";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
-import { getCurrentEnvironment } from "@/lib/relay/environment";
-import { getStaticCommunityDataQuery } from "@/relay/getStaticCommunityDataQuery.graphql";
+import queryApi from "@/lib/api/queryApi";
 
 export default async function getStaticCommunityData(urlQuery: ParsedUrlQuery) {
   const slug = routeQueryArrayToString(urlQuery?.slug);
 
   if (!slug) return;
 
-  const env = getCurrentEnvironment();
-
-  const data = await fetchQuery<getStaticCommunityDataQuery>(env, query, {
-    slug,
-  }).toPromise();
+  const { data } = await queryApi(query, { slug });
 
   if (data?.community) {
-    return readInlineData(fragment, data.community);
+    return readFragment(fragment, data.community);
   }
 }
 
-const query = graphql`
+const query = graphql(`
   query getStaticCommunityDataQuery($slug: Slug!) {
     community(slug: $slug) {
       ...getStaticCommunityDataFragment
     }
   }
-`;
+`);
 
-const fragment = graphql`
-  fragment getStaticCommunityDataFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getStaticCommunityDataFragment on Entity {
     ... on Entity {
       title
       summary
@@ -61,4 +56,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

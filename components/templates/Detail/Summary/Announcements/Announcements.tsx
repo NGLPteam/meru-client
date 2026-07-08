@@ -7,7 +7,7 @@ import ReadMoreLink from "@/components/atomic/links/Link/patterns/ReadMoreLink";
 import styles from "./Announcements.module.css";
 
 export default function EntityAnnouncements({ data }: Props) {
-  const announcements = useFragment<FragmentType<typeof fragment>>(fragment, data);
+  const announcements = useFragment(fragment, data);
 
   const { t } = useTranslation();
 

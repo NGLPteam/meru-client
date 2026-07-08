@@ -1,13 +1,11 @@
 import { Suspense } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import ArticleAnalyticsBlock from "@/components/composed/analytics/ArticleAnalyticsBlock";
 import { AnalyticsPrecision } from "@/types/graphql-schema";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesItemMetricsQuery as Query } from "@/relay/pageTemplatesItemMetricsQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export async function generateStaticParams() {
   return [];
@@ -16,7 +14,7 @@ export async function generateStaticParams() {
 export default async function ItemMetricsPage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
     dateRange: {},
     precision: "YEAR" as AnalyticsPrecision,
@@ -28,15 +26,13 @@ export default async function ItemMetricsPage({ params }: BasePageParams) {
   if (!item) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <Suspense fallback={<LoadingBlock />}>
-        <ArticleAnalyticsBlock data={item} />
-      </Suspense>
-    </UpdateClientEnvironment>
+    <Suspense fallback={<LoadingBlock />}>
+      <ArticleAnalyticsBlock data={item} />
+    </Suspense>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesItemMetricsQuery(
     $slug: Slug!
     $dateRange: DateFilterInput!
@@ -45,11 +41,6 @@ const query = graphql`
   ) {
     item(slug: $slug) {
       ...ArticleAnalyticsBlockFragment
-        @arguments(
-          dateRange: $dateRange
-          precision: $precision
-          usOnly: $usOnly
-        )
     }
   }
-`;
+`);

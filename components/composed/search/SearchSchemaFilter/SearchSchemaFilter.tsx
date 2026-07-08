@@ -6,7 +6,7 @@ import { Checkbox, CheckboxGroup } from "@/components/forms";
 export default function SearchSchemaFilter({ data }: Props) {
   const { control } = useFormContext();
 
-  const schemaData = useFragment<FragmentType<typeof fragment>>(
+  const schemaData = useFragment(
     fragment,
     data,
   );

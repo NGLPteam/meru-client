@@ -1,25 +1,20 @@
-import { fetchQuery, graphql, readInlineData } from "relay-runtime";
-import { getCurrentEnvironment } from "@/lib/relay/environment";
-import { getStaticEntityDataQuery } from "@/relay/getStaticEntityDataQuery.graphql";
+import { graphql, useFragment as readFragment } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 
 export default async function getStaticEntityData(slug: string | undefined) {
   if (!slug) return;
 
-  const env = getCurrentEnvironment();
-
-  const data = await fetchQuery<getStaticEntityDataQuery>(env, query, {
-    slug,
-  }).toPromise();
+  const { data } = await queryApi(query, { slug });
 
   if (data) {
-    return readInlineData(
+    return readFragment(
       fragment,
       data.community || data.collection || data.item || null,
     );
   }
 }
 
-const query = graphql`
+const query = graphql(`
   query getStaticEntityDataQuery($slug: Slug!) {
     community(slug: $slug) {
       ...getStaticEntityDataFragment
@@ -31,10 +26,10 @@ const query = graphql`
       ...getStaticEntityDataFragment
     }
   }
-`;
+`);
 
-const fragment = graphql`
-  fragment getStaticEntityDataFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getStaticEntityDataFragment on Entity {
     ... on Entity {
       title
       summary
@@ -66,4 +61,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

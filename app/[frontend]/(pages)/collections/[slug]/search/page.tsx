@@ -1,12 +1,10 @@
 import { Suspense } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { getPredicates } from "@/helpers/search";
 import SearchLayout from "@/components/composed/search/SearchLayout";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
-import { pageSearchCollectionQuery as Query } from "@/relay/pageSearchCollectionQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import queryApi from "@/lib/api/queryApi";
 import { BasePageParams } from "@/types/page";
 
 export default async function CollectionSearchPage({
@@ -18,7 +16,7 @@ export default async function CollectionSearchPage({
 
   const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
     ...(q && { query: q }),
     predicates,
@@ -32,15 +30,13 @@ export default async function CollectionSearchPage({
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <Suspense fallback={<LoadingBlock />}>
-        <SearchLayout data={collection} scoped />
-      </Suspense>
-    </UpdateClientEnvironment>
+    <Suspense fallback={<LoadingBlock />}>
+      <SearchLayout data={collection} scoped />
+    </Suspense>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageSearchCollectionQuery(
     $slug: Slug!
     $query: String
@@ -51,13 +47,6 @@ const query = graphql`
   ) {
     collection(slug: $slug) {
       ...SearchLayoutEntityFragment
-        @arguments(
-          query: $query
-          predicates: $predicates
-          page: $page
-          order: $order
-          schema: $schema
-        )
     }
   }
-`;
+`);

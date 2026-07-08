@@ -10,7 +10,7 @@ export default function ContributionSummary({ data }: Props) {
 
   const { t } = useTranslation();
 
-  const entity = useFragment<FragmentType<typeof entityFragment>>(
+  const entity = useFragment(
     entityFragment,
     contribution?.entity,
   );

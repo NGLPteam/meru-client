@@ -1,15 +1,13 @@
-import { graphql } from "relay-runtime";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { getStaticGlobalContextDataQuery } from "@/relay/getStaticGlobalContextDataQuery.graphql";
+import { graphql } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 
 export default async function getStaticGlobalContextData() {
-  const { data: globalStaticData } =
-    await fetchQuery<getStaticGlobalContextDataQuery>(query, {});
+  const { data: globalStaticData } = await queryApi(query, {});
 
   return globalStaticData;
 }
 
-const query = graphql`
+const query = graphql(`
   query getStaticGlobalContextDataQuery {
     globalConfiguration {
       site {
@@ -35,4 +33,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

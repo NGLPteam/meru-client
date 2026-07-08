@@ -1,14 +1,10 @@
-import { getCurrentEnvironment as environment } from "@/lib/relay/environment";
+import { graphql, type DocumentType } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 import { GetServerSidePropsContext } from "next";
-import { fetchQuery, graphql } from "relay-runtime";
 import { buildSiteMap, getEntitySitemap } from "@/helpers";
-import {
-  sitemapCommunityQuery,
-  sitemapCommunityQuery$data,
-} from "@/relay/sitemapCommunityQuery.graphql";
 
-function generateSiteMap(data: sitemapCommunityQuery$data) {
+function generateSiteMap(data: DocumentType<typeof query>) {
   return data.community ? getEntitySitemap(data.community) : "";
 }
 
@@ -22,10 +18,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   const slug = routeQueryArrayToString(urlQuery?.slug);
 
-  const env = environment();
-  const data = await fetchQuery<sitemapCommunityQuery>(env, query, {
-    slug,
-  }).toPromise();
+  const { data } = await queryApi(query, { slug });
 
   if (data) {
     const sitemap = generateSiteMap(data);
@@ -39,10 +32,10 @@ export async function getServerSideProps({
 
 export default SiteMap;
 
-const query = graphql`
+const query = graphql(`
   query sitemapCommunityQuery($slug: Slug!) {
     community(slug: $slug) {
       ...getEntitySitemapFragment
     }
   }
-`;
+`);

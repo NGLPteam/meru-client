@@ -7,7 +7,7 @@ import CommunityNameContent from "./CommunityNameContent";
 
 export default function CommunityName() {
   const communityData = useContext(CommunityContext);
-  const community = useFragment<FragmentType<typeof fragment>>(
+  const community = useFragment(
     fragment,
     communityData,
   );

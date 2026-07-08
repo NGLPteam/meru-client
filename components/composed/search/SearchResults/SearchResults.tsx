@@ -8,7 +8,7 @@ import EntitySummary from "@/components/composed/entity/EntitySummary";
 import styles from "./SearchResults.module.css";
 
 export default function SearchResults({ data, isLoading }: Props) {
-  const results = useFragment<FragmentType<typeof fragment>>(fragment, data);
+  const results = useFragment(fragment, data);
 
   const { t } = useTranslation();
 

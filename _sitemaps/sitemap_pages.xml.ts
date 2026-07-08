@@ -1,13 +1,9 @@
-import { getCurrentEnvironment as environment } from "@/lib/relay/environment";
+import { graphql, type DocumentType } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import { GetServerSidePropsContext } from "next";
-import { fetchQuery, graphql } from "relay-runtime";
 import { buildSiteMap, EXTERNAL_DATA_URL } from "@/helpers";
-import {
-  sitemapPagesQuery,
-  sitemapPagesQuery$data,
-} from "@/relay/sitemapPagesQuery.graphql";
 
-function generateSiteMap(data: sitemapPagesQuery$data) {
+function generateSiteMap(data: DocumentType<typeof query>) {
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
@@ -34,8 +30,7 @@ function SiteMap() {
 }
 
 export async function getServerSideProps({ res }: GetServerSidePropsContext) {
-  const env = environment();
-  const data = await fetchQuery<sitemapPagesQuery>(env, query, {}).toPromise();
+  const { data } = await queryApi(query, {});
 
   if (data) {
     const sitemap = generateSiteMap(data);
@@ -49,7 +44,7 @@ export async function getServerSideProps({ res }: GetServerSidePropsContext) {
 
 export default SiteMap;
 
-const query = graphql`
+const query = graphql(`
   query sitemapPagesQuery {
     communities {
       nodes {
@@ -57,4 +52,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

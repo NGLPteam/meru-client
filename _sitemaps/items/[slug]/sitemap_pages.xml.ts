@@ -1,14 +1,10 @@
-import { getCurrentEnvironment as environment } from "@/lib/relay/environment";
+import { graphql, type DocumentType } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 import { GetServerSidePropsContext } from "next";
-import { fetchQuery, graphql } from "relay-runtime";
 import { buildSiteMap, EXTERNAL_DATA_URL } from "@/helpers";
-import {
-  sitemapPagesItemQuery,
-  sitemapPagesItemQuery$data,
-} from "@/relay/sitemapPagesItemQuery.graphql";
 
-function generateSiteMap(data: sitemapPagesItemQuery$data) {
+function generateSiteMap(data: DocumentType<typeof query>) {
   const slug = data?.item?.slug;
 
   const pages = data?.item?.pages?.nodes.map(({ slug, updatedAt }) => {
@@ -44,10 +40,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext) {
   const slug = routeQueryArrayToString(urlQuery?.slug);
 
-  const env = environment();
-  const data = await fetchQuery<sitemapPagesItemQuery>(env, query, {
-    slug,
-  }).toPromise();
+  const { data } = await queryApi(query, { slug });
 
   if (data) {
     const sitemap = generateSiteMap(data);
@@ -61,7 +54,7 @@ export async function getServerSideProps({
 
 export default SiteMap;
 
-const query = graphql`
+const query = graphql(`
   query sitemapPagesItemQuery($slug: Slug!) {
     item(slug: $slug) {
       slug
@@ -74,4 +67,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

@@ -1,14 +1,10 @@
-import { getCurrentEnvironment as environment } from "@/lib/relay/environment";
+import { graphql, type DocumentType } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 import { GetServerSidePropsContext } from "next";
-import { fetchQuery, graphql } from "relay-runtime";
 import { buildSiteMap, getItemsSitemap } from "@/helpers";
-import {
-  sitemapItemsCollectionQuery,
-  sitemapItemsCollectionQuery$data,
-} from "@/relay/sitemapItemsCollectionQuery.graphql";
 
-function generateSiteMap(data: sitemapItemsCollectionQuery$data) {
+function generateSiteMap(data: DocumentType<typeof query>) {
   return data.collection?.items ? getItemsSitemap(data.collection.items) : "";
 }
 
@@ -23,11 +19,7 @@ export async function getServerSideProps({
   const slug = routeQueryArrayToString(urlQuery?.slug);
   const page = parseInt(routeQueryArrayToString(urlQuery?.page), 10);
 
-  const env = environment();
-  const data = await fetchQuery<sitemapItemsCollectionQuery>(env, query, {
-    slug,
-    page,
-  }).toPromise();
+  const { data } = await queryApi(query, { slug, page });
 
   if (data) {
     const sitemap = generateSiteMap(data);
@@ -41,7 +33,7 @@ export async function getServerSideProps({
 
 export default SiteMap;
 
-const query = graphql`
+const query = graphql(`
   query sitemapItemsCollectionQuery($slug: Slug!, $page: Int!) {
     collection(slug: $slug) {
       items(page: $page, perPage: 50) {
@@ -49,4 +41,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

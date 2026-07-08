@@ -7,7 +7,7 @@ import styles from "./CommunityNavlist.module.css";
 
 export default function CommunityNavList({ condensed, mobile }: Props) {
   const communityData = useContext(CommunityContext);
-  const community = useFragment<FragmentType<typeof fragment>>(
+  const community = useFragment(
     fragment,
     communityData,
   );

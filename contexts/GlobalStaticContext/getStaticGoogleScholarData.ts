@@ -1,35 +1,28 @@
-import { graphql, readInlineData } from "relay-runtime";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { getStaticGoogleScholarDataQuery } from "@/relay/getStaticGoogleScholarDataQuery.graphql";
-import { getStaticGoogleScholarDataFragment$key } from "@/relay/getStaticGoogleScholarDataFragment.graphql";
+import { graphql, useFragment as readFragment } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 
 export default async function getStaticGoogleScholarData(
   slug: string | undefined,
 ) {
   if (!slug) return;
 
-  const { data } = await fetchQuery<getStaticGoogleScholarDataQuery>(query, {
-    slug,
-  });
+  const { data } = await queryApi(query, { slug });
 
   if (data) {
-    return readInlineData<getStaticGoogleScholarDataFragment$key>(
-      fragment,
-      data.item || null,
-    );
+    return readFragment(fragment, data.item || null);
   }
 }
 
-const query = graphql`
+const query = graphql(`
   query getStaticGoogleScholarDataQuery($slug: Slug!) {
     item(slug: $slug) {
       ...getStaticGoogleScholarDataFragment
     }
   }
-`;
+`);
 
-const fragment = graphql`
-  fragment getStaticGoogleScholarDataFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getStaticGoogleScholarDataFragment on Entity {
     ... on Item {
       title
 
@@ -130,4 +123,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

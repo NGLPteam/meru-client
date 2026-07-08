@@ -15,7 +15,7 @@ export default function CommunityPicker({ data }: Props) {
   const communityData = useFragment(fragment, data);
 
   const activeCommunityData = useContext(CommunityContext);
-  const activeCommunity = useFragment<FragmentType<typeof communityNameFragment>>(
+  const activeCommunity = useFragment(
     communityNameFragment,
     activeCommunityData,
   );
