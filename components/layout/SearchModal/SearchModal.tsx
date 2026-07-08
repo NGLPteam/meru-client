@@ -63,7 +63,7 @@ interface Props extends Pick<ModalProps, "dialog"> {
   data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment SearchModalFragment on Entity {
     __typename
     ... on Sluggable {

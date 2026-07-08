@@ -42,7 +42,7 @@ interface Props {
   size?: "sm" | "lg";
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment SearchButtonFragment on Entity {
     ...SearchModalFragment
   }

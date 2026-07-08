@@ -1,9 +1,8 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import { PageCount, Pagination } from "@/components/atomic";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
-import { BrowseListLayoutFragment$key } from "@/relay/BrowseListLayoutFragment.graphql";
-import { BackButtonFragment$key } from "@/relay/BackButtonFragment.graphql";
+import { fragment as BackButtonFragment } from "@/components/layout/BrowseListLayout/BackButton/BackButton";
 import Container from "@/components/layout/Container";
 import NoContent from "../messages/NoContent";
 import BackButton from "./BackButton";
@@ -65,17 +64,17 @@ type args = Record<string, string | number>;
 
 interface Props {
   header?: string | [key, args] | null;
-  data?: BrowseListLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   orderComponent?: React.ReactNode;
   items?: React.ReactNode[];
-  entityData?: BackButtonFragment$key | null;
+  entityData?: FragmentType<typeof BackButtonFragment> | null;
   isPending?: boolean;
   onPageChange?: (val: Record<string, string | number>) => void;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment BrowseListLayoutFragment on PageInfo {
     ...PaginationFragment
     ...PageCountFragment
   }
-`;
+`);

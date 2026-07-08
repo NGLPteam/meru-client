@@ -1,10 +1,11 @@
 import { useId } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import { SearchButton } from "@/components/atomic";
+import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
 import MobileMenuToggle from "@/components/layout/MobileMenuToggle";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
@@ -13,13 +14,11 @@ import CommunityName from "@/components/composed/community/CommunityName";
 import Search from "@/components/forms/Search";
 import BaseDrawer from "@/components/layout/BaseDrawer";
 import AccountDropdown from "@/components/composed/AccountDropdown";
-import { AppHeaderFragment$key } from "@/relay/AppHeaderFragment.graphql";
-import { SearchButtonFragment$key } from "@/relay/SearchButtonFragment.graphql";
 import styles from "./AppHeader.module.css";
 
 interface Props {
-  data?: AppHeaderFragment$key | null;
-  searchData?: SearchButtonFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
+  searchData?: FragmentType<typeof SearchButtonFragment> | null;
 }
 
 export default function AppHeader({ data, searchData }: Props) {
@@ -97,7 +96,7 @@ export default function AppHeader({ data, searchData }: Props) {
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AppHeaderFragment on Query {
     communities(order: POSITION_ASCENDING) {
       pageInfo {
@@ -112,4 +111,4 @@ const fragment = graphql`
     }
     ...CommunityPickerFragment
   }
-`;
+`);

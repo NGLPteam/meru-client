@@ -64,7 +64,7 @@ type Props = {
 
 type Ordering = DocumentType<typeof fragment>["orderings"]["nodes"][number];
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment EntityNavListFragment on Entity {
     __typename
     schemaVersion {

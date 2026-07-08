@@ -29,7 +29,7 @@ export default function BackButton({
   ) : null;
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment BackButtonFragment on Entity {
     __typename
     slug

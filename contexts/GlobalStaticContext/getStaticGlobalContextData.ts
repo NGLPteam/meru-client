@@ -7,7 +7,7 @@ export default async function getStaticGlobalContextData() {
   return globalStaticData;
 }
 
-const query = graphql(`
+export const query = graphql(`
   query getStaticGlobalContextDataQuery {
     globalConfiguration {
       site {

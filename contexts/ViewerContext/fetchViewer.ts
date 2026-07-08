@@ -1,6 +1,15 @@
-import { getAPIURL } from "@/lib/relay/network";
-import { getGQLHeaders } from "@/lib/relay/apiHeaders";
+import { getAPIURL } from "@/lib/api/client";
 import type { ViewerContextProps } from "./ViewerContext";
+
+function getGQLHeaders(sessionToken?: string): Record<string, string> {
+  const headers: Record<string, string> = {
+    accept: "application/json",
+    "content-type": "application/json",
+    "x-token-context": "SERVER",
+  };
+  if (sessionToken) headers.authorization = `Bearer ${sessionToken}`;
+  return headers;
+}
 
 const VIEWER_QUERY = `
   query ViewerQuery {

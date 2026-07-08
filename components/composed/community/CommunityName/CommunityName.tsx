@@ -22,7 +22,7 @@ export default function CommunityName() {
   );
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment CommunityNameFragment on Community {
     title
     slug

@@ -1,11 +1,10 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { updateI18n } from "i18n";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { AppBodyFragment$key } from "@/relay/AppBodyFragment.graphql";
-import { SearchButtonFragment$key } from "@/relay/SearchButtonFragment.graphql";
+import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
 import { SetCommunityContextProvider } from "@/contexts/CommunityContext";
 import SkipLink from "@/components/global/SkipLink";
 import DraftModeBanner from "@/components/global/DraftModeBanner";
@@ -15,8 +14,8 @@ import styles from "./AppBody.module.css";
 
 interface Props {
   children: React.ReactNode;
-  data?: AppBodyFragment$key | null;
-  searchData?: SearchButtonFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
+  searchData?: FragmentType<typeof SearchButtonFragment> | null;
   draftModeEnabled?: boolean;
 }
 
@@ -44,9 +43,9 @@ function AppBody({ children, data, searchData, draftModeEnabled }: Props) {
 
 export default AppBody;
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AppBodyFragment on Query {
     ...AppHeaderFragment
     ...AppFooterFragment
   }
-`;
+`);

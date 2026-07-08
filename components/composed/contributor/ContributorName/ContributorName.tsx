@@ -18,7 +18,7 @@ interface Props {
   label?: string;
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment ContributorNameFragment on AnyContributor {
     ... on PersonContributor {
       __typename

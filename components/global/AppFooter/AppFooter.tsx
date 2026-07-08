@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import startCase from "lodash/startCase";
 import classNames from "classnames";
@@ -7,19 +7,18 @@ import useViewerContext from "@/contexts/useViewerContext";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import { Search } from "@/components/forms";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
+import { communityNameFragment as CommunityPickerCommunityNameFragment } from "@/components/composed/instance/CommunityPicker/CommunityPicker";
 import CommunityName from "@/components/composed/community/CommunityName";
 import { NamedLink, Markdown } from "@/components/atomic";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
 import { CommunityContext } from "@/contexts/CommunityContext";
-import { AppFooterFragment$key } from "@/relay/AppFooterFragment.graphql";
-import { CommunityPickerCommunityNameFragment$key } from "@/relay/CommunityPickerCommunityNameFragment.graphql";
 import { signIn } from "@/components/composed/AccountDropdown/actions";
 
 import styles from "./AppFooter.module.css";
 
 interface Props {
-  data?: AppFooterFragment$key | null;
-  communityData?: CommunityPickerCommunityNameFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
+  communityData?: FragmentType<typeof CommunityPickerCommunityNameFragment> | null;
 }
 
 export default function AppFooter({ data, communityData }: Props) {
@@ -125,7 +124,7 @@ export default function AppFooter({ data, communityData }: Props) {
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AppFooterFragment on Query {
     communities(order: POSITION_ASCENDING) {
       pageInfo {
@@ -137,4 +136,4 @@ const fragment = graphql`
     }
     ...CommunityPickerFragment
   }
-`;
+`);

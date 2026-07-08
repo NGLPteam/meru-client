@@ -5,7 +5,7 @@ import { Avatar, Dropdown, Link } from "@/components/atomic";
 import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import IconFactory from "@/components/factories/IconFactory";
 import { useProgress } from "@/lib/vendor/react-transition-progress";
-import { removeToken } from "@/lib/auth/token";
+import { setClientToken } from "@/lib/api/clientToken";
 import styles from "./AccountDropdown.module.css";
 import PreviewModeButton from "./PreviewModeButton";
 import { signIn, signOut } from "./actions";
@@ -25,7 +25,7 @@ export default function AccountDropdown({ condensed }: Props) {
   const handleSignOut = useCallback(() => {
     startTransition(async () => {
       startProgress();
-      removeToken();
+      setClientToken(undefined);
       await signOut();
     });
   }, [startProgress]);

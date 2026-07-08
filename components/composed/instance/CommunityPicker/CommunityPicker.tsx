@@ -67,7 +67,7 @@ export default function CommunityPicker({ data }: Props) {
   );
 }
 
-const communityNameFragment = graphql(`
+export const communityNameFragment = graphql(`
   fragment CommunityPickerCommunityNameFragment on Community {
     title
   }

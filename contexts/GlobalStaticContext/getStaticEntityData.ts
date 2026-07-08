@@ -28,7 +28,7 @@ const query = graphql(`
   }
 `);
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment getStaticEntityDataFragment on Entity {
     ... on Entity {
       title

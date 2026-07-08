@@ -90,7 +90,7 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
   ) : null;
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment ArticleAnalyticsBlockFragment on Item {
     id
     downloadsByDate: assetDownloads(

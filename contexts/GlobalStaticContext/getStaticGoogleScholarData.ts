@@ -21,7 +21,7 @@ const query = graphql(`
   }
 `);
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment getStaticGoogleScholarDataFragment on Entity {
     ... on Item {
       title
