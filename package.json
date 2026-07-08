@@ -8,6 +8,7 @@
     "start": "next start",
     "relay": "relay-compiler",
     "schema": "graphql-codegen",
+    "graphql": "graphql-codegen --config codegen.client.ts",
     "lint": "eslint --cache \"**/*.{js,ts,tsx}\"",
     "fix": "eslint --cache --fix \"**/*.{js,ts,tsx}\"",
     "types": "npx tsc --strict",
@@ -22,6 +23,7 @@
     "@spissvinkel/alea": "^1.2.1",
     "@trieb.work/nextjs-turbo-redis-cache": "^1.8.1",
     "@types/mdx": "^2.0.13",
+    "@urql/core": "^6.0.3",
     "chunk-text": "^2.0.1",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
@@ -53,13 +55,15 @@
     "remark-gfm": "^4.0.0",
     "sharp": "^0.33.4",
     "tailwindcss": "^3.4.15",
-    "url-join": "^5.0.0"
+    "url-join": "^5.0.0",
+    "urql": "^5.0.3"
   },
   "devDependencies": {
     "@castiron/common-types": "^2.0.1",
     "@csstools/postcss-oklab-function": "^4.0.6",
     "@eslint/js": "^9.35.0",
     "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/client-preset": "^6.1.0",
     "@graphql-codegen/introspection": "^5.0.0",
     "@graphql-codegen/typescript-resolvers": "^5.0.1",
     "@graphql-eslint/eslint-plugin": "^4.4.0",
