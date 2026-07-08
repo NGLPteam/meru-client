@@ -1,5 +1,8 @@
-import { useSharedListTemplateFragment } from "@/components/templates/shared/shared.list.graphql";
-import { sharedListTemplateFragment$key } from "@/relay/sharedListTemplateFragment.graphql";
+import {
+  useSharedListTemplateFragment,
+  listTemplateFragment as sharedListTemplateFragment,
+} from "@/components/templates/shared/shared.list.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import type { HeroBackground } from "@/types/graphql-schema";
@@ -13,7 +16,7 @@ export default function CompactListBlock({
   basePath,
   bgOverride,
 }: {
-  data?: sharedListTemplateFragment$key | null;
+  data?: FragmentType<typeof sharedListTemplateFragment> | null;
   basePath?: string | null;
   bgOverride?: HeroBackground | null;
 }) {

@@ -1,8 +1,9 @@
 import { AnyContributor } from "@/types/graphql-schema";
-import { ContributorNameFragment$data } from "@/relay/ContributorNameFragment.graphql";
+import { fragment as ContributorNameFragment } from "@/components/composed/contributor/ContributorName/ContributorName";
+import { type DocumentType } from "@/lib/api/gql";
 
 export function getContributorDisplayName(
-  contributor: Partial<AnyContributor> | ContributorNameFragment$data,
+  contributor: Partial<AnyContributor> | DocumentType<typeof ContributorNameFragment>,
   reverse?: boolean,
 ): string {
   if (!contributor) return "";

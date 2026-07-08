@@ -61,11 +61,6 @@ const images = {
 };
 
 const compiler = {
-  relay: {
-    src: "./",
-    language: "typescript",
-    artifactDirectory: "__generated__",
-  },
   styledComponents: true,
 };
 

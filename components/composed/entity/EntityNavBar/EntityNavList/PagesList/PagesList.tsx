@@ -1,10 +1,11 @@
 import { usePathname } from "next/navigation";
 import { NamedLink, NavMenuLink } from "@/components/atomic";
-import { EntityNavListFragment$data } from "@/relay/EntityNavListFragment.graphql";
+import { fragment as EntityNavListFragment } from "@/components/composed/entity/EntityNavBar/EntityNavList/EntityNavList";
+import { type DocumentType } from "@/lib/api/gql";
 import Dropdown from "../Dropdown";
 import styles from "./PagesList.module.css";
 
-type Page = EntityNavListFragment$data["pages"]["nodes"][number];
+type Page = DocumentType<typeof EntityNavListFragment>["pages"]["nodes"][number];
 
 export default function PagesList({
   pages,

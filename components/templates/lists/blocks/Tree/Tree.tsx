@@ -1,7 +1,10 @@
 import Container from "@/components/layout/Container";
 import type { HeroBackground } from "@/types/graphql-schema";
-import { useSharedListTemplateFragment } from "@/components/templates/shared/shared.list.graphql";
-import { sharedListTemplateFragment$key } from "@/relay/sharedListTemplateFragment.graphql";
+import {
+  useSharedListTemplateFragment,
+  listTemplateFragment as sharedListTemplateFragment,
+} from "@/components/templates/shared/shared.list.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import { getSeeAllHref } from "../../SeeAll/helpers";
 import List from "../../List";
@@ -14,7 +17,7 @@ export default function TreeListBlock({
   basePath,
   bgOverride,
 }: {
-  data?: sharedListTemplateFragment$key | null;
+  data?: FragmentType<typeof sharedListTemplateFragment> | null;
   basePath?: string | null;
   bgOverride?: HeroBackground | null;
 }) {

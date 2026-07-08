@@ -22,6 +22,12 @@ const config: CodegenConfig = {
       preset: "client",
       config: {
         useTypeImports: true,
+        // Use fragment/type names verbatim. The default pascal-case transform
+        // mangles acronyms (AssetPDFPreviewFragment -> ...Pdf...) and
+        // lowercase-first fragment names inconsistently, producing dangling
+        // generated type references.
+        namingConvention: "keep",
+        dedupeFragments: true,
         scalars: {
           JSON: "any",
           Slug: "string",

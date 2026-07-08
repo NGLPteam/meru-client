@@ -1,11 +1,12 @@
 import TreeAccordion from "@/components/atomic/accordions/TreeAccordion";
-import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
+import { listItemTemplateFragment as sharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import Item from "./Tree";
 import styles from "./Tree.module.css";
 
 type ItemType = {
   template?:
-    | (sharedListItemTemplateFragment$key & {
+    | (FragmentType<typeof sharedListItemTemplateFragment> & {
         entity?: { hierarchicalDepth: number };
       })
     | null;

@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { NamedLink, Button } from "@/components/atomic";
-import { EntityNavListFragment$data } from "@/relay/EntityNavListFragment.graphql";
+import { fragment as EntityNavListFragment } from "@/components/composed/entity/EntityNavBar/EntityNavList/EntityNavList";
+import { type DocumentType } from "@/lib/api/gql";
 
-type Ordering = EntityNavListFragment$data["orderings"]["nodes"][number];
+type Ordering = DocumentType<typeof EntityNavListFragment>["orderings"]["nodes"][number];
 
 export default function BrowseButton({
   basePath,

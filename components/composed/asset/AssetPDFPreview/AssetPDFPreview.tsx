@@ -46,6 +46,7 @@ type Props = {
 
 const fragment = graphql(`
   fragment AssetPDFPreviewFragment on Asset {
+    __typename
     ... on AssetPDF {
       downloadUrl
     }

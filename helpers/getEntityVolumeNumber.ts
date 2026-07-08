@@ -12,6 +12,7 @@ export default function getEntityVolumeNumber(
 
 const fragment = graphql(`
   fragment getEntityVolumeNumberFragment on Entity {
+    __typename
     ... on Collection {
       vol: ancestorByName(name: "volume") {
         ... on Collection {

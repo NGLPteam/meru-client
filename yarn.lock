@@ -2671,36 +2671,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-relay@npm:^16.0.6":
-  version: 16.0.6
-  resolution: "@types/react-relay@npm:16.0.6"
-  dependencies:
-    "@types/react": "npm:*"
-    "@types/relay-runtime": "npm:*"
-  checksum: 10c0/91a7b2e3e95610dc5ba4a994e847dd250cb6b95c5757a15662d36ab601abaddef970dd09f104333c43416b5ef0901101b55d0507fd999af60873ed849c4e9d76
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:*, @types/react@npm:^19.1.12":
+"@types/react@npm:^19.1.12":
   version: 19.1.13
   resolution: "@types/react@npm:19.1.13"
   dependencies:
     csstype: "npm:^3.0.2"
   checksum: 10c0/75e35b54883f5ed07d3b5cb16a4711b6dbb7ec6b74301bcb9bfa697c9d9fff022ec508e1719e7b2c69e2e8b042faac1125be7717b5e5e084f816a2c88e136920
-  languageName: node
-  linkType: hard
-
-"@types/relay-runtime@npm:*":
-  version: 19.0.2
-  resolution: "@types/relay-runtime@npm:19.0.2"
-  checksum: 10c0/a991db3ceafcf89a49319c4d2bdf141cdc58dd00a46d138c5028ee266c4e828a15a5a04398c80df91c9af5ce6fc5bbff7b86568e204dd67f14f9d1ba12212c24
-  languageName: node
-  linkType: hard
-
-"@types/relay-runtime@npm:^14.1.23":
-  version: 14.1.24
-  resolution: "@types/relay-runtime@npm:14.1.24"
-  checksum: 10c0/daf39e8ea22b2c08a63ff88718e4f83589bccba5ee30c03af6d36376d7f20692270ca7249edc25edb0d4d17885984ccf0f62c2df99ba6b18427ef69d2812f764
   languageName: node
   linkType: hard
 
@@ -4628,15 +4604,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-relay@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "eslint-plugin-relay@npm:2.0.0"
-  dependencies:
-    graphql: "npm:^14.0.0 || ^15.0.0 || ^16.0.0"
-  checksum: 10c0/7a2d90044cbf8250570998ea0e15f26fe48112c4ccf8476b92522cf768179dbfef4e0be276c79613c86ac43c633b847b19f88c7289c775cb06eb81af829926b8
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-unused-imports@npm:^4.2.0":
   version: 4.2.0
   resolution: "eslint-plugin-unused-imports@npm:4.2.0"
@@ -4961,7 +4928,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fbjs@npm:^3.0.0, fbjs@npm:^3.0.2":
+"fbjs@npm:^3.0.0":
   version: 3.0.5
   resolution: "fbjs@npm:3.0.5"
   dependencies:
@@ -5408,7 +5375,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^14.0.0 || ^15.0.0 || ^16.0.0, graphql@npm:^16.8.1":
+"graphql@npm:^16.8.1":
   version: 16.11.0
   resolution: "graphql@npm:16.11.0"
   checksum: 10c0/124da7860a2292e9acf2fed0c71fc0f6a9b9ca865d390d112bdd563c1f474357141501c12891f4164fe984315764736ad67f705219c62f7580681d431a85db88
@@ -6934,8 +6901,6 @@ __metadata:
     "@types/react": "npm:^19.1.12"
     "@types/react-dom": "npm:^19.1.9"
     "@types/react-pdf": "npm:^7.0.0"
-    "@types/react-relay": "npm:^16.0.6"
-    "@types/relay-runtime": "npm:^14.1.23"
     "@typescript-eslint/eslint-plugin": "npm:^8.44.0"
     "@typescript-eslint/parser": "npm:^8.44.0"
     "@urql/core": "npm:^6.0.3"
@@ -6950,7 +6915,6 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.4"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^5.2.0"
-    eslint-plugin-relay: "npm:^2.0.0"
     eslint-plugin-unused-imports: "npm:^4.2.0"
     globals: "npm:^16.4.0"
     graphql: "npm:^16.8.1"
@@ -6977,13 +6941,10 @@ __metadata:
     react-intersection-observer: "npm:^9.8.0"
     react-markdown: "npm:^9.0.1"
     react-pdf: "npm:^10.1.0"
-    react-relay: "npm:^16.2.0"
     reakit: "npm:^1.3.11"
     redis: "npm:4.7.0"
     regenerator-runtime: "npm:^0.14.1"
     rehype-raw: "npm:^7.0.0"
-    relay-compiler: "npm:^16.2.0"
-    relay-runtime: "npm:^16.2.0"
     remark-gfm: "npm:^4.0.0"
     sharp: "npm:^0.33.4"
     tailwindcss: "npm:^3.4.15"
@@ -8605,21 +8566,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-relay@npm:^16.2.0":
-  version: 16.2.0
-  resolution: "react-relay@npm:16.2.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.0.0"
-    fbjs: "npm:^3.0.2"
-    invariant: "npm:^2.2.4"
-    nullthrows: "npm:^1.1.1"
-    relay-runtime: "npm:16.2.0"
-  peerDependencies:
-    react: ^16.9.0 || ^17 || ^18
-  checksum: 10c0/d68f2626d71ab1486644b7bfdf73d0bcac6e06e37e5b3f57eac273ebb7c560d9d936ca54aa9f18677b10f54fe541d060d9a0d93cc96cef0a9cd11ea6ed409ff0
-  languageName: node
-  linkType: hard
-
 "react@npm:^19.1.2":
   version: 19.2.1
   resolution: "react@npm:19.2.1"
@@ -8817,15 +8763,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"relay-compiler@npm:^16.2.0":
-  version: 16.2.0
-  resolution: "relay-compiler@npm:16.2.0"
-  bin:
-    relay-compiler: cli.js
-  checksum: 10c0/8d7a681dc0e8113f347fd38d6834893dd2e24f502dc480f0239c50122eac0029dbe2b947d3f8d655804df70a87a8a676df090508ee378b50a6b8d9ff75727d33
-  languageName: node
-  linkType: hard
-
 "relay-runtime@npm:12.0.0":
   version: 12.0.0
   resolution: "relay-runtime@npm:12.0.0"
@@ -8834,17 +8771,6 @@ __metadata:
     fbjs: "npm:^3.0.0"
     invariant: "npm:^2.2.4"
   checksum: 10c0/f5d29b5c2f3c8a3438d43dcbc3022bd454c4ecbd4f0b10616df08bedc62d8aaa84f155f23e374053cf9f4a8238b93804e37a5b37ed9dc7ad01436d62d1b01d53
-  languageName: node
-  linkType: hard
-
-"relay-runtime@npm:16.2.0, relay-runtime@npm:^16.2.0":
-  version: 16.2.0
-  resolution: "relay-runtime@npm:16.2.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.0.0"
-    fbjs: "npm:^3.0.2"
-    invariant: "npm:^2.2.4"
-  checksum: 10c0/770dc36203a3d0a7c285ac446ac601cfa8a87da2af8ee9a9cc3c5533c506655e457b276bc40c6e0f274556dce258b2407a5d17e6582bbc9902af5f1dd9081c3a
   languageName: node
   linkType: hard
 

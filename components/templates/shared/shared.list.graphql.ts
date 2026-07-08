@@ -7,6 +7,7 @@ import {
 
 export const listTemplateFragment = graphql(`
   fragment sharedListTemplateFragment on AnyMainTemplateInstance {
+    __typename
     ... on LinkListTemplateInstance {
       entity {
         ... on Community {

@@ -1,13 +1,14 @@
 "use client";
 
 import React, { createContext } from "react";
-import { getStaticGlobalContextDataQuery$data } from "@/relay/getStaticGlobalContextDataQuery.graphql";
-import { getStaticEntityDataFragment$data } from "@/relay/getStaticEntityDataFragment.graphql";
+import { query as getStaticGlobalContextDataQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
+import { fragment as getStaticEntityDataFragment } from "@/contexts/GlobalStaticContext/getStaticEntityData";
+import { type DocumentType } from "@/lib/api/gql";
 
-export type GlobalStaticData = getStaticGlobalContextDataQuery$data;
+export type GlobalStaticData = DocumentType<typeof getStaticGlobalContextDataQuery>;
 
 type GlobalEntityData = {
-  entityData?: getStaticEntityDataFragment$data;
+  entityData?: DocumentType<typeof getStaticEntityDataFragment>;
 };
 
 type GlobalStaticValue = Partial<GlobalStaticData> & GlobalEntityData;

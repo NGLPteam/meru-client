@@ -1,12 +1,13 @@
 import Head from "next/head";
 import { getPrecisionCitationDateDisplay } from "@/helpers/dates";
 import { getContributorDisplayName } from "@/components/composed/contributor/ContributorName/helpers";
-import { getStaticGoogleScholarDataFragment$data } from "@/relay/getStaticGoogleScholarDataFragment.graphql";
+import { fragment as getStaticGoogleScholarDataFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
+import { type DocumentType } from "@/lib/api/gql";
 
 export default function GoogleScholarHtmlHead({
   entity,
 }: {
-  entity: getStaticGoogleScholarDataFragment$data;
+  entity: DocumentType<typeof getStaticGoogleScholarDataFragment>;
 }) {
   const identifier = entity.schemaDefinition?.identifier;
 

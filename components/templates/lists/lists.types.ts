@@ -1,4 +1,5 @@
-import { CoverImageFragment$key } from "@/relay/CoverImageFragment.graphql";
+import { fragment as CoverImageFragment } from "@/components/atomic/images/CoverImage/CoverImage";
+import { type FragmentType } from "@/lib/api/gql";
 import type { Slot } from "../templates.types";
 
 /*
@@ -7,7 +8,7 @@ import type { Slot } from "../templates.types";
 
 export type ListItem = {
   slots: {
-    thumbnail: CoverImageFragment$key | null;
+    thumbnail: FragmentType<typeof CoverImageFragment> | null;
     contributors: Slot | null;
     header: Slot | null;
     subheader: Slot | null;

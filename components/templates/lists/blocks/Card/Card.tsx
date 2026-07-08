@@ -1,6 +1,9 @@
 import classNames from "classnames";
-import { useSharedListTemplateFragment } from "@/components/templates/shared/shared.list.graphql";
-import { sharedListTemplateFragment$key } from "@/relay/sharedListTemplateFragment.graphql";
+import {
+  useSharedListTemplateFragment,
+  listTemplateFragment as sharedListTemplateFragment,
+} from "@/components/templates/shared/shared.list.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import { getBgClass } from "@/components/templates/helpers/bgColor";
 import type { HeroBackground } from "@/types/graphql-schema";
 import SeeAll from "../../SeeAll";
@@ -13,7 +16,7 @@ export default function CardListBlock({
   basePath,
   bgOverride,
 }: {
-  data?: sharedListTemplateFragment$key;
+  data?: FragmentType<typeof sharedListTemplateFragment>;
   basePath?: string | null;
   bgOverride?: HeroBackground | null;
 }) {

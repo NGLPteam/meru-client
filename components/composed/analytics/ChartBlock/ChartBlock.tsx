@@ -2,13 +2,14 @@ import classNames from "classnames";
 import { useCallback } from "react";
 import { format, parseISO } from "date-fns";
 import useIsMounted from "@/hooks/useIsMounted";
-import { ArticleAnalyticsBlockFragment$data } from "@/relay/ArticleAnalyticsBlockFragment.graphql";
+import { fragment as ArticleAnalyticsBlockFragment } from "@/components/composed/analytics/ArticleAnalyticsBlock/ArticleAnalyticsBlock";
+import { type DocumentType } from "@/lib/api/gql";
 import GeoChart from "../GeoChart";
 import LineColChart from "../LineColChart";
 import styles from "./ChartBlock.module.css";
 
 type Props = {
-  data: ArticleAnalyticsBlockFragment$data;
+  data: DocumentType<typeof ArticleAnalyticsBlockFragment>;
   chartType: string;
   region: string;
   mode: string;
@@ -23,7 +24,7 @@ export default function ChartBlock({
   precision,
 }: Props) {
   const formatMapData = useCallback(
-    (data: ArticleAnalyticsBlockFragment$data) => {
+    (data: DocumentType<typeof ArticleAnalyticsBlockFragment>) => {
       const subset =
         mode === "views"
           ? data.entityViewsByRegion?.results
@@ -63,7 +64,7 @@ export default function ChartBlock({
   );
 
   const formatLineChartData = useCallback(
-    (data: ArticleAnalyticsBlockFragment$data) => {
+    (data: DocumentType<typeof ArticleAnalyticsBlockFragment>) => {
       const subset =
         mode === "views"
           ? data.viewsByDate.results

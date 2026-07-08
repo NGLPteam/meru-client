@@ -1,8 +1,11 @@
 import classNames from "classnames";
 import { useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { useSharedListTemplateFragment } from "@/components/templates/shared/shared.list.graphql";
-import { sharedListTemplateFragment$key } from "@/relay/sharedListTemplateFragment.graphql";
+import {
+  useSharedListTemplateFragment,
+  listTemplateFragment as sharedListTemplateFragment,
+} from "@/components/templates/shared/shared.list.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import CoverImage from "@/components/atomic/images/CoverImage";
 import Container from "@/components/layout/Container";
@@ -20,7 +23,7 @@ export default function SummaryListBlock({
   basePath,
   bgOverride,
 }: {
-  data?: sharedListTemplateFragment$key | null;
+  data?: FragmentType<typeof sharedListTemplateFragment> | null;
   basePath?: string | null;
   bgOverride?: HeroBackground | null;
 }) {

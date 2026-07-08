@@ -1,5 +1,8 @@
-import { useSharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
-import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
+import {
+  useSharedListItemTemplateFragment,
+  listItemTemplateFragment as sharedListItemTemplateFragment,
+} from "@/components/templates/shared/shared.listItems.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import IconFactory from "@/components/factories/IconFactory";
@@ -9,7 +12,7 @@ import styles from "./Compact.module.css";
 export default function CompactListItem({
   data,
 }: {
-  data?: sharedListItemTemplateFragment$key | null;
+  data?: FragmentType<typeof sharedListItemTemplateFragment> | null;
   hideCover?: boolean;
 }) {
   const { slots, entity } = useSharedListItemTemplateFragment(data);

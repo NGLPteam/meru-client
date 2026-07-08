@@ -1,7 +1,10 @@
 import classNames from "classnames";
 import CoverImage from "@/components/atomic/images/CoverImage";
-import { useSharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
-import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
+import {
+  useSharedListItemTemplateFragment,
+  listItemTemplateFragment as sharedListItemTemplateFragment,
+} from "@/components/templates/shared/shared.listItems.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import ContributorsList from "@/components/composed/contributor/ContributorsList";
 import NamedLink from "@/components/atomic/links/NamedLink";
@@ -15,7 +18,7 @@ export default function GridListItem({
   showContributors,
   showContext,
 }: {
-  data?: sharedListItemTemplateFragment$key | null;
+  data?: FragmentType<typeof sharedListItemTemplateFragment> | null;
   hideCover?: boolean;
   showContributors?: boolean | null;
   showContext?: ListEntityContext | null;

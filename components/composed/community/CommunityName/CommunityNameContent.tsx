@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link, NamedLink } from "@/components/atomic";
-import { CommunityNameFragment$data } from "@/relay/CommunityNameFragment.graphql";
+import { fragment as CommunityNameFragment } from "@/components/composed/community/CommunityName/CommunityName";
+import { type DocumentType } from "@/lib/api/gql";
 import CommunityLogo from "./CommunityLogo";
 
 export default function CommunityName({ community }: Props) {
@@ -33,5 +34,5 @@ export default function CommunityName({ community }: Props) {
 }
 
 interface Props {
-  community?: CommunityNameFragment$data | null;
+  community?: DocumentType<typeof CommunityNameFragment> | null;
 }

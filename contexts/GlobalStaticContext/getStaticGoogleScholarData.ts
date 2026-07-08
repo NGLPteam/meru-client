@@ -23,6 +23,7 @@ const query = graphql(`
 
 export const fragment = graphql(`
   fragment getStaticGoogleScholarDataFragment on Entity {
+    __typename
     ... on Item {
       title
 

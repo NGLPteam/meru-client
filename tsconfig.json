@@ -17,7 +17,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@/relay/*": ["__generated__/*"],
       "@/types/*": ["types/*"],
       "@/components/*": ["components/*"],
       "@/lib/*": ["lib/*"],

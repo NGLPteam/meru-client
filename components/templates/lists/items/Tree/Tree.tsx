@@ -2,8 +2,11 @@ import classNames from "classnames";
 import ContributorsList from "@/components/composed/contributor/ContributorsList";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import NamedLink from "@/components/atomic/links/NamedLink";
-import { useSharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
-import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
+import {
+  useSharedListItemTemplateFragment,
+  listItemTemplateFragment as sharedListItemTemplateFragment,
+} from "@/components/templates/shared/shared.listItems.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityType } from "@/helpers/routes";
 import styles from "./Tree.module.css";
 
@@ -12,7 +15,7 @@ export default function TreeListItem({
   depth,
   singleton,
 }: {
-  data?: sharedListItemTemplateFragment$key | null;
+  data?: FragmentType<typeof sharedListItemTemplateFragment> | null;
   depth?: number;
   singleton?: boolean;
 }) {

@@ -1,10 +1,11 @@
-import { ArticleAnalyticsBlockFragment$data } from "@/relay/ArticleAnalyticsBlockFragment.graphql";
+import { fragment as ArticleAnalyticsBlockFragment } from "@/components/composed/analytics/ArticleAnalyticsBlock/ArticleAnalyticsBlock";
+import { type DocumentType } from "@/lib/api/gql";
 import StatBlock from "./StatBlock";
 import STATES from "./states.json";
 import styles from "./StatBlocks.module.css";
 
 type Props = {
-  data: ArticleAnalyticsBlockFragment$data;
+  data: DocumentType<typeof ArticleAnalyticsBlockFragment>;
   region: string;
   mode: string;
   dateLabel: string;

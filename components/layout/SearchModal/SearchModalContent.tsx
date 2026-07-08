@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Select } from "@/components/forms";
-import { SearchModalFragment$data } from "@/relay/SearchModalFragment.graphql";
+import { fragment as SearchModalFragment } from "@/components/layout/SearchModal/SearchModal";
+import { type DocumentType } from "@/lib/api/gql";
 import styles from "./SearchModal.module.css";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
@@ -66,6 +67,6 @@ export default function SearchModalContent({ searchData, register }: Props) {
 }
 
 interface Props {
-  searchData?: SearchModalFragment$data | null;
+  searchData?: DocumentType<typeof SearchModalFragment> | null;
   register: (name: string) => UseFormRegisterReturn;
 }

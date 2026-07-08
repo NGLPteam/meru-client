@@ -5,7 +5,8 @@ import type {
   LinkListBackground,
   ListEntityContext,
 } from "@/types/graphql-schema";
-import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
+import { listItemTemplateFragment as sharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
+import { type FragmentType } from "@/lib/api/gql";
 import CardItem from "../items/Card";
 import GridItem from "../items/Grid";
 import SummaryItem from "../items/Summary";
@@ -25,7 +26,7 @@ export type Props = {
   browseStyle?: boolean | null;
   treeDepth?: { min: number; max: number } | null;
   items:
-    | readonly { template?: sharedListItemTemplateFragment$key | null }[]
+    | readonly { template?: FragmentType<typeof sharedListItemTemplateFragment> | null }[]
     | null
     | undefined;
 };
