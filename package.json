@@ -24,6 +24,7 @@
     "@trieb.work/nextjs-turbo-redis-cache": "^1.8.1",
     "@types/mdx": "^2.0.13",
     "@urql/core": "^6.0.3",
+    "@urql/exchange-request-policy": "^2.0.0",
     "chunk-text": "^2.0.1",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",

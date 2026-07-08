@@ -2847,13 +2847,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@urql/core@npm:^6.0.2, @urql/core@npm:^6.0.3":
+"@urql/core@npm:^6.0.0, @urql/core@npm:^6.0.2, @urql/core@npm:^6.0.3":
   version: 6.0.3
   resolution: "@urql/core@npm:6.0.3"
   dependencies:
     "@0no-co/graphql.web": "npm:^1.0.13"
     wonka: "npm:^6.3.2"
   checksum: 10c0/1fc423d967644f60cfd41090b85708ca7c3d19da30a8e44188b1e0955787ce9fac88ab3c0caea03231041de8ad905251a90bfa49a729e34fa895d3c9117f94bb
+  languageName: node
+  linkType: hard
+
+"@urql/exchange-request-policy@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@urql/exchange-request-policy@npm:2.0.0"
+  dependencies:
+    "@urql/core": "npm:^6.0.0"
+    wonka: "npm:^6.3.2"
+  peerDependencies:
+    "@urql/core": ^6.0.0
+  checksum: 10c0/0da5fa164aef3afc2943de82b387d92b7b143b8df4203ebfbe8c1d4bd22ffbeefe06f19f1fd95e3ca0cd5493dfcf0400428485a75872b0a38446f864681b43d4
   languageName: node
   linkType: hard
 
@@ -6904,6 +6916,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.44.0"
     "@typescript-eslint/parser": "npm:^8.44.0"
     "@urql/core": "npm:^6.0.3"
+    "@urql/exchange-request-policy": "npm:^2.0.0"
     autoprefixer: "npm:^10.4.20"
     chunk-text: "npm:^2.0.1"
     classnames: "npm:^2.5.1"

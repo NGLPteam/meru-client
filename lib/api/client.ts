@@ -9,8 +9,16 @@ export function getAPIURL(): string {
   throw new Error("Missing process.env.NEXT_PUBLIC_API_URL.");
 }
 
-// Anonymous singleton used for the vast majority of (cached) server fetches.
-export const anonymousClient = makeUrqlClient(getAPIURL(), "network-only");
+// Anonymous singleton used for the vast majority of (public) server fetches.
+// In production, route-level caching (revalidate) handles reuse, so stay
+// network-only (avoids stale/unbounded caching in the long-lived server
+// process). In dev there's no route cache, so use cache-first with a TTL to
+// dedupe repeated public/global queries (theme, global config, etc.) across
+// renders/navigations. Authed & preview fetches always stay network-only.
+export const anonymousClient = makeUrqlClient(
+  getAPIURL(),
+  process.env.NODE_ENV === "production" ? "network-only" : "cache-first",
+);
 
 // Token-scoped client, built on demand for draft-mode / authenticated fetches.
 export function makeAuthorizedClient(
