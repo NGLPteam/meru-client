@@ -81,7 +81,7 @@ export default function SummaryListBlock({
   const seeAllHref = descendantsDefinition
     ? getSeeAllHref(
         showNestedEntities ? href : basePath,
-        seeAllOrderingIdentifier,
+        seeAllOrderingIdentifier as string | null | undefined,
         normalizedContext,
       )
     : null;
@@ -183,8 +183,8 @@ export default function SummaryListBlock({
           <div className={styles.heroImage}>
             <NamedLink href={href}>
               <CoverImage
-                title={entity.title}
-                id={entity.id}
+                title={entity && "title" in entity ? entity.title : undefined}
+                id={entity && "id" in entity ? entity.id : undefined}
                 data={thumbnailData?.thumbnail}
                 maxWidth={240}
                 maxHeight={320}

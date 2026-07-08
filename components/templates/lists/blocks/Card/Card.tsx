@@ -38,7 +38,11 @@ export default function CardListBlock({
   const bgClass = getBgClass(bgOverride ?? background);
 
   const seeAllHref = descendantsDefinition
-    ? getSeeAllHref(basePath, seeAllOrderingIdentifier, undefined)
+    ? getSeeAllHref(
+        basePath,
+        seeAllOrderingIdentifier as string | null | undefined,
+        undefined,
+      )
     : null;
 
   const renderSeeAll =

@@ -80,7 +80,7 @@ export default function SearchLayout({ data, scoped }: Props) {
   const entityData = useFragment(
     entityFragment,
     scoped && entityResult.data?.node?.__typename
-      ? entityResult.data.node
+      ? (entityResult.data.node as FragmentType<typeof entityFragment>)
       : null,
   );
 

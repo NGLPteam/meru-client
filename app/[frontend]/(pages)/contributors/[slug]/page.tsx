@@ -1,4 +1,4 @@
-import { graphql } from "@/lib/api/gql";
+import { graphql, type DocumentType } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import ContributorDetail from "@/components/composed/contributor/ContributorDetail";
 import ContributorDetailNav from "@/components/composed/contributor/ContributorDetailNav";
@@ -23,25 +23,31 @@ export default async function ContributorPage({
       ? collectionQuery
       : detailQuery;
 
-  const { data } = await queryApi(query, {
+  const { data: rawData } = await queryApi(query, {
     slug,
     item: itemSlug,
     collection: collectionSlug,
     page: parseInt(page),
   });
 
+  // `query` is one of three documents chosen at runtime, so type the result as
+  // the (partial) union of their shapes.
+  const data = rawData as
+    | Partial<
+        DocumentType<typeof itemQuery> &
+          DocumentType<typeof collectionQuery> &
+          DocumentType<typeof detailQuery>
+      >
+    | undefined;
+
   const contributor = data?.contributor;
 
-  if (!data || !contributor) return notFound();
+  if (!contributor) return notFound();
 
-  const item = "item" in data && data?.item;
-  const collection = "collection" in data && data?.collection;
+  const item = data?.item;
+  const collection = data?.collection;
 
-  const community = item
-    ? item.community
-    : collection
-      ? collection.community
-      : undefined;
+  const community = item?.community ?? collection?.community ?? undefined;
 
   return (
     <SetCommunity data={community}>

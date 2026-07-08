@@ -32,7 +32,7 @@ export default function Summary({
     (!subheader || subheader?.empty) &&
     (!summary || summary?.empty);
 
-  if (entity?.__typename === "%other") return null;
+  if ((entity?.__typename as string | undefined) === "%other") return null;
 
   return !hideTemplate ? (
     <Container width="wide" bgColor={bgColor}>

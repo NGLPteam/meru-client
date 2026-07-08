@@ -40,7 +40,9 @@ export default function Descendants({
     ? `/${getRouteByEntityType(entity.__typename)}/${"slug" in entity ? entity.slug : ""}`
     : null;
 
-  const BlockComponent = variant ? VARIANT_TO_COMPONENT[variant] : null;
+  const BlockComponent = variant
+    ? VARIANT_TO_COMPONENT[variant as keyof typeof VARIANT_TO_COMPONENT]
+    : null;
 
   return (
     BlockComponent && (

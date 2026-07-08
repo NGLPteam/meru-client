@@ -34,7 +34,9 @@ export default function ContributorDetail({ data }: Props) {
 
   const refetched = useFragment(
     fragment,
-    result.data?.node?.__typename ? result.data.node : null,
+    result.data?.node?.__typename
+      ? (result.data.node as FragmentType<typeof fragment>)
+      : null,
   );
 
   const contributor = page !== null && refetched ? refetched : base;

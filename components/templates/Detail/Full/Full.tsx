@@ -25,7 +25,7 @@ export default function FullVariant({
 
   const textEl = useRef<HTMLDivElement>(null);
 
-  if (entity?.__typename === "%other") return null;
+  if ((entity?.__typename as string | undefined) === "%other") return null;
 
   const { showHeroImage, showBody } = detailDefinition ?? {};
 

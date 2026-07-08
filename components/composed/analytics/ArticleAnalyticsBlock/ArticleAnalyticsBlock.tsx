@@ -47,7 +47,9 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
 
   const refetched = useFragment(
     fragment,
-    result.data?.node?.__typename ? result.data.node : null,
+    result.data?.node?.__typename
+      ? (result.data.node as FragmentType<typeof fragment>)
+      : null,
   );
 
   const chartData = refetched ?? base;

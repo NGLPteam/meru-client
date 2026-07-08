@@ -30,7 +30,7 @@ export default function ContributorsTemplate({
   const mdxHeader = header?.valid && !!header.content;
 
   const attributions =
-    entity.__typename !== "%other" ? entity.attributions : [];
+    (entity.__typename as string) !== "%other" ? entity.attributions : [];
 
   const shouldRender = !!attributions?.length;
 
@@ -42,7 +42,7 @@ export default function ContributorsTemplate({
     limit && attributions?.length > limit && entity.__typename === "Collection";
 
   const backParams =
-    entity.__typename !== "%other"
+    (entity.__typename as string) !== "%other"
       ? new URLSearchParams({
           ...(entity?.slug && {
             [entity.__typename.toLowerCase()]: entity.slug,

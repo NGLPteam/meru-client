@@ -1,5 +1,6 @@
 "use client";
 
+import { type ComponentType } from "react";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { HeroBackground } from "@/types/graphql-schema";
 import Descendants from "../Descendants";
@@ -41,7 +42,12 @@ export default function TemplateFactory({
   )
     return null;
 
-  const Template = TEMPLATE_COMPONENT_MAP[template.templateKind];
+  // The concrete component is chosen dynamically by templateKind; each expects
+  // its own fragment ref, so type the dispatched component loosely and hand it
+  // the template data (correct at runtime for the selected kind).
+  const Template = TEMPLATE_COMPONENT_MAP[template.templateKind] as
+    | ComponentType<{ data: unknown; bgOverride?: HeroBackground | null }>
+    | undefined;
 
   if (
     (template.templateKind === "DESCENDANT_LIST" ||
@@ -52,7 +58,9 @@ export default function TemplateFactory({
     return null;
   }
 
-  return Template ? <Template data={template} bgOverride={bgOverride} /> : null;
+  return Template ? (
+    <Template data={template} bgOverride={bgOverride} />
+  ) : null;
 }
 
 const fragment = graphql(`

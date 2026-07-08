@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ComponentProps } from "react";
 import { useQuery } from "urql";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -29,7 +29,9 @@ export default function EntityOrderingLayout({ data, showContext }: Props) {
 
   const refetched = useFragment(
     fragment,
-    result.data?.node?.__typename ? result.data.node : null,
+    result.data?.node?.__typename
+      ? (result.data.node as FragmentType<typeof fragment>)
+      : null,
   );
 
   const ordering = page !== null && refetched ? refetched : base;
@@ -74,7 +76,7 @@ export default function EntityOrderingLayout({ data, showContext }: Props) {
         items={ordering.children.edges.map(({ node: { entry } }) => (
           <EntitySummary
             key={entry.slug}
-            data={entry}
+            data={entry as ComponentProps<typeof EntitySummary>["data"]}
             showContext={showContext}
             browseStyle
           />

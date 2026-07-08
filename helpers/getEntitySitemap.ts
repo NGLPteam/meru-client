@@ -4,7 +4,7 @@ import EXTERNAL_DATA_URL from "./externalDataUrl";
 export default function getEntitySitemap(data: FragmentType<typeof fragment>) {
   const entity = useFragment(fragment, data);
 
-  if (entity.__typename === "%other") return "";
+  if ((entity.__typename as string) === "%other") return "";
 
   const url =
     entity.__typename === "Community"

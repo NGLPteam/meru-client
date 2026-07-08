@@ -86,7 +86,9 @@ export default function SearchFilters({
       return args.searchableProperties;
     });
 
-    return filterSearchableProperties<FilterNode>(uniqBy(flat, "searchPath"));
+    return filterSearchableProperties<FilterNode>(
+      uniqBy(flat, "searchPath") as FilterNode[],
+    );
   }, [searchData]);
 
   const coreProps = useMemo(

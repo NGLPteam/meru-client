@@ -26,7 +26,7 @@ export default function NavigationTabs({
 
   const renderMainLayout = useFullTextCheck();
 
-  if (!entity || entity.__typename === "%other") return null;
+  if (!entity || (entity.__typename as string) === "%other") return null;
 
   const basePath = `/${getRouteByEntityType(entity.__typename)}/${slug}`;
 

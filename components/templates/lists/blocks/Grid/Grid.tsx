@@ -47,7 +47,11 @@ export default function GridListBlock({
   const { entityContext } = descendantsDefinition ?? {};
 
   const seeAllHref = descendantsDefinition
-    ? getSeeAllHref(basePath, seeAllOrderingIdentifier, undefined)
+    ? getSeeAllHref(
+        basePath,
+        seeAllOrderingIdentifier as string | null | undefined,
+        undefined,
+      )
     : null;
 
   const renderSeeAll =
