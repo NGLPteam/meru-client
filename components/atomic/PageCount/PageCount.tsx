@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Trans } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 export default function PageCount({ data, className, name }: Props) {
   const pageData = useFragment(fragment, data);

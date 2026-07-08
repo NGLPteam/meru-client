@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import BasePagination from "./BasePagination";
 
 export default function Pagination({ data, onPageChange }: Props) {

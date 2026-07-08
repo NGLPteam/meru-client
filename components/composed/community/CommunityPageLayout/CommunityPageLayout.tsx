@@ -1,7 +1,7 @@
 "use client";
 
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useIsMounted from "@/hooks/useIsMounted";
 import { LoadingBlock, Markdown } from "@/components/atomic";
 import Container from "@/components/layout/Container";

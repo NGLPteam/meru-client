@@ -1,5 +1,5 @@
-import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
+import { graphql } from "@/lib/api/gql";
 import EntityPageLayout from "@/components/composed/entity/EntityPageLayout";
 import { BasePageParams } from "@/types/page";
 import queryApi from "@/lib/api/queryApi";

@@ -1,5 +1,5 @@
-import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
+import { graphql } from "@/lib/api/gql";
 import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock";
 import { BasePageParams } from "@/types/page";
 import queryApi from "@/lib/api/queryApi";

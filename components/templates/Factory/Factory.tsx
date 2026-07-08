@@ -58,9 +58,7 @@ export default function TemplateFactory({
     return null;
   }
 
-  return Template ? (
-    <Template data={template} bgOverride={bgOverride} />
-  ) : null;
+  return Template ? <Template data={template} bgOverride={bgOverride} /> : null;
 }
 
 const fragment = graphql(`

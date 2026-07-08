@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchBar from "@/components/composed/search/SearchBar";
 import Modal from "../BaseModal";
 import SearchModalContent from "./SearchModalContent";

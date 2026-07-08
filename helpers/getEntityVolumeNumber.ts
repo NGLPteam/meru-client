@@ -1,4 +1,8 @@
-import { graphql, useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import {
+  graphql,
+  useFragment as readFragment,
+  type FragmentType,
+} from "@/lib/api/gql";
 
 export default function getEntityVolumeNumber(
   data: FragmentType<typeof fragment>,

@@ -2,8 +2,8 @@
 
 import { useMemo, useState, type ComponentProps } from "react";
 import { useQuery } from "urql";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
 import BrowseTreeLayout from "@/components/layout/BrowseTreeLayout";
 import { NoContent } from "@/components/layout";

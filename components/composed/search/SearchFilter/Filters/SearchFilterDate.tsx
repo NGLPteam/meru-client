@@ -1,6 +1,6 @@
 import { Fragment } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useFormContext } from "react-hook-form";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getFilterInputLabel } from "@/helpers/search";
 import { Input } from "@/components/forms";
 

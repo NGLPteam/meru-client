@@ -1,8 +1,8 @@
 "use client";
 
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { useParams } from "next/navigation";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { formatFileSize } from "@/helpers/strings";
 import {

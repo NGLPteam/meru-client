@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import type { HeroImageLayout } from "@/types/graphql-schema";
 import { generateSrcSet, sizes } from "@/helpers/generateSrcSet";
 import type { ImageSize } from "@/types/graphql-schema";

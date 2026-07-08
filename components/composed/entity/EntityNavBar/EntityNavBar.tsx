@@ -1,10 +1,10 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { markdownToTxt } from "markdown-to-txt";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Search } from "@/components/forms";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import EntityNavList from "./EntityNavList";

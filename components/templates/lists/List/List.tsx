@@ -26,7 +26,9 @@ export type Props = {
   browseStyle?: boolean | null;
   treeDepth?: { min: number; max: number } | null;
   items:
-    | readonly { template?: FragmentType<typeof sharedListItemTemplateFragment> | null }[]
+    | readonly {
+        template?: FragmentType<typeof sharedListItemTemplateFragment> | null;
+      }[]
     | null
     | undefined;
 };

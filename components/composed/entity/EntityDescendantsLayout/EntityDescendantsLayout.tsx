@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  graphql,
-  useFragment,
-  type FragmentType,
-  type DocumentType,
-} from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getSchemaPluralName } from "@/helpers/translations";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";

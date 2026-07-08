@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchHero from "@/components/composed/search/SearchHero";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import HeroHeader from "../Header";

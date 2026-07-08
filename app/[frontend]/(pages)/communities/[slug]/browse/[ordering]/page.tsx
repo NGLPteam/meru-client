@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
+import { graphql } from "@/lib/api/gql";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
 import { OrderingPageParams } from "@/types/page";

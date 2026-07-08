@@ -3,7 +3,9 @@ import { fragment as ContributorNameFragment } from "@/components/composed/contr
 import { type DocumentType } from "@/lib/api/gql";
 
 export function getContributorDisplayName(
-  contributor: Partial<AnyContributor> | DocumentType<typeof ContributorNameFragment>,
+  contributor:
+    | Partial<AnyContributor>
+    | DocumentType<typeof ContributorNameFragment>,
   reverse?: boolean,
 ): string {
   if (!contributor) return "";

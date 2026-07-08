@@ -5,7 +5,9 @@ import { query as getStaticGlobalContextDataQuery } from "@/contexts/GlobalStati
 import { fragment as getStaticEntityDataFragment } from "@/contexts/GlobalStaticContext/getStaticEntityData";
 import { type DocumentType } from "@/lib/api/gql";
 
-export type GlobalStaticData = DocumentType<typeof getStaticGlobalContextDataQuery>;
+export type GlobalStaticData = DocumentType<
+  typeof getStaticGlobalContextDataQuery
+>;
 
 type GlobalEntityData = {
   entityData?: DocumentType<typeof getStaticEntityDataFragment>;

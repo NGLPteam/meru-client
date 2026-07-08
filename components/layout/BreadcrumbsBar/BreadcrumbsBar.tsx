@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import capitalize from "lodash/capitalize";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Breadcrumbs, Button, Dropdown } from "@/components/atomic";
 import { getOrigin, getRouteByEntityType } from "@/helpers";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";

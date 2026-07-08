@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import IconFactory from "@/components/factories/IconFactory";
 
 export default function DownloadCount({ data }: Props) {

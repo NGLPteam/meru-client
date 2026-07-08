@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useRouteSlug from "@/hooks/useRouteSlug";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import ReadMoreLink from "@/components/atomic/links/Link/patterns/ReadMoreLink";

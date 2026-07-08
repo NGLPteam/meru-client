@@ -2,8 +2,8 @@
 
 import { useState, useReducer } from "react";
 import { useQuery } from "urql";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import dynamic from "next/dynamic";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
 import ChartControls from "../ChartControls";

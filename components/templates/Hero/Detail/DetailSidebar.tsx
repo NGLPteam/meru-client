@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import DownloadCount from "@/components/atomic/properties/DownloadCount";

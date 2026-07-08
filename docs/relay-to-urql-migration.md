@@ -16,7 +16,22 @@ DONE (committed on branch `migrate-relay-to-urql`):
   ViewerContext → `clientToken` holder → UrqlProvider.
 - **codegen validates all GraphQL documents over the whole repo (glob widened).**
 
-REMAINING (TS-level plumbing + cleanup; no green build until all done):
+ALSO DONE:
+- Type-only `@/relay/` importers repointed to codegen `FragmentType`/`DocumentType`
+  (shared fragment consts exported from their defining files).
+- AppBody/AppHeader/AppFooter/BrowseListLayout converted (own fragment + sibling refs).
+- Relay machinery deleted (`lib/relay/*`, `lib/auth/token.ts`, `__generated__/`,
+  `relay.config.js`, `types/graphql-helpers.d.ts`); config cleaned (next.config relay
+  block, tsconfig `@/relay` alias, package.json deps + `relay` script,
+  eslint-plugin-relay).
+- codegen config hardened: `namingConvention: keep`, `dedupeFragments`,
+  `futureProofEnums/Unions`, `__typename` added to 6 abstract-type fragments.
+- All component-level type fixes: inline-fragment `__typename` narrowing (Relay used to
+  flatten), `node(id)` refetch result casts, contributors 3-doc union typing, loosened
+  `queryApi` variable input, `readFragment` alias in plain-fn helpers.
+- **`yarn graphql` clean; `tsc --noEmit` clean (0 errors).** `next build` = final gate.
+
+REMAINING (historical checklist — now completed above; final verification pending):
 1. **Type-only `@/relay/` importers (~24 files)** — files with NO graphql tag that import a
    sibling fragment's `$key`/`$data`/query `$data` type. Fix: `export` the referenced fragment
    const from its defining file (rename to a descriptive exported name, fix internal refs),

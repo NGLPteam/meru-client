@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react";
-import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import { graphql } from "@/lib/api/gql";
 import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
 import HeroTemplate from "@/components/templates/Hero";
@@ -44,7 +44,9 @@ export default async function CommunityLayout({
 
   return (
     <SetCommunity data={community}>
-      {showNavBar && <CommunityNavBar data={community} entityData={community} />}
+      {showNavBar && (
+        <CommunityNavBar data={community} entityData={community} />
+      )}
       <ProcessingCheck data={layouts} entityType="community">
         {layouts.hero && <HeroTemplate data={layouts.hero} />}
         {children}

@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import type { HeroImageLayout } from "@/types/graphql-schema";
 import Alert from "@/components/atomic/Alert";
 import TitleBlock from "./HeaderTitleBlock";

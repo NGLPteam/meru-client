@@ -1,8 +1,8 @@
 "use client";
 
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import capitalize from "lodash/capitalize";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import ContributorAvatar from "@/components/composed/contributor/ContributorAvatar";
 import ContributorName from "@/components/composed/contributor/ContributorName";
 import { DotList, Link, NamedLink, Markdown } from "@/components/atomic";

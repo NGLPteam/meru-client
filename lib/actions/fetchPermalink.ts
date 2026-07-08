@@ -1,7 +1,7 @@
 "use server";
 
-import { graphql } from "@/lib/api/gql";
 import { cache } from "react";
+import { graphql } from "@/lib/api/gql";
 import queryApi from "@/lib/api/queryApi";
 
 const fetchPermalinkRequest = cache(async (permalink: string) => {

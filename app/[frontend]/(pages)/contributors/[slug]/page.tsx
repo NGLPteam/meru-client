@@ -1,5 +1,5 @@
-import { graphql, type DocumentType } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
+import { graphql, type DocumentType } from "@/lib/api/gql";
 import ContributorDetail from "@/components/composed/contributor/ContributorDetail";
 import ContributorDetailNav from "@/components/composed/contributor/ContributorDetailNav";
 import queryApi from "@/lib/api/queryApi";

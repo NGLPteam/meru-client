@@ -1,16 +1,13 @@
 import { useContext } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment } from "@/lib/api/gql";
 import { CommunityContext } from "@/contexts/CommunityContext";
 import styles from "./CommunityName.module.css";
 import CommunityNameContent from "./CommunityNameContent";
 
 export default function CommunityName() {
   const communityData = useContext(CommunityContext);
-  const community = useFragment(
-    fragment,
-    communityData,
-  );
+  const community = useFragment(fragment, communityData);
 
   return (
     <div

@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import flatMap from "lodash/flatMap";
+import uniqBy from "lodash/uniqBy";
+import isEmpty from "lodash/isEmpty";
 import {
   graphql,
   useFragment,
   type FragmentType,
   type DocumentType,
 } from "@/lib/api/gql";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import flatMap from "lodash/flatMap";
-import uniqBy from "lodash/uniqBy";
-import isEmpty from "lodash/isEmpty";
 import { filterSearchableProperties } from "@/helpers/search";
 import { removeEmptyKeys } from "@/helpers/search";
 import { Fieldset, BaseForm } from "@/components/forms";

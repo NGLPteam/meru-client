@@ -1,8 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import InstanceCommunitySummary from "../InstanceCommunitySummary/InstanceCommunitySummary";
 import styles from "./InstanceCommunities.module.css";
 

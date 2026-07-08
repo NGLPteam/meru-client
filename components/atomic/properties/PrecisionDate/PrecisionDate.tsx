@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getPrecisionDateDisplay } from "@/helpers";
 
 export default function PrecisionDate({ data, label }: Props) {

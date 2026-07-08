@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
+import { graphql } from "@/lib/api/gql";
 import ArticleAnalyticsBlock from "@/components/composed/analytics/ArticleAnalyticsBlock";
 import { AnalyticsPrecision } from "@/types/graphql-schema";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";

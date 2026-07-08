@@ -1,6 +1,6 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import capitalize from "lodash/capitalize";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import InlineSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import Container from "@/components/layout/Container";

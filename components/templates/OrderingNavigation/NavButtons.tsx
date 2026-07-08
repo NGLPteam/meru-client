@@ -1,6 +1,6 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { PrevNextButton } from "@/components/atomic/Button/patterns";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";

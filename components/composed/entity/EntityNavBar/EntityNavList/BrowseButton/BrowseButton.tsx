@@ -3,7 +3,9 @@ import { NamedLink, Button } from "@/components/atomic";
 import { fragment as EntityNavListFragment } from "@/components/composed/entity/EntityNavBar/EntityNavList/EntityNavList";
 import { type DocumentType } from "@/lib/api/gql";
 
-type Ordering = DocumentType<typeof EntityNavListFragment>["orderings"]["nodes"][number];
+type Ordering = DocumentType<
+  typeof EntityNavListFragment
+>["orderings"]["nodes"][number];
 
 export default function BrowseButton({
   basePath,

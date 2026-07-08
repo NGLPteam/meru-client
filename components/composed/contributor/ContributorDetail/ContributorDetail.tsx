@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "urql";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { ExternalLink, Markdown, ORCIDLink } from "@/components/atomic";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
 import ContributionSummary from "@/components/composed/contribution/ContributionSummary";

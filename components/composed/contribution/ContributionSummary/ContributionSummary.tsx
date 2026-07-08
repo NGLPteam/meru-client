@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { DotList, PrecisionDate, SquareThumbnail } from "@/components/atomic";
 import { getRouteByEntityType } from "@/helpers";
 import Summary from "@/components/layout/Summary";
@@ -10,10 +10,7 @@ export default function ContributionSummary({ data }: Props) {
 
   const { t } = useTranslation();
 
-  const entity = useFragment(
-    entityFragment,
-    contribution?.entity,
-  );
+  const entity = useFragment(entityFragment, contribution?.entity);
 
   const route = useMemo(() => {
     return entity?.__typename ? getRouteByEntityType(entity.__typename) : null;

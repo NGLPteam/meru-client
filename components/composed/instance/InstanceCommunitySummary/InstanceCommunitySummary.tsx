@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { NamedLink } from "@/components/atomic";
 import Markdown from "@/components/atomic/Markdown";
 import { generateSrcSet } from "@/helpers/generateSrcSet";

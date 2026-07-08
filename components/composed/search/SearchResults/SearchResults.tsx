@@ -1,6 +1,6 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Trans, useTranslation } from "react-i18next";
 import { useSearchParams } from "next/navigation";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 import { NoContent } from "@/components/layout";
 import { LoadingBlock, Pagination } from "@/components/atomic";

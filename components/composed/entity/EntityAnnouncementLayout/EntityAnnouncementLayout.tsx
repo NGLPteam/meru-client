@@ -1,8 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { Markdown } from "@/components/atomic";
 import styles from "./EntityAnnouncementLayout.module.css";

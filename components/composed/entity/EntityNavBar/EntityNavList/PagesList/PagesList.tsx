@@ -5,7 +5,9 @@ import { type DocumentType } from "@/lib/api/gql";
 import Dropdown from "../Dropdown";
 import styles from "./PagesList.module.css";
 
-type Page = DocumentType<typeof EntityNavListFragment>["pages"]["nodes"][number];
+type Page = DocumentType<
+  typeof EntityNavListFragment
+>["pages"]["nodes"][number];
 
 export default function PagesList({
   pages,

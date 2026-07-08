@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useFormContext } from "react-hook-form";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Checkbox } from "@/components/forms";
 
 export default function SearchFilterBoolean({ data }: Props) {

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import startCase from "lodash/startCase";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useViewerContext from "@/contexts/useViewerContext";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import { Search } from "@/components/forms";
@@ -18,7 +18,9 @@ import styles from "./AppFooter.module.css";
 
 interface Props {
   data?: FragmentType<typeof fragment> | null;
-  communityData?: FragmentType<typeof CommunityPickerCommunityNameFragment> | null;
+  communityData?: FragmentType<
+    typeof CommunityPickerCommunityNameFragment
+  > | null;
 }
 
 export default function AppFooter({ data, communityData }: Props) {

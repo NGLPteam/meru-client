@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useWindowSize from "@/hooks/useWindowSize";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import ContributorName from "../ContributorName";

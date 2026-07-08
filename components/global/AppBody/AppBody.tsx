@@ -1,9 +1,9 @@
 "use client";
 
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { updateI18n } from "i18n";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
 import { SetCommunityContextProvider } from "@/contexts/CommunityContext";
 import SkipLink from "@/components/global/SkipLink";

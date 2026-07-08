@@ -1,7 +1,7 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Dropdown, Markdown, NamedLink } from "@/components/atomic";
 import { getRouteByEntityType } from "@/helpers";
 import BreadcrumbLink from "./BreadcrumbLink";

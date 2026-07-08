@@ -1,16 +1,13 @@
 import { useContext } from "react";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { CommunityContext } from "@/contexts/CommunityContext";
 import CommunityNavListContent from "./CommunityNavListContent";
 import styles from "./CommunityNavlist.module.css";
 
 export default function CommunityNavList({ condensed, mobile }: Props) {
   const communityData = useContext(CommunityContext);
-  const community = useFragment(
-    fragment,
-    communityData,
-  );
+  const community = useFragment(fragment, communityData);
 
   const listClasses = mobile
     ? styles.mobileList

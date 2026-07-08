@@ -1,7 +1,7 @@
 "use client";
 
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { SearchButton } from "@/components/atomic";
 import CommunityName from "../CommunityName";
 import CommunityNavList from "../CommunityNavList";

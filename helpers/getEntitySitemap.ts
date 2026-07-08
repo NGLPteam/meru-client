@@ -1,4 +1,8 @@
-import { graphql, useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import {
+  graphql,
+  useFragment as readFragment,
+  type FragmentType,
+} from "@/lib/api/gql";
 import EXTERNAL_DATA_URL from "./externalDataUrl";
 
 export default function getEntitySitemap(data: FragmentType<typeof fragment>) {

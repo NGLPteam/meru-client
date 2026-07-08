@@ -78,8 +78,7 @@ export default function CommunityNavList({
   ) : null;
 }
 
-type Ordering =
-  DocumentType<typeof fragment>["orderings"]["nodes"][number];
+type Ordering = DocumentType<typeof fragment>["orderings"]["nodes"][number];
 
 const fragment = graphql(`
   fragment CommunityNavListContentFragment on Community {

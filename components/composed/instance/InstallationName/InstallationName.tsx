@@ -1,5 +1,5 @@
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Link } from "@/lib/vendor/react-transition-progress/link";
 import styles from "./InstallationName.module.css";
 

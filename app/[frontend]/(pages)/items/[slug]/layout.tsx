@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react";
-import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import { graphql } from "@/lib/api/gql";
 import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 import getStaticGoogleScholarData from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";

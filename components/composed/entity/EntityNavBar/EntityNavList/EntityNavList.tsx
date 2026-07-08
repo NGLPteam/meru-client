@@ -1,10 +1,10 @@
+import { useParams } from "next/navigation";
 import {
   graphql,
   useFragment,
   type FragmentType,
   type DocumentType,
 } from "@/lib/api/gql";
-import { useParams } from "next/navigation";
 import { getRouteByEntityType } from "@/helpers";
 import BrowseButton from "./BrowseButton";
 import Dropdown from "./Dropdown";
