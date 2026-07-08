@@ -81,6 +81,14 @@ const nextConfig = {
     },
   },
   compiler,
+  // Turbopack (dev) equivalent of the webpack `canvas: false` alias below:
+  // pdfjs optionally requires the node-only `canvas` module in the browser
+  // build, so stub it out with an empty module.
+  turbopack: {
+    resolveAlias: {
+      canvas: "./lib/stubs/empty.js",
+    },
+  },
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;
