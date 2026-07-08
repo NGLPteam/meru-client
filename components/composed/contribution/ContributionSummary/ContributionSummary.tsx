@@ -23,6 +23,9 @@ export default function ContributionSummary({ data }: Props) {
 
   const roles = contribution.roles;
 
+  const published = "published" in entity ? entity.published : undefined;
+  const summary = "summary" in entity ? entity.summary : undefined;
+
   const metadata = (
     <>
       {!!roles && (
@@ -32,9 +35,9 @@ export default function ContributionSummary({ data }: Props) {
           ))}
         </DotList>
       )}
-      {entity.published?.value && (
+      {published?.value && (
         <span className="t-copy-sm t-copy-lighter block">
-          {t("date.published")} <PrecisionDate data={entity.published} />
+          {t("date.published")} <PrecisionDate data={published} />
         </span>
       )}
     </>
@@ -46,7 +49,7 @@ export default function ContributionSummary({ data }: Props) {
       subtitle={entity.subtitle}
       href={`/${route}/${entity.slug}`}
       metadata={metadata}
-      summary={entity.summary}
+      summary={summary}
       thumbnail={
         entity.thumbnail?.storage && <SquareThumbnail data={entity.thumbnail} />
       }

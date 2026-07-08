@@ -15,7 +15,7 @@ export default function BrowseTreeItem({ data }: Props) {
   const href = entry?.slug ? `/${route}/${entry?.slug}` : `/${route}`;
 
   const { slots } = useSharedListItemTemplateFragment(
-    entry?.layouts?.listItem?.template,
+    entry && "layouts" in entry ? entry.layouts?.listItem?.template : undefined,
   );
 
   const { header, metaA, metaB } = slots ?? {};

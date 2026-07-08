@@ -31,6 +31,12 @@ export default function TitleBlock({ data, layout }: TitleBlockProps) {
   const { listContributors, showThumbnailImage, showSplitDisplay } =
     definition ?? {};
 
+  const entityId = entity && "id" in entity ? entity.id : undefined;
+  const entityTitle = entity && "title" in entity ? entity.title : undefined;
+  const entityThumbnail =
+    entity && "thumbnail" in entity ? entity.thumbnail : undefined;
+  const entitySlug = entity && "slug" in entity ? entity.slug : undefined;
+
   const compact = showThumbnailImage && !showSplitDisplay;
 
   return (
@@ -38,9 +44,9 @@ export default function TitleBlock({ data, layout }: TitleBlockProps) {
       {compact && (
         <span className={styles.thumbColumn}>
           <CoverImage
-            id={entity?.id ?? ""}
-            title={entity?.title ?? ""}
-            data={entity?.thumbnail}
+            id={entityId ?? ""}
+            title={entityTitle ?? ""}
+            data={entityThumbnail}
             maxWidth={225}
             maxHeight={300}
           />
@@ -81,7 +87,7 @@ export default function TitleBlock({ data, layout }: TitleBlockProps) {
             <ContributorsList
               className="t-copy-medium"
               data={entity}
-              collectionSlug={entity?.slug}
+              collectionSlug={entitySlug}
               filterRole="author"
             />
           </div>

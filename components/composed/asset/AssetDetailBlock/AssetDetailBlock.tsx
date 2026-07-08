@@ -46,7 +46,7 @@ export default function AssetDetailBlock({ data }: Props) {
           <p className="t-label-lg">{asset.kind}</p>
           <ul className="t-copy-lighter">
             {asset.fileSize && <li>{formatFileSize(asset.fileSize)}</li>}
-            {asset.updatedAt && (
+            {"updatedAt" in asset && asset.updatedAt && (
               <li>{formatDate(asset.updatedAt, "MMM d, yyyy")}</li>
             )}
           </ul>

@@ -13,14 +13,18 @@ type Options = {
 // explicit authAware flag), picks an authorized client when a token exists,
 // and routes through measureQuery. Returns urql's OperationResult directly —
 // no `records` / `sessionToken` to thread through the tree.
-export default async function queryApi<
-  Query,
-  Variables extends AnyVariables = AnyVariables,
->(
-  query: DocumentInput<Query, Variables>,
-  variables: Variables,
+//
+// The RESULT is fully typed from the document (`Query`), but the variables
+// argument is intentionally loose (`AnyVariables`): the old Relay fetchQuery
+// took `Record<string, any>`, and route params here are typed
+// `string | undefined` / `unknown` (see BasePageParams), so strict variable
+// inference would surface pre-existing looseness across every page. Runtime
+// behaviour is unchanged.
+export default async function queryApi<Query>(
+  query: DocumentInput<Query, AnyVariables>,
+  variables: AnyVariables,
   options?: Options,
-): Promise<OperationResult<Query, Variables>> {
+): Promise<OperationResult<Query, AnyVariables>> {
   const { draftMode } = await import("next/headers");
   const isPreview = (await draftMode()).isEnabled;
   const needsToken = isPreview || options?.authAware;

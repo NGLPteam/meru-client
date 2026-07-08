@@ -27,7 +27,10 @@ export default function Links({
 }) {
   const template = useFragment(fragment, data);
 
-  const variant = template?.linksDefinition?.variant;
+  const variant =
+    template && "linksDefinition" in template
+      ? template.linksDefinition?.variant
+      : undefined;
 
   const BlockComponent =
     variant && variant !== "%future added value"

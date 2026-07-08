@@ -39,7 +39,13 @@ export default function Sidebar({
         {showBasicViewMetrics && !showSplitDisplay && (
           <>
             <ViewCount data={entity?.entityViews} />
-            <DownloadCount data={entity?.assetDownloads} />
+            <DownloadCount
+              data={
+                entity && "assetDownloads" in entity
+                  ? entity.assetDownloads
+                  : undefined
+              }
+            />
           </>
         )}
       </ul>

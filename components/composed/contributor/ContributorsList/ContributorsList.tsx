@@ -14,7 +14,11 @@ export default function ContributorsList({
   filterRole,
   noLinks = false,
 }: Props) {
-  const { attributions } = useFragment(fragment, data) ?? {};
+  const fragmentData = useFragment(fragment, data);
+  const attributions =
+    fragmentData && "attributions" in fragmentData
+      ? fragmentData.attributions
+      : undefined;
 
   const { t } = useTranslation();
 

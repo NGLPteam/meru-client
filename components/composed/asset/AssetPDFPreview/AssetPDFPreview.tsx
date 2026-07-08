@@ -13,7 +13,10 @@ export default function AssetPDFPreview({ data }: Props) {
 
   const [numPages, setNumPages] = useState<number | null>(null);
 
-  const file = useMemo(() => pdf?.downloadUrl, [pdf]);
+  const file = useMemo(
+    () => (pdf && "downloadUrl" in pdf ? pdf.downloadUrl : undefined),
+    [pdf],
+  );
 
   const isMounted = useIsMounted();
 

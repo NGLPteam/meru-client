@@ -9,6 +9,8 @@ export default function GoogleScholarHtmlHead({
 }: {
   entity: DocumentType<typeof getStaticGoogleScholarDataFragment>;
 }) {
+  if (entity.__typename !== "Item") return <></>;
+
   const identifier = entity.schemaDefinition?.identifier;
 
   const volume = entity.volumeNumber?.value || entity.volume?.number?.value;

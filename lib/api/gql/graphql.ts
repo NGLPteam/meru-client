@@ -11,7 +11,8 @@ export type AnalyticsPrecision =
   | 'MONTH'
   | 'QUARTER'
   | 'WEEK'
-  | 'YEAR';
+  | 'YEAR'
+  | '%future added value';
 
 /**
  * The boolean result of evaluating the left and right predicates. Both must be true.
@@ -32,7 +33,8 @@ export type AssetKind =
   | 'image'
   | 'pdf'
   | 'unknown'
-  | 'video';
+  | 'video'
+  | '%future added value';
 
 /** This describes where a given file attachment is stored (if at all) */
 export type AttachmentStorage =
@@ -47,7 +49,8 @@ export type AttachmentStorage =
   /** Remote URL storage. Only used internally at present, but may sometimes appear during certain harvesting events. */
   | 'REMOTE'
   /** STORE refers to permanent storage. An asset here has been fully processed and is ready for access */
-  | 'STORE';
+  | 'STORE'
+  | '%future added value';
 
 /** An enumerated value associated with the templating subsystem. */
 export type BlurbBackground =
@@ -56,7 +59,8 @@ export type BlurbBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** An enumerated value associated with the templating subsystem. */
 export type ContributorListBackground =
@@ -65,7 +69,8 @@ export type ContributorListBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** Require that `path = value` while enforcing that value is a date. */
 export type DateEqualsOperatorInput = {
@@ -113,7 +118,8 @@ export type DatePrecision =
   | 'DAY'
   | 'MONTH'
   | 'NONE'
-  | 'YEAR';
+  | 'YEAR'
+  | '%future added value';
 
 /** An enumerated value associated with the templating subsystem. */
 export type DescendantListBackground =
@@ -122,7 +128,8 @@ export type DescendantListBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** An enum used to control the mode of selection for a descendant list template. */
 export type DescendantListSelectionMode =
@@ -133,7 +140,8 @@ export type DescendantListSelectionMode =
   /** Render descendants from a named ordering that exists on the source entity. */
   | 'NAMED'
   /** Render entities from a schema property on the source entity. */
-  | 'PROPERTY';
+  | 'PROPERTY'
+  | '%future added value';
 
 /** An enum used to control how a descendant list template should be rendered. */
 export type DescendantListVariant =
@@ -148,7 +156,8 @@ export type DescendantListVariant =
   /** A vertical, summarized list of entities. */
   | 'SUMMARY'
   /** A tree structure. */
-  | 'TREE';
+  | 'TREE'
+  | '%future added value';
 
 /** An enumerated value associated with the templating subsystem. */
 export type DetailBackground =
@@ -157,7 +166,8 @@ export type DetailBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** An enum used to control how a detail template should be rendered. */
 export type DetailVariant =
@@ -174,13 +184,15 @@ export type DetailVariant =
   /** Display 'full' detail about the entity. */
   | 'FULL'
   /** Display detail about the entity in a summarized fashion. */
-  | 'SUMMARY';
+  | 'SUMMARY'
+  | '%future added value';
 
 /** An enumeration of the different kinds of hierarchical entities */
 export type EntityKind =
   | 'COLLECTION'
   | 'COMMUNITY'
-  | 'ITEM';
+  | 'ITEM'
+  | '%future added value';
 
 /** Sort entities by a specific property and order */
 export type EntityOrder =
@@ -203,13 +215,15 @@ export type EntityOrder =
   /** Sort entities by title A-Z */
   | 'TITLE_ASCENDING'
   /** Sort entities by title Z-A */
-  | 'TITLE_DESCENDING';
+  | 'TITLE_DESCENDING'
+  | '%future added value';
 
 /** The level of visibility an entity can have */
 export type EntityVisibility =
   | 'HIDDEN'
   | 'LIMITED'
-  | 'VISIBLE';
+  | 'VISIBLE'
+  | '%future added value';
 
 /** Require that `path = value`. */
 export type EqualsOperatorInput = {
@@ -224,12 +238,14 @@ export type HeroBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** The layout to use when rendering a Hero for an `Entity`. */
 export type HeroImageLayout =
   | 'ONE_COLUMN'
-  | 'TWO_COLUMN';
+  | 'TWO_COLUMN'
+  | '%future added value';
 
 /** The size of a specific image derivative. */
 export type ImageDerivativeSize =
@@ -246,7 +262,8 @@ export type ImageDerivativeSize =
   /** A thumb-sized image, constrained to 100px wide by 100px high. */
   | 'THUMB'
   /** A logo intended to be used when the site title is visible, constrained to 80px wide by 80px high. */
-  | 'WITH_TEXT';
+  | 'WITH_TEXT'
+  | '%future added value';
 
 /**
  * Require that the `path` must include or be one of the strings provided in `value`.
@@ -265,14 +282,16 @@ export type LinkListBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** An enum used to control the mode of selection for a link list template. */
 export type LinkListSelectionMode =
   /** Render links from a dynamic list, determined at query time. */
   | 'DYNAMIC'
   /** Render links from a manual list set on each individual entity. See `manualListName` for how this works. */
-  | 'MANUAL';
+  | 'MANUAL'
+  | '%future added value';
 
 /** An enum used to control how a link list template should be rendered. */
 export type LinkListVariant =
@@ -287,7 +306,8 @@ export type LinkListVariant =
   /** A vertical, summarized list of entities. */
   | 'SUMMARY'
   /** A tree structure. */
-  | 'TREE';
+  | 'TREE'
+  | '%future added value';
 
 /** An enum used to control how much context to show for listed entities in a template. */
 export type ListEntityContext =
@@ -296,7 +316,8 @@ export type ListEntityContext =
   /** Show the maximum amount of context for listed entities. */
   | 'FULL'
   /** Show the minimal / no amount of context for listed entities. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /**
  * Use full-text search on `path` to match `value`.
@@ -317,7 +338,8 @@ export type MetadataBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** An enumerated value associated with the templating subsystem. */
 export type NavigationBackground =
@@ -326,7 +348,8 @@ export type NavigationBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /**
  * Require that `path ≥ value` while enforcing that value is numeric.
@@ -368,7 +391,8 @@ export type OrderingBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /** How entries in an ordering should be rendered. */
 export type OrderingRenderMode =
@@ -384,7 +408,8 @@ export type OrderingRenderMode =
    * adjust the positioning to account for the entry's ancestors and position relative to
    * other entries in the ordering.
    */
-  | 'TREE';
+  | 'TREE'
+  | '%future added value';
 
 /** An enumerated value associated with the templating subsystem. */
 export type PageListBackground =
@@ -393,7 +418,8 @@ export type PageListBackground =
   /** A light gradient is applied to the background of this template. */
   | 'LIGHT'
   /** No background is applied to this template. */
-  | 'NONE';
+  | 'NONE'
+  | '%future added value';
 
 /**
  * An enum that helps describe the different kinds of records
@@ -405,13 +431,15 @@ export type PermalinkableKind =
   /** This permalink points to a community. */
   | 'COMMUNITY'
   /** This permalink points to an item. */
-  | 'ITEM';
+  | 'ITEM'
+  | '%future added value';
 
 /** The kind of entity a schema applies to */
 export type SchemaKind =
   | 'COLLECTION'
   | 'COMMUNITY'
-  | 'ITEM';
+  | 'ITEM'
+  | '%future added value';
 
 /** The data type for a schema property. */
 export type SchemaPropertyType =
@@ -460,7 +488,8 @@ export type SchemaPropertyType =
   /** A complex type representing a URL, with metadata. See `URLProperty` */
   | 'URL'
   /** A complex type representing a date that cannot be expressed exactly. See `VariableDateProperty` */
-  | 'VARIABLE_DATE';
+  | 'VARIABLE_DATE'
+  | '%future added value';
 
 /** These operators serve as keys for `SearchPredicateInput`. */
 export type SearchOperator =
@@ -483,7 +512,8 @@ export type SearchOperator =
   /** See `NumericLTEOperatorInput` */
   | 'numericLTE'
   /** See `OrOperatorInput` */
-  | 'or';
+  | 'or'
+  | '%future added value';
 
 /**
  * A predicate clause for searching entities.
@@ -521,14 +551,16 @@ export type SiteLogoMode =
   /** The site logo should be displayed with the site title _hidden_. */
   | 'SANS_TEXT'
   /** The site logo should be displayed with the site title _visible_. */
-  | 'WITH_TEXT';
+  | 'WITH_TEXT'
+  | '%future added value';
 
 /** The state of a submission target, describing whether it is accepting submissions or not. */
 export type SubmissionTargetState =
   /** The submission target is not accepting submissions. */
   | 'CLOSED'
   /** The submission target is accepting submissions. */
-  | 'OPEN';
+  | 'OPEN'
+  | '%future added value';
 
 /**
  * Discriminator for the various types of templates available to an entity,
@@ -611,7 +643,8 @@ export type TemplateKind =
    *
    * Contained within the `SUPPLEMENTARY` layout.
    */
-  | 'SUPPLEMENTARY';
+  | 'SUPPLEMENTARY'
+  | '%future added value';
 
 /** An enum discriminating between different types of content. */
 export type TemplateSlotKind =
@@ -622,7 +655,8 @@ export type TemplateSlotKind =
    *
    * It is intended for use in header, list item, and generally any other short-form spans of content.
    */
-  | 'INLINE';
+  | 'INLINE'
+  | '%future added value';
 
 /** An enum that helps organize things on the frontend to put certain templates side by side where it makes sense. */
 export type TemplateWidth =
@@ -634,7 +668,8 @@ export type TemplateWidth =
    * **Note**: This should be used in concert with an adjacent HALF-width template.
    * The server will not validate this is the case.
    */
-  | 'HALF';
+  | 'HALF'
+  | '%future added value';
 
 export type sitemapCollectionsQueryQueryVariables = Exact<{
   slug: string;

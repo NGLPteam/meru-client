@@ -34,7 +34,7 @@ export default function AssetBlockItem({ data }: Props) {
           <ul
             className={classNames("t-copy-lighter t-copy-sm", styles.metadata)}
           >
-            {file.updatedAt && (
+            {"updatedAt" in file && file.updatedAt && (
               <li>{formatDate(file.updatedAt, "MMM d, yyyy")}</li>
             )}
             {file.fileSize && <li>{formatFileSize(file.fileSize)}</li>}

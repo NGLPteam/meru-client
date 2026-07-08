@@ -28,6 +28,11 @@ const config: CodegenConfig = {
         // generated type references.
         namingConvention: "keep",
         dedupeFragments: true,
+        // Match the existing types/graphql-schema codegen so enum/union types are
+        // identical across both outputs and the codebase's sentinel checks
+        // (`=== "%other"` / `"%future added value"`) still type-check.
+        futureProofEnums: true,
+        futureProofUnions: true,
         scalars: {
           JSON: "any",
           Slug: "string",

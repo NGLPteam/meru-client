@@ -8,7 +8,7 @@ import SearchFilterBoolean from "./Filters/SearchFilterBoolean";
 export default function SearchFilter({ data }: Props) {
   const filter = useFragment(fragment, data);
 
-  switch (filter.type) {
+  switch ("type" in filter ? filter.type : undefined) {
     case "SELECT":
       return <SearchFilterSelect data={filter} />;
 

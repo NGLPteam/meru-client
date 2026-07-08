@@ -16,7 +16,8 @@ export default function SearchFilterSelect({ data }: Props) {
       {...register(`${filter.searchPath.replace(".", "-")}--equals`)}
     >
       <option value=""></option>
-      {filter?.options &&
+      {"options" in filter &&
+        filter.options &&
         filter.options.map(({ label, value }) => (
           <option key={value} value={value}>
             {label}

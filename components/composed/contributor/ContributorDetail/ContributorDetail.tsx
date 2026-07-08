@@ -82,10 +82,10 @@ export default function ContributorDetail({ data }: Props) {
               <ContributorName data={contributor} />
             </h1>
           </header>
-          {contributor.title && (
+          {"title" in contributor && contributor.title && (
             <p className="t-label-lg">{contributor.title}</p>
           )}
-          {contributor.affiliation && (
+          {"affiliation" in contributor && contributor.affiliation && (
             <p className="t-copy-lighter">{contributor.affiliation}</p>
           )}
           {contributor.bio && (

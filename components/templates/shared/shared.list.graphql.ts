@@ -141,14 +141,22 @@ export const useSharedListTemplateFragment = (
   data?: FragmentType<typeof listTemplateFragment> | null,
 ) => {
   const template = useFragment(listTemplateFragment, data ?? null);
-  const {
-    slots,
-    entityList: entityListFragment,
-    linksDefinition,
-    descendantsDefinition,
-    entity,
-    seeAllOrdering,
-  } = template ?? {};
+  const slots = template && "slots" in template ? template.slots : undefined;
+  const entityListFragment =
+    template && "entityList" in template ? template.entityList : undefined;
+  const linksDefinition =
+    template && "linksDefinition" in template
+      ? template.linksDefinition
+      : undefined;
+  const descendantsDefinition =
+    template && "descendantsDefinition" in template
+      ? template.descendantsDefinition
+      : undefined;
+  const entity = template && "entity" in template ? template.entity : undefined;
+  const seeAllOrdering =
+    template && "seeAllOrdering" in template
+      ? template.seeAllOrdering
+      : undefined;
   const entityList = useSharedListItemsTemplateFragment(entityListFragment);
   const blockHeader = useSharedInlineFragment(slots?.blockHeader);
   const header = useSharedInlineFragment(slots?.header);

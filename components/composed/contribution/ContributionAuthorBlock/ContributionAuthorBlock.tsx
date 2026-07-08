@@ -17,9 +17,10 @@ export default function ContributionAuthorBlock({ data }: Props) {
 
   const showAvatar = contributor?.image?.storage ?? null;
 
-  const itemSlug = contribution?.item?.slug;
+  const itemSlug = "item" in contribution ? contribution.item?.slug : undefined;
 
-  const collectionSlug = contribution?.collection?.slug;
+  const collectionSlug =
+    "collection" in contribution ? contribution.collection?.slug : undefined;
 
   const params = new URLSearchParams({
     ...(itemSlug && { item: itemSlug }),

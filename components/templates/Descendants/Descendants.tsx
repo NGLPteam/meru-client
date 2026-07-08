@@ -28,18 +28,19 @@ export default function Descendants({
 }) {
   const template = useFragment(fragment, data);
 
-  const { entity, descendantsDefinition } = template ?? {};
+  const entity = template && "entity" in template ? template.entity : undefined;
+  const descendantsDefinition =
+    template && "descendantsDefinition" in template
+      ? template.descendantsDefinition
+      : undefined;
 
   const variant = descendantsDefinition?.variant;
 
   const basePath = entity
-    ? `/${getRouteByEntityType(entity.__typename)}/${entity.slug}`
+    ? `/${getRouteByEntityType(entity.__typename)}/${"slug" in entity ? entity.slug : ""}`
     : null;
 
-  const BlockComponent =
-    variant && variant !== "%future added value"
-      ? VARIANT_TO_COMPONENT[variant]
-      : null;
+  const BlockComponent = variant ? VARIANT_TO_COMPONENT[variant] : null;
 
   return (
     BlockComponent && (

@@ -26,11 +26,22 @@ export default function EntityHeroHeader({
     showSplitDisplay,
   } = template?.definition ?? {};
 
-  const hidden = !!(entity?.visibility === "HIDDEN" || entity?.currentlyHidden);
+  const visibility =
+    entity && "visibility" in entity ? entity.visibility : undefined;
+  const currentlyHidden =
+    entity && "currentlyHidden" in entity ? entity.currentlyHidden : undefined;
+  const schemaIdentifier =
+    entity && "schemaDefinition" in entity
+      ? entity.schemaDefinition?.identifier
+      : undefined;
+  const heroImage =
+    entity && "heroImage" in entity ? entity.heroImage : undefined;
+
+  const hidden = !!(visibility === "HIDDEN" || currentlyHidden);
 
   const hiddenAlert = hidden
     ? t("messages.hidden", {
-        schema: entity?.schemaDefinition?.identifier.replaceAll("_", " "),
+        schema: schemaIdentifier?.replaceAll("_", " "),
       })
     : undefined;
 
@@ -38,7 +49,7 @@ export default function EntityHeroHeader({
 
   const bgClass = getBgClass(background);
 
-  const renderHeroImage = showHeroImage && entity?.heroImage?.storage;
+  const renderHeroImage = showHeroImage && heroImage?.storage;
 
   return (
     <>
@@ -57,7 +68,7 @@ export default function EntityHeroHeader({
           <HeroDetail data={layout?.template} />
         </Container>
       )}
-      {renderHeroImage && <HeroImage data={entity.heroImage} />}
+      {renderHeroImage && <HeroImage data={heroImage} />}
     </>
   );
 }

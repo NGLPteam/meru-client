@@ -8,15 +8,17 @@ export default function getEntityDisplayName(
 
   const vol = getEntityVolumeNumber(entity);
 
-  const volTitle = entity?.vol?.title
-    ? entity?.vol?.title
+  if (!entity || !("title" in entity)) return null;
+
+  const volTitle = entity.vol?.title
+    ? entity.vol.title
     : vol
       ? `Volume ${vol}`
       : null;
 
-  const number = entity?.issueNumber?.content;
-  const entityTitle = entity?.title
-    ? entity?.title
+  const number = entity.issueNumber?.content;
+  const entityTitle = entity.title
+    ? entity.title
     : number
       ? `Issue ${number}`
       : null;

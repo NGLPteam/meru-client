@@ -46,6 +46,7 @@ export default function TemplateFactory({
   if (
     (template.templateKind === "DESCENDANT_LIST" ||
       template.templateKind === "LINK_LIST") &&
+    "entityList" in template &&
     template.entityList?.empty
   ) {
     return null;

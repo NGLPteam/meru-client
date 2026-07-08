@@ -5,9 +5,11 @@ export default function getEntityVolumeNumber(
 ) {
   const entity = useFragment(fragment, data);
 
-  return entity?.vol?.number?.content
+  if (!entity || !("vol" in entity)) return undefined;
+
+  return entity.vol?.number?.content
     ? entity.vol.number.content
-    : entity?.volumeNumber?.content;
+    : entity.volumeNumber?.content;
 }
 
 const fragment = graphql(`

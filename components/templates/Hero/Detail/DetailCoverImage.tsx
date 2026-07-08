@@ -9,9 +9,13 @@ export default function DetailCoverImage({
 }) {
   const entity = useFragment(fragment, data);
 
-  const thumbnailData = entity ? getThumbWithFallback(entity) : null;
+  const narrowedEntity = entity && "id" in entity ? entity : null;
 
-  const { id, title } = entity ?? {};
+  const thumbnailData = narrowedEntity
+    ? getThumbWithFallback(narrowedEntity)
+    : null;
+
+  const { id, title } = narrowedEntity ?? {};
 
   return (
     <CoverImage
