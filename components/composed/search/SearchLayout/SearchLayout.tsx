@@ -1,9 +1,10 @@
 "use client";
 
-import { useTransition } from "react";
+import { useMemo } from "react";
+import { useQuery } from "urql";
 import classNames from "classnames";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { graphql, useRefetchableFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useForm } from "react-hook-form";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import BaseDrawer from "@/components/layout/BaseDrawer";
@@ -12,32 +13,79 @@ import { NoContent } from "@/components/layout";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 import { getPredicates } from "@/helpers/search";
 import { EntityOrder } from "@/types/graphql-schema";
-import { SearchLayoutFragment$key } from "@/relay/SearchLayoutFragment.graphql";
-import { SearchLayoutEntityFragment$key } from "@/relay/SearchLayoutEntityFragment.graphql";
-import { SearchLayoutQuery } from "@/relay/SearchLayoutQuery.graphql";
 import SearchBar from "../SearchBar";
 import SearchResults from "../SearchResults";
 import SearchFilters from "../SearchFilters";
 import styles from "./SearchLayout.module.css";
+
+function parseSearchVars(params: URLSearchParams) {
+  const filters = params.get("filters")
+    ? routeQueryArrayToString(params.get("filters"))
+    : null;
+  const page = routeQueryArrayToString(params.get("page"));
+  const q = routeQueryArrayToString(params.get("q"));
+  const order = routeQueryArrayToString(params.get("order")) as EntityOrder;
+  const schema = params.get("schema")?.split(",");
+
+  const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
+
+  return {
+    query: q || "",
+    predicates: predicates || [],
+    page: parseInt(page) || 1,
+    order: order || ("PUBLISHED_ASCENDING" as EntityOrder),
+    schema,
+  };
+}
 
 export default function SearchLayout({ data, scoped }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [searchGlobalData, refetchGlobal] = useRefetchableFragment<
-    SearchLayoutQuery,
-    SearchLayoutFragment$key
-  >(fragment, scoped ? null : data);
+  const vars = useMemo(
+    () => parseSearchVars(new URLSearchParams(searchParams)),
+    [searchParams],
+  );
 
-  const [searchEntityData, refetchEntity] = useRefetchableFragment<
-    SearchLayoutQuery,
-    SearchLayoutEntityFragment$key
-  >(entityFragment, scoped ? data : null);
+  const noSearchQuery =
+    (!searchParams.get("q") || searchParams.get("q") === "") &&
+    !searchParams.get("filters") &&
+    !searchParams.get("schema");
 
-  const search = scoped ? searchEntityData?.search : searchGlobalData?.search;
+  // The scoped entity id comes from the SSR fragment ref; the global search
+  // needs no seed and is fetched entirely client-side off the URL params.
+  const entityBase = useFragment(
+    entityFragment,
+    scoped ? (data as FragmentType<typeof entityFragment>) : null,
+  );
+  const entityId = entityBase?.id;
 
-  const [isPending, startTransition] = useTransition();
+  const [globalResult] = useQuery({
+    query: globalQuery,
+    variables: vars,
+    pause: scoped || noSearchQuery,
+  });
+
+  const [entityResult] = useQuery({
+    query: entityQuery,
+    variables: { id: entityId ?? "", ...vars },
+    pause: !scoped || noSearchQuery || !entityId,
+  });
+
+  const globalData = useFragment(
+    globalQueryFragment,
+    !scoped ? (globalResult.data ?? null) : null,
+  );
+  const entityData = useFragment(
+    entityFragment,
+    scoped && entityResult.data?.node?.__typename
+      ? entityResult.data.node
+      : null,
+  );
+
+  const search = scoped ? entityData?.search : globalData?.search;
+  const isPending = scoped ? entityResult.fetching : globalResult.fetching;
 
   const dialog = useDialogState({ animated: true });
 
@@ -45,48 +93,18 @@ export default function SearchLayout({ data, scoped }: Props) {
     shouldUseNativeValidation: true,
   });
 
-  const noSearchQuery =
-    (!searchParams.get("q") || searchParams.get("q") === "") &&
-    !searchParams.get("filters") &&
-    !searchParams.get("schema");
-
-  const doRefetch = (params: URLSearchParams) => {
-    const filters = params.get("filters")
-      ? routeQueryArrayToString(params.get("filters"))
-      : null;
-    const page = routeQueryArrayToString(params.get("page"));
-    const q = routeQueryArrayToString(params.get("q"));
-    const order = routeQueryArrayToString(params.get("order")) as EntityOrder;
-    const schema = params.get("schema")?.split(",");
-
-    const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
-
-    const queryVars = {
-      query: q || "",
-      predicates: predicates || [],
-      page: parseInt(page) || 1,
-      order: order || ("PUBLISHED_ASCENDING" as EntityOrder),
-      schema,
-    };
-
-    const refetch = scoped ? refetchEntity : refetchGlobal;
-
-    startTransition(() => {
-      refetch(queryVars);
-      return;
-    });
+  const pushSearch = (params: URLSearchParams) => {
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  const onQuerySubmit = (data: { q?: string }) => {
+  const onQuerySubmit = (formData: { q?: string }) => {
     const params = new URLSearchParams(searchParams);
-    if (data.q) {
-      params.set("q", data.q);
+    if (formData.q) {
+      params.set("q", formData.q);
     } else {
       params.delete("q");
     }
-    const url = `${pathname}?${params.toString()}`;
-    router.push(url);
-    doRefetch(params);
+    pushSearch(params);
   };
 
   return (
@@ -117,7 +135,7 @@ export default function SearchLayout({ data, scoped }: Props) {
             <SearchFilters
               id="sidebarFilters"
               data={search}
-              onSubmit={doRefetch}
+              onSubmit={pushSearch}
             />
           )}
         </div>
@@ -135,7 +153,7 @@ export default function SearchLayout({ data, scoped }: Props) {
             id="mobileFilters"
             data={search}
             onSubmit={(params: URLSearchParams) => {
-              doRefetch(params);
+              pushSearch(params);
               dialog.hide();
             }}
           />
@@ -148,25 +166,17 @@ export default function SearchLayout({ data, scoped }: Props) {
 type Props = EntityProps | GlobalProps;
 
 interface EntityProps {
-  data: SearchLayoutEntityFragment$key;
+  data: FragmentType<typeof entityFragment>;
   scoped: true;
 }
 
 interface GlobalProps {
-  data: SearchLayoutFragment$key;
+  data: FragmentType<typeof globalQueryFragment>;
   scoped?: false;
 }
 
-const fragment = graphql`
-  fragment SearchLayoutFragment on Query
-  @refetchable(queryName: "SearchLayoutQuery")
-  @argumentDefinitions(
-    query: { type: "String", defaultValue: "" }
-    predicates: { type: "[SearchPredicateInput!]", defaultValue: [] }
-    page: { type: "Int", defaultValue: 1 }
-    order: { type: "EntityOrder", defaultValue: PUBLISHED_ASCENDING }
-    schema: { type: "[String!]", defaultValue: [] }
-  ) {
+const globalQueryFragment = graphql(`
+  fragment SearchLayoutFragment on Query {
     search {
       results(
         query: $query
@@ -181,18 +191,11 @@ const fragment = graphql`
       ...SearchFiltersFragment
     }
   }
-`;
+`);
 
-const entityFragment = graphql`
-  fragment SearchLayoutEntityFragment on Entity
-  @refetchable(queryName: "SearchLayoutEntityQuery")
-  @argumentDefinitions(
-    query: { type: "String", defaultValue: "" }
-    predicates: { type: "[SearchPredicateInput!]", defaultValue: [] }
-    page: { type: "Int", defaultValue: 1 }
-    order: { type: "EntityOrder", defaultValue: PUBLISHED_ASCENDING }
-    schema: { type: "[String!]", defaultValue: [] }
-  ) {
+const entityFragment = graphql(`
+  fragment SearchLayoutEntityFragment on Entity {
+    id
     search {
       results(
         query: $query
@@ -207,4 +210,32 @@ const entityFragment = graphql`
       ...SearchFiltersFragment
     }
   }
-`;
+`);
+
+const globalQuery = graphql(`
+  query SearchLayoutQuery(
+    $query: String
+    $predicates: [SearchPredicateInput!]
+    $page: Int
+    $order: EntityOrder
+    $schema: [String!]
+  ) {
+    ...SearchLayoutFragment
+  }
+`);
+
+const entityQuery = graphql(`
+  query SearchLayoutEntityQuery(
+    $id: ID!
+    $query: String
+    $predicates: [SearchPredicateInput!]
+    $page: Int
+    $order: EntityOrder
+    $schema: [String!]
+  ) {
+    node(id: $id) {
+      __typename
+      ...SearchLayoutEntityFragment
+    }
+  }
+`);

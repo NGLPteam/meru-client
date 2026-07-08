@@ -1,9 +1,7 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import MainLayout from "@/components/templates/MainLayout";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplateQuery as Query } from "@/relay/pageTemplateQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import { BasePageParams } from "@/types/page";
 
 export async function generateStaticParams() {
@@ -13,8 +11,8 @@ export async function generateStaticParams() {
 export default async function TemplatePage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } =
-    (await fetchQuery<Query>(query, {
+  const { data } =
+    (await queryApi(query, {
       slug,
     })) ?? {};
 
@@ -24,14 +22,10 @@ export default async function TemplatePage({ params }: BasePageParams) {
 
   const { main } = community.layouts;
 
-  return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <MainLayout data={main} computedBgStart="NONE" />
-    </UpdateClientEnvironment>
-  );
+  return <MainLayout data={main} computedBgStart="NONE" />;
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplateQuery($slug: Slug!) {
     community(slug: $slug) {
       layouts {
@@ -41,4 +35,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

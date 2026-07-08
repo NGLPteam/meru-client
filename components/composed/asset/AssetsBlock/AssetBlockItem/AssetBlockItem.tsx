@@ -1,10 +1,9 @@
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { formatFileSize } from "@/helpers/strings";
 import useRouteSlug from "@/hooks/useRouteSlug";
 import { DownloadLink, NamedLink } from "@/components/atomic";
-import { AssetBlockItemFragment$key } from "@/relay/AssetBlockItemFragment.graphql";
 import AssetThumbnail from "../../AssetThumbnail";
 import styles from "./AssetBlockItem.module.css";
 
@@ -51,10 +50,10 @@ export default function AssetBlockItem({ data }: Props) {
 }
 
 interface Props {
-  data?: AssetBlockItemFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AssetBlockItemFragment on Asset {
     ... on Asset {
       caption
@@ -82,4 +81,4 @@ const fragment = graphql`
       updatedAt
     }
   }
-`;
+`);

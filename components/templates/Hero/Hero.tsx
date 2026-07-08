@@ -1,14 +1,13 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
-import { HeroTemplateFragment$key } from "@/relay/HeroTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import CommunityHeroHeader from "./patterns/Community";
 import EntityHeroHeader from "./patterns/Entity";
 
 export default function HeroTemplate({
   data,
 }: {
-  data: HeroTemplateFragment$key | null;
+  data: FragmentType<typeof fragment> | null;
 }) {
   const layout = useFragment(fragment, data);
 
@@ -23,7 +22,7 @@ export default function HeroTemplate({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment HeroTemplateFragment on HeroLayoutInstance {
     entity {
       ... on Community {
@@ -33,4 +32,4 @@ const fragment = graphql`
     ...CommunityHeroHeaderFragment
     ...EntityHeroHeaderFragment
   }
-`;
+`);

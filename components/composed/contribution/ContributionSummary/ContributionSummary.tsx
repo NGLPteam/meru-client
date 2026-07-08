@@ -1,18 +1,16 @@
 import { useMemo } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import { DotList, PrecisionDate, SquareThumbnail } from "@/components/atomic";
 import { getRouteByEntityType } from "@/helpers";
 import Summary from "@/components/layout/Summary";
-import { ContributionSummaryFragment$key } from "@/relay/ContributionSummaryFragment.graphql";
-import { ContributionSummaryEntityFragment$key } from "@/relay/ContributionSummaryEntityFragment.graphql";
 
 export default function ContributionSummary({ data }: Props) {
   const contribution = useFragment(fragment, data);
 
   const { t } = useTranslation();
 
-  const entity = useFragment<ContributionSummaryEntityFragment$key>(
+  const entity = useFragment<FragmentType<typeof entityFragment>>(
     entityFragment,
     contribution?.entity,
   );
@@ -57,10 +55,10 @@ export default function ContributionSummary({ data }: Props) {
 }
 
 interface Props {
-  data?: ContributionSummaryFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributionSummaryFragment on ContributorAttribution {
     ... on ContributorItemAttribution {
       roles {
@@ -81,9 +79,9 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);
 
-const entityFragment = graphql`
+const entityFragment = graphql(`
   fragment ContributionSummaryEntityFragment on Entity {
     __typename
     title
@@ -112,4 +110,4 @@ const entityFragment = graphql`
       summary
     }
   }
-`;
+`);

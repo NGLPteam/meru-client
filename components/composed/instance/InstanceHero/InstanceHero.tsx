@@ -1,10 +1,9 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchHero from "@/components/composed/search/SearchHero";
 import { Markdown } from "@/components/atomic";
-import { InstanceHeroFragment$key } from "@/relay/InstanceHeroFragment.graphql";
 import styles from "./InstanceHero.module.css";
 
 export default function InstanceHero({ data }: Props) {
@@ -32,10 +31,10 @@ export default function InstanceHero({ data }: Props) {
 }
 
 interface Props {
-  data: InstanceHeroFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment InstanceHeroFragment on Query {
     globalConfiguration {
       site {
@@ -45,4 +44,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

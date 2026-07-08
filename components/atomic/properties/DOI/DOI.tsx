@@ -1,6 +1,5 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
-import { DOIFragment$key } from "@/relay/DOIFragment.graphql";
 
 export default function DOI({ data }: Props) {
   const { t } = useTranslation();
@@ -33,14 +32,14 @@ export default function DOI({ data }: Props) {
 }
 
 interface Props {
-  data?: DOIFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DOIFragment on HasDOI {
     doiData {
       doi
       url
     }
   }
-`;
+`);

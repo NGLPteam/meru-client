@@ -1,9 +1,8 @@
 import { Fragment } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useFormContext } from "react-hook-form";
 import { getFilterInputLabel } from "@/helpers/search";
 import { Input } from "@/components/forms";
-import { SearchFilterDateFragment$key } from "@/relay/SearchFilterDateFragment.graphql";
 
 export default function SearchFilterDate({ data }: Props) {
   const filter = useFragment(fragment, data);
@@ -31,10 +30,10 @@ export default function SearchFilterDate({ data }: Props) {
 }
 
 interface Props {
-  data: SearchFilterDateFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchFilterDateFragment on SearchableProperty {
     label
     description
@@ -43,4 +42,4 @@ const fragment = graphql`
     # when calling the results field.
     searchOperators
   }
-`;
+`);

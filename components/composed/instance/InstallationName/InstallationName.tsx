@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { Link } from "@/lib/vendor/react-transition-progress/link";
-import { InstallationNameFragment$key } from "@/relay/InstallationNameFragment.graphql";
 import styles from "./InstallationName.module.css";
 
 const LOGO_SIZE = 40;
@@ -40,10 +39,10 @@ export default function InstallationName({
 
 type Props = {
   className?: string;
-  data?: InstallationNameFragment$key;
+  data?: FragmentType<typeof fragment>;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment InstallationNameFragment on GlobalConfiguration {
     site {
       installationName
@@ -69,4 +68,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

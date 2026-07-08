@@ -1,16 +1,13 @@
 "use client";
 
-import { useMemo, useTransition } from "react";
-import { graphql, useRefetchableFragment } from "react-relay";
+import { useMemo, useState } from "react";
+import { useQuery } from "urql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
 import BrowseTreeLayout from "@/components/layout/BrowseTreeLayout";
 import { NoContent } from "@/components/layout";
 import EntitySummary from "@/components/composed/entity/EntitySummary";
-import {
-  EntityOrderingLayoutFragment$data,
-  EntityOrderingLayoutFragment$key,
-} from "@/relay/EntityOrderingLayoutFragment.graphql";
 import type { ListEntityContext } from "@/types/graphql-schema";
 
 export default function EntityOrderingLayout({ data, showContext }: Props) {
@@ -18,16 +15,25 @@ export default function EntityOrderingLayout({ data, showContext }: Props) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [ordering, refetch] = useRefetchableFragment(fragment, data);
+  // Initial (SSR) data provides the ordering id used to refetch pages client-side.
+  const base = useFragment(fragment, data);
+  const id = base?.id;
 
-  const [isPending, startTransition] = useTransition();
+  const [page, setPage] = useState<number | null>(null);
 
-  const doRefetch = (page: number) => {
-    startTransition(() => {
-      refetch({ page });
-      return;
-    });
-  };
+  const [result] = useQuery({
+    query: refetchQuery,
+    variables: { id: id ?? "", page: page ?? 1 },
+    pause: page === null || !id,
+  });
+
+  const refetched = useFragment(
+    fragment,
+    result.data?.node?.__typename ? result.data.node : null,
+  );
+
+  const ordering = page !== null && refetched ? refetched : base;
+  const isPending = result.fetching;
 
   const onPageChange = (val: Record<string, string | number>) => {
     const pageNum = val.page
@@ -43,7 +49,7 @@ export default function EntityOrderingLayout({ data, showContext }: Props) {
     window.scrollTo({ top: 0, behavior: "smooth" });
     router.push(url);
 
-    doRefetch(pageNum);
+    setPage(pageNum);
   };
 
   const pageInfo = useMemo(() => ordering?.children.pageInfo, [ordering]);
@@ -65,7 +71,7 @@ export default function EntityOrderingLayout({ data, showContext }: Props) {
         header={ordering.header || ordering.name}
         onPageChange={onPageChange}
         isPending={isPending}
-        items={ordering.children.edges.map(({ node: { entry } }: Node) => (
+        items={ordering.children.edges.map(({ node: { entry } }) => (
           <EntitySummary
             key={entry.slug}
             data={entry}
@@ -83,15 +89,13 @@ export default function EntityOrderingLayout({ data, showContext }: Props) {
 }
 
 interface Props {
-  data?: EntityOrderingLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   showContext?: ListEntityContext;
 }
 
-type Node = EntityOrderingLayoutFragment$data["children"]["edges"][number];
-
-const fragment = graphql`
-  fragment EntityOrderingLayoutFragment on Ordering
-  @refetchable(queryName: "EntityOrderingLayoutRefetchQuery") {
+const fragment = graphql(`
+  fragment EntityOrderingLayoutFragment on Ordering {
+    id
     name
     header
     render {
@@ -122,4 +126,13 @@ const fragment = graphql`
       ...BrowseTreeLayoutFragment
     }
   }
-`;
+`);
+
+const refetchQuery = graphql(`
+  query EntityOrderingLayoutRefetchQuery($id: ID!, $page: Int) {
+    node(id: $id) {
+      __typename
+      ...EntityOrderingLayoutFragment
+    }
+  }
+`);

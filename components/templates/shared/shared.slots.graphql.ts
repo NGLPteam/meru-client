@@ -1,17 +1,15 @@
-import { graphql, useFragment } from "react-relay";
-import { sharedBlockSlotFragment$key } from "@/relay/sharedBlockSlotFragment.graphql";
-import { sharedInlineSlotFragment$key } from "@/relay/sharedInlineSlotFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
-export const templateSlotBlockFragment = graphql`
+export const templateSlotBlockFragment = graphql(`
   fragment sharedBlockSlotFragment on TemplateSlotBlockInstance {
     empty
     content
     kind
     valid
   }
-`;
+`);
 
-export const templateSlotInlineFragment = graphql`
+export const templateSlotInlineFragment = graphql(`
   fragment sharedInlineSlotFragment on TemplateSlotInlineInstance {
     empty
     content
@@ -19,16 +17,16 @@ export const templateSlotInlineFragment = graphql`
     valid
     hidesTemplate
   }
-`;
+`);
 
 export const useSharedBlockFragment = (
-  data?: sharedBlockSlotFragment$key | null,
+  data?: FragmentType<typeof templateSlotBlockFragment> | null,
 ) => {
   return useFragment(templateSlotBlockFragment, data);
 };
 
 export const useSharedInlineFragment = (
-  data?: sharedInlineSlotFragment$key | null,
+  data?: FragmentType<typeof templateSlotInlineFragment> | null,
 ) => {
   return useFragment(templateSlotInlineFragment, data);
 };

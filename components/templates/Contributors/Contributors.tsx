@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import capitalize from "lodash/capitalize";
-import { ContributorsTemplateFragment$key } from "@/relay/ContributorsTemplateFragment.graphql";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import InlineSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import Container from "@/components/layout/Container";
@@ -13,7 +12,7 @@ import styles from "./Contributors.module.css";
 export default function ContributorsTemplate({
   data,
 }: {
-  data?: ContributorsTemplateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgOverride?: HeroBackground | null;
 }) {
   const { t } = useTranslation();
@@ -82,7 +81,7 @@ export default function ContributorsTemplate({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributorsTemplateFragment on ContributorListTemplateInstance {
     __typename
     entity {
@@ -112,4 +111,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

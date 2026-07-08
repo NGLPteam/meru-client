@@ -1,13 +1,12 @@
-import { readInlineData, graphql } from "relay-runtime";
-import { sharedListTemplateFragment$key } from "@/relay/sharedListTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSharedInlineFragment } from "./shared.slots.graphql";
 import {
   useSharedListItemsTemplateFragment,
   useSharedListItemTemplateFragment,
 } from "./shared.listItems.graphql";
 
-export const listTemplateFragment = graphql`
-  fragment sharedListTemplateFragment on AnyMainTemplateInstance @inline {
+export const listTemplateFragment = graphql(`
+  fragment sharedListTemplateFragment on AnyMainTemplateInstance {
     ... on LinkListTemplateInstance {
       entity {
         ... on Community {
@@ -135,12 +134,12 @@ export const listTemplateFragment = graphql`
       }
     }
   }
-`;
+`);
 
 export const useSharedListTemplateFragment = (
-  data?: sharedListTemplateFragment$key | null,
+  data?: FragmentType<typeof listTemplateFragment> | null,
 ) => {
-  const template = readInlineData(listTemplateFragment, data ?? null);
+  const template = useFragment(listTemplateFragment, data ?? null);
   const {
     slots,
     entityList: entityListFragment,

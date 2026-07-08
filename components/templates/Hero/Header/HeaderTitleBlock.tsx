@@ -1,11 +1,10 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import type { HeroImageLayout } from "@/types/graphql-schema";
 import {
   useSharedBlockFragment,
   useSharedInlineFragment,
 } from "@/components/templates/shared/shared.slots.graphql";
-import { HeaderTitleBlockFragment$key } from "@/relay/HeaderTitleBlockFragment.graphql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import ContributorsList from "@/components/composed/contributor/ContributorsList";
@@ -13,7 +12,7 @@ import CoverImage from "@/components/atomic/images/CoverImage";
 import styles from "./Header.module.css";
 
 type TitleBlockProps = {
-  data?: HeaderTitleBlockFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   layout?: HeroImageLayout;
 };
 
@@ -97,7 +96,7 @@ export default function TitleBlock({ data, layout }: TitleBlockProps) {
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment HeaderTitleBlockFragment on HeroTemplateInstance {
     entity {
       ... on Community {
@@ -149,4 +148,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

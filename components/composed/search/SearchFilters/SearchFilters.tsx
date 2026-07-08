@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment } from "react-relay";
+import {
+  graphql,
+  useFragment,
+  type FragmentType,
+  type DocumentType,
+} from "@/lib/api/gql";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import flatMap from "lodash/flatMap";
 import uniqBy from "lodash/uniqBy";
@@ -9,10 +14,6 @@ import { filterSearchableProperties } from "@/helpers/search";
 import { removeEmptyKeys } from "@/helpers/search";
 import { Fieldset, BaseForm } from "@/components/forms";
 import { Button } from "@/components/atomic";
-import {
-  SearchFiltersFragment$data,
-  SearchFiltersFragment$key,
-} from "@/relay/SearchFiltersFragment.graphql";
 import SearchFilter from "../SearchFilter";
 import SearchOrderBy from "../SearchOrderBy";
 import SearchSchemaFilter from "../SearchSchemaFilter";
@@ -23,7 +24,7 @@ export default function SearchFilters({
   id,
   onSubmit: onSubmitCallback,
 }: Props) {
-  const searchData = useFragment<SearchFiltersFragment$key>(fragment, data);
+  const searchData = useFragment(fragment, data);
 
   const { t } = useTranslation();
 
@@ -134,7 +135,7 @@ export default function SearchFilters({
 }
 
 interface Props {
-  data: SearchFiltersFragment$key;
+  data: FragmentType<typeof fragment>;
   /** a11y ID for form compontents */
   id?: string;
   /** Callback runs on form submit.
@@ -143,9 +144,9 @@ interface Props {
   onSubmit?: (params: URLSearchParams) => void;
 }
 
-type FilterNode = SearchFiltersFragment$data["coreProperties"][number];
+type FilterNode = DocumentType<typeof fragment>["coreProperties"][number];
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchFiltersFragment on SearchScope {
     coreProperties {
       ... on SearchableProperty {
@@ -164,4 +165,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

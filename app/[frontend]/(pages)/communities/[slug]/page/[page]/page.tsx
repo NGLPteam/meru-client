@@ -1,10 +1,8 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import CommunityPageLayout from "@/components/composed/community/CommunityPageLayout";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesCommunityPageQuery as Query } from "@/relay/pageTemplatesCommunityPageQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export async function generateStaticParams() {
   return [];
@@ -13,7 +11,7 @@ export async function generateStaticParams() {
 export default async function CommunityPagePage({ params }: BasePageParams) {
   const { slug, page: pageSlug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
     pageSlug,
   });
@@ -22,14 +20,10 @@ export default async function CommunityPagePage({ params }: BasePageParams) {
 
   if (!community) return notFound();
 
-  return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <CommunityPageLayout data={community?.page} />
-    </UpdateClientEnvironment>
-  );
+  return <CommunityPageLayout data={community?.page} />;
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesCommunityPageQuery($slug: Slug!, $pageSlug: String!) {
     community(slug: $slug) {
       page(slug: $pageSlug) {
@@ -37,4 +31,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

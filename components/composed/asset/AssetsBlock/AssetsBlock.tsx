@@ -1,9 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
-import { AssetsBlockFragment$key } from "@/relay/AssetsBlockFragment.graphql";
 import AssetBlockItem from "./AssetBlockItem";
 import styles from "./AssetsBlock.module.css";
 
@@ -32,12 +31,12 @@ const AssetsBlock = ({ data }: Props) => {
 };
 
 interface Props {
-  data?: AssetsBlockFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
 export default AssetsBlock;
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AssetsBlockFragment on AssetConnection {
     edges {
       node {
@@ -45,4 +44,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

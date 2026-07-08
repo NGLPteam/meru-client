@@ -1,12 +1,11 @@
 "use client";
 
 import { PropsWithChildren, useContext, useEffect } from "react";
-import { graphql, useFragment } from "react-relay";
-import { SetCommunityFragment$key } from "@/relay/SetCommunityFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { SetCommunityContext } from "@/contexts/CommunityContext";
 
 type Props = PropsWithChildren & {
-  data?: SetCommunityFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
 export default function SetCommunity({ data, children }: Props) {
@@ -20,8 +19,8 @@ export default function SetCommunity({ data, children }: Props) {
   return children;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SetCommunityFragment on Community {
     ...CommunityContextFragment
   }
-`;
+`);

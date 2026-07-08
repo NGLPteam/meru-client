@@ -1,14 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import capitalize from "lodash/capitalize";
 import { Breadcrumbs, Button, Dropdown } from "@/components/atomic";
 import { getOrigin, getRouteByEntityType } from "@/helpers";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
-import { BreadcrumbsBarFragment$key } from "@/relay/BreadcrumbsBarFragment.graphql";
 import styles from "./BreadcrumbsBar.module.css";
 
 export default function BreadcrumbsBar({
@@ -109,12 +108,12 @@ export default function BreadcrumbsBar({
 }
 
 interface Props {
-  data?: BreadcrumbsBarFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   showShare?: boolean;
   className?: string;
 }
 
-export const fragment = graphql`
+export const fragment = graphql(`
   fragment BreadcrumbsBarFragment on Entity {
     __typename
     title
@@ -136,4 +135,4 @@ export const fragment = graphql`
     }
     ...BreadcrumbsFragment
   }
-`;
+`);

@@ -1,9 +1,7 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesItemMetadataQuery as Query } from "@/relay/pageTemplatesItemMetadataQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import MetadataTemplate from "@/components/templates/Metadata";
 import MainLayout from "@/components/templates/MainLayout";
 import { FullTextFallback } from "@/components/templates/FullTextCheck/FullTextCheck";
@@ -15,7 +13,7 @@ export async function generateStaticParams() {
 export default async function ItemPage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
   });
 
@@ -30,16 +28,16 @@ export default async function ItemPage({ params }: BasePageParams) {
   const { template } = metadata ?? {};
 
   return template ? (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
+    <>
       <MetadataTemplate data={template} />
       <FullTextFallback>
         <MainLayout data={main} fallback />
       </FullTextFallback>
-    </UpdateClientEnvironment>
+    </>
   ) : null;
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesItemMetadataQuery($slug: Slug!) {
     item(slug: $slug) {
       layouts {
@@ -54,4 +52,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

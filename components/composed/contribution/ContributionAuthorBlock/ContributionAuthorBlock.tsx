@@ -1,12 +1,11 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import capitalize from "lodash/capitalize";
 import ContributorAvatar from "@/components/composed/contributor/ContributorAvatar";
 import ContributorName from "@/components/composed/contributor/ContributorName";
 import { DotList, Link, NamedLink, Markdown } from "@/components/atomic";
-import { ContributionAuthorBlockFragment$key } from "@/relay/ContributionAuthorBlockFragment.graphql";
 import styles from "./ContributrionAuthorBlock.module.css";
 
 export default function ContributionAuthorBlock({ data }: Props) {
@@ -81,10 +80,10 @@ export default function ContributionAuthorBlock({ data }: Props) {
 }
 
 type Props = {
-  data?: ContributionAuthorBlockFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributionAuthorBlockFragment on Contribution {
     affiliation
     roleLabel
@@ -127,4 +126,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
@@ -11,9 +11,7 @@ import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import FullTextCheck from "@/components/templates/FullTextCheck";
 import NavigationTemplate from "@/components/templates/EntityNavigation";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { layoutItemTemplateQuery as Query } from "@/relay/layoutItemTemplateQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar";
 import generateItemMetadata from "@/app/[frontend]/(pages)/items/[slug]/_metadata/item";
@@ -31,9 +29,7 @@ export default async function ItemLayout({
   params,
 }: BasePageParams & PropsWithChildren) {
   const { slug } = await params;
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
-    slug,
-  });
+  const { data } = await queryApi(query, { slug });
 
   const googleScholarData = await getStaticGoogleScholarData(slug);
 
@@ -52,26 +48,24 @@ export default async function ItemLayout({
   const { hero, navigation } = layouts ?? {};
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <SetCommunity data={community}>
-        {hero && <HeroTemplate data={hero} />}
-        <ProcessingCheck data={layouts} entityType="item">
-          {googleScholarData && (
-            <GoogleScholarMetaTags entity={googleScholarData} />
-          )}
-          {slug && <ViewCounter slug={slug} />}
-          <EntityNavBar data={item} />
-          <FullTextCheck data={layouts}>
-            <NavigationTemplate data={navigation} />
-            {children}
-          </FullTextCheck>
-        </ProcessingCheck>
-      </SetCommunity>
-    </UpdateClientEnvironment>
+    <SetCommunity data={community}>
+      {hero && <HeroTemplate data={hero} />}
+      <ProcessingCheck data={layouts} entityType="item">
+        {googleScholarData && (
+          <GoogleScholarMetaTags entity={googleScholarData} />
+        )}
+        {slug && <ViewCounter slug={slug} />}
+        <EntityNavBar data={item} />
+        <FullTextCheck data={layouts}>
+          <NavigationTemplate data={navigation} />
+          {children}
+        </FullTextCheck>
+      </ProcessingCheck>
+    </SetCommunity>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query layoutItemTemplateQuery($slug: Slug!) {
     item(slug: $slug) {
       canPreview {
@@ -95,4 +89,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

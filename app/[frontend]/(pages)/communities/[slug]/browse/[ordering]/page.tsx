@@ -1,12 +1,10 @@
 import { Suspense } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
 import { OrderingPageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageBrowseCommunityOrderingQuery as OrderingQuery } from "@/relay/pageBrowseCommunityOrderingQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export default async function CommunityBrowsePage({
   params,
@@ -15,29 +13,24 @@ export default async function CommunityBrowsePage({
   const { slug, ordering } = await params;
   const { page } = await searchParams;
 
-  const { data, records, sessionToken } = await fetchQuery<OrderingQuery>(
-    orderingQuery,
-    {
-      slug,
-      page: parseInt(page) || 1,
-      identifier: ordering,
-    },
-  );
+  const { data } = await queryApi(orderingQuery, {
+    slug,
+    page: parseInt(page) || 1,
+    identifier: ordering,
+  });
 
   const { community } = data ?? {};
 
   if (!community) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <Suspense fallback={<LoadingBlock />}>
-        <EntityOrderingLayout data={community?.ordering} showContext="FULL" />
-      </Suspense>
-    </UpdateClientEnvironment>
+    <Suspense fallback={<LoadingBlock />}>
+      <EntityOrderingLayout data={community?.ordering} showContext="FULL" />
+    </Suspense>
   );
 }
 
-const orderingQuery = graphql`
+const orderingQuery = graphql(`
   query pageBrowseCommunityOrderingQuery(
     $slug: Slug!
     $identifier: String!
@@ -50,4 +43,4 @@ const orderingQuery = graphql`
       }
     }
   }
-`;
+`);

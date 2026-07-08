@@ -1,13 +1,12 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
-import { OrderingNavigationTemplateFragment$key } from "@/relay/OrderingNavigationTemplateFragment.graphql";
 import type { HeroBackground } from "@/types/graphql-schema";
 import NavButtons from "./NavButtons";
 
 export default function OrderingNavigationTemplate({
   data,
 }: {
-  data?: OrderingNavigationTemplateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgOverride?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -23,7 +22,7 @@ export default function OrderingNavigationTemplate({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment OrderingNavigationTemplateFragment on OrderingTemplateInstance {
     hidden
     orderingDefinition: definition {
@@ -35,4 +34,4 @@ const fragment = graphql`
     }
     ...NavButtonsFragment
   }
-`;
+`);

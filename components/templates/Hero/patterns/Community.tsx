@@ -1,8 +1,7 @@
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { CommunityHeroHeaderFragment$key } from "@/relay/CommunityHeroHeaderFragment.graphql";
 import SearchHero from "@/components/composed/search/SearchHero";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import HeroHeader from "../Header";
@@ -12,7 +11,7 @@ import styles from "./patterns.module.css";
 export default function CommunityHeroHeader({
   data,
 }: {
-  data?: CommunityHeroHeaderFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const { t } = useTranslation();
 
@@ -71,7 +70,7 @@ export default function CommunityHeroHeader({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityHeroHeaderFragment on HeroLayoutInstance {
     entity {
       ... on Community {
@@ -105,4 +104,4 @@ const fragment = graphql`
       ...HeaderHeroFragment
     }
   }
-`;
+`);

@@ -1,6 +1,5 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Avatar } from "@/components/atomic";
-import { ContributorAvatarFragment$key } from "@/relay/ContributorAvatarFragment.graphql";
 
 const ContributorAvatar = ({ data }: Props) => {
   const imgData = useFragment(fragment, data);
@@ -10,12 +9,12 @@ const ContributorAvatar = ({ data }: Props) => {
 };
 
 interface Props {
-  data?: ContributorAvatarFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
 export default ContributorAvatar;
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributorAvatarFragment on ImageAttachment {
     small {
       webp {
@@ -24,4 +23,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

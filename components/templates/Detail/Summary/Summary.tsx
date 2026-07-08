@@ -1,4 +1,4 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import {
   useSharedInlineFragment,
@@ -7,7 +7,6 @@ import {
 import Container from "@/components/layout/Container";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
-import { SummaryDetailFragment$key } from "@/relay/SummaryDetailFragment.graphql";
 import type { HeroBackground } from "@/types/graphql-schema";
 import Announcements from "./Announcements";
 import styles from "./Summary.module.css";
@@ -16,7 +15,7 @@ export default function Summary({
   data,
   bgColor,
 }: {
-  data?: SummaryDetailFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgColor?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -63,7 +62,7 @@ export default function Summary({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SummaryDetailFragment on DetailTemplateInstance {
     entity {
       ... on Collection {
@@ -115,4 +114,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

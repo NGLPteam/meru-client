@@ -1,10 +1,11 @@
-import { graphql, useFragment } from "react-relay";
+import {
+  graphql,
+  useFragment,
+  type FragmentType,
+  type DocumentType,
+} from "@/lib/api/gql";
 import { useParams } from "next/navigation";
 import { getRouteByEntityType } from "@/helpers";
-import {
-  EntityNavListFragment$data,
-  EntityNavListFragment$key,
-} from "@/relay/EntityNavListFragment.graphql";
 import BrowseButton from "./BrowseButton";
 import Dropdown from "./Dropdown";
 import PagesList from "./PagesList";
@@ -58,12 +59,12 @@ export default function EntityNavList({ data }: Props) {
 }
 
 type Props = {
-  data?: EntityNavListFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
-type Ordering = EntityNavListFragment$data["orderings"]["nodes"][number];
+type Ordering = DocumentType<typeof fragment>["orderings"]["nodes"][number];
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntityNavListFragment on Entity {
     __typename
     schemaVersion {
@@ -85,4 +86,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

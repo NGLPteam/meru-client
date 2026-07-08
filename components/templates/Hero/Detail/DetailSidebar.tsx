@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
-import { DetailSidebarFragment$key } from "@/relay/DetailSidebarFragment.graphql";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import DownloadCount from "@/components/atomic/properties/DownloadCount";
 import ViewCount from "@/components/atomic/properties/ViewCount";
@@ -10,7 +9,7 @@ import styles from "./Detail.module.css";
 export default function Sidebar({
   data,
 }: {
-  data?: DetailSidebarFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const template = useFragment(fragment, data);
 
@@ -39,7 +38,7 @@ export default function Sidebar({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DetailSidebarFragment on HeroTemplateInstance {
     entity {
       ... on Item {
@@ -65,4 +64,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,13 +1,12 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useRouteSlug from "@/hooks/useRouteSlug";
 import { NamedLink } from "@/components/atomic";
-import { ListPagesTemplateFragment$key } from "@/relay/ListPagesTemplateFragment.graphql";
 import styles from "./Pages.module.css";
 
 export default function List({
   data,
 }: {
-  data?: ListPagesTemplateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const slug = useRouteSlug();
 
@@ -35,7 +34,7 @@ export default function List({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ListPagesTemplateFragment on Entity {
     ... on Item {
       pages {
@@ -68,4 +67,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

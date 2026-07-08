@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { DescendantsTemplateFragment$key } from "@/relay/DescendantsTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityType } from "@/helpers/routes";
 import type { HeroBackground } from "@/types/graphql-schema";
 import {
@@ -24,7 +23,7 @@ export default function Descendants({
   data,
   bgOverride,
 }: {
-  data: DescendantsTemplateFragment$key;
+  data: FragmentType<typeof fragment>;
   bgOverride?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -53,7 +52,7 @@ export default function Descendants({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DescendantsTemplateFragment on AnyMainTemplateInstance {
     ... on DescendantListTemplateInstance {
       entity {
@@ -68,4 +67,4 @@ const fragment = graphql`
     }
     ...sharedListTemplateFragment
   }
-`;
+`);

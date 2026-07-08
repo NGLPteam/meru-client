@@ -1,13 +1,12 @@
-import { graphql, readInlineData } from "relay-runtime";
-import { routesOrderingTemplateFragment$key } from "@/relay/routesOrderingTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityType } from "@/helpers/routes";
 
 export const hrefFromTypename = (
-  data?: routesOrderingTemplateFragment$key | null,
+  data?: FragmentType<typeof fragment> | null,
 ) => {
   if (!data) return null;
 
-  const { entry, entrySlug } = readInlineData(fragment, data);
+  const { entry, entrySlug } = useFragment(fragment, data);
 
   switch (entry.__typename) {
     case "Collection":
@@ -21,8 +20,8 @@ export const hrefFromTypename = (
   }
 };
 
-const fragment = graphql`
-  fragment routesOrderingTemplateFragment on OrderingEntry @inline {
+const fragment = graphql(`
+  fragment routesOrderingTemplateFragment on OrderingEntry {
     entrySlug
     entry {
       ... on Collection {
@@ -50,4 +49,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

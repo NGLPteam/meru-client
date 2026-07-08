@@ -1,23 +1,21 @@
 import { useContext } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import { Dropdown, NamedLink } from "@/components/atomic";
-import { CommunityPickerFragment$key } from "@/relay/CommunityPickerFragment.graphql";
-import { CommunityPickerCommunityNameFragment$key } from "@/relay/CommunityPickerCommunityNameFragment.graphql";
 import { CommunityContext } from "@/contexts/CommunityContext";
 import Button from "@/components/atomic/Button";
 import styles from "./CommunityPicker.module.css";
 
 type Props = {
-  data?: CommunityPickerFragment$key | null;
-  activeData?: CommunityPickerCommunityNameFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
+  activeData?: FragmentType<typeof communityNameFragment> | null;
 };
 
 export default function CommunityPicker({ data }: Props) {
   const communityData = useFragment(fragment, data);
 
   const activeCommunityData = useContext(CommunityContext);
-  const activeCommunity = useFragment<CommunityPickerCommunityNameFragment$key>(
+  const activeCommunity = useFragment<FragmentType<typeof communityNameFragment>>(
     communityNameFragment,
     activeCommunityData,
   );
@@ -69,13 +67,13 @@ export default function CommunityPicker({ data }: Props) {
   );
 }
 
-const communityNameFragment = graphql`
+const communityNameFragment = graphql(`
   fragment CommunityPickerCommunityNameFragment on Community {
     title
   }
-`;
+`);
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityPickerFragment on Query {
     pickerCommunities: communities(order: POSITION_ASCENDING) {
       edges {
@@ -86,4 +84,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

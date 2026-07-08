@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { BlurbTemplateFragment$key } from "@/relay/BlurbTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
 import {
   useSharedInlineFragment,
@@ -13,7 +12,7 @@ import styles from "./Blurb.module.css";
 export default function BlurbTemplate({
   data,
 }: {
-  data?: BlurbTemplateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgOverride?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -53,7 +52,7 @@ export default function BlurbTemplate({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment BlurbTemplateFragment on BlurbTemplateInstance {
     __typename
     hidden
@@ -73,4 +72,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

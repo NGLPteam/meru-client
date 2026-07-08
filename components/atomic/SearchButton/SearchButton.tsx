@@ -1,11 +1,10 @@
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { pxToRem } from "@/helpers/theme";
 import SearchModal from "@/components/layout/SearchModal";
 import IconFactory from "@/components/factories/IconFactory";
-import { SearchButtonFragment$key } from "@/relay/SearchButtonFragment.graphql";
 import styles from "./SearchButton.module.css";
 
 export default function SearchButton({ data, size = "sm" }: Props) {
@@ -39,12 +38,12 @@ export default function SearchButton({ data, size = "sm" }: Props) {
 }
 
 interface Props {
-  data?: SearchButtonFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   size?: "sm" | "lg";
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchButtonFragment on Entity {
     ...SearchModalFragment
   }
-`;
+`);

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
@@ -7,9 +7,7 @@ import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_componen
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { layoutCollectionTemplateQuery as Query } from "@/relay/layoutCollectionTemplateQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar";
 import generateCollectionMetadata from "@/app/[frontend]/(pages)/collections/[slug]/_metadata/collection";
@@ -28,9 +26,7 @@ export default async function CollectionTemplateLayout({
 }: BasePageParams & PropsWithChildren) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
-    slug,
-  });
+  const { data } = await queryApi(query, { slug });
 
   const { collection } = data ?? {};
 
@@ -45,20 +41,18 @@ export default async function CollectionTemplateLayout({
   const { community, layouts } = collection;
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <SetCommunity data={community}>
-        {layouts.hero && <HeroTemplate data={layouts.hero} />}
-        <ProcessingCheck data={layouts} entityType="collection">
-          {slug && <ViewCounter slug={slug} />}
-          <EntityNavBar data={collection} />
-          {children}
-        </ProcessingCheck>
-      </SetCommunity>
-    </UpdateClientEnvironment>
+    <SetCommunity data={community}>
+      {layouts.hero && <HeroTemplate data={layouts.hero} />}
+      <ProcessingCheck data={layouts} entityType="collection">
+        {slug && <ViewCounter slug={slug} />}
+        <EntityNavBar data={collection} />
+        {children}
+      </ProcessingCheck>
+    </SetCommunity>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query layoutCollectionTemplateQuery($slug: Slug!) {
     collection(slug: $slug) {
       canPreview {
@@ -78,4 +72,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

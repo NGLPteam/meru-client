@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { ContributorNameFragment$key } from "@/relay/ContributorNameFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getContributorDisplayName } from "./helpers";
 
 export default function ContributorName({ data }: Props) {
@@ -15,11 +14,11 @@ export default function ContributorName({ data }: Props) {
 }
 
 interface Props {
-  data?: ContributorNameFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   label?: string;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributorNameFragment on AnyContributor {
     ... on PersonContributor {
       __typename
@@ -31,4 +30,4 @@ const fragment = graphql`
       legalName
     }
   }
-`;
+`);

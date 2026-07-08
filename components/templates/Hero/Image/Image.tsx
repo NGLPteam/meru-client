@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import type { HeroImageLayout } from "@/types/graphql-schema";
-import { ImageHeroTemplateFragment$key } from "@/relay/ImageHeroTemplateFragment.graphql";
 import { generateSrcSet, sizes } from "@/helpers/generateSrcSet";
 import type { ImageSize } from "@/types/graphql-schema";
 import styles from "./Image.module.css";
@@ -10,7 +9,7 @@ export default function HeroImage({
   data,
   layout,
 }: {
-  data: ImageHeroTemplateFragment$key | null;
+  data: FragmentType<typeof fragment> | null;
   layout?: HeroImageLayout;
 }) {
   const images = useFragment(fragment, data);
@@ -44,7 +43,7 @@ export default function HeroImage({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ImageHeroTemplateFragment on ImageAttachment {
     hero {
       webp {
@@ -67,4 +66,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,12 +1,11 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { markdownToTxt } from "markdown-to-txt";
 import { Search } from "@/components/forms";
-import { EntityNavBarFragment$key } from "@/relay/EntityNavBarFragment.graphql";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import EntityNavList from "./EntityNavList";
 import styles from "./EntityNavBar.module.css";
@@ -60,10 +59,10 @@ export default function EntityNavBar({ data }: Props) {
 }
 
 type Props = {
-  data?: EntityNavBarFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntityNavBarFragment on Entity {
     ... on Node {
       id
@@ -91,4 +90,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

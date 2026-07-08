@@ -1,8 +1,7 @@
 import { useMemo } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { pxToRem } from "@/helpers/theme";
 import { NamedLink } from "@/components/atomic";
-import { CommunityLogoFragment$key } from "@/relay/CommunityLogoFragment.graphql";
 import styles from "./CommunityLogo.module.css";
 
 const SIZE = 40;
@@ -39,11 +38,11 @@ export default function CommunityLogo({ data, slug }: Props) {
 }
 
 interface Props {
-  data?: CommunityLogoFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   slug?: string;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityLogoFragment on ImageAttachment {
     storage
     original {
@@ -53,4 +52,4 @@ const fragment = graphql`
       height
     }
   }
-`;
+`);

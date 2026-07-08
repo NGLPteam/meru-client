@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { SquareThumbnailFragment$key } from "@/relay/SquareThumbnailFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SquareThumbnailBase from "./SquareThumbnailBase";
 
 type BaseProps = React.ComponentProps<typeof SquareThumbnailBase>;
@@ -19,10 +18,10 @@ export default function SquareThumbnail({
 }
 
 interface Props {
-  data?: SquareThumbnailFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SquareThumbnailFragment on ImageAttachment {
     thumb: medium {
       webp {
@@ -31,4 +30,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

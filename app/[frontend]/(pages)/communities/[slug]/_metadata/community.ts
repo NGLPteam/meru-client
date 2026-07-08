@@ -1,7 +1,6 @@
-import { graphql } from "relay-runtime";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import { graphql } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import type { BasePageParams } from "@/types/page";
-import { communityMetadataQuery as Query } from "@/relay/communityMetadataQuery.graphql";
 import { getTruncatedText } from "@/helpers";
 import type { Metadata, ResolvingMetadata } from "next";
 
@@ -14,7 +13,7 @@ export default async function generateCommunityMetadata(
   const { slug } = await props.params;
 
   const { data } =
-    (await fetchQuery<Query>(query, {
+    (await queryApi(query, {
       slug,
     })) ?? {};
 
@@ -57,7 +56,7 @@ export default async function generateCommunityMetadata(
   };
 }
 
-const query = graphql`
+const query = graphql(`
   query communityMetadataQuery($slug: Slug!) {
     community(slug: $slug) {
       title
@@ -88,4 +87,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

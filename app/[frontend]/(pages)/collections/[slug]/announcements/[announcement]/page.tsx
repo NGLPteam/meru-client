@@ -1,12 +1,10 @@
 import { Suspense } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import EntityAnnouncementLayout from "@/components/composed/entity/EntityAnnouncementLayout";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesCollectionAnnouncementQuery as Query } from "@/relay/pageTemplatesCollectionAnnouncementQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export async function generateStaticParams() {
   return [];
@@ -17,7 +15,7 @@ export default async function CollectionAnnouncementPage({
 }: BasePageParams) {
   const { slug, announcement } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
     announcementSlug: announcement,
   });
@@ -27,15 +25,13 @@ export default async function CollectionAnnouncementPage({
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <Suspense fallback={<LoadingBlock />}>
-        <EntityAnnouncementLayout data={collection.announcement} />
-      </Suspense>
-    </UpdateClientEnvironment>
+    <Suspense fallback={<LoadingBlock />}>
+      <EntityAnnouncementLayout data={collection.announcement} />
+    </Suspense>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesCollectionAnnouncementQuery(
     $slug: Slug!
     $announcementSlug: Slug!
@@ -48,4 +44,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

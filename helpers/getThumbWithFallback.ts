@@ -1,10 +1,9 @@
-import { graphql, readInlineData } from "relay-runtime";
-import { getThumbWithFallbackFragment$key } from "@/relay/getThumbWithFallbackFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 export default function getThumbWithFallback(
-  data: getThumbWithFallbackFragment$key,
+  data: FragmentType<typeof fragment>,
 ) {
-  const entity = readInlineData(fragment, data);
+  const entity = useFragment(fragment, data);
 
   const { thumbnail, breadcrumbs } = entity;
 
@@ -20,8 +19,8 @@ export default function getThumbWithFallback(
   return { thumbnail, hasThumb: false };
 }
 
-const fragment = graphql`
-  fragment getThumbWithFallbackFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getThumbWithFallbackFragment on Entity {
     ... on Collection {
       thumbnail {
         image: medium {
@@ -86,4 +85,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

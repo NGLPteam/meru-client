@@ -1,6 +1,5 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Trans } from "react-i18next";
-import { PageCountFragment$key } from "@/relay/PageCountFragment.graphql";
 
 export default function PageCount({ data, className, name }: Props) {
   const pageData = useFragment(fragment, data);
@@ -32,15 +31,15 @@ export default function PageCount({ data, className, name }: Props) {
 }
 
 interface Props {
-  data?: PageCountFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   className?: string;
   name?: string;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment PageCountFragment on PageInfo {
     totalCount
     page
     perPage
   }
-`;
+`);

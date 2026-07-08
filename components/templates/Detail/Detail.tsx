@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { DetailTemplateFragment$key } from "@/relay/DetailTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import type { HeroBackground } from "@/types/graphql-schema";
 import Summary from "./Summary";
 import Full from "./Full";
@@ -15,7 +14,7 @@ export default function DetailTemplate({
   data,
   bgOverride,
 }: {
-  data?: DetailTemplateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgOverride?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -33,7 +32,7 @@ export default function DetailTemplate({
   return <Variant data={template} bgColor={bgOverride ?? background} />;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DetailTemplateFragment on DetailTemplateInstance {
     __typename
     hidden
@@ -45,4 +44,4 @@ const fragment = graphql`
     ...FullDetailFragment
     ...ColumnsDetailFragment
   }
-`;
+`);

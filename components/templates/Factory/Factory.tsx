@@ -1,7 +1,6 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
-import { FactoryTemplatesFragment$key } from "@/relay/FactoryTemplatesFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { HeroBackground } from "@/types/graphql-schema";
 import Descendants from "../Descendants";
 import Detail from "../Detail";
@@ -30,7 +29,7 @@ export default function TemplateFactory({
   data,
   bgOverride,
 }: {
-  data: FactoryTemplatesFragment$key | null;
+  data: FragmentType<typeof fragment> | null;
   bgOverride?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -55,7 +54,7 @@ export default function TemplateFactory({
   return Template ? <Template data={template} bgOverride={bgOverride} /> : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment FactoryTemplatesFragment on AnyMainTemplateInstance {
     ... on TemplateInstance {
       templateKind
@@ -93,4 +92,4 @@ const fragment = graphql`
     ...DescendantsTemplateFragment
     ...LinksTemplateFragment
   }
-`;
+`);

@@ -1,6 +1,5 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SummaryListItem from "@/components/templates/lists/items/Summary";
-import { EntitySummaryFragment$key } from "@/relay/EntitySummaryFragment.graphql";
 import type { ListEntityContext } from "@/types/graphql-schema";
 
 export default function EntitySummary({
@@ -20,12 +19,12 @@ export default function EntitySummary({
 }
 
 interface Props {
-  data: EntitySummaryFragment$key | null;
+  data: FragmentType<typeof fragment> | null;
   browseStyle?: boolean;
   showContext?: ListEntityContext;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntitySummaryFragment on Entity {
     __typename
     layouts {
@@ -36,4 +35,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

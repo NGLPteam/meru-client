@@ -1,13 +1,12 @@
 "use server";
 
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { cache } from "react";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { fetchPreviewAccessQuery as Query } from "@/relay/fetchPreviewAccessQuery.graphql";
+import queryApi from "@/lib/api/queryApi";
 
 const fetchPreviewAccessRequest = cache(
   async (entity: string, slug: string) => {
-    const { data } = await fetchQuery<Query>(
+    const { data } = await queryApi(
       query,
       {
         slug,
@@ -15,7 +14,7 @@ const fetchPreviewAccessRequest = cache(
         isCollection: entity === "collections",
         isCommunity: entity === "communities",
       },
-      true,
+      { authAware: true },
     );
 
     return (
@@ -31,7 +30,7 @@ export async function fetchPreviewAccess(entity: string, slug: string) {
   return fetchPreviewAccessRequest(entity, slug);
 }
 
-const query = graphql`
+const query = graphql(`
   query fetchPreviewAccessQuery(
     $slug: Slug!
     $isItem: Boolean!
@@ -54,4 +53,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

@@ -1,14 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { useFragment, graphql } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import useRouteSlug from "@/hooks/useRouteSlug";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import ReadMoreLink from "@/components/atomic/links/Link/patterns/ReadMoreLink";
-import { AnnouncementsFragment$key } from "@/relay/AnnouncementsFragment.graphql";
 import styles from "./Announcements.module.css";
 
 export default function EntityAnnouncements({ data }: Props) {
-  const announcements = useFragment<AnnouncementsFragment$key>(fragment, data);
+  const announcements = useFragment<FragmentType<typeof fragment>>(fragment, data);
 
   const { t } = useTranslation();
 
@@ -43,10 +42,10 @@ export default function EntityAnnouncements({ data }: Props) {
 }
 
 interface Props {
-  data: AnnouncementsFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AnnouncementsFragment on AnnouncementConnection {
     nodes {
       teaser
@@ -54,4 +53,4 @@ const fragment = graphql`
       slug
     }
   }
-`;
+`);

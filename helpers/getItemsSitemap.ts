@@ -1,9 +1,8 @@
-import { graphql, readInlineData } from "relay-runtime";
-import { getItemsSitemapFragment$key } from "@/relay/getItemsSitemapFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import EXTERNAL_DATA_URL from "./externalDataUrl";
 
-export default function getItemsSitemap(data: getItemsSitemapFragment$key) {
-  const entity = readInlineData(fragment, data);
+export default function getItemsSitemap(data: FragmentType<typeof fragment>) {
+  const entity = useFragment(fragment, data);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -21,12 +20,12 @@ export default function getItemsSitemap(data: getItemsSitemapFragment$key) {
   `;
 }
 
-const fragment = graphql`
-  fragment getItemsSitemapFragment on ItemConnection @inline {
+const fragment = graphql(`
+  fragment getItemsSitemapFragment on ItemConnection {
     nodes {
       __typename
       slug
       updatedAt
     }
   }
-`;
+`);

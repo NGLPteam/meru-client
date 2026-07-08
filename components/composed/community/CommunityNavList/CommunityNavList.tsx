@@ -1,14 +1,13 @@
 import { useContext } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
-import { CommunityNavListFragment$key } from "@/relay/CommunityNavListFragment.graphql";
 import { CommunityContext } from "@/contexts/CommunityContext";
 import CommunityNavListContent from "./CommunityNavListContent";
 import styles from "./CommunityNavlist.module.css";
 
 export default function CommunityNavList({ condensed, mobile }: Props) {
   const communityData = useContext(CommunityContext);
-  const community = useFragment<CommunityNavListFragment$key>(
+  const community = useFragment<FragmentType<typeof fragment>>(
     fragment,
     communityData,
   );
@@ -29,11 +28,11 @@ export default function CommunityNavList({ condensed, mobile }: Props) {
 interface Props {
   condensed?: boolean;
   mobile?: boolean;
-  data?: CommunityNavListFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityNavListFragment on Community {
     ...CommunityNavListContentFragment
   }
-`;
+`);

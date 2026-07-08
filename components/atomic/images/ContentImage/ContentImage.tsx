@@ -1,5 +1,4 @@
-import { useFragment, graphql } from "react-relay";
-import { ContentImageFragment$key } from "@/relay/ContentImageFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { generateSrcSet, sizes } from "@/helpers/generateSrcSet";
 import type { ImageSize } from "@/types/graphql-schema";
 import styles from "./ContentImage.module.css";
@@ -30,11 +29,11 @@ export default function ContentImage({ data, loading }: Props) {
 }
 
 interface Props {
-  data?: ContentImageFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   loading?: "eager" | "lazy";
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContentImageFragment on ImageAttachment {
     large {
       webp {
@@ -57,4 +56,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,9 +1,8 @@
 import { useRef } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { BackToTopBlock } from "@/components/layout";
 import ContentImage from "@/components/atomic/images/ContentImage";
 import Container from "@/components/layout/Container";
-import { FullDetailFragment$key } from "@/relay/FullDetailFragment.graphql";
 import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
@@ -15,7 +14,7 @@ export default function FullVariant({
   data,
   bgColor,
 }: {
-  data?: FullDetailFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgColor?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -71,7 +70,7 @@ export default function FullVariant({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment FullDetailFragment on DetailTemplateInstance {
     entity {
       ... on Item {
@@ -105,4 +104,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

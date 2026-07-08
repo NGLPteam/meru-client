@@ -1,13 +1,12 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import { useController, useFormContext } from "react-hook-form";
 import { Checkbox, CheckboxGroup } from "@/components/forms";
-import { SearchSchemaFilterFragment$key } from "@/relay/SearchSchemaFilterFragment.graphql";
 
 export default function SearchSchemaFilter({ data }: Props) {
   const { control } = useFormContext();
 
-  const schemaData = useFragment<SearchSchemaFilterFragment$key>(
+  const schemaData = useFragment<FragmentType<typeof fragment>>(
     fragment,
     data,
   );
@@ -52,10 +51,10 @@ export default function SearchSchemaFilter({ data }: Props) {
 }
 
 interface Props {
-  data: SearchSchemaFilterFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchSchemaFilterFragment on SearchScope {
     schemas: availableSchemaVersions {
       name
@@ -65,4 +64,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

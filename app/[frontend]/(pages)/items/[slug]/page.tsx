@@ -1,9 +1,7 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import MainLayout from "@/components/templates/MainLayout";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageItemTemplateQuery as Query } from "@/relay/pageItemTemplateQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import { BasePageParams } from "@/types/page";
 import { FullTextCheckRedirect } from "@/components/templates/FullTextCheck/FullTextCheck";
 
@@ -13,8 +11,8 @@ export async function generateStaticParams() {
 
 export default async function TemplatePage({ params }: BasePageParams) {
   const { slug } = await params;
-  const { data, records, sessionToken } =
-    (await fetchQuery<Query>(query, {
+  const { data } =
+    (await queryApi(query, {
       slug,
     })) ?? {};
 
@@ -25,15 +23,13 @@ export default async function TemplatePage({ params }: BasePageParams) {
   const { main } = item.layouts;
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <FullTextCheckRedirect redirectPath={`/items/${slug}/metadata`}>
-        <MainLayout data={main} />
-      </FullTextCheckRedirect>
-    </UpdateClientEnvironment>
+    <FullTextCheckRedirect redirectPath={`/items/${slug}/metadata`}>
+      <MainLayout data={main} />
+    </FullTextCheckRedirect>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageItemTemplateQuery($slug: Slug!) {
     item(slug: $slug) {
       layouts {
@@ -43,4 +39,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

@@ -1,12 +1,10 @@
-import { graphql, useFragment } from "react-relay";
-import { sharedListItemTemplateFragment$key } from "@/relay/sharedListItemTemplateFragment.graphql";
-import { sharedListItemsTemplateFragment$key } from "@/relay/sharedListItemsTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import {
   useSharedInlineFragment,
   useSharedBlockFragment,
 } from "./shared.slots.graphql";
 
-export const listItemsTemplateFragment = graphql`
+export const listItemsTemplateFragment = graphql(`
   fragment sharedListItemsTemplateFragment on TemplateEntityList {
     empty
     count
@@ -45,10 +43,10 @@ export const listItemsTemplateFragment = graphql`
       }
     }
   }
-`;
+`);
 
 export const useSharedListItemsTemplateFragment = (
-  data?: sharedListItemsTemplateFragment$key | null,
+  data?: FragmentType<typeof listItemsTemplateFragment> | null,
 ) => {
   const list = useFragment(listItemsTemplateFragment, data);
   const { listItemLayouts, empty, count, depths } = list ?? {};
@@ -63,7 +61,7 @@ export const useSharedListItemsTemplateFragment = (
   return { listItemLayouts, empty, count, treeDepth };
 };
 
-export const listItemTemplateFragment = graphql`
+export const listItemTemplateFragment = graphql(`
   fragment sharedListItemTemplateFragment on ListItemTemplateInstance {
     definition {
       seeAllOrderingIdentifier
@@ -177,10 +175,10 @@ export const listItemTemplateFragment = graphql`
       }
     }
   }
-`;
+`);
 
 export const useSharedListItemTemplateFragment = (
-  data?: sharedListItemTemplateFragment$key | null,
+  data?: FragmentType<typeof listItemTemplateFragment> | null,
 ) => {
   const template = useFragment(listItemTemplateFragment, data);
   const { slots, entity, definition } = template ?? {};

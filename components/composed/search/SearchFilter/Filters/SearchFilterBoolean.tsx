@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useFormContext } from "react-hook-form";
 import { Checkbox } from "@/components/forms";
-import { SearchFilterBooleanFragment$key } from "@/relay/SearchFilterBooleanFragment.graphql";
 
 export default function SearchFilterBoolean({ data }: Props) {
   const filter = useFragment(fragment, data);
@@ -19,10 +18,10 @@ export default function SearchFilterBoolean({ data }: Props) {
 }
 
 interface Props {
-  data: SearchFilterBooleanFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchFilterBooleanFragment on SearchableProperty {
     label
     description
@@ -31,4 +30,4 @@ const fragment = graphql`
     # when calling the results field.
     searchOperators
   }
-`;
+`);

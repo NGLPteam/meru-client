@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import NamedLink from "@/components/atomic/links/NamedLink";
-import { ContributorFragment$key } from "@/relay/ContributorFragment.graphql";
 import ContributorName from "@/components/composed/contributor/ContributorName";
 import ContributorAvatar from "@/components/composed/contributor/ContributorAvatar";
 import DotList from "@/components/atomic/DotList";
@@ -11,7 +10,7 @@ export default function Contributor({
   data,
   backParams,
 }: {
-  data?: ContributorFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   backParams?: URLSearchParams;
   slug?: string | null;
 }) {
@@ -56,7 +55,7 @@ export default function Contributor({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributorFragment on Attribution {
     roles {
       identifier
@@ -72,4 +71,4 @@ const fragment = graphql`
       ...ContributorNameFragment
     }
   }
-`;
+`);

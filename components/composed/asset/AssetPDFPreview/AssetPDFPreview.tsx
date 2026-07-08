@@ -3,10 +3,9 @@
 import "@/lib/pdfsupport";
 import { useState, useMemo, useCallback } from "react";
 import { Document, Page } from "react-pdf";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useIsMounted from "@/hooks/useIsMounted";
 import { LoadingBlock } from "@/components/atomic";
-import { AssetPDFPreviewFragment$key } from "@/relay/AssetPDFPreviewFragment.graphql";
 import AssetPDFPage from "../AssetPDFPage";
 
 export default function AssetPDFPreview({ data }: Props) {
@@ -42,13 +41,13 @@ export default function AssetPDFPreview({ data }: Props) {
 }
 
 type Props = {
-  data?: AssetPDFPreviewFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AssetPDFPreviewFragment on Asset {
     ... on AssetPDF {
       downloadUrl
     }
   }
-`;
+`);

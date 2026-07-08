@@ -1,10 +1,9 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import { Dropdown, Markdown, NamedLink } from "@/components/atomic";
 import { getRouteByEntityType } from "@/helpers";
-import { BreadcrumbsFragment$key } from "@/relay/BreadcrumbsFragment.graphql";
 import BreadcrumbLink from "./BreadcrumbLink";
 import styles from "./Breadcrumbs.module.css";
 
@@ -93,10 +92,10 @@ export default function Breadcrumbs({ data }: Props) {
 }
 
 interface Props {
-  data?: BreadcrumbsFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-export const fragment = graphql`
+export const fragment = graphql(`
   fragment BreadcrumbsFragment on Entity {
     __typename
     title
@@ -109,4 +108,4 @@ export const fragment = graphql`
       slug
     }
   }
-`;
+`);

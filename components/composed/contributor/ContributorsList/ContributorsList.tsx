@@ -1,9 +1,8 @@
 import { useMemo } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import useWindowSize from "@/hooks/useWindowSize";
 import NamedLink from "@/components/atomic/links/NamedLink";
-import { ContributorsListFragment$key } from "@/relay/ContributorsListFragment.graphql";
 import ContributorName from "../ContributorName";
 import styles from "./ContributorsList.module.css";
 
@@ -73,7 +72,7 @@ export default function ContributorsList({
 }
 
 interface Props {
-  data?: ContributorsListFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   label?: string;
   className?: string;
   /** Pass this in to add the parent item's slug to the contributor route */
@@ -85,7 +84,7 @@ interface Props {
   noLinks?: boolean;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributorsListFragment on Entity {
     ... on Item {
       attributions {
@@ -110,4 +109,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

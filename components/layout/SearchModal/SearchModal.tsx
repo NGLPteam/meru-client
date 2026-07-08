@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import SearchBar from "@/components/composed/search/SearchBar";
-import { SearchModalFragment$key } from "@/relay/SearchModalFragment.graphql";
 import Modal from "../BaseModal";
 import SearchModalContent from "./SearchModalContent";
 import styles from "./SearchModal.module.css";
@@ -61,10 +60,10 @@ export default function SearchModal({ dialog, data }: Props) {
 }
 
 interface Props extends Pick<ModalProps, "dialog"> {
-  data?: SearchModalFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchModalFragment on Entity {
     __typename
     ... on Sluggable {
@@ -85,4 +84,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

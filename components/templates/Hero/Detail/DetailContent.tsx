@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import ContributorsList from "@/components/composed/contributor/ContributorsList";
-import { DetailContentFragment$key } from "@/relay/DetailContentFragment.graphql";
 import {
   useSharedBlockFragment,
   useSharedInlineFragment,
@@ -11,7 +10,7 @@ import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import styles from "./Detail.module.css";
 
 type DetailContentProps = {
-  data?: DetailContentFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
 export default function Content({ data }: DetailContentProps) {
@@ -74,7 +73,7 @@ export default function Content({ data }: DetailContentProps) {
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DetailContentFragment on HeroTemplateInstance {
     entity {
       ... on Item {
@@ -106,4 +105,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

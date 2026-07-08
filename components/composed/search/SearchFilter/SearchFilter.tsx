@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { SearchFilterFragment$key } from "@/relay/SearchFilterFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchFilterSelect from "./Filters/SearchFilterSelect";
 import SearchFilterInput from "./Filters/SearchFilterInput";
 import SearchFilterDate from "./Filters/SearchFilterDate";
@@ -28,10 +27,10 @@ export default function SearchFilter({ data }: Props) {
 }
 
 interface Props {
-  data: SearchFilterFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchFilterFragment on SearchableProperty {
     ... on ScalarProperty {
       type
@@ -43,4 +42,4 @@ const fragment = graphql`
     ...SearchFilterNumberFragment
     ...SearchFilterBooleanFragment
   }
-`;
+`);

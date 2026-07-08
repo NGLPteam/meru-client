@@ -1,10 +1,8 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import EntityPageLayout from "@/components/composed/entity/EntityPageLayout";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesItemPageQuery as Query } from "@/relay/pageTemplatesItemPageQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export async function generateStaticParams() {
   return [];
@@ -13,7 +11,7 @@ export async function generateStaticParams() {
 export default async function ItemPagePage({ params }: BasePageParams) {
   const { slug, page } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
     pageSlug: page,
   });
@@ -22,14 +20,10 @@ export default async function ItemPagePage({ params }: BasePageParams) {
 
   if (!item) return notFound();
 
-  return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <EntityPageLayout data={item.page} />
-    </UpdateClientEnvironment>
-  );
+  return <EntityPageLayout data={item.page} />;
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesItemPageQuery($slug: Slug!, $pageSlug: String!) {
     item(slug: $slug) {
       page(slug: $pageSlug) {
@@ -37,4 +31,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

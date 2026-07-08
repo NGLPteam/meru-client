@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Button } from "@/components/atomic";
-import { AssetDownloadButtonFragment$key } from "@/relay/AssetDownloadButtonFragment.graphql";
 
 /* Simple download text and icon,
  * style can be changed using the className property */
@@ -32,14 +31,14 @@ export default function AssetDownloadButton({ data, children }: Props) {
 
 interface Props {
   children?: React.ReactNode;
-  data?: AssetDownloadButtonFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AssetDownloadButtonFragment on Asset {
     name
     downloadUrl
     kind
     contentType
   }
-`;
+`);

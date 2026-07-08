@@ -1,15 +1,14 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Trans, useTranslation } from "react-i18next";
 import { useSearchParams } from "next/navigation";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 import { NoContent } from "@/components/layout";
 import { LoadingBlock, Pagination } from "@/components/atomic";
-import { SearchResultsFragment$key } from "@/relay/SearchResultsFragment.graphql";
 import EntitySummary from "@/components/composed/entity/EntitySummary";
 import styles from "./SearchResults.module.css";
 
 export default function SearchResults({ data, isLoading }: Props) {
-  const results = useFragment<SearchResultsFragment$key>(fragment, data);
+  const results = useFragment<FragmentType<typeof fragment>>(fragment, data);
 
   const { t } = useTranslation();
 
@@ -53,11 +52,11 @@ export default function SearchResults({ data, isLoading }: Props) {
 }
 
 interface Props {
-  data?: SearchResultsFragment$key;
+  data?: FragmentType<typeof fragment>;
   isLoading?: boolean;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchResultsFragment on SearchResultConnection {
     nodes {
       entity {
@@ -72,4 +71,4 @@ const fragment = graphql`
       ...PaginationFragment
     }
   }
-`;
+`);

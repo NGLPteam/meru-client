@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { CoverCardListFragment$key } from "@/relay/CoverCardListFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import CoverPlaceholder from "@/components/atomic/images/CoverImage/CoverPlaceholder";
 import styles from "./Card.module.css";
 
@@ -37,7 +36,7 @@ export default function Cover({
 }
 
 interface ImageProps {
-  data?: CoverCardListFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   loading?: "eager" | "lazy";
 }
 
@@ -45,12 +44,12 @@ interface ImageProps {
 // generate the placeholder
 interface PlaceholderProps {
   /* Image fragment */
-  data?: CoverCardListFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   title: string;
   id: string;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CoverCardListFragment on ImageAttachment {
     image: medium {
       webp {
@@ -61,4 +60,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

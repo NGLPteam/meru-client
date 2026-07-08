@@ -1,8 +1,7 @@
 import { Fragment } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/forms";
-import { SearchFilterNumberFragment$key } from "@/relay/SearchFilterNumberFragment.graphql";
 
 export default function SearchFilterNumber({ data }: Props) {
   const filter = useFragment(fragment, data);
@@ -28,10 +27,10 @@ export default function SearchFilterNumber({ data }: Props) {
 }
 
 interface Props {
-  data: SearchFilterNumberFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment SearchFilterNumberFragment on SearchableProperty {
     label
     description
@@ -40,4 +39,4 @@ const fragment = graphql`
     # when calling the results field.
     searchOperators
   }
-`;
+`);

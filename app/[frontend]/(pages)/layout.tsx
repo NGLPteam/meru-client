@@ -1,14 +1,12 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { PropsWithChildren } from "react";
 import { Metadata } from "next";
 import { draftMode } from "next/headers";
 import getStaticGlobalContextData from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
 import { GlobalStaticContextProvider } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import RelayEnvironmentProvider from "@/lib/relay/RelayClientEnvProvider";
-import { layoutAllPagesQuery as Query } from "@/relay/layoutAllPagesQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
+import UrqlProvider from "@/lib/api/UrqlProvider";
 import { ViewerContextProvider } from "@/contexts/ViewerContext";
 import AppBody from "@/components/global/AppBody";
 import { BasePageParams } from "@/types/page";
@@ -28,31 +26,26 @@ export default async function PageLayout({ children }: PropsWithChildren) {
 
   const { isEnabled: draftModeEnabled } = await draftMode();
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {});
+  const { data } = await queryApi(query, {});
 
   return (
     <GlobalStaticContextProvider globalData={globalData}>
-      <RelayEnvironmentProvider>
-        <ViewerContextProvider isPreview={draftModeEnabled}>
-          <UpdateClientEnvironment
-            records={records}
-            sessionToken={sessionToken}
-          >
-            <ProgressBarProvider>
-              <ProgressBar />
-              <AppBody data={data} draftModeEnabled={draftModeEnabled}>
-                {children}
-              </AppBody>
-            </ProgressBarProvider>
-          </UpdateClientEnvironment>
-        </ViewerContextProvider>
-      </RelayEnvironmentProvider>
+      <ViewerContextProvider isPreview={draftModeEnabled}>
+        <UrqlProvider>
+          <ProgressBarProvider>
+            <ProgressBar />
+            <AppBody data={data} draftModeEnabled={draftModeEnabled}>
+              {children}
+            </AppBody>
+          </ProgressBarProvider>
+        </UrqlProvider>
+      </ViewerContextProvider>
     </GlobalStaticContextProvider>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query layoutAllPagesQuery {
     ...AppBodyFragment
   }
-`;
+`);

@@ -1,14 +1,13 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
-import { EntityNavigationTemplateFragment$key } from "@/relay/EntityNavigationTemplateFragment.graphql";
 import NavigationTabs from "./NavigationTabs";
 
 export default function EntityNavigationTemplate({
   data,
 }: {
-  data?: EntityNavigationTemplateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const { template } = useFragment(fragment, data) ?? {};
 
@@ -21,7 +20,7 @@ export default function EntityNavigationTemplate({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntityNavigationTemplateFragment on NavigationLayoutInstance {
     template {
       definition {
@@ -30,4 +29,4 @@ const fragment = graphql`
       ...NavigationTabsFragment
     }
   }
-`;
+`);

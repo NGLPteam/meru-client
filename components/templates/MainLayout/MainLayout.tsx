@@ -1,13 +1,14 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
+import {
+  graphql,
+  useFragment,
+  type FragmentType,
+  type DocumentType,
+} from "@/lib/api/gql";
 import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
 import Container from "@/components/layout/Container";
 import TemplateFactory from "@/components/templates/Factory";
-import {
-  MainLayoutFragment$key,
-  MainLayoutFragment$data,
-} from "@/relay/MainLayoutFragment.graphql";
 import type { HeroBackground } from "@/types/graphql-schema";
 import styles from "./MainLayout.module.css";
 
@@ -16,7 +17,7 @@ export default function MainLayout({
   computedBgStart,
   fallback = false,
 }: {
-  data?: MainLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   computedBgStart?: HeroBackground;
   fallback?: boolean;
 }) {
@@ -52,10 +53,10 @@ export default function MainLayout({
   );
 }
 
-type Template = MainLayoutFragment$data["templates"][number];
+type Template = DocumentType<typeof fragment>["templates"][number];
 type SiblingTemplateData = NonNullable<Template["nextSiblings"]>[number];
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment MainLayoutFragment on MainLayoutInstance {
     allHidden
     entity {
@@ -81,7 +82,7 @@ const fragment = graphql`
       ...FactoryTemplatesFragment
     }
   }
-`;
+`);
 
 const generateBgMap = (
   startColor: HeroBackground,

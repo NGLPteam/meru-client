@@ -1,8 +1,7 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { NamedLink } from "@/components/atomic";
 import Markdown from "@/components/atomic/Markdown";
-import { InstanceCommunitySummaryFragment$key } from "@/relay/InstanceCommunitySummaryFragment.graphql";
 import { generateSrcSet } from "@/helpers/generateSrcSet";
 import styles from "./InstanceCommunitySummary.module.css";
 
@@ -78,10 +77,10 @@ export default function InstanceCommunitySummary({ data }: Props) {
 }
 
 type Props = {
-  data: InstanceCommunitySummaryFragment$key;
+  data: FragmentType<typeof fragment>;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment InstanceCommunitySummaryFragment on Community {
     slug
     title
@@ -125,4 +124,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

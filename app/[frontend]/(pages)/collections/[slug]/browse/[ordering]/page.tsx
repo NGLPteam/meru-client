@@ -1,12 +1,10 @@
 import { Suspense, ComponentProps } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { OrderingPageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesBrowseCollectionQuery as Query } from "@/relay/pageTemplatesBrowseCollectionQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 type ContextType = ComponentProps<typeof EntityOrderingLayout>["showContext"];
 
@@ -19,7 +17,7 @@ export default async function CollectionBrowsePage({
   const { slug, ordering } = await params;
   const { context, page } = await searchParams;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     identifier: ordering,
     page: parseInt(page) || 1,
     slug,
@@ -30,18 +28,13 @@ export default async function CollectionBrowsePage({
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <Suspense fallback={<LoadingBlock />}>
-        <EntityOrderingLayout
-          data={collection.ordering}
-          showContext={context}
-        />
-      </Suspense>
-    </UpdateClientEnvironment>
+    <Suspense fallback={<LoadingBlock />}>
+      <EntityOrderingLayout data={collection.ordering} showContext={context} />
+    </Suspense>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesBrowseCollectionQuery(
     $slug: Slug!
     $identifier: String!
@@ -54,4 +47,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

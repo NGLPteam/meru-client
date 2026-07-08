@@ -1,10 +1,8 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { redirect, notFound } from "next/navigation";
 import InstanceCommunities from "@/components/composed/instance/InstanceCommunities";
 import InstanceHero from "@/components/composed/instance/InstanceHero";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
-import { pageInstanceContentLayoutQuery as Query } from "@/relay/pageInstanceContentLayoutQuery.graphql";
+import queryApi from "@/lib/api/queryApi";
 import SetCommunity from "@/components/global/SetCommunity";
 
 export async function generateStaticParams() {
@@ -12,11 +10,7 @@ export async function generateStaticParams() {
 }
 
 export default async function HomePage() {
-  const {
-    data: instance,
-    records,
-    sessionToken,
-  } = await fetchQuery<Query>(query, {});
+  const { data: instance } = await queryApi(query, {});
 
   const total = instance?.communities?.pageInfo?.totalCount ?? 0;
   const firstSlug = instance?.communities?.edges[0]?.node?.slug ?? null;
@@ -29,16 +23,14 @@ export default async function HomePage() {
   if (!instance) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <SetCommunity>
-        <InstanceHero data={instance} />
-        <InstanceCommunities data={instance.communities} />
-      </SetCommunity>
-    </UpdateClientEnvironment>
+    <SetCommunity>
+      <InstanceHero data={instance} />
+      <InstanceCommunities data={instance.communities} />
+    </SetCommunity>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageInstanceContentLayoutQuery {
     communities(order: POSITION_ASCENDING) {
       edges {
@@ -53,4 +45,4 @@ const query = graphql`
     }
     ...InstanceHeroFragment
   }
-`;
+`);

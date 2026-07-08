@@ -1,11 +1,10 @@
-import { graphql, readInlineData } from "relay-runtime";
-import { getCollectionsSitemapFragment$key } from "@/relay/getCollectionsSitemapFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import EXTERNAL_DATA_URL from "./externalDataUrl";
 
 export default function getCollectionsSitemap(
-  data: getCollectionsSitemapFragment$key,
+  data: FragmentType<typeof fragment>,
 ) {
-  const entity = readInlineData(fragment, data);
+  const entity = useFragment(fragment, data);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -23,12 +22,12 @@ export default function getCollectionsSitemap(
   `;
 }
 
-const fragment = graphql`
-  fragment getCollectionsSitemapFragment on CollectionConnection @inline {
+const fragment = graphql(`
+  fragment getCollectionsSitemapFragment on CollectionConnection {
     nodes {
       __typename
       slug
       updatedAt
     }
   }
-`;
+`);

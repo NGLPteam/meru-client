@@ -1,11 +1,10 @@
-import { readInlineData, graphql } from "relay-runtime";
-import { getEntityDisplayNumberFragment$key } from "@/relay/getEntityDisplayNumberFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import getEntityVolumeNumber from "./getEntityVolumeNumber";
 
 export default function getEntityDisplayNumber(
-  data: getEntityDisplayNumberFragment$key,
+  data: FragmentType<typeof fragment>,
 ) {
-  const entity = readInlineData(fragment, data);
+  const entity = useFragment(fragment, data);
 
   const vol = getEntityVolumeNumber(entity);
 
@@ -14,8 +13,8 @@ export default function getEntityDisplayNumber(
   return vol ? `Vol. ${vol}, No. ${number}` : number ? `No. ${number}` : null;
 }
 
-const fragment = graphql`
-  fragment getEntityDisplayNumberFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getEntityDisplayNumberFragment on Entity {
     ... on Collection {
       issueNumber: schemaProperty(fullPath: "number") {
         ... on StringProperty {
@@ -25,4 +24,4 @@ const fragment = graphql`
       ...getEntityVolumeNumberFragment
     }
   }
-`;
+`);

@@ -1,12 +1,10 @@
 "use client";
 
-import { useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
-import { graphql } from "react-relay";
 import useIsMounted from "@/hooks/useIsMounted";
 import { LoadingBlock, Markdown } from "@/components/atomic";
 import Container from "@/components/layout/Container";
-import { CommunityPageLayoutFragment$key } from "@/relay/CommunityPageLayoutFragment.graphql";
 import { generateSrcSet, sizes } from "@/helpers/generateSrcSet";
 import styles from "./CommunityPageLayout.module.css";
 
@@ -53,10 +51,10 @@ export default function CommunityPageLayout({ data }: Props) {
 }
 
 interface Props {
-  data?: CommunityPageLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityPageLayoutFragment on Page {
     title
     body
@@ -89,4 +87,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,7 +1,6 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
-import { CollectionContributionsBlockFragment$key } from "@/relay/CollectionContributionsBlockFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Contributor from "@/components/templates/Contributors/Contributor";
 import BackButton from "@/components/layout/BrowseListLayout/BackButton";
 import Container from "@/components/layout/Container";
@@ -53,14 +52,14 @@ const ContributionsBlock = ({
 };
 
 interface Props extends BaseProps {
-  data?: CollectionContributionsBlockFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   /** Filter by a role, example: author */
   filterRole?: string;
 }
 
 export default ContributionsBlock;
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CollectionContributionsBlockFragment on Collection {
     ...BackButtonFragment
 
@@ -77,4 +76,4 @@ const fragment = graphql`
       ...ContributorFragment
     }
   }
-`;
+`);

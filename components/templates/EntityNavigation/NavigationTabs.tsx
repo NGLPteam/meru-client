@@ -1,9 +1,8 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useParams, usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import NamedLink from "@/components/atomic/links/NamedLink";
-import { NavigationTabsFragment$key } from "@/relay/NavigationTabsFragment.graphql";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import type { TemplateSlotInlineInstance } from "@/types/graphql-schema";
 import { getRouteByEntityType } from "@/helpers/routes";
@@ -13,7 +12,7 @@ import styles from "./EntityNavigation.module.css";
 export default function NavigationTabs({
   data,
 }: {
-  data?: NavigationTabsFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const { slug } = useParams();
   const pathname = usePathname();
@@ -84,7 +83,7 @@ export default function NavigationTabs({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment NavigationTabsFragment on NavigationTemplateInstance {
     entity {
       ... on Item {
@@ -155,4 +154,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

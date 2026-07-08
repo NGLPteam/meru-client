@@ -1,12 +1,10 @@
 import { Suspense } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import EntityPageLayout from "@/components/composed/entity/EntityPageLayout";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesCollectionPageQuery as Query } from "@/relay/pageTemplatesCollectionPageQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export async function generateStaticParams() {
   return [];
@@ -15,7 +13,7 @@ export async function generateStaticParams() {
 export default async function CollectionPagePage({ params }: BasePageParams) {
   const { slug, page: pageSlug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
     pageSlug,
   });
@@ -25,15 +23,13 @@ export default async function CollectionPagePage({ params }: BasePageParams) {
   if (!collection) return notFound();
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <Suspense fallback={<LoadingBlock />}>
-        <EntityPageLayout data={collection.page} />
-      </Suspense>
-    </UpdateClientEnvironment>
+    <Suspense fallback={<LoadingBlock />}>
+      <EntityPageLayout data={collection.page} />
+    </Suspense>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesCollectionPageQuery($slug: Slug!, $pageSlug: String!) {
     collection(slug: $slug) {
       page(slug: $pageSlug) {
@@ -41,4 +37,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

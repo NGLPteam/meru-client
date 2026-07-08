@@ -1,9 +1,7 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import MainLayout from "@/components/templates/MainLayout";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageCollectionTemplateQuery as Query } from "@/relay/pageCollectionTemplateQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import { BasePageParams } from "@/types/page";
 
 export async function generateStaticParams() {
@@ -13,10 +11,7 @@ export async function generateStaticParams() {
 export default async function TemplatePage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } =
-    (await fetchQuery<Query>(query, {
-      slug,
-    })) ?? {};
+  const { data } = (await queryApi(query, { slug })) ?? {};
 
   const { collection } = data ?? {};
 
@@ -27,14 +22,10 @@ export default async function TemplatePage({ params }: BasePageParams) {
   const computedBgStart =
     main?.templates?.[0]?.templateKind === "DETAIL" ? "LIGHT" : undefined;
 
-  return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <MainLayout data={main} computedBgStart={computedBgStart} />
-    </UpdateClientEnvironment>
-  );
+  return <MainLayout data={main} computedBgStart={computedBgStart} />;
 }
 
-const query = graphql`
+const query = graphql(`
   query pageCollectionTemplateQuery($slug: Slug!) {
     collection(slug: $slug) {
       layouts {
@@ -49,4 +40,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

@@ -1,7 +1,6 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
-import { ContributionsBlockFragment$key } from "@/relay/ContributionsBlockFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Contributor from "@/components/templates/Contributors/Contributor";
 import BaseContributionsBlock from "./BaseContributionsBlock";
 
@@ -41,14 +40,14 @@ const ContributionsBlock = ({
 };
 
 interface Props extends BaseProps {
-  data?: ContributionsBlockFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   /** Filter by a role, example: author */
   filterRole?: string;
 }
 
 export default ContributionsBlock;
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributionsBlockFragment on Item {
     attributions {
       slug
@@ -63,4 +62,4 @@ const fragment = graphql`
       ...ContributorFragment
     }
   }
-`;
+`);

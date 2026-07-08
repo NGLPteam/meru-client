@@ -1,6 +1,5 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { PaginationFragment$key } from "@/relay/PaginationFragment.graphql";
 import BasePagination from "./BasePagination";
 
 export default function Pagination({ data, onPageChange }: Props) {
@@ -28,13 +27,13 @@ export default function Pagination({ data, onPageChange }: Props) {
 }
 
 interface Props {
-  data?: PaginationFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   onPageChange?: (val: Record<string, string | number>) => void;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment PaginationFragment on PageInfo {
     page
     pageCount
   }
-`;
+`);

@@ -1,9 +1,8 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { NamedLink } from "@/components/atomic";
 import { getRouteByEntityType } from "@/helpers";
 import { useSharedListItemTemplateFragment } from "@/components/templates/shared/shared.listItems.graphql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
-import { BrowseTreeItemFragment$key } from "@/relay/BrowseTreeItemFragment.graphql";
 import DotList from "@/components/atomic/DotList";
 import styles from "./BrowseTreeItem.module.css";
 
@@ -54,10 +53,10 @@ export default function BrowseTreeItem({ data }: Props) {
 }
 
 interface Props {
-  data: BrowseTreeItemFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment BrowseTreeItemFragment on OrderingEntry {
     # How much indentation should be applied
     treeDepth
@@ -77,4 +76,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

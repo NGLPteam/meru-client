@@ -1,12 +1,11 @@
 "use server";
 
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { cache } from "react";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { fetchPermalinkQuery as Query } from "@/relay/fetchPermalinkQuery.graphql";
+import queryApi from "@/lib/api/queryApi";
 
 const fetchPermalinkRequest = cache(async (permalink: string) => {
-  const { data } = await fetchQuery<Query>(query, { uri: permalink });
+  const { data } = await queryApi(query, { uri: permalink });
 
   const { kind, permalinkableSlug } = data?.permalinkByUri ?? {};
 
@@ -17,11 +16,11 @@ export async function fetchPermalink(permalink: string) {
   return fetchPermalinkRequest(permalink);
 }
 
-const query = graphql`
+const query = graphql(`
   query fetchPermalinkQuery($uri: String!) {
     permalinkByUri(uri: $uri) {
       kind
       permalinkableSlug
     }
   }
-`;
+`);

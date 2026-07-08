@@ -1,17 +1,18 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment } from "react-relay";
+import {
+  graphql,
+  useFragment,
+  type FragmentType,
+  type DocumentType,
+} from "@/lib/api/gql";
 import useRoutePageSlug from "@/hooks/useRoutePageSlug";
 import { NamedLink, Accordion, NavMenuLink, Link } from "@/components/atomic";
 import NavDropdown from "@/components/composed/entity/EntityNavBar/EntityNavList/Dropdown";
-import {
-  CommunityNavListContentFragment$key,
-  CommunityNavListContentFragment$data,
-} from "@/__generated__/CommunityNavListContentFragment.graphql";
 
 interface Props {
   condensed?: boolean;
   mobile?: boolean;
-  data: CommunityNavListContentFragment$key;
+  data: FragmentType<typeof fragment>;
 }
 
 export default function CommunityNavList({
@@ -78,9 +79,9 @@ export default function CommunityNavList({
 }
 
 type Ordering =
-  CommunityNavListContentFragment$data["orderings"]["nodes"][number];
+  DocumentType<typeof fragment>["orderings"]["nodes"][number];
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityNavListContentFragment on Community {
     slug
     orderings(availability: ENABLED) {
@@ -98,4 +99,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

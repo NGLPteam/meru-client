@@ -1,14 +1,13 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import { graphql, useFragment } from "react-relay";
-import { ProcessingCheckFragment$key } from "@/relay/ProcessingCheckFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
 import EmptyMessage from "./EmptyMessage";
 import styles from "./ProcessingCheck.module.css";
 
 type Props = PropsWithChildren & {
-  data?: ProcessingCheckFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   entityType: "item" | "collection" | "community";
 };
 
@@ -26,7 +25,7 @@ export default function ProcessingCheck({ data, children, entityType }: Props) {
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ProcessingCheckFragment on EntityLayouts {
     main {
       allHidden
@@ -37,4 +36,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

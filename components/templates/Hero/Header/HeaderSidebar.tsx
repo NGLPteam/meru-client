@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
-import { HeaderSidebarFragment$key } from "@/relay/HeaderSidebarFragment.graphql";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import DOI from "@/components/atomic/properties/DOI";
 import DownloadCount from "@/components/atomic/properties/DownloadCount";
@@ -11,7 +10,7 @@ import styles from "./Header.module.css";
 export default function Sidebar({
   data,
 }: {
-  data?: HeaderSidebarFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const template = useFragment(fragment, data);
 
@@ -48,7 +47,7 @@ export default function Sidebar({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment HeaderSidebarFragment on HeroTemplateInstance {
     entity {
       ... on HasDOI {
@@ -82,4 +81,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

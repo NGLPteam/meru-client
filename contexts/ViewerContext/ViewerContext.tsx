@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { setToken } from "@/lib/auth/token";
+import { setClientToken } from "@/lib/api/clientToken";
 
 export interface ViewerContextProps {
   isAuthenticated: boolean;
@@ -52,7 +52,7 @@ function ViewerContextProvider({ children, isPreview }: Props) {
 
         const { accessToken, ...viewerData } = data;
 
-        if (accessToken) setToken(accessToken);
+        if (accessToken) setClientToken(accessToken);
 
         setViewer((prev) => ({ ...prev, ...viewerData }));
       })

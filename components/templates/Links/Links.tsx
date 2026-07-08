@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { LinksTemplateFragment$key } from "@/relay/LinksTemplateFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import type { HeroBackground } from "@/types/graphql-schema";
 import {
   CompactListBlock,
@@ -23,7 +22,7 @@ export default function Links({
   data,
   bgOverride,
 }: {
-  data: LinksTemplateFragment$key;
+  data: FragmentType<typeof fragment>;
   bgOverride?: HeroBackground | null;
 }) {
   const template = useFragment(fragment, data);
@@ -40,7 +39,7 @@ export default function Links({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment LinksTemplateFragment on AnyMainTemplateInstance {
     ... on LinkListTemplateInstance {
       __typename
@@ -50,4 +49,4 @@ const fragment = graphql`
     }
     ...sharedListTemplateFragment
   }
-`;
+`);

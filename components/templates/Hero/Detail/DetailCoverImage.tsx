@@ -1,12 +1,11 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import CoverImage from "@/components/atomic/images/CoverImage";
-import { DetailCoverImageFragment$key } from "@/relay/DetailCoverImageFragment.graphql";
 import { getThumbWithFallback } from "@/helpers";
 
 export default function DetailCoverImage({
   data,
 }: {
-  data?: DetailCoverImageFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const entity = useFragment(fragment, data);
 
@@ -25,7 +24,7 @@ export default function DetailCoverImage({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DetailCoverImageFragment on Entity {
     ... on Collection {
       id
@@ -38,4 +37,4 @@ const fragment = graphql`
       ...getThumbWithFallbackFragment
     }
   }
-`;
+`);

@@ -1,12 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
-import {
-  InstanceCommunitiesFragment$data,
-  InstanceCommunitiesFragment$key,
-} from "@/relay/InstanceCommunitiesFragment.graphql";
 import InstanceCommunitySummary from "../InstanceCommunitySummary/InstanceCommunitySummary";
 import styles from "./InstanceCommunities.module.css";
 
@@ -22,7 +18,7 @@ export default function InstanceCommunities({ data }: Props) {
           {t("layouts.instance_communities_header")}
         </h2>
         <ul className={styles.list}>
-          {communities.edges.map(({ node }: Node) => (
+          {communities.edges.map(({ node }) => (
             <li key={node.slug}>
               <InstanceCommunitySummary data={node} />
             </li>
@@ -33,13 +29,11 @@ export default function InstanceCommunities({ data }: Props) {
   ) : null;
 }
 
-type Node = InstanceCommunitiesFragment$data["edges"][number];
-
 type Props = {
-  data: InstanceCommunitiesFragment$key;
+  data: FragmentType<typeof fragment>;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment InstanceCommunitiesFragment on CommunityConnection {
     edges {
       node {
@@ -48,4 +42,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

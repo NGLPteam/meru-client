@@ -1,9 +1,8 @@
-import { readInlineData, graphql } from "relay-runtime";
-import { getEntitySitemapFragment$key } from "@/relay/getEntitySitemapFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import EXTERNAL_DATA_URL from "./externalDataUrl";
 
-export default function getEntitySitemap(data: getEntitySitemapFragment$key) {
-  const entity = readInlineData(fragment, data);
+export default function getEntitySitemap(data: FragmentType<typeof fragment>) {
+  const entity = useFragment(fragment, data);
 
   if (entity.__typename === "%other") return "";
 
@@ -50,8 +49,8 @@ export default function getEntitySitemap(data: getEntitySitemapFragment$key) {
   `;
 }
 
-const fragment = graphql`
-  fragment getEntitySitemapFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getEntitySitemapFragment on Entity {
     __typename
 
     ... on Community {
@@ -90,4 +89,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

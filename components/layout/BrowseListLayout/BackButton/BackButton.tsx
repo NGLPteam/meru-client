@@ -1,11 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityType } from "@/helpers";
 import { NamedLink, Button } from "@/components/atomic";
-import { BackButtonFragment$key } from "@/relay/BackButtonFragment.graphql";
 import styles from "./BackButton.module.css";
 
-export default function BackButton({ data }: { data: BackButtonFragment$key }) {
+export default function BackButton({
+  data,
+}: {
+  data: FragmentType<typeof fragment>;
+}) {
   const { t } = useTranslation();
 
   const entity = useFragment(fragment, data);
@@ -26,7 +29,7 @@ export default function BackButton({ data }: { data: BackButtonFragment$key }) {
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment BackButtonFragment on Entity {
     __typename
     slug
@@ -34,4 +37,4 @@ const fragment = graphql`
       name
     }
   }
-`;
+`);

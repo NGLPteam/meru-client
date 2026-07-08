@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import {
   useSharedInlineFragment,
@@ -8,7 +8,6 @@ import {
 import Container from "@/components/layout/Container";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
-import { ColumnsDetailFragment$key } from "@/relay/ColumnsDetailFragment.graphql";
 import type { HeroBackground } from "@/types/graphql-schema";
 import styles from "./Columns.module.css";
 
@@ -16,7 +15,7 @@ export default function Columns({
   data,
   bgColor,
 }: PropsWithChildren & {
-  data?: ColumnsDetailFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   bgColor?: HeroBackground | null;
 }) {
   const { t } = useTranslation();
@@ -56,7 +55,7 @@ export default function Columns({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ColumnsDetailFragment on DetailTemplateInstance {
     slots {
       header {
@@ -76,4 +75,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

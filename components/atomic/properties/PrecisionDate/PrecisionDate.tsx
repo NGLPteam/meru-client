@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import { getPrecisionDateDisplay } from "@/helpers";
-import { PrecisionDateFragment$key } from "@/relay/PrecisionDateFragment.graphql";
 
 export default function PrecisionDate({ data, label }: Props) {
   const date = useFragment(fragment, data);
@@ -16,13 +15,13 @@ export default function PrecisionDate({ data, label }: Props) {
 }
 
 interface Props {
-  data?: PrecisionDateFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   label?: string;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment PrecisionDateFragment on VariablePrecisionDate {
     precision
     value
   }
-`;
+`);

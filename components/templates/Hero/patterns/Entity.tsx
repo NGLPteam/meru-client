@@ -1,8 +1,7 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import Container from "@/components/layout/Container";
 import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar";
-import { EntityHeroHeaderFragment$key } from "@/relay/EntityHeroHeaderFragment.graphql";
 import { getBgClass } from "@/components/templates/helpers/bgColor";
 import HeroDetail from "../Detail";
 import HeroHeader from "../Header";
@@ -11,7 +10,7 @@ import HeroImage from "../Image";
 export default function EntityHeroHeader({
   data,
 }: {
-  data?: EntityHeroHeaderFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const { t } = useTranslation();
 
@@ -63,7 +62,7 @@ export default function EntityHeroHeader({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntityHeroHeaderFragment on HeroLayoutInstance {
     entity {
       ... on Collection {
@@ -104,4 +103,4 @@ const fragment = graphql`
       ...DetailHeroFragment
     }
   }
-`;
+`);

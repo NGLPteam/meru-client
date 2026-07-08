@@ -1,7 +1,6 @@
-import { graphql } from "relay-runtime";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import { graphql } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import type { BasePageParams } from "@/types/page";
-import { collectionMetadataQuery as Query } from "@/relay/collectionMetadataQuery.graphql";
 import { getTruncatedText } from "@/helpers";
 import type { Metadata, ResolvingMetadata } from "next";
 
@@ -14,7 +13,7 @@ export default async function generateCollectionMetadata(
   const { slug } = await props.params;
 
   const { data } =
-    (await fetchQuery<Query>(query, {
+    (await queryApi(query, {
       slug,
     })) ?? {};
 
@@ -57,7 +56,7 @@ export default async function generateCollectionMetadata(
   };
 }
 
-const query = graphql`
+const query = graphql(`
   query collectionMetadataQuery($slug: Slug!) {
     collection(slug: $slug) {
       title
@@ -88,4 +87,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

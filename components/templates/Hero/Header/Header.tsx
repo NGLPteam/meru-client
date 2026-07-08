@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import type { HeroImageLayout } from "@/types/graphql-schema";
-import { HeaderHeroFragment$key } from "@/relay/HeaderHeroFragment.graphql";
 import Alert from "@/components/atomic/Alert";
 import TitleBlock from "./HeaderTitleBlock";
 import Sidebar from "./HeaderSidebar";
@@ -12,7 +11,7 @@ export default function HeroHeader({
   layout,
   hiddenAlert,
 }: {
-  data?: HeaderHeroFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   layout?: HeroImageLayout;
   hiddenAlert?: string;
 }) {
@@ -41,7 +40,7 @@ export default function HeroHeader({
   ) : null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment HeaderHeroFragment on HeroTemplateInstance {
     definition {
       showSplitDisplay
@@ -49,4 +48,4 @@ const fragment = graphql`
     ...HeaderSidebarFragment
     ...HeaderTitleBlockFragment
   }
-`;
+`);

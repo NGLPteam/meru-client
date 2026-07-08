@@ -1,11 +1,10 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@/helpers/dates";
 import { Markdown } from "@/components/atomic";
-import { EntityAnnouncementLayoutFragment$key } from "@/relay/EntityAnnouncementLayoutFragment.graphql";
 import styles from "./EntityAnnouncementLayout.module.css";
 
 export default function EntityAnnouncementLayout({ data }: Props) {
@@ -41,16 +40,16 @@ export default function EntityAnnouncementLayout({ data }: Props) {
 
 interface Props {
   /* Item data */
-  data?: EntityAnnouncementLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   /* Child page content */
   children?: React.ReactNode;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntityAnnouncementLayoutFragment on Announcement {
     header
     body
     publishedOn
     updatedAt
   }
-`;
+`);

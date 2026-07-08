@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useRouteSlug from "@/hooks/useRouteSlug";
 import { FileThumbnail, NamedLink } from "@/components/atomic";
-import { AssetThumbnailFragment$key } from "@/relay/AssetThumbnailFragment.graphql";
 import styles from "./AssetThumbnail.module.css";
 
 export default function AssetThumbnail({ data }: Props) {
@@ -32,10 +31,10 @@ export default function AssetThumbnail({ data }: Props) {
 }
 
 interface Props {
-  data?: AssetThumbnailFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AssetThumbnailFragment on Asset {
     kind
     slug
@@ -50,4 +49,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,6 +1,6 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { useParams } from "next/navigation";
 import { formatDate } from "@/helpers/dates";
@@ -11,7 +11,6 @@ import {
   DownloadLink,
   NamedLink,
 } from "@/components/atomic";
-import { AssetDetailBlockFragment$key } from "@/relay/AssetDetailBlockFragment.graphql";
 import AssetPDFPreview from "../AssetPDFPreview";
 import styles from "./AssetDetailBlock.module.css";
 
@@ -60,10 +59,10 @@ export default function AssetDetailBlock({ data }: Props) {
 }
 
 interface Props {
-  data?: AssetDetailBlockFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment AssetDetailBlockFragment on Node {
     ... on Asset {
       slug
@@ -83,4 +82,4 @@ const fragment = graphql`
       updatedAt
     }
   }
-`;
+`);

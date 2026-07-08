@@ -2,9 +2,8 @@
 
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { BackButton, NamedLink } from "@/components/atomic";
-import { ContributorDetailNavFragment$key } from "@/relay/ContributorDetailNavFragment.graphql";
 import styles from "./ContributorDetailNav.module.css";
 
 export default function ContributorDetailNav({ data }: Props) {
@@ -31,10 +30,10 @@ export default function ContributorDetailNav({ data }: Props) {
 }
 
 interface Props {
-  data?: ContributorDetailNavFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment ContributorDetailNavFragment on Entity {
     __typename
 
@@ -46,4 +45,4 @@ const fragment = graphql`
       slug
     }
   }
-`;
+`);

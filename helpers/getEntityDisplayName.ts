@@ -1,12 +1,10 @@
-// import { graphql } from "react-relay";
-import { readInlineData, graphql } from "relay-runtime";
-import { getEntityDisplayNameFragment$key } from "@/relay/getEntityDisplayNameFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import getEntityVolumeNumber from "./getEntityVolumeNumber";
 
 export default function getEntityDisplayName(
-  data: getEntityDisplayNameFragment$key,
+  data: FragmentType<typeof fragment>,
 ) {
-  const entity = readInlineData(fragment, data);
+  const entity = useFragment(fragment, data);
 
   const vol = getEntityVolumeNumber(entity);
 
@@ -26,8 +24,8 @@ export default function getEntityDisplayName(
   return volTitle ? `${volTitle}, ${entityTitle}` : entityTitle;
 }
 
-const fragment = graphql`
-  fragment getEntityDisplayNameFragment on Entity @inline {
+const fragment = graphql(`
+  fragment getEntityDisplayNameFragment on Entity {
     ... on Collection {
       title
       vol: ancestorByName(name: "volume") {
@@ -44,4 +42,4 @@ const fragment = graphql`
 
     ...getEntityVolumeNumberFragment
   }
-`;
+`);

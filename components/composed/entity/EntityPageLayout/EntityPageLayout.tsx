@@ -1,10 +1,9 @@
 "use client";
 
 import classNames from "classnames";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useIsMounted from "@/hooks/useIsMounted";
 import { ContentImage, Markdown, LoadingBlock } from "@/components/atomic";
-import { EntityPageLayoutFragment$key } from "@/relay/EntityPageLayoutFragment.graphql";
 import styles from "./EntityPageLayout.module.css";
 
 export default function EntityPageLayout({ data }: Props) {
@@ -33,12 +32,12 @@ export default function EntityPageLayout({ data }: Props) {
 
 interface Props {
   /* Item data */
-  data?: EntityPageLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   /* Child page content */
   children?: React.ReactNode;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment EntityPageLayoutFragment on Page {
     title
     body
@@ -47,4 +46,4 @@ const fragment = graphql`
       ...ContentImageFragment
     }
   }
-`;
+`);

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
@@ -8,9 +8,7 @@ import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { layoutCommunityTemplateQuery as Query } from "@/relay/layoutCommunityTemplateQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 import generateCommunityMetadata from "@/app/[frontend]/(pages)/communities/[slug]/_metadata/community";
 import SetCommunity from "@/components/global/SetCommunity";
 
@@ -27,9 +25,7 @@ export default async function CommunityLayout({
 }: BasePageParams & PropsWithChildren) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
-    slug,
-  });
+  const { data } = await queryApi(query, { slug });
 
   const { community } = data ?? {};
 
@@ -47,21 +43,17 @@ export default async function CommunityLayout({
     layouts?.hero?.template?.definition?.enableDescendantBrowsing;
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <SetCommunity data={community}>
-        {showNavBar && (
-          <CommunityNavBar data={community} entityData={community} />
-        )}
-        <ProcessingCheck data={layouts} entityType="community">
-          {layouts.hero && <HeroTemplate data={layouts.hero} />}
-          {children}
-        </ProcessingCheck>
-      </SetCommunity>
-    </UpdateClientEnvironment>
+    <SetCommunity data={community}>
+      {showNavBar && <CommunityNavBar data={community} entityData={community} />}
+      <ProcessingCheck data={layouts} entityType="community">
+        {layouts.hero && <HeroTemplate data={layouts.hero} />}
+        {children}
+      </ProcessingCheck>
+    </SetCommunity>
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query layoutCommunityTemplateQuery($slug: Slug!) {
     community(slug: $slug) {
       canPreview {
@@ -83,4 +75,4 @@ const query = graphql`
       ...SetCommunityFragment
     }
   }
-`;
+`);

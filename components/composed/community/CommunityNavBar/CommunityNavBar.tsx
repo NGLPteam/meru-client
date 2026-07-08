@@ -1,10 +1,8 @@
 "use client";
 
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import classNames from "classnames";
 import { SearchButton } from "@/components/atomic";
-import { CommunityNavBarFragment$key } from "@/relay/CommunityNavBarFragment.graphql";
-import { CommunityNavBarEntityFragment$key } from "@/relay/CommunityNavBarEntityFragment.graphql";
 import CommunityName from "../CommunityName";
 import CommunityNavList from "../CommunityNavList";
 import styles from "./CommunityNavBar.module.css";
@@ -29,19 +27,19 @@ export default function CommunityNavBar({ data, entityData }: Props) {
 }
 
 interface Props {
-  data?: CommunityNavBarFragment$key | null;
-  entityData?: CommunityNavBarEntityFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
+  entityData?: FragmentType<typeof entityFragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CommunityNavBarFragment on Community {
     ...CommunityNameFragment
     ...CommunityNavListFragment
   }
-`;
+`);
 
-const entityFragment = graphql`
+const entityFragment = graphql(`
   fragment CommunityNavBarEntityFragment on Entity {
     ...SearchButtonFragment
   }
-`;
+`);

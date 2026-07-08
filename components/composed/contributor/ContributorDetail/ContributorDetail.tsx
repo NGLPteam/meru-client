@@ -1,14 +1,14 @@
 "use client";
 
-import { useMemo, useTransition } from "react";
-import { graphql, useRefetchableFragment } from "react-relay";
+import { useMemo, useState } from "react";
+import { useQuery } from "urql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { ExternalLink, Markdown, ORCIDLink } from "@/components/atomic";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
 import ContributionSummary from "@/components/composed/contribution/ContributionSummary";
-import { ContributorDetailFragment$key } from "@/relay/ContributorDetailFragment.graphql";
 import ContributorName from "../ContributorName";
 import ContributorAvatar from "../ContributorAvatar";
 import styles from "./ContributorDetail.module.css";
@@ -18,16 +18,27 @@ export default function ContributorDetail({ data }: Props) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [contributor, refetch] = useRefetchableFragment(fragment, data);
+  // Initial (SSR) data from the fragment ref provides the id used to refetch.
+  const base = useFragment(fragment, data);
+  const id = base?.id;
 
-  const [isPending, startTransition] = useTransition();
+  // Client-side pagination: null until the reader paginates, at which point we
+  // refetch the contributor by id with the new page.
+  const [page, setPage] = useState<number | null>(null);
 
-  const doRefetch = (page: number) => {
-    startTransition(() => {
-      refetch({ page });
-      return;
-    });
-  };
+  const [result] = useQuery({
+    query: refetchQuery,
+    variables: { id: id ?? "", page: page ?? 1 },
+    pause: page === null || !id,
+  });
+
+  const refetched = useFragment(
+    fragment,
+    result.data?.node?.__typename ? result.data.node : null,
+  );
+
+  const contributor = page !== null && refetched ? refetched : base;
+  const isPending = result.fetching;
 
   const onPageChange = (val: Record<string, string | number>) => {
     const pageNum = val.page
@@ -43,7 +54,7 @@ export default function ContributorDetail({ data }: Props) {
     window.scrollTo({ top: 0, behavior: "smooth" });
     router.push(url);
 
-    doRefetch(pageNum);
+    setPage(pageNum);
   };
 
   const { t } = useTranslation();
@@ -117,14 +128,14 @@ export default function ContributorDetail({ data }: Props) {
 }
 
 interface Props {
-  data?: ContributorDetailFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   backRoute?: string;
   backLabel?: string;
 }
 
-const fragment = graphql`
-  fragment ContributorDetailFragment on Contributor
-  @refetchable(queryName: "ContributorDetailRefetchQuery") {
+const fragment = graphql(`
+  fragment ContributorDetailFragment on Contributor {
+    id
     ...ContributorNameFragment
     ... on Contributor {
       bio
@@ -158,4 +169,13 @@ const fragment = graphql`
       title
     }
   }
-`;
+`);
+
+const refetchQuery = graphql(`
+  query ContributorDetailRefetchQuery($id: ID!, $page: Int) {
+    node(id: $id) {
+      __typename
+      ...ContributorDetailFragment
+    }
+  }
+`);

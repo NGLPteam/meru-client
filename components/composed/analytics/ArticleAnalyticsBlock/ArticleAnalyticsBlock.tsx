@@ -1,20 +1,10 @@
 "use client";
 
-import {
-  useState,
-  useReducer,
-  useTransition,
-  useEffect,
-  useCallback,
-} from "react";
-import { graphql, useRefetchableFragment } from "react-relay";
+import { useState, useReducer } from "react";
+import { useQuery } from "urql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import dynamic from "next/dynamic";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
-import { ArticleAnalyticsBlockFragment$key } from "@/relay/ArticleAnalyticsBlockFragment.graphql";
-import {
-  ArticleAnalyticsBlockQuery,
-  ArticleAnalyticsBlockQuery$variables,
-} from "@/relay/ArticleAnalyticsBlockQuery.graphql";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
 import ChartControls from "../ChartControls";
 import StatBlocks from "../StatBlocks";
@@ -22,53 +12,46 @@ import { chartSettingsReducer } from "./settingsReducer";
 import styles from "./ArticleAnalyticsBlock.module.css";
 
 type Props = {
-  data: ArticleAnalyticsBlockFragment$key;
+  data: FragmentType<typeof fragment>;
 };
 
 const ChartBlock = dynamic(() => import("../ChartBlock"), { ssr: false });
 
 export default function ArticleAnalyticsBlock({ data }: Props) {
-  const [chartData, refetch] = useRefetchableFragment<
-    ArticleAnalyticsBlockQuery,
-    ArticleAnalyticsBlockFragment$key
-  >(fragment, data);
+  const base = useFragment(fragment, data);
+  const id = base?.id;
 
   const [mode, setMode] = useState("views");
 
-  const minDate =
-    mode === "views"
-      ? chartData.viewsByDate.minDate
-      : chartData.downloadsByDate.minDate;
-
-  const initalSettings = {
+  const [settings, dispatchSettingsUpdate] = useReducer(chartSettingsReducer, {
     chartType: "map",
     precision: "YEAR" as AnalyticsPrecision,
     dateLabel: "all",
     usOnly: false,
-    minDate: minDate ?? null,
+    minDate: null,
     updated: false,
-  };
+  });
 
-  const [isPending, startTransition] = useTransition();
-
-  const doRefetch = useCallback(
-    (queryVars: Omit<ArticleAnalyticsBlockQuery$variables, "id">) => {
-      startTransition(() => {
-        refetch(queryVars);
-        return;
-      });
+  // Analytics is always fetched client-side (views/downloads must not be
+  // counted for server fetches). Refetch whenever precision/usOnly change.
+  const [result] = useQuery({
+    query: analyticsQuery,
+    variables: {
+      id: id ?? "",
+      dateRange: {},
+      precision: settings.precision,
+      usOnly: settings.usOnly,
     },
-    [startTransition, refetch],
+    pause: !id,
+  });
+
+  const refetched = useFragment(
+    fragment,
+    result.data?.node?.__typename ? result.data.node : null,
   );
 
-  const [settings, dispatchSettingsUpdate] = useReducer(
-    chartSettingsReducer,
-    initalSettings,
-  );
-
-  useEffect(() => {
-    doRefetch(settings);
-  }, [doRefetch, settings]);
+  const chartData = refetched ?? base;
+  const isPending = result.fetching;
 
   const region = settings.usOnly ? "US" : "world";
 
@@ -107,14 +90,9 @@ export default function ArticleAnalyticsBlock({ data }: Props) {
   ) : null;
 }
 
-const fragment = graphql`
-  fragment ArticleAnalyticsBlockFragment on Item
-  @refetchable(queryName: "ArticleAnalyticsBlockQuery")
-  @argumentDefinitions(
-    dateRange: { type: "DateFilterInput", defaultValue: {} }
-    precision: { type: "AnalyticsPrecision", defaultValue: YEAR }
-    usOnly: { type: "Boolean", defaultValue: false }
-  ) {
+const fragment = graphql(`
+  fragment ArticleAnalyticsBlockFragment on Item {
+    id
     downloadsByDate: assetDownloads(
       dateFilter: $dateRange
       precision: $precision
@@ -153,4 +131,18 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);
+
+const analyticsQuery = graphql(`
+  query ArticleAnalyticsBlockQuery(
+    $id: ID!
+    $dateRange: DateFilterInput
+    $precision: AnalyticsPrecision
+    $usOnly: Boolean
+  ) {
+    node(id: $id) {
+      __typename
+      ...ArticleAnalyticsBlockFragment
+    }
+  }
+`);

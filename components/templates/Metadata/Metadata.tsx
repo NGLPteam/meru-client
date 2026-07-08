@@ -1,9 +1,8 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
-import { MetadataTemplateFragment$key } from "@/relay/MetadataTemplateFragment.graphql";
 import {
   useSharedInlineFragment,
   useSharedBlockFragment,
@@ -16,7 +15,7 @@ import styles from "./Metadata.module.css";
 
 export default function MetadataTemplate({
   data,
-}: PropsWithChildren & { data?: MetadataTemplateFragment$key | null }) {
+}: PropsWithChildren & { data?: FragmentType<typeof fragment> | null }) {
   const { t } = useTranslation();
 
   const template = useFragment(fragment, data);
@@ -62,7 +61,7 @@ export default function MetadataTemplate({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment MetadataTemplateFragment on MetadataTemplateInstance {
     definition {
       background
@@ -85,4 +84,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

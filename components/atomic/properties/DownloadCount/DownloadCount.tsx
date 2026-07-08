@@ -1,7 +1,6 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import IconFactory from "@/components/factories/IconFactory";
-import { DownloadCountFragment$key } from "@/relay/DownloadCountFragment.graphql";
 
 export default function DownloadCount({ data }: Props) {
   const summary = useFragment(fragment, data);
@@ -17,11 +16,11 @@ export default function DownloadCount({ data }: Props) {
 }
 
 interface Props {
-  data?: DownloadCountFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment DownloadCountFragment on AnalyticsEventCountSummary {
     total
   }
-`;
+`);

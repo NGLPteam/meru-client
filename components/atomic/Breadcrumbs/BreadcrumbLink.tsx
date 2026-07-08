@@ -1,11 +1,10 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityKind } from "@/helpers";
-import { BreadcrumbLinkFragment$key } from "@/relay/BreadcrumbLinkFragment.graphql";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import styles from "./Breadcrumbs.module.css";
 
 interface Props {
-  data: BreadcrumbLinkFragment$key | null;
+  data: FragmentType<typeof fragment> | null;
 }
 
 export default function BreadcrumbLink({ data }: Props) {
@@ -22,10 +21,10 @@ export default function BreadcrumbLink({ data }: Props) {
   );
 }
 
-export const fragment = graphql`
+export const fragment = graphql(`
   fragment BreadcrumbLinkFragment on EntityBreadcrumb {
     label
     kind
     slug
   }
-`;
+`);

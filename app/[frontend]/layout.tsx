@@ -1,20 +1,19 @@
 import "@/styles/global.css";
 
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import ThemeProvider from "@/contexts/ThemeProvider";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import queryApi from "@/lib/api/queryApi";
 import ILISARNIQ from "@/styles/fonts/ilisarniq";
 import SWITZER from "@/styles/fonts/switzer";
 import LIBRE_FRANKLIN from "@/styles/fonts/libre-franklin";
 import SENTIENT from "@/styles/fonts/sentient";
-import { layoutThemeQuery as Query } from "@/relay/layoutThemeQuery.graphql";
 import { getThemeClasses } from "@/styles/theme-helpers";
 import type { PropsWithChildren } from "react";
 
 export const revalidate = 3600;
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const { data } = await fetchQuery<Query>(query, {});
+  const { data } = await queryApi(query, {});
 
   const theme = data?.globalConfiguration?.theme;
 
@@ -33,7 +32,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   );
 }
 
-const query = graphql`
+const query = graphql(`
   query layoutThemeQuery {
     globalConfiguration {
       theme {
@@ -42,4 +41,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

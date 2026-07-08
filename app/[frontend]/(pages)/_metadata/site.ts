@@ -1,7 +1,6 @@
-import { graphql } from "relay-runtime";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import { graphql } from "@/lib/api/gql";
+import queryApi from "@/lib/api/queryApi";
 import type { BasePageParams } from "@/types/page";
-import { siteMetadataQuery as Query } from "@/relay/siteMetadataQuery.graphql";
 import { getTruncatedText } from "@/helpers";
 import type { Metadata } from "next";
 
@@ -10,7 +9,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_FE_URL;
 export default async function generateSiteMetadata(
   _props: BasePageParams,
 ): Promise<Metadata> {
-  const { data } = (await fetchQuery<Query>(query, {})) ?? {};
+  const { data } = (await queryApi(query, {})) ?? {};
 
   const config = data?.globalConfiguration;
 
@@ -55,7 +54,7 @@ export default async function generateSiteMetadata(
   };
 }
 
-const query = graphql`
+const query = graphql(`
   query siteMetadataQuery {
     globalConfiguration {
       site {
@@ -72,4 +71,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

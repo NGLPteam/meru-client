@@ -1,18 +1,17 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { PrevNextButton } from "@/components/atomic/Button/patterns";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
-import { NavButtonsFragment$key } from "@/relay/NavButtonsFragment.graphql";
 import { hrefFromTypename } from "./routes";
 import styles from "./OrderingNavigation.module.css";
 
 export default function NavButtons({
   data,
 }: {
-  data?: NavButtonsFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 }) {
   const { t } = useTranslation();
 
@@ -71,7 +70,7 @@ export default function NavButtons({
   );
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment NavButtonsFragment on OrderingTemplateInstance {
     orderingPair {
       exists
@@ -93,4 +92,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

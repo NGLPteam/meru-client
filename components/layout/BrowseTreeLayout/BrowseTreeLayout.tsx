@@ -1,12 +1,13 @@
-import { graphql, useFragment } from "react-relay";
+import {
+  graphql,
+  useFragment,
+  type FragmentType,
+  type DocumentType,
+} from "@/lib/api/gql";
 import { PageCount, Pagination } from "@/components/atomic";
 import BrowseTreeItem from "@/components/layout/BrowseTreeLayout/BrowseTreeItem";
 import TreeAccordion from "@/components/atomic/accordions/TreeAccordion";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
-import {
-  BrowseTreeLayoutFragment$data,
-  BrowseTreeLayoutFragment$key,
-} from "@/relay/BrowseTreeLayoutFragment.graphql";
 import NoContent from "../messages/NoContent";
 import styles from "./BrowseTreeLayout.module.css";
 
@@ -79,17 +80,17 @@ export default function BrowseTreeLayout({
   ) : null;
 }
 
-type Node = BrowseTreeLayoutFragment$data["nodes"][number];
+type Node = DocumentType<typeof fragment>["nodes"][number];
 
 interface Props {
   header?: string | null;
-  data?: BrowseTreeLayoutFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   orderComponent?: React.ReactNode;
   isPending: boolean;
   onPageChange: (val: Record<string, string | number>) => void;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment BrowseTreeLayoutFragment on OrderingEntryConnection {
     nodes {
       id
@@ -106,7 +107,7 @@ const fragment = graphql`
       ...PageCountFragment
     }
   }
-`;
+`);
 
 interface TreeNode extends Node {
   children?: TreeNode[];

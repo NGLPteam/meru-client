@@ -2,11 +2,10 @@
 
 import { PropsWithChildren, createContext, useContext } from "react";
 import { redirect } from "next/navigation";
-import { graphql, useFragment } from "react-relay";
-import { FullTextCheckFragment$key } from "@/relay/FullTextCheckFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 type Props = PropsWithChildren & {
-  data?: FullTextCheckFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
 };
 
 const FullTextCheckContext = createContext(true);
@@ -62,7 +61,7 @@ export const FullTextFallback = ({
   return children;
 };
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment FullTextCheckFragment on EntityLayouts {
     main {
       templates {
@@ -81,4 +80,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);

@@ -1,13 +1,9 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import ContributorDetail from "@/components/composed/contributor/ContributorDetail";
 import ContributorDetailNav from "@/components/composed/contributor/ContributorDetailNav";
-import fetchQuery from "@/lib/relay/fetchQuery";
+import queryApi from "@/lib/api/queryApi";
 import { BasePageParams } from "@/types/page";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
-import { pageContributorDetailQuery as DetailQuery } from "@/relay/pageContributorDetailQuery.graphql";
-import { pageContributorItemDetailQuery as ItemQuery } from "@/relay/pageContributorItemDetailQuery.graphql";
-import { pageContributorCollectionLayoutQuery as CollectionQuery } from "@/relay/pageContributorCollectionLayoutQuery.graphql";
 import SetCommunity from "@/components/global/SetCommunity";
 
 export default async function ContributorPage({
@@ -27,9 +23,7 @@ export default async function ContributorPage({
       ? collectionQuery
       : detailQuery;
 
-  const { data, records, sessionToken } = await fetchQuery<
-    DetailQuery | ItemQuery | CollectionQuery
-  >(query, {
+  const { data } = await queryApi(query, {
     slug,
     item: itemSlug,
     collection: collectionSlug,
@@ -50,25 +44,23 @@ export default async function ContributorPage({
       : undefined;
 
   return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <SetCommunity data={community}>
-        {item && <ContributorDetailNav data={item} />}
-        {collection && <ContributorDetailNav data={collection} />}
-        <ContributorDetail data={contributor} />
-      </SetCommunity>
-    </UpdateClientEnvironment>
+    <SetCommunity data={community}>
+      {item && <ContributorDetailNav data={item} />}
+      {collection && <ContributorDetailNav data={collection} />}
+      <ContributorDetail data={contributor} />
+    </SetCommunity>
   );
 }
 
-const detailQuery = graphql`
+const detailQuery = graphql(`
   query pageContributorDetailQuery($slug: Slug!, $page: Int) {
     contributor(slug: $slug) {
       ...ContributorDetailFragment
     }
   }
-`;
+`);
 
-const itemQuery = graphql`
+const itemQuery = graphql(`
   query pageContributorItemDetailQuery($slug: Slug!, $item: Slug!, $page: Int) {
     contributor(slug: $slug) {
       ...ContributorDetailFragment
@@ -82,9 +74,9 @@ const itemQuery = graphql`
       }
     }
   }
-`;
+`);
 
-const collectionQuery = graphql`
+const collectionQuery = graphql(`
   query pageContributorCollectionLayoutQuery(
     $slug: Slug!
     $collection: Slug!
@@ -102,4 +94,4 @@ const collectionQuery = graphql`
       }
     }
   }
-`;
+`);

@@ -1,10 +1,8 @@
-import { graphql } from "relay-runtime";
+import { graphql } from "@/lib/api/gql";
 import { notFound } from "next/navigation";
 import AssetsBlock from "@/components/composed/asset/AssetsBlock";
 import { BasePageParams } from "@/types/page";
-import fetchQuery from "@/lib/relay/fetchQuery";
-import { pageTemplatesItemFilesQuery as Query } from "@/relay/pageTemplatesItemFilesQuery.graphql";
-import UpdateClientEnvironment from "@/lib/relay/UpdateClientEnvironment";
+import queryApi from "@/lib/api/queryApi";
 
 export async function generateStaticParams() {
   return [];
@@ -13,7 +11,7 @@ export async function generateStaticParams() {
 export default async function ItemFilesPage({ params }: BasePageParams) {
   const { slug } = await params;
 
-  const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  const { data } = await queryApi(query, {
     slug,
   });
 
@@ -21,14 +19,10 @@ export default async function ItemFilesPage({ params }: BasePageParams) {
 
   if (!item) return notFound();
 
-  return (
-    <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-      <AssetsBlock data={item.assets} />
-    </UpdateClientEnvironment>
-  );
+  return <AssetsBlock data={item.assets} />;
 }
 
-const query = graphql`
+const query = graphql(`
   query pageTemplatesItemFilesQuery($slug: Slug!) {
     item(slug: $slug) {
       assets {
@@ -36,4 +30,4 @@ const query = graphql`
       }
     }
   }
-`;
+`);

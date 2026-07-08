@@ -1,5 +1,4 @@
-import { graphql, useFragment } from "react-relay";
-import { CoverImageFragment$key } from "@/relay/CoverImageFragment.graphql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { pxToRem } from "@/helpers/theme";
 import CoverPlaceholder from "./CoverPlaceholder";
 import styles from "./CoverImage.module.css";
@@ -49,7 +48,7 @@ export default function CoverImage({
 }
 
 interface ImageProps {
-  data?: CoverImageFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   maxWidth: number;
   maxHeight: number;
   loading?: "eager" | "lazy";
@@ -61,7 +60,7 @@ interface ImageProps {
 // generate the placeholder
 interface PlaceholderProps {
   /* Image fragment */
-  data?: CoverImageFragment$key | null;
+  data?: FragmentType<typeof fragment> | null;
   maxWidth: number;
   maxHeight: number;
   title: string;
@@ -70,7 +69,7 @@ interface PlaceholderProps {
   objectPosition?: string;
 }
 
-const fragment = graphql`
+const fragment = graphql(`
   fragment CoverImageFragment on ImageAttachment {
     image: medium {
       webp {
@@ -81,4 +80,4 @@ const fragment = graphql`
       }
     }
   }
-`;
+`);
