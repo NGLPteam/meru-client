@@ -4,7 +4,9 @@
 
 **STATUS: COMPLETE.** Relay is fully removed; the app builds on urql + graphql-codegen
 client-preset. `yarn graphql`, `tsc --noEmit`, `yarn lint`, and `next build` all pass on
-branch `migrate-relay-to-urql`. Not yet merged (pending review + runtime QA).
+branch `migrate-relay-to-urql`. Runtime QA + a dev/build-tooling pass surfaced several
+behavioral and tooling issues that are now fixed — see **Post-migration fixes** below.
+Not yet merged (pending review).
 
 DONE (committed on branch `migrate-relay-to-urql`):
 - Batch 0 scaffold: `lib/api/` (makeUrqlClient, measureQuery, client, queryApi, clientToken,
@@ -63,6 +65,71 @@ REMAINING (historical checklist — now completed above; final verification pend
 6. **Gate:** `yarn graphql` (done, green) → `npx tsc --noEmit` (fix boundary errors) →
    `npm run lint` (watch react-hooks on any remaining `useFragment` in plain fns) →
    `next build` → runtime verify (render, search, auth/draft-mode).
+
+## Post-migration fixes (runtime QA + dev/build tooling)
+
+Found while running the app after the build first went green. These are the non-obvious
+behavioral and tooling differences of the Relay → urql switch — worth knowing for review and
+future work.
+
+### Runtime correctness
+
+- **Force POST — `preferGetMethod: false` in `makeUrqlClient`.** urql defaults *queries* to
+  GET; the Meru API only accepts POST and returns 404, which surfaced as
+  `Network Error halted: Not Found` on the very first query (`layoutThemeQuery`). Relay always
+  POSTed. This affects every operation (server clients + the client Provider).
+- **Search — show the loading spinner immediately (`SearchLayout`).** The query was driven off
+  `useSearchParams`, which only updates *after* `router.push` completes an RSC navigation (a
+  full round-trip under the `/dynamic` rewrite), so the spinner lagged the submit. Fix: hold
+  the query variables in local `useState`, updated synchronously on submit/filter; a
+  `useEffect` resyncs from the URL for back/forward; `router.push` runs in parallel — restoring
+  Relay's immediate `refetch()`. Also removed a redundant double URL push (SearchFilters
+  already pushes). The other client queries were already immediate: ContributorDetail /
+  EntityOrderingLayout pagination use local `page` state; ArticleAnalyticsBlock uses local
+  `settings`.
+- **Analytics date range — `ArticleAnalyticsBlock`.** The `useQuery` variables hardcoded
+  `dateRange: {}`, so every range selection ("Last Year", etc.) returned all-time counts. The
+  settings reducer computes `settings.dateRange = { startDate }` for week/month/year; fixed by
+  passing `settings.dateRange ?? {}`.
+  - **Regression class to watch:** a query variable that *should* be dynamic getting
+    hardcoded/dropped during the refetchable → `useQuery` conversion (or `@arguments` removal).
+    All 4 interactive components + every server `queryApi` call site were audited against their
+    declared variables — this was the only one wrong. (The metrics *page* intentionally passes
+    hardcoded analytics vars for its SSR fetch, which the client block immediately re-fetches
+    with real settings, so it's harmless.)
+
+### Perf
+
+- **cache-first public server queries in dev.** client-preset has no normalized cache and
+  every client was `network-only`, so repeated public/global queries (theme, global config,
+  AppBody) re-fetched on every render/navigation. Added `@urql/exchange-request-policy`; the
+  anonymous server client uses `cache-first` with a 30s TTL (`requestPolicyExchange`, see
+  `CACHE_TTL_MS`) in **dev** (no route cache there), and stays `network-only` in **production**
+  (route-level `revalidate` handles reuse; avoids stale/unbounded caching in a long-lived
+  server process). Authed/preview clients and the client-side Provider stay `network-only`.
+  Mirrors hcc-client.
+
+### Dev tooling
+
+- **Turbopack dev — `next dev --turbopack`** (`dev:webpack` kept as a fallback). The single
+  ~1.6MB generated `lib/api/gql/graphql.ts` (imported by ~183 files) slowed webpack Fast
+  Refresh vs Relay's per-artifact files; Turbopack's incremental compilation handles it far
+  better. Two wrinkles:
+  - **pdfjs `canvas`**: pdfjs v5 dynamically imports `"canvas"` / `@napi-rs/canvas` (not
+    installed) — the Turbopack equivalent of the webpack `canvas: false` alias is
+    `turbopack.resolveAlias.canvas → lib/stubs/empty.js` (the webpack alias is kept for the
+    prod build). PDF rendering verified. Note `AssetPDFPreview` is `dynamic(ssr: false)`, so
+    pdfjs only compiles in the browser — a server-side route compile can't exercise it, so the
+    alias couldn't be proven removable.
+  - **tailwind config**: `require("./styles/helpers")` → `require("./styles/helpers.cjs")` —
+    Turbopack's resolver doesn't try the `.cjs` extension for a bare specifier (webpack/jiti
+    did).
+
+### Build / lint
+
+- eslint ignores extended to `lib/api/gql/` (the 1.6MB generated file — no value in linting it,
+  and it slowed lint) and `lib/stubs/` (the CJS `module.exports` stub tripped `no-undef` in the
+  build's lint pass).
 
 ## Context
 
