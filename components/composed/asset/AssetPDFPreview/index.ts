@@ -1,5 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import clientOnly from "@/lib/clientOnly";
 
-export default dynamic(() => import("./AssetPDFPreview"), { ssr: false });
+export default clientOnly(() => import("./AssetPDFPreview"));

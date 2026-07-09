@@ -2,7 +2,7 @@
 
 import { useState, useReducer } from "react";
 import { useQuery } from "urql";
-import dynamic from "next/dynamic";
+import clientOnly from "@/lib/clientOnly";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
@@ -15,7 +15,7 @@ type Props = {
   data: FragmentType<typeof fragment>;
 };
 
-const ChartBlock = dynamic(() => import("../ChartBlock"), { ssr: false });
+const ChartBlock = clientOnly(() => import("../ChartBlock"));
 
 export default function ArticleAnalyticsBlock({ data }: Props) {
   const base = useFragment(fragment, data);

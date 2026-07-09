@@ -1,10 +1,7 @@
-import dynamic from "next/dynamic";
+// AssetInlinePDF's barrel is already a client-only (ssr:false) component, so we
+// import it directly rather than re-wrapping it.
+import AssetInlinePDF from "@/components/composed/asset/AssetInlinePDF";
 import type { PropsWithChildren } from "react";
-
-const AssetInlinePDF = dynamic(
-  () => import("@/components/composed/asset/AssetInlinePDF"),
-  { ssr: false },
-);
 
 type Props = PropsWithChildren & {
   name?: string | null;
