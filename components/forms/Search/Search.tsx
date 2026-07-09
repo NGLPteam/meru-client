@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { useRouter } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { useRouter } from "@/lib/routing/hooks";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./Search.module.css";
 

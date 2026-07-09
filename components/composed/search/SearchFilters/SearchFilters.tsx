@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter, useSearchParams, usePathname } from "@/lib/routing/hooks";
 import flatMap from "lodash/flatMap";
 import uniqBy from "lodash/uniqBy";
 import isEmpty from "lodash/isEmpty";
+import { useRouter, useSearchParams, usePathname } from "@/lib/routing/hooks";
 import {
   graphql,
   useFragment,

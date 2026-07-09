@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
+import { usePathname } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchHero from "@/components/composed/search/SearchHero";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
+import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
 import { Select } from "@/components/forms";
 
 export default function EntityDescendantOrderSelect() {

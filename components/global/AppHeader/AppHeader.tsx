@@ -1,8 +1,8 @@
 import { useId } from "react";
-import { usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
+import { usePathname } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { SearchButton } from "@/components/atomic";
 import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";

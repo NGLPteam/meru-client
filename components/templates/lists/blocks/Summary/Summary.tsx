@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { useParams } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
+import { useParams } from "@/lib/routing/hooks";
 import {
   useSharedListTemplateFragment,
   listTemplateFragment as sharedListTemplateFragment,

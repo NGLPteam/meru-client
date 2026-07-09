@@ -1,6 +1,6 @@
-import { useParams, usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
+import { useParams, usePathname } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";

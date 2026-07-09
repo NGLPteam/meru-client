@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "urql";
-import { useSearchParams, useRouter, usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
+import { useSearchParams, useRouter, usePathname } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { ExternalLink, Markdown, ORCIDLink } from "@/components/atomic";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
