@@ -1,4 +1,4 @@
-import { draftMode } from "next/headers";
+import { enableDraftMode } from "@/lib/request/draftMode";
 import { notFound, redirect } from "@/lib/routing/navigation";
 
 const LANDING: Record<string, (slug: string) => string> = {
@@ -17,7 +17,7 @@ export async function GET(
 
   if (!landing) notFound();
 
-  (await draftMode()).enable();
+  await enableDraftMode();
 
   redirect(landing(slug));
 }

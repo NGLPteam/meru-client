@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
-import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import { isDraftModeEnabled } from "@/lib/request/draftMode";
 import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
@@ -33,7 +33,7 @@ export default async function CollectionTemplateLayout({
 
   if (!collection) return notFound();
 
-  const { isEnabled: draftModeEnabled } = await draftMode();
+  const draftModeEnabled = await isDraftModeEnabled();
 
   if (draftModeEnabled && !collection.canPreview?.value) {
     return <UnauthorizedMessage reason="forbidden" entity="collection" />;

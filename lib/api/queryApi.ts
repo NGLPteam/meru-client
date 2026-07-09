@@ -6,6 +6,10 @@ type Options = {
   // Force an authenticated fetch even outside draft mode (replaces the old
   // fetchQuery `includeToken` flag).
   authAware?: boolean;
+  // Explicit access token. When provided, it is used directly and the draft
+  // mode / auth() resolution below is skipped — the seam the Astro SSR migration
+  // uses to feed a token from Astro.locals instead of next/headers.
+  token?: string;
 };
 
 // Main server-side data path — the queryCraft analogue. Resolves the access
@@ -25,13 +29,17 @@ export default async function queryApi<Query>(
   variables: AnyVariables,
   options?: Options,
 ): Promise<OperationResult<Query, AnyVariables>> {
-  const { draftMode } = await import("next/headers");
-  const isPreview = (await draftMode()).isEnabled;
-  const needsToken = isPreview || options?.authAware;
+  let token = options?.token;
 
-  const token = needsToken
-    ? (await (await import("@/lib/auth/initAuth")).auth())?.accessToken
-    : undefined;
+  if (token === undefined) {
+    const { isDraftModeEnabled } = await import("@/lib/request/draftMode");
+    const isPreview = await isDraftModeEnabled();
+    const needsToken = isPreview || options?.authAware;
+
+    token = needsToken
+      ? (await (await import("@/lib/auth/initAuth")).auth())?.accessToken
+      : undefined;
+  }
 
   const client = token ? makeAuthorizedClient(token) : anonymousClient;
 

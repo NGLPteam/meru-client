@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Metadata } from "next";
-import { draftMode } from "next/headers";
+import { isDraftModeEnabled } from "@/lib/request/draftMode";
 import { graphql } from "@/lib/api/gql";
 import getStaticGlobalContextData from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
 import { GlobalStaticContextProvider } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
@@ -25,7 +25,7 @@ export async function generateMetadata(
 export default async function PageLayout({ children }: PropsWithChildren) {
   const globalData = await getStaticGlobalContextData();
 
-  const { isEnabled: draftModeEnabled } = await draftMode();
+  const draftModeEnabled = await isDraftModeEnabled();
 
   const { data } = await queryApi(query, {});
 

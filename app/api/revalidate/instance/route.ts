@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
-import { headers } from "next/headers";
+import { getRequestHeader } from "@/lib/request/headers";
 
 const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET;
 
@@ -18,7 +18,7 @@ export async function DELETE(_request: NextRequest) {
       },
     );
 
-  const authorization = (await headers()).get("Authorization");
+  const authorization = await getRequestHeader("Authorization");
   const secret = authorization?.startsWith("Bearer")
     ? authorization.replace("Bearer ", "")
     : null;

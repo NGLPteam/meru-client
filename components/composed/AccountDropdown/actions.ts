@@ -1,7 +1,7 @@
 "use server";
 
-import { draftMode } from "next/headers";
 import joinURL from "url-join";
+import { enableDraftMode, disableDraftMode } from "@/lib/request/draftMode";
 import {
   auth,
   signIn as doSignIn,
@@ -19,13 +19,13 @@ export async function signIn() {
 }
 
 export async function enterPreviewMode() {
-  (await draftMode()).enable();
+  await enableDraftMode();
 }
 
 export async function signOut() {
   const session = await auth();
 
-  (await draftMode()).disable();
+  await disableDraftMode();
 
   if (session?.refreshToken) {
     try {
