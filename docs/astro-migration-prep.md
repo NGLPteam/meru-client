@@ -141,10 +141,13 @@ by leverage.
    contributor-pagination go server-side (SSR on URL-param navigation); analytics + ViewCounter
    stay client-side behind a same-origin `/api/graphql` proxy that injects the cookie token. The
    entire client-token path is deleted.
-8. **On-demand revalidation has no Astro equivalent.** `/api/revalidate/entity` and `/instance`
-   call `revalidatePath` (Next ISR) — the backend-webhook cache-invalidation story. On a
-   static/hybrid host this becomes a rebuild trigger or a CDN purge. Design the replacement before
-   migrating.
+8. **On-demand revalidation. → DESIGN SETTLED, see `docs/astro-caching-plan.md`.** Adopt Astro 7's
+   `cache` API with the `memoryCache` provider (hcc-client's proven setup): per-route
+   `Astro.cache.set({maxAge, swr, tags})` replaces `export const revalidate`, and one signed
+   `/api/revalidate` endpoint calls `cache.invalidate({path, tags})` (replacing both current
+   endpoints; the `/dynamic` path-variant hack disappears). Accepted constraint: memoryCache is
+   per-instance and lost on redeploy — assumes one long-lived instance per tenant. Drops the Redis
+   cache handler + deps.
 9. **Re-home the middleware logic.** `middleware.ts` does HTTPS redirect, `/preview` auth-gating,
    and `/permalink` → entity-path rewrites. The `/dynamic` opt-out trick disappears entirely; the
    redirect/gate/rewrite logic moves to an Astro middleware or adapter config.
