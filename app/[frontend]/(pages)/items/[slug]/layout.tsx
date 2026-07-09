@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import { notFound } from "@/lib/routing/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
@@ -15,13 +15,14 @@ import queryApi from "@/lib/api/queryApi";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar";
 import generateItemMetadata from "@/app/[frontend]/(pages)/items/[slug]/_metadata/item";
+import toNextMetadata from "@/lib/metadata/toNextMetadata";
 import SetCommunity from "@/components/global/SetCommunity";
 
 export async function generateMetadata(
   props: BasePageParams,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return generateItemMetadata(props, parent);
+  return toNextMetadata(await generateItemMetadata(props), parent);
 }
 
 export default async function ItemLayout({

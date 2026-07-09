@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { getPrecisionCitationDateDisplay } from "@/helpers/dates";
 import { getContributorDisplayName } from "@/components/composed/contributor/ContributorName/helpers";
 import { fragment as getStaticGoogleScholarDataFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
@@ -43,7 +42,10 @@ export default function GoogleScholarHtmlHead({
     case "dissertation":
     case "paper":
       return (
-        <Head>
+        // Bare metadata tags: React 19 hoists <meta> into <head> (next/head was
+        // a Pages-Router API and inert here). In Astro these move to the layout
+        // <head>.
+        <>
           <meta name="citation_title" content={entity.title} />
           {authors.map(({ contributor }, i) => (
             <meta
@@ -74,7 +76,7 @@ export default function GoogleScholarHtmlHead({
               content={institution}
             />
           )}
-        </Head>
+        </>
       );
 
     default:

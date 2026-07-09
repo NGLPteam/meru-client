@@ -2,20 +2,20 @@ import { graphql } from "@/lib/api/gql";
 import queryApi from "@/lib/api/queryApi";
 import type { BasePageParams } from "@/types/page";
 import { getTruncatedText } from "@/helpers";
-import type { Metadata } from "next";
+import type { PageMeta } from "@/lib/metadata/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_FE_URL;
 
 export default async function generateSiteMetadata(
   _props: BasePageParams,
-): Promise<Metadata> {
+): Promise<PageMeta> {
   const { data } = (await queryApi(query, {})) ?? {};
 
   const config = data?.globalConfiguration;
 
   const site = config?.site;
 
-  const title = site?.installationName;
+  const title = site?.installationName ?? undefined;
 
   const description = getTruncatedText(site?.installationHomePageCopy || "");
 
@@ -26,31 +26,16 @@ export default async function generateSiteMetadata(
       }
     : null;
 
-  const url = BASE_URL ? new URL(BASE_URL) : undefined;
-
   return {
-    title: {
-      default: title || "",
-      template: `%s - ${title}`,
-    },
+    title,
+    titleTemplate: `%s - ${title}`,
     description,
-    metadataBase: url,
-    openGraph: {
-      title,
-      description,
-      siteName: title,
-      type: "website",
-      locale: "en",
-      url,
-      ...(!!image?.url && {
-        images: [
-          {
-            url: image.url ?? undefined,
-            alt: image.alt ?? undefined,
-          },
-        ],
-      }),
-    },
+    baseUrl: BASE_URL,
+    url: BASE_URL,
+    siteName: title,
+    ogType: "website",
+    locale: "en",
+    images: image?.url ? [{ url: image.url, alt: image.alt }] : [],
   };
 }
 

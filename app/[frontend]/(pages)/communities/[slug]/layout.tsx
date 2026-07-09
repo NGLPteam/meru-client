@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import { notFound } from "@/lib/routing/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
@@ -10,13 +10,14 @@ import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import { BasePageParams } from "@/types/page";
 import queryApi from "@/lib/api/queryApi";
 import generateCommunityMetadata from "@/app/[frontend]/(pages)/communities/[slug]/_metadata/community";
+import toNextMetadata from "@/lib/metadata/toNextMetadata";
 import SetCommunity from "@/components/global/SetCommunity";
 
 export async function generateMetadata(
   props: BasePageParams,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return generateCommunityMetadata(props, parent);
+  return toNextMetadata(await generateCommunityMetadata(props), parent);
 }
 
 export default async function CommunityLayout({

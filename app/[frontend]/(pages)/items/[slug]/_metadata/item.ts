@@ -2,14 +2,13 @@ import { graphql } from "@/lib/api/gql";
 import queryApi from "@/lib/api/queryApi";
 import type { BasePageParams } from "@/types/page";
 import { getTruncatedText } from "@/helpers";
-import type { Metadata, ResolvingMetadata } from "next";
+import type { PageMeta } from "@/lib/metadata/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_FE_URL;
 
 export default async function generateItemMetadata(
   props: BasePageParams,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+): Promise<PageMeta> {
   const { slug } = await props.params;
 
   const { data } =
@@ -38,21 +37,12 @@ export default async function generateItemMetadata(
         }
       : null;
 
-  const images = image?.url ? [image] : [];
-
-  // optionally access and extend (rather than replace) parent metadata
-  const previousOpenGraph = (await parent)?.openGraph || { images: [] };
-  const previousImages = previousOpenGraph?.images || [];
-
   return {
-    ...(title && { title }),
-    ...(description && { description }),
-    openGraph: {
-      ...previousOpenGraph,
-      ...(title && { title }),
-      url: `${BASE_URL}items/${slug}`,
-      images: [...images, ...previousImages],
-    },
+    title: title ?? undefined,
+    description,
+    url: `${BASE_URL}items/${slug}`,
+    images: image?.url ? [{ url: image.url, alt: image.alt }] : [],
+    inheritParent: true,
   };
 }
 

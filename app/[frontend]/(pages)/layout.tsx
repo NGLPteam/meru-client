@@ -11,6 +11,7 @@ import { ViewerContextProvider } from "@/contexts/ViewerContext";
 import AppBody from "@/components/global/AppBody";
 import { BasePageParams } from "@/types/page";
 import ProgressBar from "@/components/atomic/loading/ProgressBar";
+import toNextMetadata from "@/lib/metadata/toNextMetadata";
 import generateSiteMetadata from "./_metadata/site";
 
 export const revalidate = 3600;
@@ -18,7 +19,7 @@ export const revalidate = 3600;
 export async function generateMetadata(
   props: BasePageParams,
 ): Promise<Metadata> {
-  return generateSiteMetadata(props);
+  return toNextMetadata(await generateSiteMetadata(props));
 }
 
 export default async function PageLayout({ children }: PropsWithChildren) {

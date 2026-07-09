@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import { notFound } from "@/lib/routing/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
 import HeroTemplate from "@/components/templates/Hero";
@@ -11,13 +11,14 @@ import queryApi from "@/lib/api/queryApi";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar";
 import generateCollectionMetadata from "@/app/[frontend]/(pages)/collections/[slug]/_metadata/collection";
+import toNextMetadata from "@/lib/metadata/toNextMetadata";
 import SetCommunity from "@/components/global/SetCommunity";
 
 export async function generateMetadata(
   props: BasePageParams,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return generateCollectionMetadata(props, parent);
+  return toNextMetadata(await generateCollectionMetadata(props), parent);
 }
 
 export default async function CollectionTemplateLayout({
