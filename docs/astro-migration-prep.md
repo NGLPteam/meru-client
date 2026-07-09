@@ -1,9 +1,36 @@
 # Prep work for moving meru-client off Next.js onto a static site generator (likely Astro)
 
-Status: planning. The relay→urql migration (`docs/relay-to-urql-migration.md`) is the
-data-layer prerequisite and is in progress on branch `migrate-relay-to-urql`. This doc
-covers everything else we can and should do **before** undertaking the full framework
-migration. Target is likely Astro, but not finalized.
+Status: **target decided — Astro SSR for all pages** (request-time rendering with a Node
+adapter; runtime env resolved per request, so the runtime-config path is settled). The
+relay→urql migration (`docs/relay-to-urql-migration.md`) is complete on branch
+`migrate-relay-to-urql`. This doc covers everything else we do **before** the full framework
+migration.
+
+## Progress: prep steps 1–6 complete
+
+Done on branch `decouple-next-apis` (stacked on `migrate-relay-to-urql`), one commit per step;
+full `tsc` + `eslint` clean throughout, verified against the running dev server. Every
+targeted Next API is now at **0 files outside its shim/boundary**:
+
+1. **Routing** — `next/navigation` + `next/link` behind `@/lib/routing/{navigation,hooks,Link}`
+   (51 importers repointed).
+2. **Fonts** — `next/font/local` → self-hosted `@font-face` (`styles/fonts/fonts.css`), assets
+   in `public/fonts/`, middleware matcher excludes `/fonts`.
+3. **Dynamic** — `next/dynamic({ssr:false})` → `@/lib/clientOnly` (React.lazy + hydration
+   guard); PDFViewer de-double-wrapped.
+4. **Metadata** — builders return neutral `PageMeta`; `next` `Metadata` confined to the 4
+   layouts + `@/lib/metadata/toNextMetadata`. `next/head` dropped (bare `<meta>`, React-hoisted).
+   Home `<head>` verified byte-identical; entity OG inheritance preserved. Fixed the
+   `communitys`→`communities` og:url typo.
+5. **Request context** — `next/headers` behind `@/lib/request/{draftMode,headers}` (dynamic
+   import inside each accessor to stay client-bundle-safe); `queryApi` gains an optional
+   explicit `token` seam.
+6. **Images** — confirmed zero `next/image`; dropped the direct `sharp` dep + `NEXT_SHARP_PATH`.
+
+**Next coupling intentionally left (framework boundary, handled during migration):** the 4
+layout `generateMetadata` exports + `toNextMetadata` (`next` Metadata), `lib/request/*` +
+`middleware.ts` (`next/headers`), `next/cache` `revalidatePath` (step 8), `next/server` +
+`middleware.ts` (step 9), and the dead `images` block in `next.config.js`.
 
 ## The thing to understand first
 
