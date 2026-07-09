@@ -148,9 +148,11 @@ by leverage.
    endpoints; the `/dynamic` path-variant hack disappears). Accepted constraint: memoryCache is
    per-instance and lost on redeploy — assumes one long-lived instance per tenant. Drops the Redis
    cache handler + deps.
-9. **Re-home the middleware logic.** `middleware.ts` does HTTPS redirect, `/preview` auth-gating,
-   and `/permalink` → entity-path rewrites. The `/dynamic` opt-out trick disappears entirely; the
-   redirect/gate/rewrite logic moves to an Astro middleware or adapter config.
+9. **Re-home the middleware logic. → DESIGN SETTLED, see `docs/astro-middleware-plan.md`.** The
+   `/dynamic` catch-all rewrite is deleted (no build-time generation to defeat); middleware
+   collapses to just `attachUserAndSession` (#7). `/preview/*` gating and `/permalink/*` resolution
+   become routes (not middleware); the HTTPS redirect is dropped (handled at the CDN/LB); i18n stays
+   client-side for the initial migration. Removes the last reason for the `[frontend]` segment.
 10. **Verify the CSS pipeline ports.** Custom PostCSS stack (`postcss-mixins`, `postcss-nested`,
     oklab, `postcss-assign-layer`, `@castiron/style-mixins`) + Tailwind 3. hcc-client already
     fought this — see its `astro7-css-diff.md`. MDX is minor (only 2 wrapper components, no
