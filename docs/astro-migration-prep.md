@@ -153,10 +153,13 @@ by leverage.
    collapses to just `attachUserAndSession` (#7). `/preview/*` gating and `/permalink/*` resolution
    become routes (not middleware); the HTTPS redirect is dropped (handled at the CDN/LB); i18n stays
    client-side for the initial migration. Removes the last reason for the `[frontend]` segment.
-10. **Verify the CSS pipeline ports.** Custom PostCSS stack (`postcss-mixins`, `postcss-nested`,
-    oklab, `postcss-assign-layer`, `@castiron/style-mixins`) + Tailwind 3. hcc-client already
-    fought this — see its `astro7-css-diff.md`. MDX is minor (only 2 wrapper components, no
-    meaningful `MDXRemote` runtime use).
+10. **CSS pipeline. → DESIGN SETTLED, see `docs/astro-styling-plan.md`.** Keep CSS Modules (~128
+    `*.module.css`, Vite-native) and keep Tailwind 3 for the initial migration — Astro/Vite runs
+    `postcss.config.js` natively, so the custom stack (`postcss-mixins` + `@castiron/style-mixins`,
+    `postcss-assign-layer`, the `@layer` cascade) carries over essentially as-is; the port is a
+    verification exercise. Tailwind 4 is a **separate follow-up project** (Meru has zero `@apply`,
+    so it's cleanly decoupled). Drop the vestigial `styled-components` layer + compiler flag with
+    Next. MDX is minor (2 wrapper components, no meaningful `MDXRemote` runtime use).
 
 ## Suggested sequencing
 
