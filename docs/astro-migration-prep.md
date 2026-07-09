@@ -159,7 +159,10 @@ by leverage.
     `postcss-assign-layer`, the `@layer` cascade) carries over essentially as-is; the port is a
     verification exercise. Tailwind 4 is a **separate follow-up project** (Meru has zero `@apply`,
     so it's cleanly decoupled). Drop the vestigial `styled-components` layer + compiler flag with
-    Next. MDX is minor (2 wrapper components, no meaningful `MDXRemote` runtime use).
+    Next. **Runtime MDX is a separate, core workstream** — most entity content arrives as MDX
+    strings in the API payload and is rendered via `next-mdx-remote` (`serialize` + `MDXRemote`,
+    ~15 custom components); it stays a React island (see `docs/astro-execution-plan.md` Phase 4b).
+    Only the file-based `@next/mdx` loader drops.
 
 ## Suggested sequencing
 
