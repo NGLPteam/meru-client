@@ -7,7 +7,7 @@ import { fetchPreviewAccess } from "@/lib/actions/fetchPreviewAccess";
 import { getRouteByEntityKind } from "@/helpers/routes";
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|fonts).*)"],
 };
 
 export async function middleware(request: NextRequest) {

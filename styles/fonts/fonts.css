@@ -1,0 +1,137 @@
+/*
+ * Self-hosted @font-face declarations.
+ *
+ * Replaces the previous next/font/local modules (styles/fonts/<name>/index.ts).
+ * next/font generated a hashed family name and exposed it via a CSS variable
+ * (e.g. --font-ilisarniq); we reproduce that contract with plain @font-face +
+ * :root variables so nothing downstream changes. Consumers:
+ *   styles/utilities/_theme.css, styles/base/_root.css  (--font-face-base/header)
+ *
+ * Assets live in public/fonts/ and are referenced by absolute /fonts/... URLs
+ * (served statically, no bundler url() rebasing needed, and covered by the
+ * `/fonts/(.*)` immutable-cache header in next.config.js). This carries over to
+ * the Astro SSR migration unchanged (public/ is static in both frameworks).
+ * Weight/style mappings are copied verbatim from the old next/font configs —
+ * note Libre Franklin's "600" files are intentionally mapped to weight 500.
+ */
+
+/* ---- Ilisarniq ---- */
+@font-face {
+  font-family: "Ilisarniq";
+  src: url("/fonts/ilisarniq/Ilisarniq-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ilisarniq";
+  src: url("/fonts/ilisarniq/Ilisarniq-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ilisarniq";
+  src: url("/fonts/ilisarniq/Ilisarniq-Demi.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ilisarniq";
+  src: url("/fonts/ilisarniq/Ilisarniq-DemiItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---- Switzer ---- */
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/Switzer-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/Switzer-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/Switzer-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/Switzer-MediumItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/Switzer-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Libre Franklin ---- */
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("/fonts/libre-franklin/Libre-Franklin-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("/fonts/libre-franklin/Libre-Franklin-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("/fonts/libre-franklin/Libre-Franklin-600.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("/fonts/libre-franklin/Libre-Franklin-600-Italic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---- Sentient ---- */
+@font-face {
+  font-family: "Sentient";
+  src: url("/fonts/sentient/Sentient-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sentient";
+  src: url("/fonts/sentient/Sentient-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Family-name variables, reproducing the next/font `variable` contract. */
+:root {
+  --font-ilisarniq: "Ilisarniq";
+  --font-switzer: "Switzer";
+  --font-libre-franklin: "Libre Franklin";
+  --font-sentient: "Sentient";
+}

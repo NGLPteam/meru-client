@@ -2,6 +2,7 @@
 
 @import "tailwindcss/base" layer(tw-base);
 
+@import "fonts/fonts.css" layer(meru-base);
 @import "base/_root.css" layer(meru-base);
 @import "base/_appearance.css" layer(meru-base);
 @import "base/_layout.css" layer(meru-base);

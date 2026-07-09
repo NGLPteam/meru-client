@@ -2,7 +2,6 @@
 
 import "@/styles/global.css";
 
-import ILISARNIQ from "@/styles/fonts/ilisarniq";
 import Button from "@/components/atomic/Button";
 
 export default function GlobalError({
@@ -16,7 +15,7 @@ export default function GlobalError({
     <html
       lang="en"
       dir={"ltr"}
-      className={`${ILISARNIQ.variable} theme-custom-cream theme-font-ilisarniq`}
+      className="theme-custom-cream theme-font-ilisarniq"
     >
       <body className="a-bg-neutral00">
         <div
