@@ -134,10 +134,13 @@ by leverage.
 
 ## Harder re-platforming items to design now (don't build yet)
 
-7. **Auth is the second-biggest lift after routing.** On `next-auth@5-beta` + Keycloak, which
-   doesn't run on Astro. Good news: `@auth/core` is already a direct dependency
-   (framework-agnostic). Check how hcc-client handles auth and design the Astro equivalent
-   (Auth.js core + a session accessor) now.
+7. **Auth is the second-biggest lift after routing. → DESIGN SETTLED, see
+   `docs/astro-auth-plan.md`.** Drop `next-auth`/`@auth/core` entirely and port hcc-client's
+   hand-rolled Keycloak OIDC cookie model (same Keycloak backend, no Auth.js). Access token stays
+   server-side (httpOnly cookie + `Astro.locals`), never in the browser. Search/ordering/
+   contributor-pagination go server-side (SSR on URL-param navigation); analytics + ViewCounter
+   stay client-side behind a same-origin `/api/graphql` proxy that injects the cookie token. The
+   entire client-token path is deleted.
 8. **On-demand revalidation has no Astro equivalent.** `/api/revalidate/entity` and `/instance`
    call `revalidatePath` (Next ISR) — the backend-webhook cache-invalidation story. On a
    static/hybrid host this becomes a rebuild trigger or a CDN purge. Design the replacement before
