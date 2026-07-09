@@ -15,8 +15,11 @@ Design doc for migrating Meru's `middleware.ts` onto the Astro SSR stack. Compan
 - **`/preview/*` gating and `/permalink/*` resolution become routes, not middleware** — matching
   hcc-client's "resolve in routes" pattern.
 - **HTTPS redirect is dropped from the app** — enforced at the CDN/load balancer (Cloudflare).
-- **i18n stays client-side** (`react-i18next` islands) for the initial migration — no
-  `attachTFunction`/server-`t` in `locals`. (Revisit later if we move i18n server-side.)
+- **i18n stays `react-i18next`** (no `attachTFunction`/server-`t` in `locals`), but it is **not
+  client-only**: most `t()` users become server-rendered React, so the shared i18next instance must
+  render on the server too. Single-locale makes this a small SSR-safe-init change (drop/guard the
+  browser `LanguageDetector`, force `lng: "en-US"`) — see `docs/astro-execution-plan.md` i18n note.
+  Per-request/multi-locale (`Astro.currentLocale`) is deferred.
 
 ## What Meru's middleware does today → fate
 

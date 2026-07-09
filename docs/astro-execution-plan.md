@@ -147,7 +147,8 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
 - Island-granularity optimization (carve static regions out of coarse islands to cut JS/hydration
   payload).
 - Tailwind 3 → 4 (`astro-styling-plan.md`).
-- Server-side i18n (keep `react-i18next` islands for now, per #9).
+- Per-request / multi-locale i18n (thread `Astro.currentLocale` into the instance). Not needed
+  while single-locale — see the i18n note below.
 - Redis-backed cache provider (only if a tenant is ever scaled past one instance, per #8).
 
 ## Cross-cutting notes
@@ -159,6 +160,14 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
   receiving a serialized fragment ref unmasks it exactly as on the server.
 - **Env/config** — the browser stops needing the API URL (proxy), so per-tenant runtime config is a
   server-only concern; drop the `NEXT_PUBLIC_*` client inlining entirely.
+- **i18n must render on the server, not just the client.** Keep `react-i18next`, but it is **not**
+  client-only: 57 of 79 `t()`-using files become server-rendered React (they work in Next only
+  because they sit under `"use client"` boundaries), so untranslated SSR HTML would ship and never
+  hydrate. Because Meru is single-locale (`en.json`, `DEFAULT_LNG = "en-US"`, synchronous bundled
+  resources), the fix is small: make the shared i18next init **SSR-safe** — drop/guard the browser
+  `LanguageDetector` (`i18n.ts` `.use(LanguageDetector)` touches `window` and throws on the server)
+  and force `lng: "en-US"`. Then `t()` resolves identically in server render and islands. No
+  `Astro.locals.t` / per-request locale needed until multi-locale (deferred).
 
 ## Open decisions (settle at Phase 0)
 
