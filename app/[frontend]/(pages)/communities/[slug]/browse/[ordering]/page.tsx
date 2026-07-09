@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";

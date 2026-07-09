@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import { Select } from "@/components/forms";
 

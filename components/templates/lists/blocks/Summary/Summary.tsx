@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useParams } from "next/navigation";
+import { useParams } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import {
   useSharedListTemplateFragment,

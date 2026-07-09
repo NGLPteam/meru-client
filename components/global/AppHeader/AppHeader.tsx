@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";

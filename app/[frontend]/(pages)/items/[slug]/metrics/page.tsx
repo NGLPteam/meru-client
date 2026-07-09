@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import ArticleAnalyticsBlock from "@/components/composed/analytics/ArticleAnalyticsBlock";
 import { AnalyticsPrecision } from "@/types/graphql-schema";

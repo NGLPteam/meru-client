@@ -4,7 +4,7 @@ import "@/lib/pdfsupport";
 import { useState, useRef, useCallback } from "react";
 import { Document } from "react-pdf";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/lib/routing/hooks";
 import { Trans } from "react-i18next";
 import { ErrorBlock } from "@/components/layout";
 import { NoContent } from "@/components/layout";

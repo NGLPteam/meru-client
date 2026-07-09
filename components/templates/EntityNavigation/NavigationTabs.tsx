@@ -1,4 +1,4 @@
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";

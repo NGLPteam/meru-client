@@ -1,4 +1,4 @@
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/lib/routing/hooks";
 import { NamedLink, NavMenuLink } from "@/components/atomic";
 import { fragment as EntityNavListFragment } from "@/components/composed/entity/EntityNavBar/EntityNavList/EntityNavList";
 import { type DocumentType } from "@/lib/api/gql";

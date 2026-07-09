@@ -1,4 +1,4 @@
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import BasePagination from "./BasePagination";
 

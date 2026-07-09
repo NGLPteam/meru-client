@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import ContributionsBlock from "@/components/composed/contribution/ContributionsBlock";
 import { BasePageParams } from "@/types/page";

@@ -1,8 +1,8 @@
 "use client";
 
 import { startTransition, forwardRef } from "react";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
+import NextLink from "@/lib/routing/Link";
+import { useRouter } from "@/lib/routing/hooks";
 import { useProgress } from "./";
 
 // Copied from  https://github.com/vercel/next.js/blob/canary/packages/next/src/client/link.tsx#L180-L191

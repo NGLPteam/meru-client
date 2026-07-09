@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "urql";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Button } from "@/components/atomic";

@@ -1,5 +1,5 @@
 import { draftMode } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound, redirect } from "@/lib/routing/navigation";
 
 const LANDING: Record<string, (slug: string) => string> = {
   items: (slug) => `/items/${slug}/metadata`,

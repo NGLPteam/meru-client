@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import { Fieldset, Select } from "@/components/forms";
 

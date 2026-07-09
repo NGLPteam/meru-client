@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/lib/routing/hooks";
 import { useForm } from "react-hook-form";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchBar from "@/components/composed/search/SearchBar";

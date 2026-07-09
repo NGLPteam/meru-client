@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { notFound } from "next/navigation";
+import { notFound } from "@/lib/routing/navigation";
 import { draftMode } from "next/headers";
 import { ResolvingMetadata, Metadata } from "next";
 import { graphql } from "@/lib/api/gql";

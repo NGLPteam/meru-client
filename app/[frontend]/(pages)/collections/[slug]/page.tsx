@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import MainLayout from "@/components/templates/MainLayout";
 import queryApi from "@/lib/api/queryApi";

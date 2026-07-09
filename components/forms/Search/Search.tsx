@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import IconFactory from "@/components/factories/IconFactory";

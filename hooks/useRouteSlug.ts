@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useParams } from "@/lib/routing/hooks";
 import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
 
 export default function useRouteSlug(): string | undefined | null {

@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/lib/routing/hooks";
 import { useTranslation } from "react-i18next";
 import { markdownToTxt } from "markdown-to-txt";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";

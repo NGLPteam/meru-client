@@ -1,4 +1,4 @@
-import { redirect, notFound } from "next/navigation";
+import { redirect, notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
 import InstanceCommunities from "@/components/composed/instance/InstanceCommunities";
 import InstanceHero from "@/components/composed/instance/InstanceHero";

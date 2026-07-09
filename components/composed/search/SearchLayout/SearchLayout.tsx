@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "urql";
 import classNames from "classnames";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
 import { useForm } from "react-hook-form";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";

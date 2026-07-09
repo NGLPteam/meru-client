@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
-import { usePathname } from "next/navigation";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname } from "@/lib/routing/hooks";
+import { useRouter, useSearchParams } from "@/lib/routing/hooks";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./SearchHero.module.css";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useParams } from "next/navigation";
+import { useParams } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { formatFileSize } from "@/helpers/strings";

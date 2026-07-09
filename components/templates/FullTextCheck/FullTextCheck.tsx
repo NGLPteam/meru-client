@@ -1,7 +1,7 @@
 "use client";
 
 import { PropsWithChildren, createContext, useContext } from "react";
-import { redirect } from "next/navigation";
+import { redirect } from "@/lib/routing/navigation";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 type Props = PropsWithChildren & {
