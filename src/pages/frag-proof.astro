@@ -1,0 +1,29 @@
+---
+// Phase 0, milestone C (the crux): .astro fetches a query that spreads a
+// component's fragment, then renders that React component server-side with the
+// masked fragment ref threaded as a prop. Proves the entire thin-Astro strategy:
+// Astro = fetch/route layer, React component = pure fragment consumer, unchanged.
+import query from "../lib/query";
+import { FragProofQuery } from "../lib/fragProof.query";
+import SiteNameProof from "../components/SiteNameProof";
+import SiteNameIsland from "../components/SiteNameIsland";
+
+const { data, error } = await query(FragProofQuery, {});
+const config = data?.globalConfiguration;
+---
+
+<html lang="en">
+  <head><meta charset="utf-8" /><title>fragment masking proof</title></head>
+  <body>
+    <h1>Phase 0 fragment-masking proof</h1>
+    {error && <pre>ERROR: {String(error)}</pre>}
+    {config ? (
+      <>
+        <p>Server-rendered (no JS): <SiteNameProof data={config} /></p>
+        <p>Hydrated island: <SiteNameIsland data={config} client:load /></p>
+      </>
+    ) : (
+      <p>no config</p>
+    )}
+  </body>
+</html>

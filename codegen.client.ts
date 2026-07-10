@@ -8,6 +8,7 @@ const config: CodegenConfig = {
   ignoreNoDocuments: true,
   schema: "./schema.graphql",
   documents: [
+    "src/**/*.{ts,tsx}",
     "app/**/*.{ts,tsx}",
     "components/**/*.{ts,tsx}",
     "contexts/**/*.{ts,tsx}",

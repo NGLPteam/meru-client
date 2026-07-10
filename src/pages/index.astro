@@ -1,0 +1,21 @@
+---
+// Phase 0, milestones A–C: prove Astro boots, the CSS pipeline runs, and an
+// existing Meru React component renders server-side (no JS) with its CSS module
+// + global theme custom properties.
+import "@/styles/global.css";
+import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
+---
+
+<html lang="en" class="theme-custom-cream theme-font-ilisarniq">
+  <head>
+    <meta charset="utf-8" />
+    <title>Astro Phase 0 proof</title>
+  </head>
+  <body>
+    <h1>Phase 0 proof</h1>
+    <p>Below is Meru's <code>LoadingBlock</code> React component, server-rendered by Astro:</p>
+    <div style="height: 180px; border: 1px dashed #999;">
+      <LoadingBlock />
+    </div>
+  </body>
+</html>
