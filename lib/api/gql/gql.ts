@@ -191,6 +191,7 @@ type Documents = {
     "\n  query fetchPreviewAccessQuery(\n    $slug: Slug!\n    $isItem: Boolean!\n    $isCollection: Boolean!\n    $isCommunity: Boolean!\n  ) {\n    item(slug: $slug) @include(if: $isItem) {\n      canUpdate {\n        value\n      }\n    }\n    collection(slug: $slug) @include(if: $isCollection) {\n      canUpdate {\n        value\n      }\n    }\n    community(slug: $slug) @include(if: $isCommunity) {\n      canUpdate {\n        value\n      }\n    }\n  }\n": typeof types.fetchPreviewAccessQueryDocument,
     "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": typeof types.SiteNameProofFragmentDoc,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": typeof types.Phase0FragProofQueryDocument,
+    "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": typeof types.LayoutThemeAstroQueryDocument,
 };
 const documents: Documents = {
     "\n  query sitemapCollectionsQuery($slug: Slug!) {\n    collection(slug: $slug) {\n      ...getEntitySitemapFragment\n    }\n  }\n": types.sitemapCollectionsQueryDocument,
@@ -370,6 +371,7 @@ const documents: Documents = {
     "\n  query fetchPreviewAccessQuery(\n    $slug: Slug!\n    $isItem: Boolean!\n    $isCollection: Boolean!\n    $isCommunity: Boolean!\n  ) {\n    item(slug: $slug) @include(if: $isItem) {\n      canUpdate {\n        value\n      }\n    }\n    collection(slug: $slug) @include(if: $isCollection) {\n      canUpdate {\n        value\n      }\n    }\n    community(slug: $slug) @include(if: $isCommunity) {\n      canUpdate {\n        value\n      }\n    }\n  }\n": types.fetchPreviewAccessQueryDocument,
     "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": types.SiteNameProofFragmentDoc,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": types.Phase0FragProofQueryDocument,
+    "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": types.LayoutThemeAstroQueryDocument,
 };
 
 /**
@@ -1094,6 +1096,10 @@ export function graphql(source: "\n  fragment SiteNameProof on GlobalConfigurati
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n"): (typeof documents)["\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n"): (typeof documents)["\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
