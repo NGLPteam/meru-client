@@ -156,6 +156,16 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
 - **Data fetching only in `.astro`** — components can't fetch. All server fetches (currently in
   pages/layouts + `getStatic*` + metadata builders) live in `.astro` frontmatter; results thread
   down as fragment-ref props. Already the shape after relay→urql, so little hoisting needed.
+- **Astro inverts the layout/page data flow — this deletes `SetCommunityContext`.** In Next the
+  layout renders the page (`children` is opaque), so the item page — which fetches the item and thus
+  discovers its community — must push that community *back up* to the already-rendered global header
+  via a `"use client"` context setter (`SetCommunityContext` + `useState`). In Astro the **page
+  renders the layout**: `item.astro` fetches the item first, then `<BaseLayout community={item.community}>`
+  passes it *in* as a prop → header island. No setter, no cross-island state. `SetCommunityContext`
+  and `CommunityContext` both delete; the layout takes an optional `community` prop (item/collection
+  pages derive it from the entity, community pages from the slug, home/search pass none). With View
+  Transitions, let the header island re-render per navigation (not `transition:persist`) so the new
+  community takes effect.
 - **`useFragment` works in islands** — it's a pure runtime identity function; a hydrated island
   receiving a serialized fragment ref unmasks it exactly as on the server.
 - **Env/config** — the browser stops needing the API URL (proxy), so per-tenant runtime config is a
@@ -169,12 +179,21 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
   and force `lng: "en-US"`. Then `t()` resolves identically in server render and islands. No
   `Astro.locals.t` / per-request locale needed until multi-locale (deferred).
 
-## Open decisions (settle at Phase 0)
+## Settled decisions
 
-1. **Repo structure** — build the Astro app in-place in `meru-client` (new `src/` + `astro.config`,
-   Next kept runnable until Phase 6 cutover) vs. a parallel scaffold/branch. In-place keeps one
-   history and lets components be shared without copying, but the two build configs coexist
-   awkwardly during the transition. Leaning in-place with cutover at Phase 6.
-2. **Default island granularity** — start with fine-grained (server-render by default, hoist
-   interactive leaves) vs. accept coarser islands initially to move faster. Leaning fine-grained
-   except where hoisting is disproportionately costly; revisit in the deferred optimization pass.
+1. **Repo structure — in-place, move-over (Next is NOT kept runnable).** Astro is built in-place in
+   `meru-client` (`src/` + `astro.config`), and we **migrate rather than coexist**: Next is not kept
+   green during the port. This drops the coexistence tax:
+   - **Routing shim rewritten in place, no aliasing.** `lib/routing/hooks.ts` (etc.) are edited
+     directly to Astro impls (`usePathname` = `window.location`, `useRouter` = History, …). No
+     `astro.config` alias is needed (that was only to keep `next/navigation` working simultaneously).
+     The prep-step-1 shim still pays off — one file to change instead of 49.
+   - **Natural query names.** Codegen no longer scans a live Next tree, so no `*AstroQuery`
+     suffixing; narrow the `documents` glob (drop `app/**` as pages port; keep `components/`,
+     `contexts/`, `helpers/`, `src/`, …) and reuse plain operation names.
+   - **Delete-as-we-go.** `next.config.js`, `middleware.ts`, `app/` pages, and the `[frontend]`/
+     `/dynamic` scaffolding are removed as their Astro equivalents land — not a big Phase 6 sweep.
+   - Trade-off: we lose easy A/B regression diffing of Next vs Astro output; verify Astro directly.
+2. **Default island granularity — fine-grained** (server-render by default, hoist interactive
+   leaves), accepting a coarser island only where hoisting is disproportionately costly; revisit in
+   the deferred optimization pass.
