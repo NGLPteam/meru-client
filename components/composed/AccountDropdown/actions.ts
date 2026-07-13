@@ -1,56 +1,29 @@
-"use server";
+// TEMPORARY (Astro migration) — auth stub.
+//
+// The Next implementation of these was a `"use server"` module that statically
+// imported next-auth (@/lib/auth/initAuth + @/lib/auth/keycloak). Astro/Vite has
+// no `"use server"` handling, so those imports would ship next-auth into the
+// browser island bundle. Until the auth phase ports the hcc Keycloak client
+// pattern (httpOnly cookies, /api/auth/* routes — see docs/astro-auth-plan.md),
+// these are inert placeholders so the global chrome renders and hydrates.
+//
+// Signatures are unchanged so AccountDropdown / AppFooter / PreviewModeButton
+// compile untouched; the buttons are simply no-ops until auth lands.
 
-import joinURL from "url-join";
-import { enableDraftMode, disableDraftMode } from "@/lib/request/draftMode";
-import {
-  auth,
-  signIn as doSignIn,
-  signOut as doSignOut,
-} from "@/lib/auth/initAuth";
-import {
-  NEXT_PUBLIC_KEYCLOAK_URL,
-  NEXT_PUBLIC_KEYCLOAK_REALM,
-  NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
-  NEXT_KEYCLOAK_CLIENT_SECRET,
-} from "@/lib/auth/keycloak";
-
-export async function signIn() {
-  await doSignIn("keycloak");
+function notYet(action: string) {
+  if (typeof window !== "undefined") {
+    console.warn(`[auth stub] ${action} not wired up yet (Astro migration).`);
+  }
 }
 
-export async function enterPreviewMode() {
-  await enableDraftMode();
+export async function signIn() {
+  notYet("signIn");
 }
 
 export async function signOut() {
-  const session = await auth();
+  notYet("signOut");
+}
 
-  await disableDraftMode();
-
-  if (session?.refreshToken) {
-    try {
-      const logoutUrl = joinURL(
-        NEXT_PUBLIC_KEYCLOAK_URL,
-        "realms",
-        NEXT_PUBLIC_KEYCLOAK_REALM,
-        "protocol/openid-connect/logout",
-      );
-
-      const params = new URLSearchParams({
-        client_id: NEXT_PUBLIC_KEYCLOAK_CLIENT_ID,
-        client_secret: NEXT_KEYCLOAK_CLIENT_SECRET,
-        refresh_token: session.refreshToken,
-      });
-
-      await fetch(logoutUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params,
-      });
-    } catch {
-      // ignore — local sign-out below still runs
-    }
-  }
-
-  await doSignOut();
+export async function enterPreviewMode() {
+  notYet("enterPreviewMode");
 }

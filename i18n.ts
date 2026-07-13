@@ -16,24 +16,29 @@ Object.keys(resources).forEach(
   (key) => (SUPPORTED_LOCALES[key] = get(resources, `${key}.translation.key`)),
 );
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    lng: DEFAULT_LNG,
-    resources,
-    interpolation: {
-      escapeValue: false,
-      format: (value, format, lng) =>
-        format === "number" ? new Intl.NumberFormat(lng).format(value) : value,
-    },
-    fallbackLng: {
-      default: [DEFAULT_LNG],
-    },
-    react: {
-      transSupportBasicHtmlNodes: true,
-    },
-  });
+// The browser LanguageDetector touches window/navigator/document at init, which
+// throws when React islands are server-rendered under Astro SSR. The app is
+// single-locale and pins the language explicitly (DEFAULT_LNG), so only wire the
+// detector up in the browser; the server just uses DEFAULT_LNG.
+if (typeof window !== "undefined") {
+  i18n.use(LanguageDetector);
+}
+
+i18n.use(initReactI18next).init({
+  lng: DEFAULT_LNG,
+  resources,
+  interpolation: {
+    escapeValue: false,
+    format: (value, format, lng) =>
+      format === "number" ? new Intl.NumberFormat(lng).format(value) : value,
+  },
+  fallbackLng: {
+    default: [DEFAULT_LNG],
+  },
+  react: {
+    transSupportBasicHtmlNodes: true,
+  },
+});
 
 export default i18n;
 
