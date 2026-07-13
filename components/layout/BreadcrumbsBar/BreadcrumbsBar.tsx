@@ -7,6 +7,7 @@ import capitalize from "lodash/capitalize";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Breadcrumbs, Button, Dropdown } from "@/components/atomic";
 import { getOrigin, getRouteByEntityType } from "@/helpers";
+import { ADMIN_URL } from "@/lib/env/clientConfig";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
 import styles from "./BreadcrumbsBar.module.css";
 
@@ -54,7 +55,7 @@ export default function BreadcrumbsBar({
               as="a"
               size="sm"
               icon="linkExternal"
-              href={`${process.env.NEXT_PUBLIC_ADMIN_URL}my-submissions/new?collection=${breadcrumbData.slug}`}
+              href={`${ADMIN_URL}my-submissions/new?collection=${breadcrumbData.slug}`}
               target="_blank"
               secondary
             >

@@ -13,4 +13,12 @@ export default defineConfig({
   adapter: node({ mode: "standalone" }),
   integrations: [react()],
   server: { port: 4321 },
+  vite: {
+    // Expose the app's public deploy vars to the client bundle via
+    // import.meta.env. These carry the legacy NEXT_PUBLIC_ prefix (public by
+    // convention, same as Next); secrets without the prefix stay server-only.
+    // Client code reads them through lib/env/clientConfig.ts — the single swap
+    // point for the eventual var rename / Next removal.
+    envPrefix: ["PUBLIC_", "NEXT_PUBLIC_"],
+  },
 });

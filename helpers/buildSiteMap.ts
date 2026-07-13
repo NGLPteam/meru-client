@@ -1,7 +1,12 @@
 import { ServerResponse } from "http";
 
-const MAXAGE = process.env.NEXT_PUBLIC_SITEMAP_CACHE_MAXAGE || "86400";
-const REVALIDATE = process.env.NEXT_PUBLIC_SITEMAP_CACHE_REVALIDATE || "59";
+// Guard `process` so eager dev-mode barrel loading into a client bundle doesn't
+// throw "process is not defined"; sitemap generation only runs server-side.
+const procEnv: Record<string, string | undefined> =
+  typeof process !== "undefined" ? process.env : {};
+
+const MAXAGE = procEnv.NEXT_PUBLIC_SITEMAP_CACHE_MAXAGE || "86400";
+const REVALIDATE = procEnv.NEXT_PUBLIC_SITEMAP_CACHE_REVALIDATE || "59";
 
 export default async function buildSiteMap(
   res: ServerResponse,

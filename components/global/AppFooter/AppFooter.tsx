@@ -12,6 +12,7 @@ import CommunityName from "@/components/composed/community/CommunityName";
 import { NamedLink, Markdown } from "@/components/atomic";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
 import { CommunityContext } from "@/contexts/CommunityContext";
+import { ADMIN_URL } from "@/lib/env/clientConfig";
 import { signIn } from "@/components/composed/AccountDropdown/actions";
 
 import styles from "./AppFooter.module.css";
@@ -97,9 +98,7 @@ export default function AppFooter({ data, communityData }: Props) {
           <h5 className="t-label-lg">{t("nav.explore")}</h5>
           <ul className={classNames("t-unstyled-list", styles.navList)}>
             {renderRoute("/", "nav.home")}
-            {canAccessAdmin &&
-              process.env.NEXT_PUBLIC_ADMIN_URL &&
-              renderRoute(process.env.NEXT_PUBLIC_ADMIN_URL, "nav.admin")}
+            {canAccessAdmin && ADMIN_URL && renderRoute(ADMIN_URL, "nav.admin")}
             {!isAuthenticated && (
               <li
                 className={classNames("t-copy-sm t-copy-light", styles.navItem)}

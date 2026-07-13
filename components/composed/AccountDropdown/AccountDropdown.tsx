@@ -6,6 +6,7 @@ import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import IconFactory from "@/components/factories/IconFactory";
 import { useProgress } from "@/lib/vendor/react-transition-progress";
 import { setClientToken } from "@/lib/api/clientToken";
+import { ADMIN_URL } from "@/lib/env/clientConfig";
 import styles from "./AccountDropdown.module.css";
 import PreviewModeButton from "./PreviewModeButton";
 import { signIn, signOut } from "./actions";
@@ -20,7 +21,7 @@ export default function AccountDropdown({ condensed }: Props) {
 
   const [, startTransition] = useTransition();
 
-  const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL;
+  const adminUrl = ADMIN_URL;
 
   const handleSignOut = useCallback(() => {
     startTransition(async () => {
