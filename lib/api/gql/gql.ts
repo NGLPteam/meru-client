@@ -53,7 +53,6 @@ type Documents = {
     "\n  query pageItemTemplateQuery($slug: Slug!) {\n    item(slug: $slug) {\n      layouts {\n        main {\n          ...MainLayoutFragment\n        }\n      }\n    }\n  }\n": typeof types.pageItemTemplateQueryDocument,
     "\n  query pageTemplatesItemPageQuery($slug: Slug!, $pageSlug: String!) {\n    item(slug: $slug) {\n      page(slug: $pageSlug) {\n        ...EntityPageLayoutFragment\n      }\n    }\n  }\n": typeof types.pageTemplatesItemPageQueryDocument,
     "\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n": typeof types.layoutAllPagesQueryDocument,
-    "\n  query pageInstanceContentLayoutQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n": typeof types.pageInstanceContentLayoutQueryDocument,
     "\n  query pageSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n": typeof types.pageSearchQueryDocument,
     "\n  query layoutThemeQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": typeof types.layoutThemeQueryDocument,
     "\n  fragment BreadcrumbLinkFragment on EntityBreadcrumb {\n    label\n    kind\n    slug\n  }\n": typeof types.BreadcrumbLinkFragmentFragmentDoc,
@@ -192,6 +191,7 @@ type Documents = {
     "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": typeof types.SiteNameProofFragmentDoc,
     "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n": typeof types.chromeLayoutQueryDocument,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": typeof types.Phase0FragProofQueryDocument,
+    "\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n": typeof types.instanceContentQueryDocument,
     "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": typeof types.LayoutThemeAstroQueryDocument,
 };
 const documents: Documents = {
@@ -234,7 +234,6 @@ const documents: Documents = {
     "\n  query pageItemTemplateQuery($slug: Slug!) {\n    item(slug: $slug) {\n      layouts {\n        main {\n          ...MainLayoutFragment\n        }\n      }\n    }\n  }\n": types.pageItemTemplateQueryDocument,
     "\n  query pageTemplatesItemPageQuery($slug: Slug!, $pageSlug: String!) {\n    item(slug: $slug) {\n      page(slug: $pageSlug) {\n        ...EntityPageLayoutFragment\n      }\n    }\n  }\n": types.pageTemplatesItemPageQueryDocument,
     "\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n": types.layoutAllPagesQueryDocument,
-    "\n  query pageInstanceContentLayoutQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n": types.pageInstanceContentLayoutQueryDocument,
     "\n  query pageSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n": types.pageSearchQueryDocument,
     "\n  query layoutThemeQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": types.layoutThemeQueryDocument,
     "\n  fragment BreadcrumbLinkFragment on EntityBreadcrumb {\n    label\n    kind\n    slug\n  }\n": types.BreadcrumbLinkFragmentFragmentDoc,
@@ -373,6 +372,7 @@ const documents: Documents = {
     "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": types.SiteNameProofFragmentDoc,
     "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n": types.chromeLayoutQueryDocument,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": types.Phase0FragProofQueryDocument,
+    "\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n": types.instanceContentQueryDocument,
     "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": types.LayoutThemeAstroQueryDocument,
 };
 
@@ -546,10 +546,6 @@ export function graphql(source: "\n  query pageTemplatesItemPageQuery($slug: Slu
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n"): (typeof documents)["\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query pageInstanceContentLayoutQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n"): (typeof documents)["\n  query pageInstanceContentLayoutQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1102,6 +1098,10 @@ export function graphql(source: "\n  query chromeLayoutQuery {\n    ...AppHeader
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n"): (typeof documents)["\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n"): (typeof documents)["\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

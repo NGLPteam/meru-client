@@ -1,18 +1,34 @@
 ---
-// Phase 1 demo: a page using the real BaseLayout — theme classes on <html>,
-// site metadata in <head>, global chrome (header + footer islands) around this
-// page content in the slot. No `meta` prop → the home page uses the site-level
-// metadata (installation name / homepage copy) as-is.
+// Home / instance page — Astro port of app/[frontend]/(pages)/page.tsx.
+// Fetches the instance content, applies the single-community redirect / no-
+// instance 404, and renders the hero + community list island in the slot.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import query from "../lib/query";
+import { instanceContentQuery } from "../lib/queries/home";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import InstanceContent from "../components/pages/InstanceContent";
+
+const { data: instance } = await query(instanceContentQuery, {});
+
+// A single-community instance is that community's site — send the root there.
+const total = instance?.communities?.pageInfo?.totalCount ?? 0;
+const firstSlug = instance?.communities?.edges[0]?.node?.slug ?? null;
+if (total === 1 && firstSlug) {
+  return Astro.redirect(`/communities/${firstSlug}`);
+}
+
+if (!instance) {
+  return new Response(null, { status: 404 });
+}
+
+const { data: globalData } = await query(globalStaticQuery, {});
 ---
 
 <BaseLayout>
-  <section class="l-container-wide" style="padding-block: 4rem;">
-    <h1 class="t-h1">Phase 1: chrome shell</h1>
-    <p class="t-copy">
-      Server-rendered page content. The header and footer above/below are
-      hydrated Astro islands fed server data; this region is a plain
-      <code>&lt;slot /&gt;</code>.
-    </p>
-  </section>
+  <InstanceContent
+    client:load
+    data={instance}
+    communities={instance.communities}
+    globalData={globalData}
+  />
 </BaseLayout>
