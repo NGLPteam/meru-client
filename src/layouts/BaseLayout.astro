@@ -1,23 +1,48 @@
 ---
-// Phase 1: the outer root layout — the Astro port of app/[frontend]/layout.tsx.
-// Owns <html>/<head>/<body>, the server-known theme classes (getThemeClasses),
-// fonts + global CSS (prep step 2), and a <slot/> for page content. The global
-// chrome (AppBody → header/footer) is layered in on top of this.
+// Phase 1: the outer root layout — the Astro port of app/[frontend]/layout.tsx
+// + (pages)/layout.tsx. Owns <html>/<head>/<body>, the server-known theme
+// classes, fonts + global CSS (prep step 2), the global chrome (header/footer
+// islands), and a <slot/> for page content.
+//
+// The chrome is decomposed into two hydrated islands (AppHeaderIsland /
+// AppFooterIsland) around a plain Astro <slot/> — page content stays free to be
+// its own server HTML + independent islands. Each island carries its own
+// provider stack (see ChromeProviders); server data is fetched here and threaded
+// in as props.
 import "@/styles/global.css";
 import { getThemeClasses } from "@/styles/theme-helpers";
 import query from "../lib/query";
 import { LayoutThemeAstroQuery } from "../lib/queries/layout";
+import { chromeLayoutQuery } from "../lib/chrome/queries";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import AppHeaderIsland from "../components/chrome/AppHeaderIsland";
+import AppFooterIsland from "../components/chrome/AppFooterIsland";
+import type { ComponentProps } from "react";
+
+type CommunityRef = ComponentProps<typeof AppHeaderIsland>["community"];
 
 interface Props {
   title?: string;
   description?: string;
+  // Present on entity/community/collection pages — the page knows the active
+  // community server-side and threads it into the chrome (replacing Next's
+  // client-side SetCommunityContext). Undefined elsewhere.
+  community?: CommunityRef;
+  draftModeEnabled?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, community, draftModeEnabled } = Astro.props;
 
-const { data } = await query(LayoutThemeAstroQuery, {});
-const theme = data?.globalConfiguration?.theme ?? undefined;
+const [themeRes, chromeRes, globalStaticRes] = await Promise.all([
+  query(LayoutThemeAstroQuery, {}),
+  query(chromeLayoutQuery, {}),
+  query(globalStaticQuery, {}),
+]);
+
+const theme = themeRes.data?.globalConfiguration?.theme ?? undefined;
 const themeClasses = getThemeClasses(theme);
+const chromeData = chromeRes.data;
+const globalData = globalStaticRes.data;
 ---
 
 <html lang="en" dir="ltr" class={themeClasses}>
@@ -28,6 +53,34 @@ const themeClasses = getThemeClasses(theme);
     {description && <meta name="description" content={description} />}
   </head>
   <body>
-    <slot />
+    <div class="app-shell">
+      <AppHeaderIsland
+        client:load
+        data={chromeData}
+        globalData={globalData}
+        community={community}
+        draftModeEnabled={draftModeEnabled}
+      />
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+      <AppFooterIsland
+        client:load
+        data={chromeData}
+        globalData={globalData}
+        community={community}
+        draftModeEnabled={draftModeEnabled}
+      />
+    </div>
   </body>
 </html>
+
+<style>
+  /* Ported from AppBody.module.css .content — footer sticks to the viewport
+     bottom on short pages. */
+  .app-shell {
+    min-block-size: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

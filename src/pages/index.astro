@@ -1,14 +1,16 @@
 ---
-// Phase 1 demo: a page using the real BaseLayout (theme classes fetched + applied
-// on <html>), rendering a Meru React component in the slot.
+// Phase 1 demo: a page using the real BaseLayout — theme classes on <html>,
+// global chrome (header + footer islands) around this page content in the slot.
 import BaseLayout from "../layouts/BaseLayout.astro";
-import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 ---
 
 <BaseLayout title="Meru — Astro Phase 1">
-  <h1>Phase 1: BaseLayout</h1>
-  <p>Theme classes are fetched server-side and applied to &lt;html&gt;.</p>
-  <div style="height: 160px; border: 1px dashed #999;">
-    <LoadingBlock />
-  </div>
+  <section class="l-container-wide" style="padding-block: 4rem;">
+    <h1 class="t-h1">Phase 1: chrome shell</h1>
+    <p class="t-copy">
+      Server-rendered page content. The header and footer above/below are
+      hydrated Astro islands fed server data; this region is a plain
+      <code>&lt;slot /&gt;</code>.
+    </p>
+  </section>
 </BaseLayout>

@@ -1,0 +1,57 @@
+"use client";
+
+// Provider stack for the global-chrome islands (AppHeader / AppFooter).
+//
+// Astro renders each `client:*` component as its own React root, so the chrome
+// can't inherit context from an Astro-level wrapper — each chrome island wraps
+// itself in this stack, fed server-known data via props.
+//
+// Deferred vs. the Next (pages)/layout.tsx stack:
+//   - UrqlProvider: omitted. No chrome child runs a client useQuery/useMutation,
+//     and the client urql bootstrap reads NEXT_PUBLIC_API_URL — that arrives
+//     with the same-origin /api/graphql proxy in the auth phase.
+//   - ViewerContext still self-fetches /api/viewer (logged-out until the auth
+//     phase provides that route; the fetch failure is swallowed).
+// Side-effect: initialize the i18next singleton (SSR-safe — the browser
+// LanguageDetector is only wired under `window`). react-i18next hooks in the
+// chrome depend on this having run.
+import "@/i18n";
+import {
+  GlobalStaticContextProvider,
+  type GlobalStaticData,
+} from "@/contexts/GlobalStaticContext/GlobalStaticContext";
+// Import the provider from the module directly, not the barrel — the barrel is
+// import-safe now, but the direct path keeps the server fetch out of the graph.
+import { ViewerContextProvider } from "@/contexts/ViewerContext/ViewerContext";
+import { CommunityContextProvider } from "@/contexts/CommunityContext";
+import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
+import type { PropsWithChildren } from "react";
+
+type CommunityRef = React.ComponentProps<
+  typeof CommunityContextProvider
+>["data"];
+
+type Props = PropsWithChildren & {
+  globalData?: GlobalStaticData;
+  community?: CommunityRef;
+  draftModeEnabled?: boolean;
+};
+
+export default function ChromeProviders({
+  children,
+  globalData,
+  community,
+  draftModeEnabled,
+}: Props) {
+  return (
+    <GlobalStaticContextProvider globalData={globalData}>
+      <ViewerContextProvider isPreview={draftModeEnabled}>
+        <ProgressBarProvider>
+          <CommunityContextProvider data={community}>
+            {children}
+          </CommunityContextProvider>
+        </ProgressBarProvider>
+      </ViewerContextProvider>
+    </GlobalStaticContextProvider>
+  );
+}

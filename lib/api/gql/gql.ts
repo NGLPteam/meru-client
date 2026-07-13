@@ -190,6 +190,7 @@ type Documents = {
     "\n  query fetchPermalinkQuery($uri: String!) {\n    permalinkByUri(uri: $uri) {\n      kind\n      permalinkableSlug\n    }\n  }\n": typeof types.fetchPermalinkQueryDocument,
     "\n  query fetchPreviewAccessQuery(\n    $slug: Slug!\n    $isItem: Boolean!\n    $isCollection: Boolean!\n    $isCommunity: Boolean!\n  ) {\n    item(slug: $slug) @include(if: $isItem) {\n      canUpdate {\n        value\n      }\n    }\n    collection(slug: $slug) @include(if: $isCollection) {\n      canUpdate {\n        value\n      }\n    }\n    community(slug: $slug) @include(if: $isCommunity) {\n      canUpdate {\n        value\n      }\n    }\n  }\n": typeof types.fetchPreviewAccessQueryDocument,
     "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": typeof types.SiteNameProofFragmentDoc,
+    "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n": typeof types.chromeLayoutQueryDocument,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": typeof types.Phase0FragProofQueryDocument,
     "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": typeof types.LayoutThemeAstroQueryDocument,
 };
@@ -370,6 +371,7 @@ const documents: Documents = {
     "\n  query fetchPermalinkQuery($uri: String!) {\n    permalinkByUri(uri: $uri) {\n      kind\n      permalinkableSlug\n    }\n  }\n": types.fetchPermalinkQueryDocument,
     "\n  query fetchPreviewAccessQuery(\n    $slug: Slug!\n    $isItem: Boolean!\n    $isCollection: Boolean!\n    $isCommunity: Boolean!\n  ) {\n    item(slug: $slug) @include(if: $isItem) {\n      canUpdate {\n        value\n      }\n    }\n    collection(slug: $slug) @include(if: $isCollection) {\n      canUpdate {\n        value\n      }\n    }\n    community(slug: $slug) @include(if: $isCommunity) {\n      canUpdate {\n        value\n      }\n    }\n  }\n": types.fetchPreviewAccessQueryDocument,
     "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": types.SiteNameProofFragmentDoc,
+    "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n": types.chromeLayoutQueryDocument,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": types.Phase0FragProofQueryDocument,
     "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": types.LayoutThemeAstroQueryDocument,
 };
@@ -1092,6 +1094,10 @@ export function graphql(source: "\n  query fetchPreviewAccessQuery(\n    $slug: 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n"): (typeof documents)["\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n"): (typeof documents)["\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

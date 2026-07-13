@@ -1,4 +1,4 @@
-import { anonymousClient, makeAuthorizedClient } from "./client";
+import { getAnonymousClient, makeAuthorizedClient } from "./client";
 import measureQuery from "./measureQuery";
 import type { AnyVariables, DocumentInput, OperationResult } from "@urql/core";
 
@@ -41,7 +41,7 @@ export default async function queryApi<Query>(
       : undefined;
   }
 
-  const client = token ? makeAuthorizedClient(token) : anonymousClient;
+  const client = token ? makeAuthorizedClient(token) : getAnonymousClient();
 
   return measureQuery(client, query, variables);
 }

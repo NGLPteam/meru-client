@@ -5,7 +5,7 @@ import React, { createContext } from "react";
 // client.ts, which reads NEXT_PUBLIC_API_URL). This context is used by client
 // islands, so import the query/fragment documents for their *types* only — a
 // value import would bundle the server client into the browser.
-import type { query as getStaticGlobalContextDataQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData";
+import type { query as getStaticGlobalContextDataQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import type { fragment as getStaticEntityDataFragment } from "@/contexts/GlobalStaticContext/getStaticEntityData";
 import { type DocumentType } from "@/lib/api/gql";
 
