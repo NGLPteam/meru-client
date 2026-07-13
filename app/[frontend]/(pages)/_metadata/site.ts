@@ -1,8 +1,8 @@
-import { graphql } from "@/lib/api/gql";
 import queryApi from "@/lib/api/queryApi";
 import type { BasePageParams } from "@/types/page";
 import { getTruncatedText } from "@/helpers";
 import type { PageMeta } from "@/lib/metadata/types";
+import { siteMetadataQuery as query } from "@/lib/metadata/siteMetadata.query";
 
 const BASE_URL = process.env.NEXT_PUBLIC_FE_URL;
 
@@ -38,22 +38,3 @@ export default async function generateSiteMetadata(
     images: image?.url ? [{ url: image.url, alt: image.alt }] : [],
   };
 }
-
-const query = graphql(`
-  query siteMetadataQuery {
-    globalConfiguration {
-      site {
-        installationName
-        installationHomePageCopy
-      }
-      logo {
-        original {
-          url
-        }
-      }
-      logoMetadata {
-        alt
-      }
-    }
-  }
-`);

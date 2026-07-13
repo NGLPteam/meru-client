@@ -1,0 +1,30 @@
+---
+// Renders <head> metadata tags from a resolved PageMeta (see
+// src/lib/metadata/resolvePageMeta). The Astro counterpart of Next's Metadata
+// rendering — same PageMeta source, framework-native output.
+import type { ResolvedHead } from "@/lib/metadata/resolvePageMeta";
+
+interface Props {
+  head: ResolvedHead;
+}
+
+const { head } = Astro.props;
+const { title, description, og } = head;
+---
+
+{title && <title>{title}</title>}
+{description && <meta name="description" content={description} />}
+{og.title && <meta property="og:title" content={og.title} />}
+{og.description && <meta property="og:description" content={og.description} />}
+{og.siteName && <meta property="og:site_name" content={og.siteName} />}
+{og.type && <meta property="og:type" content={og.type} />}
+{og.locale && <meta property="og:locale" content={og.locale} />}
+{og.url && <meta property="og:url" content={og.url} />}
+{
+  og.images.map((img) => (
+    <>
+      <meta property="og:image" content={img.url} />
+      {img.alt && <meta property="og:image:alt" content={img.alt} />}
+    </>
+  ))
+}

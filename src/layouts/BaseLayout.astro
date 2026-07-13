@@ -15,15 +15,20 @@ import query from "../lib/query";
 import { LayoutThemeAstroQuery } from "../lib/queries/layout";
 import { chromeLayoutQuery } from "../lib/chrome/queries";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import getSiteMetadata from "../lib/metadata/siteMetadata";
+import resolvePageMeta from "../lib/metadata/resolvePageMeta";
+import PageHead from "../components/head/PageHead.astro";
 import AppHeaderIsland from "../components/chrome/AppHeaderIsland";
 import AppFooterIsland from "../components/chrome/AppFooterIsland";
 import type { ComponentProps } from "react";
+import type { PageMeta } from "@/lib/metadata/types";
 
 type CommunityRef = ComponentProps<typeof AppHeaderIsland>["community"];
 
 interface Props {
-  title?: string;
-  description?: string;
+  // Page-level metadata (title, description, og:images…). Merged over the
+  // site-level defaults; omit on the home page to use the site meta as-is.
+  meta?: PageMeta;
   // Present on entity/community/collection pages — the page knows the active
   // community server-side and threads it into the chrome (replacing Next's
   // client-side SetCommunityContext). Undefined elsewhere.
@@ -31,26 +36,27 @@ interface Props {
   draftModeEnabled?: boolean;
 }
 
-const { title, description, community, draftModeEnabled } = Astro.props;
+const { meta, community, draftModeEnabled } = Astro.props;
 
-const [themeRes, chromeRes, globalStaticRes] = await Promise.all([
+const [themeRes, chromeRes, globalStaticRes, siteMeta] = await Promise.all([
   query(LayoutThemeAstroQuery, {}),
   query(chromeLayoutQuery, {}),
   query(globalStaticQuery, {}),
+  getSiteMetadata(),
 ]);
 
 const theme = themeRes.data?.globalConfiguration?.theme ?? undefined;
 const themeClasses = getThemeClasses(theme);
 const chromeData = chromeRes.data;
 const globalData = globalStaticRes.data;
+const head = resolvePageMeta(siteMeta, meta);
 ---
 
 <html lang="en" dir="ltr" class={themeClasses}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {title && <title>{title}</title>}
-    {description && <meta name="description" content={description} />}
+    <PageHead head={head} />
   </head>
   <body>
     <div class="app-shell">

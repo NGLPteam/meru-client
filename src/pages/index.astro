@@ -1,10 +1,12 @@
 ---
 // Phase 1 demo: a page using the real BaseLayout — theme classes on <html>,
-// global chrome (header + footer islands) around this page content in the slot.
+// site metadata in <head>, global chrome (header + footer islands) around this
+// page content in the slot. No `meta` prop → the home page uses the site-level
+// metadata (installation name / homepage copy) as-is.
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Meru — Astro Phase 1">
+<BaseLayout>
   <section class="l-container-wide" style="padding-block: 4rem;">
     <h1 class="t-h1">Phase 1: chrome shell</h1>
     <p class="t-copy">
