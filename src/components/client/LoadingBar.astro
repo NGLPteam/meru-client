@@ -1,0 +1,114 @@
+<loading-bar>
+  <div class="loading-bar">
+    <span
+      id="loading-bar-inner"
+      class="inner"
+      role="progressbar"
+      aria-label="Loading"></span>
+  </div>
+</loading-bar>
+
+<style>
+  .loading-bar {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 0.35rem;
+    inline-size: 100vw;
+    background: transparent;
+    overflow: hidden;
+    z-index: 100;
+  }
+
+  @keyframes loading {
+    0% {
+      transform: translateX(0) scaleX(0);
+    }
+    40% {
+      transform: translateX(0) scaleX(0.4);
+    }
+    100% {
+      transform: translateX(100%) scaleX(0.5);
+    }
+  }
+
+  .inner {
+    display: none;
+  }
+
+  .inner.active {
+    display: block;
+    block-size: 100%;
+    inline-size: 100%;
+    transition: inline-size var(--base-duration) var(--base-timing);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-custom60) 25%,
+      var(--color-custom60) 75%,
+      transparent 100%
+    );
+    transform-origin: 0% 50%;
+    animation: loading 1.25s infinite linear;
+  }
+</style>
+
+<script>
+  class LoadingBar extends HTMLElement {
+    abortController: AbortController;
+    interval: NodeJS.Timeout | null;
+
+    constructor() {
+      super();
+
+      this.abortController = new AbortController();
+      this.interval = null;
+    }
+
+    get loadingBarInner() {
+      return this.querySelector("#loading-bar-inner") as HTMLDivElement;
+    }
+
+    connectedCallback() {
+      document.addEventListener(
+        "astro:before-preparation",
+        this.onBeforePreparation,
+      );
+      document.addEventListener(
+        "astro:after-preparation",
+        this.onAfterPreparation,
+      );
+    }
+
+    disconnectedCallback() {
+      // remove all event listeners
+      this.abortController.abort();
+      document.removeEventListener(
+        "astro:before-preparation",
+        this.onBeforePreparation,
+      );
+      document.removeEventListener(
+        "astro:after-preparation",
+        this.onAfterPreparation,
+      );
+    }
+
+    onBeforePreparation = () => {
+      const loadingBarInner = this.loadingBarInner;
+      if (!loadingBarInner) return;
+
+      loadingBarInner.classList.add("active");
+    };
+
+    onAfterPreparation = () => {
+      const loadingBarInner = this.loadingBarInner;
+      if (!loadingBarInner) return;
+
+      loadingBarInner.classList.remove("active");
+    };
+  }
+
+  if (!customElements.get("loading-bar")) {
+    customElements.define("loading-bar", LoadingBar);
+  }
+</script>

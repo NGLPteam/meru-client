@@ -10,7 +10,9 @@
 // provider stack (see ChromeProviders); server data is fetched here and threaded
 // in as props.
 import "@/styles/global.css";
+import { ClientRouter } from "astro:transitions";
 import { getThemeClasses } from "@/styles/theme-helpers";
+import LoadingBar from "../components/client/LoadingBar.astro";
 import query from "../lib/query";
 import { LayoutThemeAstroQuery } from "../lib/queries/layout";
 import { chromeLayoutQuery } from "../lib/chrome/queries";
@@ -70,8 +72,10 @@ const head = resolvePageMeta(siteMeta, meta);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <PageHead head={head} />
+    <ClientRouter />
   </head>
   <body>
+    <LoadingBar />
     <div class="app-shell">
       <AppHeaderIsland
         client:load

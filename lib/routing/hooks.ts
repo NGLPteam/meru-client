@@ -8,12 +8,15 @@
 //     which the .astro layout/page seeds from Astro.url / Astro.params. Reading
 //     the *server-known* route (rather than a neutral default) means island SSR
 //     renders the correct route-dependent markup and hydration doesn't reflow.
-//   - useRouter drives navigation via window.location / History (only ever
-//     called from event handlers, so it needs no server value).
+//   - useRouter drives navigation via Astro's client router (view transitions)
+//     so navigations are soft swaps with the loading bar rather than full
+//     reloads. navigate() falls back to a full load if the ClientRouter isn't
+//     present on the page.
 //
 // Application code must import routing hooks from here, never from
 // "next/navigation" directly.
 import { useMemo } from "react";
+import { navigate } from "astro:transitions/client";
 import { useRouteState, type RouteParams } from "./RouteContext";
 
 export function usePathname(): string {
@@ -48,9 +51,9 @@ export interface Router {
 export function useRouter(): Router {
   return useMemo<Router>(
     () => ({
-      push: (href) => window.location.assign(href),
-      replace: (href) => window.location.replace(href),
-      refresh: () => window.location.reload(),
+      push: (href) => navigate(href),
+      replace: (href) => navigate(href, { history: "replace" }),
+      refresh: () => navigate(window.location.href, { history: "replace" }),
       back: () => window.history.back(),
       forward: () => window.history.forward(),
       prefetch: () => {},
