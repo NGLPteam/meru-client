@@ -1,0 +1,33 @@
+---
+// Named community sub-page — Astro port of communities/[slug]/page/[page]/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { communityPageQuery } from "~/lib/queries/community";
+import buildCommunityMeta from "~/lib/metadata/communityMetadata";
+import CommunityPage from "~/components/pages/community/CommunityPage";
+
+const { slug, page: pageSlug } = Astro.params;
+if (!slug || !pageSlug) return new Response(null, { status: 404 });
+
+const { data } = await query(communityPageQuery, { slug, pageSlug });
+const community = data?.community;
+if (!community) return new Response(null, { status: 404 });
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCommunityMeta(community, slug);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={community} routeParams={{ slug, page: pageSlug }}>
+  <CommunityPage
+    client:load
+    community={community}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

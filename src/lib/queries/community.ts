@@ -1,59 +1,122 @@
 import { graphql } from "@/lib/api/gql";
 
-// Community landing page — combines the Next community layout query
-// (layoutCommunityTemplateQuery) and page query (pageTemplateQuery) into one,
-// plus the metadata fields (communityMetadataQuery), so a single fetch drives
-// the chrome community context, the community hero/nav/main content, and the
-// page <head>. `...CommunityContextFragment` replaces the deleted SetCommunity.
+// Shared community-chrome selection (hero + nav bar + processing check) reused by
+// the landing and every sub-route, so they all render the same community shell.
+// CommunityContext + metadata are spread directly on each query (not nested
+// here) so the .astro can read them without unmasking.
+export const communityLayoutFragment = graphql(`
+  fragment CommunityLayoutFragment on Community {
+    canPreview {
+      value
+    }
+    layouts {
+      hero {
+        template {
+          definition {
+            enableDescendantBrowsing
+          }
+        }
+        ...HeroTemplateFragment
+      }
+      ...ProcessingCheckFragment
+    }
+    ...CommunityNavBarFragment
+    ...CommunityNavBarEntityFragment
+  }
+`);
+
+// Metadata fields, unmasked in buildCommunityMeta (server-side, via readFragment).
+export const communityMetaFragment = graphql(`
+  fragment CommunityMetaFragment on Community {
+    title
+    heroImage {
+      image: large {
+        webp {
+          url
+        }
+      }
+    }
+    heroImageMetadata {
+      alt
+    }
+    thumbnail {
+      image: large {
+        webp {
+          url
+        }
+      }
+    }
+    thumbnailMetadata {
+      alt
+    }
+    about: schemaProperty(fullPath: "about") {
+      ... on MarkdownProperty {
+        content
+      }
+    }
+  }
+`);
+
+// Landing — community shell + the main layout content.
 export const communityQuery = graphql(`
   query communityQuery($slug: Slug!) {
     community(slug: $slug) {
-      canPreview {
-        value
-      }
+      ...CommunityLayoutFragment
+      ...CommunityMetaFragment
+      ...CommunityContextFragment
       layouts {
-        hero {
-          template {
-            definition {
-              enableDescendantBrowsing
-            }
-          }
-          ...HeroTemplateFragment
-        }
         main {
           ...MainLayoutFragment
         }
-        ...ProcessingCheckFragment
       }
-      ...CommunityNavBarFragment
-      ...CommunityNavBarEntityFragment
+    }
+  }
+`);
+
+// Named community sub-page (/communities/[slug]/page/[pageSlug]).
+export const communityPageQuery = graphql(`
+  query communityPageQuery($slug: Slug!, $pageSlug: String!) {
+    community(slug: $slug) {
+      ...CommunityLayoutFragment
+      ...CommunityMetaFragment
       ...CommunityContextFragment
-      title
-      heroImage {
-        image: large {
-          webp {
-            url
-          }
-        }
+      page(slug: $pageSlug) {
+        ...CommunityPageLayoutFragment
       }
-      heroImageMetadata {
-        alt
+    }
+  }
+`);
+
+// Browse an ordering (/communities/[slug]/browse/[ordering]).
+export const communityBrowseQuery = graphql(`
+  query communityBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {
+    community(slug: $slug) {
+      ...CommunityLayoutFragment
+      ...CommunityMetaFragment
+      ...CommunityContextFragment
+      ordering(identifier: $identifier) {
+        disabled
+        ...EntityOrderingLayoutFragment
       }
-      thumbnail {
-        image: large {
-          webp {
-            url
-          }
-        }
-      }
-      thumbnailMetadata {
-        alt
-      }
-      about: schemaProperty(fullPath: "about") {
-        ... on MarkdownProperty {
-          content
-        }
-      }
+    }
+  }
+`);
+
+// Scoped search (/communities/[slug]/search).
+export const communitySearchQuery = graphql(`
+  query communitySearchQuery(
+    $slug: Slug!
+    $query: String
+    $predicates: [SearchPredicateInput!]
+    $page: Int
+    $order: EntityOrder
+    $schema: [String!]
+  ) {
+    community(slug: $slug) {
+      ...CommunityLayoutFragment
+      ...CommunityMetaFragment
+      ...CommunityContextFragment
+      ...SearchLayoutEntityFragment
     }
   }
 `);

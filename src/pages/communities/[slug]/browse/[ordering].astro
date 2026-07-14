@@ -1,0 +1,39 @@
+---
+// Browse an ordering — Astro port of communities/[slug]/browse/[ordering]/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { communityBrowseQuery } from "~/lib/queries/community";
+import buildCommunityMeta from "~/lib/metadata/communityMetadata";
+import CommunityBrowse from "~/components/pages/community/CommunityBrowse";
+
+const { slug, ordering } = Astro.params;
+if (!slug || !ordering) return new Response(null, { status: 404 });
+
+const page = parseInt(Astro.url.searchParams.get("page") ?? "") || 1;
+
+const { data } = await query(communityBrowseQuery, {
+  slug,
+  identifier: ordering,
+  page,
+});
+const community = data?.community;
+if (!community) return new Response(null, { status: 404 });
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCommunityMeta(community, slug);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={community} routeParams={{ slug, ordering }}>
+  <CommunityBrowse
+    client:load
+    community={community}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

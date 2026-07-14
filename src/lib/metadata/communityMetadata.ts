@@ -1,19 +1,22 @@
+// useFragment from the client-preset is a pure identity function (not a React
+// hook); alias it so it can run in this server-side helper without tripping the
+// rules-of-hooks lint.
+import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import { getTruncatedText } from "@/helpers/strings";
 import type { PageMeta } from "@/lib/metadata/types";
-import type { DocumentType } from "@/lib/api/gql";
-import type { communityQuery } from "../queries/community";
+import { communityMetaFragment } from "../queries/community";
 
 // Astro port of app/**/communities/[slug]/_metadata/community.ts. A pure
-// function over the community already fetched by communityQuery (no extra
-// request); returns an inheritParent PageMeta extending the site defaults.
+// function over the community already fetched by the page (no extra request);
+// returns an inheritParent PageMeta extending the site defaults.
 const BASE_URL = import.meta.env.NEXT_PUBLIC_FE_URL as string | undefined;
 
-type Community = NonNullable<DocumentType<typeof communityQuery>["community"]>;
-
 export default function buildCommunityMeta(
-  community: Community,
+  data: FragmentType<typeof communityMetaFragment>,
   slug: string,
 ): PageMeta {
+  const community = readFragment(communityMetaFragment, data);
+
   const title = community.title ?? undefined;
 
   const about = community.about;

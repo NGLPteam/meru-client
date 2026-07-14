@@ -21,7 +21,8 @@
       "@/components/*": ["components/*"],
       "@/lib/*": ["lib/*"],
       "@/routes/*": ["routes/*"],
-      "@/hooks/*": ["hooks/*"]
+      "@/hooks/*": ["hooks/*"],
+      "~/*": ["src/*"]
     },
     "plugins": [
       {
