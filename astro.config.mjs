@@ -10,6 +10,9 @@ import react from "@astrojs/react";
 // SSR (the settled rendering model).
 export default defineConfig({
   output: "server",
+  // Canonical site origin for absolute URLs (sitemap/robots). Empty in dev, so
+  // those endpoints fall back to the request origin. No trailing slash needed.
+  site: process.env.NEXT_PUBLIC_FE_URL || undefined,
   adapter: node({ mode: "standalone" }),
   integrations: [react()],
   server: { port: 4321 },
