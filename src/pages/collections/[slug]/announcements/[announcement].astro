@@ -1,0 +1,38 @@
+---
+// Collection announcement — Astro port of
+// collections/[slug]/announcements/[announcement]/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { collectionAnnouncementQuery } from "~/lib/queries/collection";
+import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
+import CollectionAnnouncement from "~/components/pages/collection/CollectionAnnouncement";
+
+const { slug, announcement } = Astro.params;
+if (!slug || !announcement) return new Response(null, { status: 404 });
+
+const { data } = await query(collectionAnnouncementQuery, {
+  slug,
+  announcementSlug: announcement,
+});
+const collection = data?.collection;
+if (!collection) return new Response(null, { status: 404 });
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCollectionMeta(collection, slug);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={collection.community} routeParams={{ slug, announcement }}>
+  <CollectionAnnouncement
+    client:load
+    collection={collection}
+    slug={slug}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

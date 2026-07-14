@@ -1,0 +1,45 @@
+---
+// Browse a collection ordering — Astro port of collections/[slug]/browse/[ordering]/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { collectionBrowseQuery } from "~/lib/queries/collection";
+import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
+import CollectionBrowse from "~/components/pages/collection/CollectionBrowse";
+import type { ListEntityContext } from "@/types/graphql-schema";
+
+const { slug, ordering } = Astro.params;
+if (!slug || !ordering) return new Response(null, { status: 404 });
+
+const page = parseInt(Astro.url.searchParams.get("page") ?? "") || 1;
+const showContext =
+  (Astro.url.searchParams.get("context") as ListEntityContext | null) ??
+  undefined;
+
+const { data } = await query(collectionBrowseQuery, {
+  slug,
+  identifier: ordering,
+  page,
+});
+const collection = data?.collection;
+if (!collection) return new Response(null, { status: 404 });
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCollectionMeta(collection, slug);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={collection.community} routeParams={{ slug, ordering }}>
+  <CollectionBrowse
+    client:load
+    collection={collection}
+    slug={slug}
+    showContext={showContext}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

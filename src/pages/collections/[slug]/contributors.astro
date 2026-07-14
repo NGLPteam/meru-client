@@ -1,0 +1,34 @@
+---
+// Collection contributors — Astro port of collections/[slug]/contributors/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { collectionContributorsQuery } from "~/lib/queries/collection";
+import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
+import CollectionContributors from "~/components/pages/collection/CollectionContributors";
+
+const { slug } = Astro.params;
+if (!slug) return new Response(null, { status: 404 });
+
+const { data } = await query(collectionContributorsQuery, { slug });
+const collection = data?.collection;
+if (!collection) return new Response(null, { status: 404 });
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCollectionMeta(collection, slug);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={collection.community} routeParams={{ slug }}>
+  <CollectionContributors
+    client:load
+    collection={collection}
+    slug={slug}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

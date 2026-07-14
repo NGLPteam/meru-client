@@ -1,0 +1,52 @@
+---
+// Scoped collection search — Astro port of collections/[slug]/search/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { collectionSearchQuery } from "~/lib/queries/collection";
+import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
+import CollectionSearch from "~/components/pages/collection/CollectionSearch";
+import { getPredicates } from "@/helpers/search";
+import type { EntityOrder } from "@/types/graphql-schema";
+
+const { slug } = Astro.params;
+if (!slug) return new Response(null, { status: 404 });
+
+const sp = Astro.url.searchParams;
+const q = sp.get("q") ?? undefined;
+const filters = sp.get("filters");
+const page = sp.get("page");
+const order = sp.get("order");
+const schema = sp.get("schema");
+
+const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
+
+const { data } = await query(collectionSearchQuery, {
+  slug,
+  ...(q && { query: q }),
+  predicates,
+  page: page ? parseInt(page) : 1,
+  order: (order ?? "PUBLISHED_ASCENDING") as EntityOrder,
+  schema: schema ? schema.split(",") : [],
+});
+const collection = data?.collection;
+if (!collection) return new Response(null, { status: 404 });
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCollectionMeta(collection, slug);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={collection.community} routeParams={{ slug }}>
+  <CollectionSearch
+    client:load
+    collection={collection}
+    slug={slug}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>
