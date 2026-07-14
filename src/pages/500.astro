@@ -1,0 +1,32 @@
+---
+// 500 — Astro port of app/[frontend]/(pages)/error.tsx + global-error.tsx.
+// Deliberately self-contained (no BaseLayout data fetches): a server error may
+// well be the chrome/API itself, so this page must render without them.
+import "@/styles/global.css";
+
+Astro.response.status = 500;
+const error = Astro.props.error as Error | undefined;
+---
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Server error</title>
+  </head>
+  <body>
+    <div
+      class="l-container-wide l-flex l-flex--align-center"
+      style="min-height: 60vh; justify-content: center;"
+    >
+      <div class="t-rte t-align-center">
+        <h2>A server error occurred!</h2>
+        {error?.message && <p>{error.message}</p>}
+        <p>
+          <button type="button" onclick="location.reload()">Try Again</button>
+        </p>
+        <p><a href="/">Home</a></p>
+      </div>
+    </div>
+  </body>
+</html>

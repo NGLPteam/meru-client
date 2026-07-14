@@ -10,7 +10,7 @@ import { getPredicates } from "@/helpers/search";
 import type { EntityOrder } from "@/types/graphql-schema";
 
 const { slug } = Astro.params;
-if (!slug) return new Response(null, { status: 404 });
+if (!slug) return Astro.rewrite("/404");
 
 const sp = Astro.url.searchParams;
 const q = sp.get("q") ?? undefined;
@@ -30,7 +30,7 @@ const { data } = await query(communitySearchQuery, {
   schema: schema ? schema.split(",") : [],
 });
 const community = data?.community;
-if (!community) return new Response(null, { status: 404 });
+if (!community) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const meta = buildCommunityMeta(community, slug);

@@ -26,9 +26,6 @@ type Documents = {
     "\n  query sitemapPagesItemQuery($slug: Slug!) {\n    item(slug: $slug) {\n      slug\n      updatedAt\n      pages {\n        nodes {\n          slug\n          updatedAt\n        }\n      }\n    }\n  }\n": typeof types.sitemapPagesItemQueryDocument,
     "\n  query sitemapQuery {\n    communities {\n      nodes {\n        slug\n      }\n    }\n  }\n": typeof types.sitemapQueryDocument,
     "\n  query sitemapPagesQuery {\n    communities {\n      nodes {\n        slug\n      }\n    }\n  }\n": typeof types.sitemapPagesQueryDocument,
-    "\n  query pageContributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n": typeof types.pageContributorDetailQueryDocument,
-    "\n  query pageContributorItemDetailQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n": typeof types.pageContributorItemDetailQueryDocument,
-    "\n  query pageContributorCollectionLayoutQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n": typeof types.pageContributorCollectionLayoutQueryDocument,
     "\n  query itemMetadataQuery($slug: Slug!) {\n    item(slug: $slug) {\n      title\n      heroImage {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      heroImageMetadata {\n        alt\n      }\n      thumbnail {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      thumbnailMetadata {\n        alt\n      }\n      about: schemaProperty(fullPath: \"about\") {\n        ... on MarkdownProperty {\n          content\n        }\n      }\n      abstract: schemaProperty(fullPath: \"abstract\") {\n        ... on FullTextProperty {\n          fullText {\n            content\n          }\n        }\n      }\n    }\n  }\n": typeof types.itemMetadataQueryDocument,
     "\n  query pageTemplatesItemContributorsQuery($slug: Slug!) {\n    item(slug: $slug) {\n      ...ContributionsBlockFragment\n    }\n  }\n": typeof types.pageTemplatesItemContributorsQueryDocument,
     "\n  query pageTemplatesItemFileDetailQuery($file: Slug!) {\n    asset(slug: $file) {\n      ...AssetDetailBlockFragment\n    }\n  }\n": typeof types.pageTemplatesItemFileDetailQueryDocument,
@@ -39,7 +36,6 @@ type Documents = {
     "\n  query pageItemTemplateQuery($slug: Slug!) {\n    item(slug: $slug) {\n      layouts {\n        main {\n          ...MainLayoutFragment\n        }\n      }\n    }\n  }\n": typeof types.pageItemTemplateQueryDocument,
     "\n  query pageTemplatesItemPageQuery($slug: Slug!, $pageSlug: String!) {\n    item(slug: $slug) {\n      page(slug: $pageSlug) {\n        ...EntityPageLayoutFragment\n      }\n    }\n  }\n": typeof types.pageTemplatesItemPageQueryDocument,
     "\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n": typeof types.layoutAllPagesQueryDocument,
-    "\n  query pageSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n": typeof types.pageSearchQueryDocument,
     "\n  query layoutThemeQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": typeof types.layoutThemeQueryDocument,
     "\n  fragment BreadcrumbLinkFragment on EntityBreadcrumb {\n    label\n    kind\n    slug\n  }\n": typeof types.BreadcrumbLinkFragmentFragmentDoc,
     "\n  fragment BreadcrumbsFragment on Entity {\n    __typename\n    title\n    breadcrumbs {\n      depth\n      ...BreadcrumbLinkFragment\n    }\n\n    ... on Sluggable {\n      slug\n    }\n  }\n": typeof types.BreadcrumbsFragmentFragmentDoc,
@@ -191,8 +187,12 @@ type Documents = {
     "\n  query communityPageQuery($slug: Slug!, $pageSlug: String!) {\n    community(slug: $slug) {\n      ...CommunityLayoutFragment\n      ...CommunityMetaFragment\n      ...CommunityContextFragment\n      page(slug: $pageSlug) {\n        ...CommunityPageLayoutFragment\n      }\n    }\n  }\n": typeof types.communityPageQueryDocument,
     "\n  query communityBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {\n    community(slug: $slug) {\n      ...CommunityLayoutFragment\n      ...CommunityMetaFragment\n      ...CommunityContextFragment\n      ordering(identifier: $identifier) {\n        disabled\n        ...EntityOrderingLayoutFragment\n      }\n    }\n  }\n": typeof types.communityBrowseQueryDocument,
     "\n  query communitySearchQuery(\n    $slug: Slug!\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    community(slug: $slug) {\n      ...CommunityLayoutFragment\n      ...CommunityMetaFragment\n      ...CommunityContextFragment\n      ...SearchLayoutEntityFragment\n    }\n  }\n": typeof types.communitySearchQueryDocument,
+    "\n  query contributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n": typeof types.contributorDetailQueryDocument,
+    "\n  query contributorItemQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n": typeof types.contributorItemQueryDocument,
+    "\n  query contributorCollectionQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n": typeof types.contributorCollectionQueryDocument,
     "\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n": typeof types.instanceContentQueryDocument,
     "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": typeof types.LayoutThemeAstroQueryDocument,
+    "\n  query globalSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n": typeof types.globalSearchQueryDocument,
 };
 const documents: Documents = {
     "\n  query sitemapCollectionsQuery($slug: Slug!) {\n    collection(slug: $slug) {\n      ...getEntitySitemapFragment\n    }\n  }\n": types.sitemapCollectionsQueryDocument,
@@ -207,9 +207,6 @@ const documents: Documents = {
     "\n  query sitemapPagesItemQuery($slug: Slug!) {\n    item(slug: $slug) {\n      slug\n      updatedAt\n      pages {\n        nodes {\n          slug\n          updatedAt\n        }\n      }\n    }\n  }\n": types.sitemapPagesItemQueryDocument,
     "\n  query sitemapQuery {\n    communities {\n      nodes {\n        slug\n      }\n    }\n  }\n": types.sitemapQueryDocument,
     "\n  query sitemapPagesQuery {\n    communities {\n      nodes {\n        slug\n      }\n    }\n  }\n": types.sitemapPagesQueryDocument,
-    "\n  query pageContributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n": types.pageContributorDetailQueryDocument,
-    "\n  query pageContributorItemDetailQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n": types.pageContributorItemDetailQueryDocument,
-    "\n  query pageContributorCollectionLayoutQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n": types.pageContributorCollectionLayoutQueryDocument,
     "\n  query itemMetadataQuery($slug: Slug!) {\n    item(slug: $slug) {\n      title\n      heroImage {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      heroImageMetadata {\n        alt\n      }\n      thumbnail {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      thumbnailMetadata {\n        alt\n      }\n      about: schemaProperty(fullPath: \"about\") {\n        ... on MarkdownProperty {\n          content\n        }\n      }\n      abstract: schemaProperty(fullPath: \"abstract\") {\n        ... on FullTextProperty {\n          fullText {\n            content\n          }\n        }\n      }\n    }\n  }\n": types.itemMetadataQueryDocument,
     "\n  query pageTemplatesItemContributorsQuery($slug: Slug!) {\n    item(slug: $slug) {\n      ...ContributionsBlockFragment\n    }\n  }\n": types.pageTemplatesItemContributorsQueryDocument,
     "\n  query pageTemplatesItemFileDetailQuery($file: Slug!) {\n    asset(slug: $file) {\n      ...AssetDetailBlockFragment\n    }\n  }\n": types.pageTemplatesItemFileDetailQueryDocument,
@@ -220,7 +217,6 @@ const documents: Documents = {
     "\n  query pageItemTemplateQuery($slug: Slug!) {\n    item(slug: $slug) {\n      layouts {\n        main {\n          ...MainLayoutFragment\n        }\n      }\n    }\n  }\n": types.pageItemTemplateQueryDocument,
     "\n  query pageTemplatesItemPageQuery($slug: Slug!, $pageSlug: String!) {\n    item(slug: $slug) {\n      page(slug: $pageSlug) {\n        ...EntityPageLayoutFragment\n      }\n    }\n  }\n": types.pageTemplatesItemPageQueryDocument,
     "\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n": types.layoutAllPagesQueryDocument,
-    "\n  query pageSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n": types.pageSearchQueryDocument,
     "\n  query layoutThemeQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": types.layoutThemeQueryDocument,
     "\n  fragment BreadcrumbLinkFragment on EntityBreadcrumb {\n    label\n    kind\n    slug\n  }\n": types.BreadcrumbLinkFragmentFragmentDoc,
     "\n  fragment BreadcrumbsFragment on Entity {\n    __typename\n    title\n    breadcrumbs {\n      depth\n      ...BreadcrumbLinkFragment\n    }\n\n    ... on Sluggable {\n      slug\n    }\n  }\n": types.BreadcrumbsFragmentFragmentDoc,
@@ -372,8 +368,12 @@ const documents: Documents = {
     "\n  query communityPageQuery($slug: Slug!, $pageSlug: String!) {\n    community(slug: $slug) {\n      ...CommunityLayoutFragment\n      ...CommunityMetaFragment\n      ...CommunityContextFragment\n      page(slug: $pageSlug) {\n        ...CommunityPageLayoutFragment\n      }\n    }\n  }\n": types.communityPageQueryDocument,
     "\n  query communityBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {\n    community(slug: $slug) {\n      ...CommunityLayoutFragment\n      ...CommunityMetaFragment\n      ...CommunityContextFragment\n      ordering(identifier: $identifier) {\n        disabled\n        ...EntityOrderingLayoutFragment\n      }\n    }\n  }\n": types.communityBrowseQueryDocument,
     "\n  query communitySearchQuery(\n    $slug: Slug!\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    community(slug: $slug) {\n      ...CommunityLayoutFragment\n      ...CommunityMetaFragment\n      ...CommunityContextFragment\n      ...SearchLayoutEntityFragment\n    }\n  }\n": types.communitySearchQueryDocument,
+    "\n  query contributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n": types.contributorDetailQueryDocument,
+    "\n  query contributorItemQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n": types.contributorItemQueryDocument,
+    "\n  query contributorCollectionQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n": types.contributorCollectionQueryDocument,
     "\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n": types.instanceContentQueryDocument,
     "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n": types.LayoutThemeAstroQueryDocument,
+    "\n  query globalSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n": types.globalSearchQueryDocument,
 };
 
 /**
@@ -441,18 +441,6 @@ export function graphql(source: "\n  query sitemapPagesQuery {\n    communities 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query pageContributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n"): (typeof documents)["\n  query pageContributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query pageContributorItemDetailQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query pageContributorItemDetailQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query pageContributorCollectionLayoutQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query pageContributorCollectionLayoutQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n\n      community {\n        ...SetCommunityFragment\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n  query itemMetadataQuery($slug: Slug!) {\n    item(slug: $slug) {\n      title\n      heroImage {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      heroImageMetadata {\n        alt\n      }\n      thumbnail {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      thumbnailMetadata {\n        alt\n      }\n      about: schemaProperty(fullPath: \"about\") {\n        ... on MarkdownProperty {\n          content\n        }\n      }\n      abstract: schemaProperty(fullPath: \"abstract\") {\n        ... on FullTextProperty {\n          fullText {\n            content\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query itemMetadataQuery($slug: Slug!) {\n    item(slug: $slug) {\n      title\n      heroImage {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      heroImageMetadata {\n        alt\n      }\n      thumbnail {\n        image: large {\n          webp {\n            url\n          }\n        }\n      }\n      thumbnailMetadata {\n        alt\n      }\n      about: schemaProperty(fullPath: \"about\") {\n        ... on MarkdownProperty {\n          content\n        }\n      }\n      abstract: schemaProperty(fullPath: \"abstract\") {\n        ... on FullTextProperty {\n          fullText {\n            content\n          }\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -490,10 +478,6 @@ export function graphql(source: "\n  query pageTemplatesItemPageQuery($slug: Slu
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n"): (typeof documents)["\n  query layoutAllPagesQuery {\n    ...AppBodyFragment\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query pageSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n"): (typeof documents)["\n  query pageSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1101,11 +1085,27 @@ export function graphql(source: "\n  query communitySearchQuery(\n    $slug: Slu
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  query contributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n"): (typeof documents)["\n  query contributorDetailQuery($slug: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query contributorItemQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query contributorItemQuery($slug: Slug!, $item: Slug!, $page: Int) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    item(slug: $item) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query contributorCollectionQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query contributorCollectionQuery(\n    $slug: Slug!\n    $collection: Slug!\n    $page: Int\n  ) {\n    contributor(slug: $slug) {\n      ...ContributorDetailFragment\n    }\n    collection(slug: $collection) {\n      ...ContributorDetailNavFragment\n      community {\n        ...CommunityContextFragment\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n"): (typeof documents)["\n  query instanceContentQuery {\n    communities(order: POSITION_ASCENDING) {\n      edges {\n        node {\n          slug\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n      ...InstanceCommunitiesFragment\n    }\n    ...InstanceHeroFragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n"): (typeof documents)["\n  query LayoutThemeAstroQuery {\n    globalConfiguration {\n      theme {\n        color\n        font\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query globalSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n"): (typeof documents)["\n  query globalSearchQuery(\n    $query: String\n    $predicates: [SearchPredicateInput!]\n    $page: Int\n    $order: EntityOrder\n    $schema: [String!]\n  ) {\n    ...SearchLayoutFragment\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

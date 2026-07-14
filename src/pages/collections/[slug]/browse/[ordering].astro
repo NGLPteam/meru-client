@@ -9,7 +9,7 @@ import CollectionBrowse from "~/components/pages/collection/CollectionBrowse";
 import type { ListEntityContext } from "@/types/graphql-schema";
 
 const { slug, ordering } = Astro.params;
-if (!slug || !ordering) return new Response(null, { status: 404 });
+if (!slug || !ordering) return Astro.rewrite("/404");
 
 const page = parseInt(Astro.url.searchParams.get("page") ?? "") || 1;
 const showContext =
@@ -22,7 +22,7 @@ const { data } = await query(collectionBrowseQuery, {
   page,
 });
 const collection = data?.collection;
-if (!collection) return new Response(null, { status: 404 });
+if (!collection) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const meta = buildCollectionMeta(collection, slug);

@@ -18,7 +18,7 @@ if (total === 1 && firstSlug) {
 }
 
 if (!instance) {
-  return new Response(null, { status: 404 });
+  return Astro.rewrite("/404");
 }
 
 const { data: globalData } = await query(globalStaticQuery, {});

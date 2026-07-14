@@ -8,11 +8,11 @@ import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
 import CollectionLanding from "~/components/pages/collection/CollectionLanding";
 
 const { slug } = Astro.params;
-if (!slug) return new Response(null, { status: 404 });
+if (!slug) return Astro.rewrite("/404");
 
 const { data } = await query(collectionQuery, { slug });
 const collection = data?.collection;
-if (!collection) return new Response(null, { status: 404 });
+if (!collection) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const meta = buildCollectionMeta(collection, slug);

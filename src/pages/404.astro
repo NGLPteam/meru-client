@@ -1,0 +1,20 @@
+---
+// 404 — Astro port of app/[frontend]/(pages)/not-found.tsx. Rendered for
+// unmatched routes and via Astro.rewrite("/404") when a page can't find its
+// resource. Shows the global chrome + a not-found message.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+Astro.response.status = 404;
+---
+
+<BaseLayout meta={{ title: "Page not found" }}>
+  <div
+    class="l-container-wide l-flex l-flex--align-center"
+    style="min-height: 40vh; justify-content: center;"
+  >
+    <div class="t-rte t-align-center">
+      <h2>404</h2>
+      <p>Page not found.</p>
+    </div>
+  </div>
+</BaseLayout>

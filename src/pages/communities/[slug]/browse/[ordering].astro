@@ -8,7 +8,7 @@ import buildCommunityMeta from "~/lib/metadata/communityMetadata";
 import CommunityBrowse from "~/components/pages/community/CommunityBrowse";
 
 const { slug, ordering } = Astro.params;
-if (!slug || !ordering) return new Response(null, { status: 404 });
+if (!slug || !ordering) return Astro.rewrite("/404");
 
 const page = parseInt(Astro.url.searchParams.get("page") ?? "") || 1;
 
@@ -18,7 +18,7 @@ const { data } = await query(communityBrowseQuery, {
   page,
 });
 const community = data?.community;
-if (!community) return new Response(null, { status: 404 });
+if (!community) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const meta = buildCommunityMeta(community, slug);

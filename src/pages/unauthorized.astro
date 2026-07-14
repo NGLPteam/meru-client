@@ -1,0 +1,11 @@
+---
+// Unauthorized — Astro port of app/[frontend]/(pages)/unauthorized/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import UnauthorizedContent from "~/components/pages/UnauthorizedContent";
+
+const reason = Astro.url.searchParams.get("reason") ?? undefined;
+---
+
+<BaseLayout meta={{ title: "Unauthorized" }}>
+  <UnauthorizedContent client:load reason={reason} />
+</BaseLayout>

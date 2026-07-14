@@ -3,7 +3,7 @@ import { ResolvingMetadata, Metadata } from "next";
 import { isDraftModeEnabled } from "@/lib/request/draftMode";
 import { notFound } from "@/lib/routing/navigation";
 import { graphql } from "@/lib/api/gql";
-import UnauthorizedMessage from "@/app/[frontend]/(pages)/unauthorized/_components/UnauthorizedMessage";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 import getStaticGoogleScholarData from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import HeroTemplate from "@/components/templates/Hero";

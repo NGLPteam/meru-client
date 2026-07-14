@@ -9,14 +9,14 @@ import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
 import CollectionAnnouncement from "~/components/pages/collection/CollectionAnnouncement";
 
 const { slug, announcement } = Astro.params;
-if (!slug || !announcement) return new Response(null, { status: 404 });
+if (!slug || !announcement) return Astro.rewrite("/404");
 
 const { data } = await query(collectionAnnouncementQuery, {
   slug,
   announcementSlug: announcement,
 });
 const collection = data?.collection;
-if (!collection) return new Response(null, { status: 404 });
+if (!collection) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const meta = buildCollectionMeta(collection, slug);

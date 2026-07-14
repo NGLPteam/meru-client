@@ -1,0 +1,63 @@
+---
+// Contributor detail — Astro port of contributors/[slug]/page.tsx. Picks one of
+// three queries depending on the item/collection scope in the URL.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import {
+  contributorDetailQuery,
+  contributorItemQuery,
+  contributorCollectionQuery,
+} from "~/lib/queries/contributor";
+import ContributorPage from "~/components/pages/ContributorPage";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.rewrite("/404");
+
+const sp = Astro.url.searchParams;
+const item = sp.get("item") ?? undefined;
+const collection = sp.get("collection") ?? undefined;
+const page = parseInt(sp.get("page") ?? "1") || 1;
+
+let contributor;
+let navData;
+let community;
+if (item) {
+  const { data } = await query(contributorItemQuery, { slug, item, page });
+  contributor = data?.contributor;
+  navData = data?.item;
+  community = data?.item?.community;
+} else if (collection) {
+  const { data } = await query(contributorCollectionQuery, {
+    slug,
+    collection,
+    page,
+  });
+  contributor = data?.contributor;
+  navData = data?.collection;
+  community = data?.collection?.community;
+} else {
+  const { data } = await query(contributorDetailQuery, { slug, page });
+  contributor = data?.contributor;
+}
+
+if (!contributor) return Astro.rewrite("/404");
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout community={community} routeParams={{ slug }}>
+  <ContributorPage
+    client:load
+    contributor={contributor}
+    navData={navData}
+    community={community}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

@@ -10,11 +10,11 @@ import buildCommunityMeta from "../../lib/metadata/communityMetadata";
 import CommunityLanding from "../../components/pages/CommunityLanding";
 
 const { slug } = Astro.params;
-if (!slug) return new Response(null, { status: 404 });
+if (!slug) return Astro.rewrite("/404");
 
 const { data } = await query(communityQuery, { slug });
 const community = data?.community;
-if (!community) return new Response(null, { status: 404 });
+if (!community) return Astro.rewrite("/404");
 
 // NOTE: the draft-mode preview authorization check (community.canPreview) is
 // deferred to the auth phase, along with the /api/viewer + draft-mode plumbing.
