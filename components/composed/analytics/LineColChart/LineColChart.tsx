@@ -3,8 +3,13 @@ import {
   ReactGoogleChartProps,
   ChartWrapperOptions,
 } from "react-google-charts";
-import { colors } from "@/styles/helpers.cjs";
+// helpers.cjs is CommonJS; import the default (module.exports) and destructure
+// so the browser ESM bundle (Vite) resolves it — a named import only works
+// under webpack, not Vite's on-the-fly CJS interop.
+import helpers from "@/styles/helpers.cjs";
 import { useTheme } from "@/contexts/ThemeProvider";
+
+const { colors } = helpers;
 
 type Props = Partial<ReactGoogleChartProps> &
   Partial<ChartWrapperOptions> & {
