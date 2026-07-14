@@ -21,8 +21,19 @@ if (!community) return new Response(null, { status: 404 });
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const meta = buildCommunityMeta(community, slug);
+
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
 ---
 
 <BaseLayout meta={meta} community={community} routeParams={{ slug }}>
-  <CommunityLanding client:load community={community} globalData={globalData} />
+  <CommunityLanding
+    client:load
+    community={community}
+    globalData={globalData}
+    route={route}
+  />
 </BaseLayout>

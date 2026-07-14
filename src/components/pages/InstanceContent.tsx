@@ -13,15 +13,17 @@ type Props = {
   data: React.ComponentProps<typeof InstanceHero>["data"];
   communities: React.ComponentProps<typeof InstanceCommunities>["data"];
   globalData?: GlobalStaticData;
+  route?: React.ComponentProps<typeof ChromeProviders>["route"];
 };
 
 export default function InstanceContent({
   data,
   communities,
   globalData,
+  route,
 }: Props) {
   return (
-    <ChromeProviders globalData={globalData}>
+    <ChromeProviders globalData={globalData} route={route}>
       <InstanceHero data={data} />
       <InstanceCommunities data={communities} />
     </ChromeProviders>

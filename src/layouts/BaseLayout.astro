@@ -33,13 +33,23 @@ interface Props {
   // community server-side and threads it into the chrome (replacing Next's
   // client-side SetCommunityContext). Undefined elsewhere.
   community?: CommunityRef;
-  // Route params (e.g. { slug }) published to window for the routing shim's
-  // useParams — islands get no route context for free. Omit on paramless pages.
+  // Route params (e.g. { slug }) for the routing shim's useParams. Pathname and
+  // search come from Astro.url; params are page-supplied. Threaded into the
+  // chrome islands' RouteProvider so route-dependent SSR matches hydration.
   routeParams?: Record<string, string | undefined>;
   draftModeEnabled?: boolean;
 }
 
 const { meta, community, routeParams, draftModeEnabled } = Astro.props;
+
+// Server-known route, seeded into the chrome islands so pathname-dependent
+// markup (e.g. the header's community-vs-home variant) renders identically on
+// the server and after hydration.
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: routeParams ?? {},
+};
 
 const [themeRes, chromeRes, globalStaticRes, siteMeta] = await Promise.all([
   query(LayoutThemeAstroQuery, {}),
@@ -62,20 +72,13 @@ const head = resolvePageMeta(siteMeta, meta);
     <PageHead head={head} />
   </head>
   <body>
-    {
-      routeParams && (
-        <script
-          is:inline
-          set:html={`window.__meruRouteParams = ${JSON.stringify(routeParams)};`}
-        />
-      )
-    }
     <div class="app-shell">
       <AppHeaderIsland
         client:load
         data={chromeData}
         globalData={globalData}
         community={community}
+        route={route}
         draftModeEnabled={draftModeEnabled}
       />
       <main id="main" tabindex="-1">
@@ -86,6 +89,7 @@ const head = resolvePageMeta(siteMeta, meta);
         data={chromeData}
         globalData={globalData}
         community={community}
+        route={route}
         draftModeEnabled={draftModeEnabled}
       />
     </div>

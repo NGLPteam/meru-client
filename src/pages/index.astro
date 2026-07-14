@@ -22,6 +22,12 @@ if (!instance) {
 }
 
 const { data: globalData } = await query(globalStaticQuery, {});
+
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
 ---
 
 <BaseLayout>
@@ -30,5 +36,6 @@ const { data: globalData } = await query(globalStaticQuery, {});
     data={instance}
     communities={instance.communities}
     globalData={globalData}
+    route={route}
   />
 </BaseLayout>

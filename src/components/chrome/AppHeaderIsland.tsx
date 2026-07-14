@@ -14,6 +14,7 @@ type Props = {
   searchData?: React.ComponentProps<typeof AppHeader>["searchData"];
   globalData?: GlobalStaticData;
   community?: React.ComponentProps<typeof ChromeProviders>["community"];
+  route?: React.ComponentProps<typeof ChromeProviders>["route"];
   draftModeEnabled?: boolean;
 };
 
@@ -27,12 +28,14 @@ export default function AppHeaderIsland({
   searchData,
   globalData,
   community,
+  route,
   draftModeEnabled,
 }: Props) {
   return (
     <ChromeProviders
       globalData={globalData}
       community={community}
+      route={route}
       draftModeEnabled={draftModeEnabled}
     >
       <SkipLinkWithLabel />

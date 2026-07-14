@@ -25,6 +25,7 @@ import {
 import { ViewerContextProvider } from "@/contexts/ViewerContext/ViewerContext";
 import { CommunityContextProvider } from "@/contexts/CommunityContext";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
+import { RouteProvider, type RouteState } from "@/lib/routing/RouteContext";
 import type { PropsWithChildren } from "react";
 
 type CommunityRef = React.ComponentProps<
@@ -34,6 +35,9 @@ type CommunityRef = React.ComponentProps<
 type Props = PropsWithChildren & {
   globalData?: GlobalStaticData;
   community?: CommunityRef;
+  // Server-known route (pathname/search/params) so route-dependent hooks render
+  // the same markup on the server and after hydration — no reflow.
+  route?: Partial<RouteState>;
   draftModeEnabled?: boolean;
 };
 
@@ -41,17 +45,20 @@ export default function ChromeProviders({
   children,
   globalData,
   community,
+  route,
   draftModeEnabled,
 }: Props) {
   return (
-    <GlobalStaticContextProvider globalData={globalData}>
-      <ViewerContextProvider isPreview={draftModeEnabled}>
-        <ProgressBarProvider>
-          <CommunityContextProvider data={community}>
-            {children}
-          </CommunityContextProvider>
-        </ProgressBarProvider>
-      </ViewerContextProvider>
-    </GlobalStaticContextProvider>
+    <RouteProvider route={route}>
+      <GlobalStaticContextProvider globalData={globalData}>
+        <ViewerContextProvider isPreview={draftModeEnabled}>
+          <ProgressBarProvider>
+            <CommunityContextProvider data={community}>
+              {children}
+            </CommunityContextProvider>
+          </ProgressBarProvider>
+        </ViewerContextProvider>
+      </GlobalStaticContextProvider>
+    </RouteProvider>
   );
 }

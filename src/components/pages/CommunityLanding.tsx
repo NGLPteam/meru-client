@@ -18,15 +18,20 @@ type Community = NonNullable<DocumentType<typeof communityQuery>["community"]>;
 type Props = {
   community: Community;
   globalData?: GlobalStaticData;
+  route?: React.ComponentProps<typeof AppProviders>["route"];
 };
 
-export default function CommunityLanding({ community, globalData }: Props) {
+export default function CommunityLanding({
+  community,
+  globalData,
+  route,
+}: Props) {
   const { layouts } = community;
   const showNavBar =
     layouts?.hero?.template?.definition?.enableDescendantBrowsing;
 
   return (
-    <AppProviders community={community} globalData={globalData}>
+    <AppProviders community={community} globalData={globalData} route={route}>
       {showNavBar && (
         <CommunityNavBar data={community} entityData={community} />
       )}
