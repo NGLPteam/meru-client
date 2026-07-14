@@ -29,6 +29,16 @@ export function useRouteState(): RouteState {
   return useContext(RouteContext);
 }
 
+// Same-page URL updates (a search/filter/pagination router.push that only
+// changes the query string) use history.pushState directly — no page load — and
+// fire this event so the provider re-reads window.location. popstate doesn't
+// fire on pushState, hence the custom signal.
+const LOCATION_CHANGE_EVENT = "meru:locationchange";
+
+export function notifyLocationChange() {
+  window.dispatchEvent(new Event(LOCATION_CHANGE_EVENT));
+}
+
 type Props = PropsWithChildren<{ route?: Partial<RouteState> }>;
 
 export function RouteProvider({ route, children }: Props) {
@@ -49,9 +59,11 @@ export function RouteProvider({ route, children }: Props) {
       }));
     window.addEventListener("popstate", sync);
     window.addEventListener("hashchange", sync);
+    window.addEventListener(LOCATION_CHANGE_EVENT, sync);
     return () => {
       window.removeEventListener("popstate", sync);
       window.removeEventListener("hashchange", sync);
+      window.removeEventListener(LOCATION_CHANGE_EVENT, sync);
     };
   }, []);
 
