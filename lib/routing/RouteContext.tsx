@@ -42,11 +42,25 @@ export function notifyLocationChange() {
 type Props = PropsWithChildren<{ route?: Partial<RouteState> }>;
 
 export function RouteProvider({ route, children }: Props) {
-  const [state, setState] = useState<RouteState>(() => ({
+  const seeded: RouteState = {
     pathname: route?.pathname ?? DEFAULT.pathname,
     search: route?.search ?? DEFAULT.search,
     params: route?.params ?? DEFAULT.params,
-  }));
+  };
+
+  const [state, setState] = useState<RouteState>(seeded);
+
+  // When a persisted chrome island survives a view-transition navigation, Astro
+  // re-renders it with the new page's route prop while keeping React state (so
+  // ViewerContext doesn't re-fetch). The useState seed above won't re-run, so
+  // re-seed from the new prop when its pathname changes — that's exactly a
+  // cross-page navigation. In-page query-string updates (same pathname) come
+  // through the window listeners below instead.
+  const [prevPathname, setPrevPathname] = useState(seeded.pathname);
+  if (seeded.pathname !== prevPathname) {
+    setPrevPathname(seeded.pathname);
+    setState(seeded);
+  }
 
   useEffect(() => {
     // Full-page navigation remounts islands; popstate/hashchange update the URL

@@ -79,6 +79,8 @@ const head = resolvePageMeta(siteMeta, meta);
     <div class="app-shell">
       <AppHeaderIsland
         client:load
+        transition:persist="app-header"
+        transition:persist-props={false}
         data={chromeData}
         globalData={globalData}
         community={community}
@@ -90,6 +92,8 @@ const head = resolvePageMeta(siteMeta, meta);
       </main>
       <AppFooterIsland
         client:load
+        transition:persist="app-footer"
+        transition:persist-props={false}
         data={chromeData}
         globalData={globalData}
         community={community}
