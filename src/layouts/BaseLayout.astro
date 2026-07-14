@@ -33,10 +33,13 @@ interface Props {
   // community server-side and threads it into the chrome (replacing Next's
   // client-side SetCommunityContext). Undefined elsewhere.
   community?: CommunityRef;
+  // Route params (e.g. { slug }) published to window for the routing shim's
+  // useParams — islands get no route context for free. Omit on paramless pages.
+  routeParams?: Record<string, string | undefined>;
   draftModeEnabled?: boolean;
 }
 
-const { meta, community, draftModeEnabled } = Astro.props;
+const { meta, community, routeParams, draftModeEnabled } = Astro.props;
 
 const [themeRes, chromeRes, globalStaticRes, siteMeta] = await Promise.all([
   query(LayoutThemeAstroQuery, {}),
@@ -59,6 +62,14 @@ const head = resolvePageMeta(siteMeta, meta);
     <PageHead head={head} />
   </head>
   <body>
+    {
+      routeParams && (
+        <script
+          is:inline
+          set:html={`window.__meruRouteParams = ${JSON.stringify(routeParams)};`}
+        />
+      )
+    }
     <div class="app-shell">
       <AppHeaderIsland
         client:load

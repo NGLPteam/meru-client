@@ -1,0 +1,28 @@
+---
+// Community landing page — Astro port of the Next community layout + page
+// (app/[frontend]/(pages)/communities/[slug]/{layout,page}.tsx). One query drives
+// the chrome community context, the hero/nav/main content island, and the head.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import query from "../../lib/query";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { communityQuery } from "../../lib/queries/community";
+import buildCommunityMeta from "../../lib/metadata/communityMetadata";
+import CommunityLanding from "../../components/pages/CommunityLanding";
+
+const { slug } = Astro.params;
+if (!slug) return new Response(null, { status: 404 });
+
+const { data } = await query(communityQuery, { slug });
+const community = data?.community;
+if (!community) return new Response(null, { status: 404 });
+
+// NOTE: the draft-mode preview authorization check (community.canPreview) is
+// deferred to the auth phase, along with the /api/viewer + draft-mode plumbing.
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildCommunityMeta(community, slug);
+---
+
+<BaseLayout meta={meta} community={community} routeParams={{ slug }}>
+  <CommunityLanding client:load community={community} globalData={globalData} />
+</BaseLayout>
