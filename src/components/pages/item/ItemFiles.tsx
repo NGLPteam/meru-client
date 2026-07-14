@@ -1,0 +1,32 @@
+"use client";
+
+// Hydrated island: the item files sub-page (/items/[slug]/files).
+import AssetsBlock from "@/components/composed/asset/AssetsBlock";
+import type { DocumentType } from "@/lib/api/gql";
+import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
+import AppProviders from "../../providers/AppProviders";
+import ItemShell from "./ItemShell";
+import type { itemFilesQuery } from "../../../lib/queries/item";
+
+type Item = NonNullable<DocumentType<typeof itemFilesQuery>["item"]>;
+
+type Props = {
+  item: Item;
+  slug: string;
+  globalData?: GlobalStaticData;
+  route?: React.ComponentProps<typeof AppProviders>["route"];
+};
+
+export default function ItemFiles({ item, slug, globalData, route }: Props) {
+  return (
+    <AppProviders
+      community={item.community}
+      globalData={globalData}
+      route={route}
+    >
+      <ItemShell data={item} slug={slug}>
+        <AssetsBlock data={item.assets} />
+      </ItemShell>
+    </AppProviders>
+  );
+}

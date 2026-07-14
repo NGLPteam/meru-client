@@ -1,0 +1,39 @@
+// useFragment is a pure identity function (not a hook); alias it so it runs in
+// this server-side helper without tripping rules-of-hooks.
+import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { getTruncatedText } from "@/helpers/strings";
+import type { PageMeta } from "@/lib/metadata/types";
+import { itemMetaFragment } from "../queries/item";
+
+// Astro port of app/**/items/[slug]/_metadata/item.ts.
+const BASE_URL = import.meta.env.NEXT_PUBLIC_FE_URL as string | undefined;
+
+export default function buildItemMeta(
+  data: FragmentType<typeof itemMetaFragment>,
+  slug: string,
+): PageMeta {
+  const item = readFragment(itemMetaFragment, data);
+
+  const title = item.title ?? undefined;
+
+  const about = item.about;
+  const aboutContent =
+    about && "content" in about ? (about.content ?? undefined) : undefined;
+  const description = aboutContent ? getTruncatedText(aboutContent) : undefined;
+
+  const heroUrl = item.heroImage?.image?.webp?.url;
+  const thumbUrl = item.thumbnail?.image?.webp?.url;
+  const image = heroUrl
+    ? { url: heroUrl, alt: item.heroImageMetadata?.alt ?? "" }
+    : thumbUrl
+      ? { url: thumbUrl, alt: item.thumbnailMetadata?.alt ?? "" }
+      : null;
+
+  return {
+    title,
+    description,
+    url: `${BASE_URL}items/${slug}`,
+    images: image?.url ? [{ url: image.url, alt: image.alt }] : [],
+    inheritParent: true,
+  };
+}

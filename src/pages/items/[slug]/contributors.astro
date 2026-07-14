@@ -1,0 +1,39 @@
+---
+// Item contributors — Astro port of items/[slug]/contributors/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { useFragment as readFragment } from "@/lib/api/gql";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
+import { itemContributorsQuery } from "~/lib/queries/item";
+import buildItemMeta from "~/lib/metadata/itemMetadata";
+import ItemContributors from "~/components/pages/item/ItemContributors";
+import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.rewrite("/404");
+
+const { data } = await query(itemContributorsQuery, { slug });
+const item = data?.item;
+if (!item) return Astro.rewrite("/404");
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildItemMeta(item, slug);
+const scholar = readFragment(googleScholarFragment, item);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={item.community} routeParams={{ slug }}>
+  <GoogleScholarMetaTags slot="head" entity={scholar} />
+  <ItemContributors
+    client:load
+    item={item}
+    slug={slug}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

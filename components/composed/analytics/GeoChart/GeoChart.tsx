@@ -5,10 +5,9 @@ import {
 } from "react-google-charts";
 import { colors } from "@/styles/helpers.cjs";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { GOOGLE_MAPS_KEY as MAPS_KEY } from "@/lib/env/clientConfig";
 
 type Props = Partial<ReactGoogleChartProps> & Partial<ChartWrapperOptions>;
-
-const MAPS_KEY = process.env.googleMapsKey;
 
 export default function GeoChart({
   region,

@@ -1,0 +1,42 @@
+---
+// Item file detail — Astro port of items/[slug]/files/[file]/page.tsx. The item
+// supplies the shell; the asset is a separate root query.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { useFragment as readFragment } from "@/lib/api/gql";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
+import { itemFileDetailQuery } from "~/lib/queries/item";
+import buildItemMeta from "~/lib/metadata/itemMetadata";
+import ItemFileDetail from "~/components/pages/item/ItemFileDetail";
+import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
+
+const { slug, file } = Astro.params;
+if (!slug || !file) return Astro.rewrite("/404");
+
+const { data } = await query(itemFileDetailQuery, { slug, file });
+const item = data?.item;
+const asset = data?.asset;
+if (!item || !asset) return Astro.rewrite("/404");
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildItemMeta(item, slug);
+const scholar = readFragment(googleScholarFragment, item);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={item.community} routeParams={{ slug, file }}>
+  <GoogleScholarMetaTags slot="head" entity={scholar} />
+  <ItemFileDetail
+    client:load
+    item={item}
+    asset={asset}
+    slug={slug}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>

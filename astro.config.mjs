@@ -18,7 +18,8 @@ export default defineConfig({
     // import.meta.env. These carry the legacy NEXT_PUBLIC_ prefix (public by
     // convention, same as Next); secrets without the prefix stay server-only.
     // Client code reads them through lib/env/clientConfig.ts — the single swap
-    // point for the eventual var rename / Next removal.
-    envPrefix: ["PUBLIC_", "NEXT_PUBLIC_"],
+    // point for the eventual var rename / Next removal. GOOGLE_MAPS_KEY is a
+    // public browser key (analytics geo chart), exposed by its full name.
+    envPrefix: ["PUBLIC_", "NEXT_PUBLIC_", "GOOGLE_MAPS_KEY"],
   },
 });

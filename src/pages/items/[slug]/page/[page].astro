@@ -1,0 +1,39 @@
+---
+// Named item sub-page — Astro port of items/[slug]/page/[page]/page.tsx.
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import query from "~/lib/query";
+import { useFragment as readFragment } from "@/lib/api/gql";
+import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
+import { itemPageQuery } from "~/lib/queries/item";
+import buildItemMeta from "~/lib/metadata/itemMetadata";
+import ItemPage from "~/components/pages/item/ItemPage";
+import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
+
+const { slug, page: pageSlug } = Astro.params;
+if (!slug || !pageSlug) return Astro.rewrite("/404");
+
+const { data } = await query(itemPageQuery, { slug, pageSlug });
+const item = data?.item;
+if (!item) return Astro.rewrite("/404");
+
+const { data: globalData } = await query(globalStaticQuery, {});
+const meta = buildItemMeta(item, slug);
+const scholar = readFragment(googleScholarFragment, item);
+const route = {
+  pathname: Astro.url.pathname,
+  search: Astro.url.search,
+  params: Astro.params,
+};
+---
+
+<BaseLayout meta={meta} community={item.community} routeParams={{ slug, page: pageSlug }}>
+  <GoogleScholarMetaTags slot="head" entity={scholar} />
+  <ItemPage
+    client:load
+    item={item}
+    slug={slug}
+    globalData={globalData}
+    route={route}
+  />
+</BaseLayout>
