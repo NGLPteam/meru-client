@@ -3,14 +3,12 @@ import {
   ReactGoogleChartProps,
   ChartWrapperOptions,
 } from "react-google-charts";
-// helpers.cjs is CommonJS; import the default (module.exports) and destructure
-// so the browser ESM bundle (Vite) resolves it — a named import only works
-// under webpack, not Vite's on-the-fly CJS interop.
-import helpers from "@/styles/helpers.cjs";
+// Import the palette from JSON, not helpers.cjs: Vite serves that .cjs raw
+// (top-level require + module.exports), so it exposes no ESM export to the
+// browser bundle. JSON imports work in both webpack and Vite.
+import colors from "@/styles/colors.json";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { GOOGLE_MAPS_KEY as MAPS_KEY } from "@/lib/env/clientConfig";
-
-const { colors } = helpers;
 
 type Props = Partial<ReactGoogleChartProps> & Partial<ChartWrapperOptions>;
 
