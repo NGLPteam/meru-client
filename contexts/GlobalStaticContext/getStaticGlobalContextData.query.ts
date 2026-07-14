@@ -8,6 +8,10 @@ import { graphql } from "@/lib/api/gql";
 export const query = graphql(`
   query getStaticGlobalContextDataQuery {
     globalConfiguration {
+      theme {
+        color
+        font
+      }
       site {
         providerName
         installationName

@@ -24,6 +24,7 @@ import {
 // import-safe now, but the direct path keeps the server fetch out of the graph.
 import { ViewerContextProvider } from "@/contexts/ViewerContext/ViewerContext";
 import { CommunityContextProvider } from "@/contexts/CommunityContext";
+import ThemeProvider from "@/contexts/ThemeProvider";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
 import { RouteProvider, type RouteState } from "@/lib/routing/RouteContext";
 import type { PropsWithChildren } from "react";
@@ -48,16 +49,23 @@ export default function ChromeProviders({
   route,
   draftModeEnabled,
 }: Props) {
+  // Global site theme (color/font) — drives useTheme() consumers (e.g. the
+  // analytics charts). Sourced from globalData so it reaches every island
+  // without per-page plumbing; the server also applies it as <html> classes.
+  const theme = globalData?.globalConfiguration?.theme ?? undefined;
+
   return (
     <RouteProvider route={route}>
       <GlobalStaticContextProvider globalData={globalData}>
-        <ViewerContextProvider isPreview={draftModeEnabled}>
-          <ProgressBarProvider>
-            <CommunityContextProvider data={community}>
-              {children}
-            </CommunityContextProvider>
-          </ProgressBarProvider>
-        </ViewerContextProvider>
+        <ThemeProvider theme={theme}>
+          <ViewerContextProvider isPreview={draftModeEnabled}>
+            <ProgressBarProvider>
+              <CommunityContextProvider data={community}>
+                {children}
+              </CommunityContextProvider>
+            </ProgressBarProvider>
+          </ViewerContextProvider>
+        </ThemeProvider>
       </GlobalStaticContextProvider>
     </RouteProvider>
   );
