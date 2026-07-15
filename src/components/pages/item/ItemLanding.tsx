@@ -20,6 +20,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function ItemLanding({
@@ -28,6 +29,7 @@ export default function ItemLanding({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -35,6 +37,7 @@ export default function ItemLanding({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <ItemShell data={item} slug={slug}>
         <FullTextCheckRedirect redirectPath={`/items/${slug}/metadata`}>

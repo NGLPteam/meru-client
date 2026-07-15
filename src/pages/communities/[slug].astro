@@ -5,6 +5,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import query from "../../lib/query";
 import getViewer from "../../lib/auth/viewer";
+import { previewToken } from "../../lib/request/previewToken";
+import { isDraftModeEnabled } from "../../lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityQuery } from "../../lib/queries/community";
 import buildCommunityMeta from "../../lib/metadata/communityMetadata";
@@ -13,15 +15,13 @@ import CommunityLanding from "../../components/pages/CommunityLanding";
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
 
-const { data } = await query(communityQuery, { slug });
+const { data } = await query(communityQuery, { slug }, previewToken(Astro));
 const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
-// NOTE: the draft-mode preview authorization check (community.canPreview) is
-// deferred to the auth phase, along with the draft-mode plumbing.
-
 const { data: globalData } = await query(globalStaticQuery, {});
 const viewer = await getViewer(Astro);
+const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
 
 const route = {
@@ -38,5 +38,6 @@ const route = {
     globalData={globalData}
     route={route}
     viewer={viewer}
+    draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

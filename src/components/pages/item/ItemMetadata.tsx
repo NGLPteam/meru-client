@@ -20,6 +20,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function ItemMetadata({
@@ -28,6 +29,7 @@ export default function ItemMetadata({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   const { metadata, main } = item.layouts;
   const template = metadata?.template;
@@ -38,6 +40,7 @@ export default function ItemMetadata({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <ItemShell data={item} slug={slug}>
         {template ? (

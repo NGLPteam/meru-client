@@ -18,6 +18,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function CommunityPage({
@@ -25,6 +26,7 @@ export default function CommunityPage({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -32,6 +34,7 @@ export default function CommunityPage({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <CommunityShell data={community}>
         <CommunityPageLayout data={community.page} />

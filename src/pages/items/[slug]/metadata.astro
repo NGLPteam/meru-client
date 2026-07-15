@@ -3,6 +3,8 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import getViewer from "~/lib/auth/viewer";
+import { previewToken } from "~/lib/request/previewToken";
+import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
@@ -14,12 +16,13 @@ import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
 
-const { data } = await query(itemMetadataQuery, { slug });
+const { data } = await query(itemMetadataQuery, { slug }, previewToken(Astro));
 const item = data?.item;
 if (!item) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const viewer = await getViewer(Astro);
+const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
 const route = {
@@ -38,5 +41,6 @@ const route = {
     globalData={globalData}
     route={route}
     viewer={viewer}
+    draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

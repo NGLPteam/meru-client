@@ -7,6 +7,11 @@ export const COOKIE = {
   accessToken: "meru-access-token",
   refreshToken: "meru-refresh-token",
   redirectUri: "meru-redirect-uri",
+  // Preview/draft-mode flag. Unsigned like the rest — NOT load-bearing: the API
+  // still gates draft content per entity via canPreview/canUpdate (checked with
+  // the viewer's own token), so this cookie only toggles the client into the
+  // authed-fetch + banner state, revealing nothing the token can't already see.
+  draftMode: "meru-draft-mode",
 } as const;
 
 // Shared cookie options. Unsigned (rely on httpOnly/secure/sameSite). `secure`

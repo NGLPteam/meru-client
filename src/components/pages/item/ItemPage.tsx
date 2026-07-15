@@ -16,6 +16,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function ItemPage({
@@ -24,6 +25,7 @@ export default function ItemPage({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -31,6 +33,7 @@ export default function ItemPage({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <ItemShell data={item} slug={slug}>
         <EntityPageLayout data={item.page} />

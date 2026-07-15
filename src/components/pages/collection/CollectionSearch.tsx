@@ -18,6 +18,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function CollectionSearch({
@@ -26,6 +27,7 @@ export default function CollectionSearch({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -33,6 +35,7 @@ export default function CollectionSearch({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>
         <SearchLayout data={collection} scoped />

@@ -18,6 +18,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function CollectionPage({
@@ -26,6 +27,7 @@ export default function CollectionPage({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -33,6 +35,7 @@ export default function CollectionPage({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>
         <EntityPageLayout data={collection.page} />

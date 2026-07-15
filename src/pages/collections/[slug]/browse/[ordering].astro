@@ -3,6 +3,8 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import getViewer from "~/lib/auth/viewer";
+import { previewToken } from "~/lib/request/previewToken";
+import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionBrowseQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
@@ -17,11 +19,15 @@ const showContext =
   (Astro.url.searchParams.get("context") as ListEntityContext | null) ??
   undefined;
 
-const { data } = await query(collectionBrowseQuery, {
-  slug,
-  identifier: ordering,
-  page,
-});
+const { data } = await query(
+  collectionBrowseQuery,
+  {
+    slug,
+    identifier: ordering,
+    page,
+  },
+  previewToken(Astro),
+);
 const collection = data?.collection;
 if (!collection) return Astro.rewrite("/404");
 
@@ -33,6 +39,7 @@ const route = {
   params: Astro.params,
 };
 const viewer = await getViewer(Astro);
+const draftModeEnabled = isDraftModeEnabled(Astro);
 ---
 
 <BaseLayout meta={meta} community={collection.community} routeParams={{ slug, ordering }}>
@@ -44,5 +51,6 @@ const viewer = await getViewer(Astro);
     globalData={globalData}
     route={route}
     viewer={viewer}
+    draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

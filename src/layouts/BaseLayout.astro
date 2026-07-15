@@ -15,6 +15,8 @@ import { getThemeClasses } from "@/styles/theme-helpers";
 import LoadingBar from "../components/client/LoadingBar.astro";
 import query from "../lib/query";
 import getViewer from "~/lib/auth/viewer";
+import { isDraftModeEnabled } from "~/lib/request/draftMode";
+import DraftModeBannerIsland from "../components/chrome/DraftModeBannerIsland";
 import { LayoutThemeAstroQuery } from "../lib/queries/layout";
 import { chromeLayoutQuery } from "../lib/chrome/queries";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
@@ -40,10 +42,16 @@ interface Props {
   // search come from Astro.url; params are page-supplied. Threaded into the
   // chrome islands' RouteProvider so route-dependent SSR matches hydration.
   routeParams?: Record<string, string | undefined>;
+  // Optional override; by default draft mode is read from the cookie here, since
+  // it is a global toggle that must surface the banner + preview chrome on every
+  // page, not only entity pages that happen to thread it through.
   draftModeEnabled?: boolean;
 }
 
-const { meta, community, routeParams, draftModeEnabled } = Astro.props;
+const { meta, community, routeParams } = Astro.props;
+
+const draftModeEnabled =
+  Astro.props.draftModeEnabled ?? isDraftModeEnabled(Astro);
 
 // Server-known route, seeded into the chrome islands so pathname-dependent
 // markup (e.g. the header's community-vs-home variant) renders identically on
@@ -80,6 +88,7 @@ const head = resolvePageMeta(siteMeta, meta);
   </head>
   <body>
     <LoadingBar />
+    {draftModeEnabled && <DraftModeBannerIsland client:load />}
     <div class="app-shell">
       <AppHeaderIsland
         client:load

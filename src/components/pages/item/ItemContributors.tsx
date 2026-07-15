@@ -16,6 +16,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function ItemContributors({
@@ -24,6 +25,7 @@ export default function ItemContributors({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -31,6 +33,7 @@ export default function ItemContributors({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <ItemShell data={item} slug={slug}>
         <ContributionsBlock data={item} slug={slug} background="neutral00" />

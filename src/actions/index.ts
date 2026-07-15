@@ -5,6 +5,7 @@ import {
   clearSessionCookies,
   setSessionCookies,
 } from "~/lib/auth/session";
+import { enableDraftMode, disableDraftMode } from "~/lib/request/draftMode";
 
 // Client-invocable auth actions. The grant + cookie logic lives in
 // src/lib/auth so server code (getSession/middleware) calls it directly; these
@@ -41,6 +42,24 @@ export const server = {
         clearSessionCookies(context);
         return { ok: false };
       }
+    },
+  }),
+
+  // Global preview toggle (account dropdown). enterPreview only sets the draft
+  // cookie — the per-entity `canPreview` gate still governs what actually
+  // renders, so this is safe to expose to any authed viewer. exitPreview clears
+  // it (the draft banner's "exit"). Callers reload afterward to re-render SSR.
+  enterPreview: defineAction({
+    handler: (_input, context) => {
+      enableDraftMode(context);
+      return { ok: true };
+    },
+  }),
+
+  exitPreview: defineAction({
+    handler: (_input, context) => {
+      disableDraftMode(context);
+      return { ok: true };
     },
   }),
 };

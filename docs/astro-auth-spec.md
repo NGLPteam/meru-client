@@ -131,15 +131,25 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   `enterPreviewMode` is still inert — deferred to step 5 (needs the draft cookie + `/preview` flow).
   The dropdown's `isAuthenticated`/`canAccessAdmin` now come from the step-3 server-seeded viewer.
 
-### 5. Preview / draft mode (folds into #9)
-- `lib/request/draftMode.ts` → Astro signed cookie via `Astro.cookies` (`enableDraftMode`/
-  `disableDraftMode`/`isDraftModeEnabled`).
-- `src/pages/preview/[entity]/[slug].ts` — one endpoint: gate on `locals.isAuthenticated`
-  (→ `/unauthorized?reason=unauthenticated`), `fetchPreviewAccess` (→ `?reason=forbidden`), else
-  enable draft cookie + redirect to the entity landing (`LANDING` map). Replaces the Next route +
-  middleware gate.
-- Enforce the deferred `canPreview` checks in the community/collection/item routes (the fragments
-  already select `canPreview`); render `UnauthorizedMessage` when draft + `!canPreview`.
+### 5. Preview / draft mode — DONE (2026-07-15)
+- `src/lib/request/draftMode.ts` — Astro-native, context-taking (`isDraftModeEnabled`/
+  `enableDraftMode`/`disableDraftMode`) over an **unsigned** httpOnly cookie `meru-draft-mode`
+  (decided 2026-07-15: not load-bearing — the API's per-entity `canPreview`/`canUpdate`, checked
+  with the viewer's token, is what actually gates content). Fresh module (root `lib/request/
+  draftMode.ts` is Next-only, dies in cleanup). `src/lib/request/previewToken.ts` returns the
+  locals token only when draft mode is on, else undefined (queries stay anonymous/cacheable).
+- `src/pages/preview/[entity]/[slug].ts` — deep-link endpoint: `!isAuthenticated` →
+  `/unauthorized?reason=unauthenticated`; `fetchPreviewAccess` (`src/lib/preview/`, token from
+  locals, reuses the registered `fetchPreviewAccessQuery`) → `?reason=forbidden`; else enable draft
+  + redirect to `LANDING`. Hardens the Next route, which had no gate.
+- Global toggle: `enterPreview`/`exitPreview` Astro actions set/clear the cookie; `AccountDropdown`
+  `enterPreviewMode` → `actions.enterPreview()`; `DraftModeBannerIsland` (BaseLayout renders it
+  whenever the cookie is set — self-read, so the banner shows on every page) → `actions.exitPreview()`.
+- `canPreview` enforcement: **inline** (decided 2026-07-15) — Item/Collection/Community shells read
+  `useViewerContext().isPreview` + the layout fragment's `canPreview` and render
+  `UnauthorizedMessage` in place when preview + `!canPreview`. `draftModeEnabled` is threaded
+  page → island → `AppProviders` (mirrors the viewer prop) across all 17 entity pages so `isPreview`
+  reaches the shells; each entity page fetches its primary query with `previewToken(Astro)`.
 
 ### 6. `/api/graphql` proxy + point the two kept client queries at it
 - `src/pages/api/graphql.ts` — `POST`: read session cookie via `locals`, inject

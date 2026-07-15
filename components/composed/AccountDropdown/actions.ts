@@ -36,8 +36,8 @@ export async function signOut() {
 }
 
 export async function enterPreviewMode() {
-  // Wired in the preview / draft-mode step. Inert until then.
-  if (typeof window !== "undefined") {
-    console.warn("[auth] enterPreviewMode is wired in the preview-mode step.");
-  }
+  // Global preview toggle: set the draft cookie server-side. The caller
+  // (PreviewModeButton) reloads once the transition settles so the next SSR
+  // render picks up draft mode; the per-entity canPreview gate governs content.
+  await actions.enterPreview();
 }

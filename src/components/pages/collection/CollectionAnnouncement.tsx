@@ -19,6 +19,7 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
 };
 
 export default function CollectionAnnouncement({
@@ -27,6 +28,7 @@ export default function CollectionAnnouncement({
   globalData,
   route,
   viewer,
+  draftModeEnabled,
 }: Props) {
   return (
     <AppProviders
@@ -34,6 +36,7 @@ export default function CollectionAnnouncement({
       globalData={globalData}
       route={route}
       viewer={viewer}
+      draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>
         <EntityAnnouncementLayout data={collection.announcement} />

@@ -5,6 +5,8 @@
 // the Next collection layout.tsx. Unmasks CollectionLayoutFragment; the parent
 // community for the header context is provided separately (AppProviders).
 import { useFragment, type FragmentType } from "@/lib/api/gql";
+import useViewerContext from "@/contexts/useViewerContext";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
@@ -19,6 +21,13 @@ type Props = PropsWithChildren<{
 
 export default function CollectionShell({ data, slug, children }: Props) {
   const layout = useFragment(collectionLayoutFragment, data);
+  const { isPreview } = useViewerContext();
+
+  // Preview gate: an entity the viewer can't preview shows the unauthorized
+  // message in place instead of its draft content. No-op outside preview.
+  if (isPreview && !layout.canPreview?.value) {
+    return <UnauthorizedMessage reason="forbidden" entity="collection" />;
+  }
 
   return (
     <>
