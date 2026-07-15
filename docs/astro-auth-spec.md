@@ -172,10 +172,27 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   preview/authed) and View Transitions swap content. Remove their client `useQuery`/`UrqlProvider`.
 - Result: deep/paginated states land in SSR HTML (crawlable, cacheable — consistent with the sitemap).
 
-### 8. Cleanup
-- Remove `next-auth`, `@auth/core`; add `jwt-decode`. Delete `initAuth.ts`, `/api/auth/*`,
-  `clientToken.ts`. Retire the `NEXT_PUBLIC_`/`AUTH_SECRET` env names in favor of the new set (see
-  below); `lib/env/clientConfig.ts` stays the single client-env swap point.
+### 8. Cleanup — mostly DONE (2026-07-15); `next` dep deferred to #7
+Done in two commits:
+- **Remove the Next application** — deleted `app/**` (layouts, loading, preview route, `api/auth`,
+  `api/revalidate`), root `middleware.ts`/`next.config.js`/`next-env.d.ts`, `components/global/AppBody`,
+  the Next `DraftModeBanner` (`.tsx`/`actions`/`index`; kept `.module.css`), and `lib/actions/*`.
+  Repointed `package.json` scripts to `astro dev/build/preview`; fixed `tsconfig` include.
+- **Sever `next-auth`** — the shared `GlobalStaticContext` fetchers blocked it (the barrel re-exported
+  `getStaticGlobalContextData`, imported by ~23 Astro files; `getStaticGoogleScholarData`/
+  `getStaticEntityData` export fragments Astro uses — all statically pulled `queryApi → initAuth →
+  next-auth`). Decoupled: dropped the barrel's fetcher re-export and stripped the Next-only fetch
+  functions (kept the fragment exports byte-identical for codegen). Then deleted the chain
+  (`lib/api/queryApi.ts`, `lib/auth/{initAuth,keycloak,types}.ts`, root `lib/request/draftMode.ts`,
+  `getStaticCommunityData`, `getStaticGlobalContextData`) and removed deps `next-auth`, `@auth/core`,
+  `@next/mdx`, `@next/eslint-plugin-next`, `@trieb.work/nextjs-turbo-redis-cache`. `clientToken.ts`
+  was already deleted in step 6. **No `jwt-decode`** (identity is the GraphQL viewer; expiry rides the
+  access cookie's maxAge). Verified: client bundle carries no token; tsc + build green.
+
+**Deferred to #7:** the `next` package itself stays — `lib/routing/navigation.ts` re-exports
+`notFound`/`redirect` from `next/navigation` and is reachable from Astro (`FullTextCheck` → `ItemShell`).
+Porting that shim (and rechecking `FullTextCheck`'s redirect under Astro) drops the last `next` dep.
+Env: `AUTH_SECRET` no longer used (no next-auth); `lib/env/clientConfig.ts` stays the client-env swap point.
 
 ## Env vars
 
