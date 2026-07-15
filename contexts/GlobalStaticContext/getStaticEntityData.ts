@@ -1,33 +1,9 @@
-import { graphql, useFragment as readFragment } from "@/lib/api/gql";
-import queryApi from "@/lib/api/queryApi";
+import { graphql } from "@/lib/api/gql";
 
-export default async function getStaticEntityData(slug: string | undefined) {
-  if (!slug) return;
-
-  const { data } = await queryApi(query, { slug });
-
-  if (data) {
-    return readFragment(
-      fragment,
-      data.community || data.collection || data.item || null,
-    );
-  }
-}
-
-const query = graphql(`
-  query getStaticEntityDataQuery($slug: Slug!) {
-    community(slug: $slug) {
-      ...getStaticEntityDataFragment
-    }
-    collection(slug: $slug) {
-      ...getStaticEntityDataFragment
-    }
-    item(slug: $slug) {
-      ...getStaticEntityDataFragment
-    }
-  }
-`);
-
+// The `getStaticEntityData` fetch function was Next-only (server data path via
+// queryApi) and left with the Next app. Only the fragment is kept — Astro
+// selects it within each entity's own query and reads it via GlobalStaticContext
+// (which imports the `fragment` type from here).
 export const fragment = graphql(`
   fragment getStaticEntityDataFragment on Entity {
     ... on Entity {
