@@ -3,11 +3,10 @@ import { defineConfig } from "astro/config";
 import node from "@astrojs/node";
 import react from "@astrojs/react";
 
-// Phase 0 scaffold (docs/astro-execution-plan.md). Astro coexists with the Next
-// app (app/, next.config.js) until the Phase 6 cutover: it serves from src/pages/
-// on its own port and shares postcss.config.js / tailwind.config.js and the
-// @/* tsconfig path aliases. output: "server" + the node adapter = request-time
-// SSR (the settled rendering model).
+// Astro is now the sole app (the Next app/ + next.config.js were removed in the
+// auth migration). Serves from src/pages/, sharing postcss.config.js /
+// tailwind.config.js and the @/* + ~/* tsconfig path aliases. output: "server" +
+// the node adapter = request-time SSR (the settled rendering model).
 export default defineConfig({
   output: "server",
   // Canonical site origin for absolute URLs (sitemap/robots). Empty in dev, so
