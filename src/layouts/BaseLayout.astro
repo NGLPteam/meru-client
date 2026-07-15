@@ -14,6 +14,7 @@ import { ClientRouter } from "astro:transitions";
 import { getThemeClasses } from "@/styles/theme-helpers";
 import LoadingBar from "../components/client/LoadingBar.astro";
 import query from "../lib/query";
+import getViewer from "~/lib/auth/viewer";
 import { LayoutThemeAstroQuery } from "../lib/queries/layout";
 import { chromeLayoutQuery } from "../lib/chrome/queries";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
@@ -53,12 +54,14 @@ const route = {
   params: routeParams ?? {},
 };
 
-const [themeRes, chromeRes, globalStaticRes, siteMeta] = await Promise.all([
-  query(LayoutThemeAstroQuery, {}),
-  query(chromeLayoutQuery, {}),
-  query(globalStaticQuery, {}),
-  getSiteMetadata(),
-]);
+const [themeRes, chromeRes, globalStaticRes, siteMeta, viewer] =
+  await Promise.all([
+    query(LayoutThemeAstroQuery, {}),
+    query(chromeLayoutQuery, {}),
+    query(globalStaticQuery, {}),
+    getSiteMetadata(),
+    getViewer(Astro),
+  ]);
 
 const theme = themeRes.data?.globalConfiguration?.theme ?? undefined;
 const themeClasses = getThemeClasses(theme);
@@ -86,6 +89,7 @@ const head = resolvePageMeta(siteMeta, meta);
         globalData={globalData}
         community={community}
         route={route}
+        viewer={viewer}
         draftModeEnabled={draftModeEnabled}
       />
       <main id="main" tabindex="-1">
@@ -99,6 +103,7 @@ const head = resolvePageMeta(siteMeta, meta);
         globalData={globalData}
         community={community}
         route={route}
+        viewer={viewer}
         draftModeEnabled={draftModeEnabled}
       />
     </div>

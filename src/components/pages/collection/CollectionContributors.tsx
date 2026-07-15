@@ -17,6 +17,7 @@ type Props = {
   slug: string;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
+  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
 export default function CollectionContributors({
@@ -24,12 +25,14 @@ export default function CollectionContributors({
   slug,
   globalData,
   route,
+  viewer,
 }: Props) {
   return (
     <AppProviders
       community={collection.community}
       globalData={globalData}
       route={route}
+      viewer={viewer}
     >
       <CollectionShell data={collection} slug={slug}>
         <CollectionContributionsBlock

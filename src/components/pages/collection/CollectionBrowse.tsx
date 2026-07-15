@@ -19,6 +19,7 @@ type Props = {
   showContext?: ComponentProps<typeof EntityOrderingLayout>["showContext"];
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
+  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
 export default function CollectionBrowse({
@@ -27,12 +28,14 @@ export default function CollectionBrowse({
   showContext,
   globalData,
   route,
+  viewer,
 }: Props) {
   return (
     <AppProviders
       community={collection.community}
       globalData={globalData}
       route={route}
+      viewer={viewer}
     >
       <CollectionShell data={collection} slug={slug}>
         <EntityOrderingLayout

@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { setClientToken } from "@/lib/api/clientToken";
 
 export interface ViewerContextProps {
   isAuthenticated: boolean;
@@ -26,45 +25,38 @@ const initialState: ViewerContextProps = {
 const ViewerContext = createContext<ViewerContextProps>(initialState);
 
 interface Props {
+  // Server-resolved viewer, seeded via props (getViewer → resolveViewer). The
+  // access token never reaches the browser — identity is fully prop-seeded, so
+  // there is no client `/api/viewer` fetch.
+  viewer?: ViewerContextProps;
   isPreview?: boolean;
   children: React.ReactNode;
 }
 
-function ViewerContextProvider({ children, isPreview }: Props) {
-  const [viewer, setViewer] = useState<ViewerContextProps>({
+function ViewerContextProvider({ children, viewer, isPreview }: Props) {
+  const [state, setViewer] = useState<ViewerContextProps>({
     ...initialState,
+    ...viewer,
     isPreview,
   });
 
   // Keep isPreview in sync with the server value (draftMode is read on the
-  // server and can change on router.refresh() when entering/exiting preview).
+  // server and can change on navigation when entering/exiting preview).
   useEffect(() => {
     setViewer((prev) => ({ ...prev, isPreview }));
   }, [isPreview]);
 
+  // Re-seed when the server viewer changes across a navigation (the persisted
+  // chrome island updates its props on View-Transitions navigations, and content
+  // islands remount). `viewer` omits `isPreview`, so it never clobbers the sync
+  // above. Loop-safe: within a stable parent render the prop reference is stable.
   useEffect(() => {
-    let active = true;
-
-    fetch("/api/viewer", { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!active) return;
-
-        const { accessToken, ...viewerData } = data;
-
-        if (accessToken) setClientToken(accessToken);
-
-        setViewer((prev) => ({ ...prev, ...viewerData }));
-      })
-      .catch(() => {});
-
-    return () => {
-      active = false;
-    };
-  }, []);
+    if (!viewer) return;
+    setViewer((prev) => ({ ...prev, ...viewer }));
+  }, [viewer]);
 
   return (
-    <ViewerContext.Provider value={viewer}>{children}</ViewerContext.Provider>
+    <ViewerContext.Provider value={state}>{children}</ViewerContext.Provider>
   );
 }
 

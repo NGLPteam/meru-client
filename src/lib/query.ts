@@ -1,19 +1,18 @@
-import makeUrqlClient from "@/lib/api/makeUrqlClient";
+import { getAnonymousClient, makeAuthorizedClient } from "@/lib/api/client";
 import measureQuery from "@/lib/api/measureQuery";
 import type { AnyVariables, DocumentInput, OperationResult } from "@urql/core";
 
-// Phase 0 Astro server query helper. Reuses the existing urql client factory +
-// measureQuery choke point; the only Astro-specific change is reading the API
-// URL from import.meta.env (Vite) instead of process.env (Next). The full server
-// data path (token from Astro.locals, preview, per #7) is built in a later phase.
-const API_URL = import.meta.env.NEXT_PUBLIC_API_URL;
-if (!API_URL) throw new Error("Missing NEXT_PUBLIC_API_URL (import.meta.env).");
-
-const anonymousClient = makeUrqlClient(API_URL, "network-only");
-
+// Astro server query helper. Anonymous by default (public SSR — the shared
+// network-only-in-prod / cache-first-in-dev singleton); pass a token to force a
+// Bearer-authorized, network-only fetch for authed/preview requests. Pages feed
+// `Astro.locals.session?.accessToken` (populated by the auth middleware) here.
+// Both paths funnel through measureQuery; env + request-policy resolution live
+// once in lib/api/client (getAPIURL supports import.meta.env and process.env).
 export default function query<Query, Variables extends AnyVariables = AnyVariables>(
   document: DocumentInput<Query, Variables>,
   variables: Variables,
+  token?: string,
 ): Promise<OperationResult<Query, Variables>> {
-  return measureQuery(anonymousClient, document, variables);
+  const client = token ? makeAuthorizedClient(token) : getAnonymousClient();
+  return measureQuery(client, document, variables);
 }

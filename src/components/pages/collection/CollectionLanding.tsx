@@ -19,6 +19,7 @@ type Props = {
   slug: string;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
+  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
 export default function CollectionLanding({
@@ -26,6 +27,7 @@ export default function CollectionLanding({
   slug,
   globalData,
   route,
+  viewer,
 }: Props) {
   const main = collection.layouts.main;
   const firstKind = main?.templates?.[0];
@@ -41,6 +43,7 @@ export default function CollectionLanding({
       community={collection.community}
       globalData={globalData}
       route={route}
+      viewer={viewer}
     >
       <CollectionShell data={collection} slug={slug}>
         <MainLayout data={main} computedBgStart={computedBgStart} />

@@ -18,15 +18,22 @@ type Props = {
   community: Community;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
+  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
 export default function CommunitySearch({
   community,
   globalData,
   route,
+  viewer,
 }: Props) {
   return (
-    <AppProviders community={community} globalData={globalData} route={route}>
+    <AppProviders
+      community={community}
+      globalData={globalData}
+      route={route}
+      viewer={viewer}
+    >
       <CommunityShell data={community}>
         <SearchLayout data={community} scoped />
       </CommunityShell>

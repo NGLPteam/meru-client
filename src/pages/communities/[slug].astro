@@ -4,6 +4,7 @@
 // the chrome community context, the hero/nav/main content island, and the head.
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import query from "../../lib/query";
+import getViewer from "../../lib/auth/viewer";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityQuery } from "../../lib/queries/community";
 import buildCommunityMeta from "../../lib/metadata/communityMetadata";
@@ -17,9 +18,10 @@ const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
 // NOTE: the draft-mode preview authorization check (community.canPreview) is
-// deferred to the auth phase, along with the /api/viewer + draft-mode plumbing.
+// deferred to the auth phase, along with the draft-mode plumbing.
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const viewer = await getViewer(Astro);
 const meta = buildCommunityMeta(community, slug);
 
 const route = {
@@ -35,5 +37,6 @@ const route = {
     community={community}
     globalData={globalData}
     route={route}
+    viewer={viewer}
   />
 </BaseLayout>

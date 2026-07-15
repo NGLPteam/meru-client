@@ -1,29 +1,43 @@
-// TEMPORARY (Astro migration) — auth stub.
-//
-// The Next implementation of these was a `"use server"` module that statically
-// imported next-auth (@/lib/auth/initAuth + @/lib/auth/keycloak). Astro/Vite has
-// no `"use server"` handling, so those imports would ship next-auth into the
-// browser island bundle. Until the auth phase ports the hcc Keycloak client
-// pattern (httpOnly cookies, /api/auth/* routes — see docs/astro-auth-plan.md),
-// these are inert placeholders so the global chrome renders and hydrates.
-//
-// Signatures are unchanged so AccountDropdown / AppFooter / PreviewModeButton
-// compile untouched; the buttons are simply no-ops until auth lands.
+"use client";
 
-function notYet(action: string) {
-  if (typeof window !== "undefined") {
-    console.warn(`[auth stub] ${action} not wired up yet (Astro migration).`);
-  }
+// Auth UI actions for the global chrome (AccountDropdown / PreviewModeButton).
+//
+// Astro-native (the Next `"use server"` next-auth versions are gone — Next is
+// deleted before this branch merges):
+//   - signIn: a plain browser navigation to the /api/signin endpoint, which
+//     starts the Keycloak Authorization-Code flow and returns to the current URL.
+//   - signOut: calls the `logout` Astro Action (Keycloak back-channel logout +
+//     httpOnly cookie clear), then hard-navigates so the server re-renders
+//     anonymous chrome.
+//   - enterPreviewMode: still inert — wired in the preview/draft-mode step.
+//
+// Signatures are unchanged so AccountDropdown / PreviewModeButton compile
+// untouched.
+import { actions } from "astro:actions";
+
+function currentReturnTo(): string {
+  if (typeof window === "undefined") return "/";
+  return window.location.pathname + window.location.search;
 }
 
 export async function signIn() {
-  notYet("signIn");
+  if (typeof window === "undefined") return;
+  window.location.assign(
+    `/api/signin?returnTo=${encodeURIComponent(currentReturnTo())}`,
+  );
 }
 
 export async function signOut() {
-  notYet("signOut");
+  // Best-effort backchannel logout + cookie clear (server-side). Cookies are
+  // cleared regardless of the Keycloak call's outcome, so a hard nav to "/"
+  // lands on freshly-anonymous SSR chrome.
+  await actions.logout();
+  if (typeof window !== "undefined") window.location.assign("/");
 }
 
 export async function enterPreviewMode() {
-  notYet("enterPreviewMode");
+  // Wired in the preview / draft-mode step. Inert until then.
+  if (typeof window !== "undefined") {
+    console.warn("[auth] enterPreviewMode is wired in the preview-mode step.");
+  }
 }

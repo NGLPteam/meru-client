@@ -2,6 +2,7 @@
 // Named community sub-page — Astro port of communities/[slug]/page/[page]/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
+import getViewer from "~/lib/auth/viewer";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityPageQuery } from "~/lib/queries/community";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
@@ -15,6 +16,7 @@ const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const viewer = await getViewer(Astro);
 const meta = buildCommunityMeta(community, slug);
 const route = {
   pathname: Astro.url.pathname,
@@ -29,5 +31,6 @@ const route = {
     community={community}
     globalData={globalData}
     route={route}
+    viewer={viewer}
   />
 </BaseLayout>

@@ -10,8 +10,8 @@
 //   - UrqlProvider: omitted. No chrome child runs a client useQuery/useMutation,
 //     and the client urql bootstrap reads NEXT_PUBLIC_API_URL — that arrives
 //     with the same-origin /api/graphql proxy in the auth phase.
-//   - ViewerContext still self-fetches /api/viewer (logged-out until the auth
-//     phase provides that route; the fetch failure is swallowed).
+//   - ViewerContext is seeded from the server-resolved `viewer` prop (getViewer);
+//     the token never reaches the browser and there is no client fetch.
 // Side-effect: initialize the i18next singleton (SSR-safe — the browser
 // LanguageDetector is only wired under `window`). react-i18next hooks in the
 // chrome depend on this having run.
@@ -22,7 +22,10 @@ import {
 } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
 // Import the provider from the module directly, not the barrel — the barrel is
 // import-safe now, but the direct path keeps the server fetch out of the graph.
-import { ViewerContextProvider } from "@/contexts/ViewerContext/ViewerContext";
+import {
+  ViewerContextProvider,
+  type ViewerContextProps,
+} from "@/contexts/ViewerContext/ViewerContext";
 import { CommunityContextProvider } from "@/contexts/CommunityContext";
 import ThemeProvider from "@/contexts/ThemeProvider";
 import { ProgressBarProvider } from "@/lib/vendor/react-transition-progress";
@@ -39,6 +42,9 @@ type Props = PropsWithChildren & {
   // Server-known route (pathname/search/params) so route-dependent hooks render
   // the same markup on the server and after hydration — no reflow.
   route?: Partial<RouteState>;
+  // Server-resolved viewer (getViewer), seeded so identity renders on the server
+  // and after hydration without a client fetch.
+  viewer?: ViewerContextProps;
   draftModeEnabled?: boolean;
 };
 
@@ -47,6 +53,7 @@ export default function ChromeProviders({
   globalData,
   community,
   route,
+  viewer,
   draftModeEnabled,
 }: Props) {
   // Global site theme (color/font) — drives useTheme() consumers (e.g. the
@@ -58,7 +65,7 @@ export default function ChromeProviders({
     <RouteProvider route={route}>
       <GlobalStaticContextProvider globalData={globalData}>
         <ThemeProvider theme={theme}>
-          <ViewerContextProvider isPreview={draftModeEnabled}>
+          <ViewerContextProvider viewer={viewer} isPreview={draftModeEnabled}>
             <ProgressBarProvider>
               <CommunityContextProvider data={community}>
                 {children}

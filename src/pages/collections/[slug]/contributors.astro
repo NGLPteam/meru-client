@@ -2,6 +2,7 @@
 // Collection contributors — Astro port of collections/[slug]/contributors/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
+import getViewer from "~/lib/auth/viewer";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionContributorsQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
@@ -21,6 +22,7 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
+const viewer = await getViewer(Astro);
 ---
 
 <BaseLayout meta={meta} community={collection.community} routeParams={{ slug }}>
@@ -30,5 +32,6 @@ const route = {
     slug={slug}
     globalData={globalData}
     route={route}
+    viewer={viewer}
   />
 </BaseLayout>

@@ -3,6 +3,7 @@
 // supplies the shell; the asset is a separate root query.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
+import getViewer from "~/lib/auth/viewer";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
@@ -20,6 +21,7 @@ const asset = data?.asset;
 if (!item || !asset) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const viewer = await getViewer(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
 const route = {
@@ -38,5 +40,6 @@ const route = {
     slug={slug}
     globalData={globalData}
     route={route}
+    viewer={viewer}
   />
 </BaseLayout>

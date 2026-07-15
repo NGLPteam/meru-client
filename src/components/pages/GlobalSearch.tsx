@@ -12,11 +12,17 @@ type Props = {
   data: DocumentType<typeof globalSearchQuery>;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
+  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
-export default function GlobalSearch({ data, globalData, route }: Props) {
+export default function GlobalSearch({
+  data,
+  globalData,
+  route,
+  viewer,
+}: Props) {
   return (
-    <AppProviders globalData={globalData} route={route}>
+    <AppProviders globalData={globalData} route={route} viewer={viewer}>
       <SearchLayout data={data} />
     </AppProviders>
   );

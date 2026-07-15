@@ -14,6 +14,7 @@ type Props = {
   communities: React.ComponentProps<typeof InstanceCommunities>["data"];
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof ChromeProviders>["route"];
+  viewer?: React.ComponentProps<typeof ChromeProviders>["viewer"];
 };
 
 export default function InstanceContent({
@@ -21,9 +22,10 @@ export default function InstanceContent({
   communities,
   globalData,
   route,
+  viewer,
 }: Props) {
   return (
-    <ChromeProviders globalData={globalData} route={route}>
+    <ChromeProviders globalData={globalData} route={route} viewer={viewer}>
       <InstanceHero data={data} />
       <InstanceCommunities data={communities} />
     </ChromeProviders>

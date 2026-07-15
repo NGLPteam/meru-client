@@ -15,6 +15,7 @@ type Props = {
   slug: string;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
+  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
 export default function ItemContributors({
@@ -22,12 +23,14 @@ export default function ItemContributors({
   slug,
   globalData,
   route,
+  viewer,
 }: Props) {
   return (
     <AppProviders
       community={item.community}
       globalData={globalData}
       route={route}
+      viewer={viewer}
     >
       <ItemShell data={item} slug={slug}>
         <ContributionsBlock data={item} slug={slug} background="neutral00" />

@@ -12,6 +12,7 @@ type Props = {
   globalData?: GlobalStaticData;
   community?: React.ComponentProps<typeof ChromeProviders>["community"];
   route?: React.ComponentProps<typeof ChromeProviders>["route"];
+  viewer?: React.ComponentProps<typeof ChromeProviders>["viewer"];
   draftModeEnabled?: boolean;
 };
 
@@ -21,6 +22,7 @@ export default function AppFooterIsland({
   globalData,
   community,
   route,
+  viewer,
   draftModeEnabled,
 }: Props) {
   return (
@@ -28,6 +30,7 @@ export default function AppFooterIsland({
       globalData={globalData}
       community={community}
       route={route}
+      viewer={viewer}
       draftModeEnabled={draftModeEnabled}
     >
       <AppFooter data={data} communityData={communityData} />
