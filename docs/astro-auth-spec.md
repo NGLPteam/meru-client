@@ -16,8 +16,9 @@ Verified against both codebases 2026-07-14.
   per request, in `Astro.locals`. Delete the entire client-token path.
 - **Client-query split = SSR-on-navigation** (decided 2026-07-14). Search, browse-ordering, and
   contributor-pagination become server-rendered on navigation (URL-param driven, View Transitions
-  smooth it). **Only `ArticleAnalyticsBlock` + `ViewCounter` stay client-side**, talking to a
-  same-origin `/api/graphql` proxy that injects the cookie token server-side.
+  smooth it). **Only `ArticleAnalyticsBlock` + `ViewCounter` stay client-side**, and both are
+  **anonymous** — no proxy (decided 2026-07-15): `ViewCounter` pauses in preview, `ArticleAnalyticsBlock`
+  shows public counts, so neither needs the token. They query `NEXT_PUBLIC_API_URL` directly.
 
 ## Meru-specific deltas from the hcc reference (important)
 
@@ -151,13 +152,19 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   page → island → `AppProviders` (mirrors the viewer prop) across all 17 entity pages so `isPreview`
   reaches the shells; each entity page fetches its primary query with `previewToken(Astro)`.
 
-### 6. `/api/graphql` proxy + point the two kept client queries at it
-- `src/pages/api/graphql.ts` — `POST`: read session cookie via `locals`, inject
-  `Authorization: Bearer <accessToken>` when present (anonymous pass-through otherwise), forward the
-  GraphQL body to `NEXT_PUBLIC_API_URL`, stream the response back.
-- Point `ArticleAnalyticsBlock` + `ViewCounter`'s client urql at the relative `/api/graphql` (no
-  token, no runtime API URL, no cross-origin CORS). Keeps preview analytics working (proxy injects
-  the token). This is the *only* remaining client urql after step 7.
+### 6. Client analytics stay anonymous — NO proxy (revised + DONE 2026-07-15)
+- **Decision reversed (2026-07-15):** the `/api/graphql` proxy was only ever justified by token
+  injection. But neither remaining client query needs the token: `ViewCounter` must NOT fire in
+  preview at all (an editor previewing shouldn't record a view), and `ArticleAnalyticsBlock` always
+  shows public counts (even in preview). So there is no client-side auth, and **no proxy is built** —
+  the two widgets query `NEXT_PUBLIC_API_URL` directly (anonymous), as they already did.
+- `ViewCounter` — `pause: isPreview` (from `useViewerContext`), so it neither records a view nor
+  queries in draft mode.
+- `ArticleAnalyticsBlock` — unchanged; anonymous public counts.
+- `UrqlProvider` — dropped the dead `getClientToken`/Bearer closure; the client is now plainly
+  anonymous against `NEXT_PUBLIC_API_URL`. Deleted `lib/api/clientToken.ts` and its last caller
+  (`AccountDropdown`'s `setClientToken(undefined)`). Verified: the client bundle contains no cookie
+  names, no `getClientToken`, and no `Bearer`/`authorization` header path.
 
 ### 7. Convert search / browse / contributor to SSR-on-navigation
 - `SearchLayout`, `EntityOrderingLayout`, `ContributorDetail`: interactions (query/filter/page/order)
