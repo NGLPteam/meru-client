@@ -86,8 +86,8 @@ interface Props {
   header?: string | null;
   data?: FragmentType<typeof fragment> | null;
   orderComponent?: React.ReactNode;
-  isPending: boolean;
-  onPageChange: (val: Record<string, string | number>) => void;
+  isPending?: boolean;
+  onPageChange?: (val: Record<string, string | number>) => void;
 }
 
 const fragment = graphql(`

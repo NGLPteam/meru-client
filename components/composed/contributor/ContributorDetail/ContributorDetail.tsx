@@ -1,10 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useQuery } from "urql";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
-import { useSearchParams, useRouter, usePathname } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { ExternalLink, Markdown, ORCIDLink } from "@/components/atomic";
 import BrowseListLayout from "@/components/layout/BrowseListLayout";
@@ -13,51 +11,12 @@ import ContributorName from "../ContributorName";
 import ContributorAvatar from "../ContributorAvatar";
 import styles from "./ContributorDetail.module.css";
 
+// Contributor bio + attributions, rendered entirely from SSR data. The hosting
+// .astro page reads ?page from the URL and fetches server-side; pagination is
+// Pagination's default URL push, which re-renders the page on the server
+// (SSR-on-navigation). No client-side GraphQL.
 export default function ContributorDetail({ data }: Props) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-
-  // Initial (SSR) data from the fragment ref provides the id used to refetch.
-  const base = useFragment(fragment, data);
-  const id = base?.id;
-
-  // Client-side pagination: null until the reader paginates, at which point we
-  // refetch the contributor by id with the new page.
-  const [page, setPage] = useState<number | null>(null);
-
-  const [result] = useQuery({
-    query: refetchQuery,
-    variables: { id: id ?? "", page: page ?? 1 },
-    pause: page === null || !id,
-  });
-
-  const refetched = useFragment(
-    fragment,
-    result.data?.node?.__typename
-      ? (result.data.node as FragmentType<typeof fragment>)
-      : null,
-  );
-
-  const contributor = page !== null && refetched ? refetched : base;
-  const isPending = result.fetching;
-
-  const onPageChange = (val: Record<string, string | number>) => {
-    const pageNum = val.page
-      ? typeof val.page === "string"
-        ? parseInt(val.page)
-        : val.page
-      : null;
-    if (!pageNum) return;
-
-    const params = new URLSearchParams(searchParams);
-    params.set("page", pageNum.toString());
-    const url = `${pathname}?${params.toString()}`;
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    router.push(url);
-
-    setPage(pageNum);
-  };
+  const contributor = useFragment(fragment, data);
 
   const { t } = useTranslation();
 
@@ -118,8 +77,6 @@ export default function ContributorDetail({ data }: Props) {
         <BrowseListLayout
           data={attributions.pageInfo}
           header={t("layouts.contributions_header")}
-          onPageChange={onPageChange}
-          isPending={isPending}
           items={attributions.nodes.map((node) => (
             <ContributionSummary key={node.id} data={node} />
           ))}
@@ -171,15 +128,6 @@ const fragment = graphql(`
     ... on PersonContributor {
       affiliation
       title
-    }
-  }
-`);
-
-const refetchQuery = graphql(`
-  query ContributorDetailRefetchQuery($id: ID!, $page: Int) {
-    node(id: $id) {
-      __typename
-      ...ContributorDetailFragment
     }
   }
 `);

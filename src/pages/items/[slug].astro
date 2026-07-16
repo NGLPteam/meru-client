@@ -8,10 +8,11 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemQuery } from "~/lib/queries/item";
+import { itemQuery, itemLayoutFragment } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemLanding from "~/components/pages/item/ItemLanding";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
+import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -19,6 +20,14 @@ if (!slug) return Astro.rewrite("/404");
 const { data } = await query(itemQuery, { slug }, previewToken(Astro));
 const item = data?.item;
 if (!item) return Astro.rewrite("/404");
+
+// An item whose FULL detail template wants a body but has no full text has no
+// landing content — send readers to the metadata sub-route instead (the Next
+// app did this client-side; here it's a real 302).
+const layout = readFragment(itemLayoutFragment, item);
+if (!shouldRenderMainLayout(layout.layouts)) {
+  return Astro.redirect(`/items/${slug}/metadata`);
+}
 
 const { data: globalData } = await query(globalStaticQuery, {});
 const viewer = await getViewer(Astro);

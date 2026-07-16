@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery } from "urql";
+// Search results + filters, rendered entirely from SSR data. The hosting
+// .astro page parses the URL search params (q, filters, page, order, schema)
+// into the query variables and fetches server-side; every interaction here
+// (submit, filter, order, pagination) is a router.push that re-renders the
+// page on the server (SSR-on-navigation). No client-side GraphQL.
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import { useDialogState, DialogDisclosure } from "reakit/Dialog";
@@ -10,100 +13,37 @@ import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import BaseDrawer from "@/components/layout/BaseDrawer";
 import { Button } from "@/components/atomic";
 import { NoContent } from "@/components/layout";
-import routeQueryArrayToString from "@/helpers/routeQueryArrayToString";
-import { getPredicates } from "@/helpers/search";
-import { EntityOrder } from "@/types/graphql-schema";
 import SearchBar from "../SearchBar";
 import SearchResults from "../SearchResults";
 import SearchFilters from "../SearchFilters";
 import styles from "./SearchLayout.module.css";
-
-function parseSearchVars(params: URLSearchParams) {
-  const filters = params.get("filters")
-    ? routeQueryArrayToString(params.get("filters"))
-    : null;
-  const page = routeQueryArrayToString(params.get("page"));
-  const q = routeQueryArrayToString(params.get("q"));
-  const order = routeQueryArrayToString(params.get("order")) as EntityOrder;
-  const schema = params.get("schema")?.split(",");
-
-  const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
-
-  return {
-    query: q || "",
-    predicates: predicates || [],
-    page: parseInt(page) || 1,
-    order: order || ("PUBLISHED_ASCENDING" as EntityOrder),
-    schema,
-  };
-}
 
 export default function SearchLayout({ data, scoped }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Query variables live in local state so a submit updates them synchronously
-  // (firing the query + spinner immediately), rather than waiting for the
-  // router.push navigation round-trip to update useSearchParams. The effect
-  // keeps them in sync with the URL for external changes (back/forward, direct
-  // loads with ?q=).
-  const [vars, setVars] = useState(() =>
-    parseSearchVars(new URLSearchParams(searchParams)),
-  );
-
-  useEffect(() => {
-    setVars(parseSearchVars(new URLSearchParams(searchParams)));
-  }, [searchParams]);
-
   const noSearchQuery =
-    !vars.query && !vars.predicates?.length && !vars.schema?.length;
-
-  // The scoped entity id comes from the SSR fragment ref; the global search
-  // needs no seed and is fetched entirely client-side off the URL params.
-  const entityBase = useFragment(
-    entityFragment,
-    scoped ? (data as FragmentType<typeof entityFragment>) : null,
-  );
-  const entityId = entityBase?.id;
-
-  const [globalResult] = useQuery({
-    query: globalQuery,
-    variables: vars,
-    pause: scoped || noSearchQuery,
-  });
-
-  const [entityResult] = useQuery({
-    query: entityQuery,
-    variables: { id: entityId ?? "", ...vars },
-    pause: !scoped || noSearchQuery || !entityId,
-  });
+    !searchParams.get("q") &&
+    !searchParams.get("filters") &&
+    !searchParams.get("schema");
 
   const globalData = useFragment(
     globalQueryFragment,
-    !scoped ? (globalResult.data ?? null) : null,
+    !scoped ? (data as FragmentType<typeof globalQueryFragment>) : null,
   );
   const entityData = useFragment(
     entityFragment,
-    scoped && entityResult.data?.node?.__typename
-      ? (entityResult.data.node as FragmentType<typeof entityFragment>)
-      : null,
+    scoped ? (data as FragmentType<typeof entityFragment>) : null,
   );
 
   const search = scoped ? entityData?.search : globalData?.search;
-  const isPending = scoped ? entityResult.fetching : globalResult.fetching;
 
   const dialog = useDialogState({ animated: true });
 
   const { register, handleSubmit } = useForm({
     shouldUseNativeValidation: true,
   });
-
-  // Update the query immediately (shows the spinner now); SearchFilters already
-  // pushes the URL itself, so this only refreshes the client query state.
-  const applyVars = (params: URLSearchParams) => {
-    setVars(parseSearchVars(params));
-  };
 
   const onQuerySubmit = (formData: { q?: string }) => {
     const params = new URLSearchParams(searchParams);
@@ -112,8 +52,7 @@ export default function SearchLayout({ data, scoped }: Props) {
     } else {
       params.delete("q");
     }
-    // Fire the query right away, then sync the URL in parallel.
-    applyVars(params);
+    params.set("page", "1");
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -141,19 +80,13 @@ export default function SearchLayout({ data, scoped }: Props) {
           </DialogDisclosure>
         </div>
         <div className={styles.sidebar}>
-          {search && (
-            <SearchFilters
-              id="sidebarFilters"
-              data={search}
-              onSubmit={applyVars}
-            />
-          )}
+          {search && <SearchFilters id="sidebarFilters" data={search} />}
         </div>
         <div className={styles.results}>
-          {noSearchQuery && !isPending ? (
+          {noSearchQuery ? (
             <NoContent message="search.start_search" />
           ) : (
-            <SearchResults data={search?.results} isLoading={isPending} />
+            <SearchResults data={search?.results} />
           )}
         </div>
       </div>
@@ -162,10 +95,7 @@ export default function SearchLayout({ data, scoped }: Props) {
           <SearchFilters
             id="mobileFilters"
             data={search}
-            onSubmit={(params: URLSearchParams) => {
-              applyVars(params);
-              dialog.hide();
-            }}
+            onSubmit={() => dialog.hide()}
           />
         )}
       </BaseDrawer>
@@ -218,34 +148,6 @@ const entityFragment = graphql(`
         ...SearchResultsFragment
       }
       ...SearchFiltersFragment
-    }
-  }
-`);
-
-const globalQuery = graphql(`
-  query SearchLayoutQuery(
-    $query: String
-    $predicates: [SearchPredicateInput!]
-    $page: Int
-    $order: EntityOrder
-    $schema: [String!]
-  ) {
-    ...SearchLayoutFragment
-  }
-`);
-
-const entityQuery = graphql(`
-  query SearchLayoutEntityQuery(
-    $id: ID!
-    $query: String
-    $predicates: [SearchPredicateInput!]
-    $page: Int
-    $order: EntityOrder
-    $schema: [String!]
-  ) {
-    node(id: $id) {
-      __typename
-      ...SearchLayoutEntityFragment
     }
   }
 `);

@@ -3,6 +3,7 @@
 import { useState, useReducer } from "react";
 import { useQuery } from "urql";
 import clientOnly from "@/lib/clientOnly";
+import UrqlProvider from "@/lib/api/UrqlProvider";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
@@ -17,7 +18,17 @@ type Props = {
 
 const ChartBlock = clientOnly(() => import("../ChartBlock"));
 
-export default function ArticleAnalyticsBlock({ data }: Props) {
+// Provides its own (anonymous) urql client — analytics widgets are the only
+// client-side GraphQL left.
+export default function ArticleAnalyticsBlock(props: Props) {
+  return (
+    <UrqlProvider>
+      <ArticleAnalyticsBlockInner {...props} />
+    </UrqlProvider>
+  );
+}
+
+function ArticleAnalyticsBlockInner({ data }: Props) {
   const base = useFragment(fragment, data);
   const id = base?.id;
 

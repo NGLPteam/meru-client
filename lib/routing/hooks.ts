@@ -11,32 +11,15 @@
 //   - useRouter drives navigation via Astro's client router (view transitions)
 //     so navigations are soft swaps with the loading bar rather than full
 //     reloads. navigate() falls back to a full load if the ClientRouter isn't
-//     present on the page.
+//     present on the page. Query-string-only pushes (search, filters,
+//     pagination) are real navigations too: the server re-renders off the new
+//     params (SSR-on-navigation), so islands carry no client re-query logic.
 //
 // Application code must import routing hooks from here, never from
 // "next/navigation" directly.
 import { useMemo } from "react";
 import { navigate } from "astro:transitions/client";
-import {
-  useRouteState,
-  notifyLocationChange,
-  type RouteParams,
-} from "./RouteContext";
-
-// A push/replace that only changes the query string (search, filters, pagination)
-// should update the URL in place — no page load — so the already-mounted island
-// re-queries off the new params, matching Next's soft router.push. A different
-// pathname is a real navigation (soft view-transition swap).
-function isSamePathname(href: string): boolean {
-  try {
-    return (
-      new URL(href, window.location.origin).pathname ===
-      window.location.pathname
-    );
-  } catch {
-    return false;
-  }
-}
+import { useRouteState, type RouteParams } from "./RouteContext";
 
 export function usePathname(): string {
   return useRouteState().pathname;
@@ -71,20 +54,10 @@ export function useRouter(): Router {
   return useMemo<Router>(
     () => ({
       push: (href) => {
-        if (isSamePathname(href)) {
-          window.history.pushState(null, "", href);
-          notifyLocationChange();
-        } else {
-          navigate(href);
-        }
+        navigate(href);
       },
       replace: (href) => {
-        if (isSamePathname(href)) {
-          window.history.replaceState(null, "", href);
-          notifyLocationChange();
-        } else {
-          navigate(href, { history: "replace" });
-        }
+        navigate(href, { history: "replace" });
       },
       refresh: () => navigate(window.location.href, { history: "replace" }),
       back: () => window.history.back(),

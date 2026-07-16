@@ -2,6 +2,7 @@
 
 import { useQuery } from "urql";
 import { graphql } from "@/lib/api/gql";
+import UrqlProvider from "@/lib/api/UrqlProvider";
 import useViewerContext from "@/contexts/useViewerContext";
 
 /**
@@ -10,9 +11,18 @@ import useViewerContext from "@/contexts/useViewerContext";
  *
  * Paused in preview/draft mode: an editor previewing an entity should not
  * record a view (it would pollute the metrics), and the query is anonymous so it
- * never needs the session token.
+ * never needs the session token. Provides its own (anonymous) urql client —
+ * analytics widgets are the only client-side GraphQL left.
  */
-export default function ViewCounter({ slug }: { slug: string }) {
+export default function ViewCounter(props: { slug: string }) {
+  return (
+    <UrqlProvider>
+      <ViewCounterInner {...props} />
+    </UrqlProvider>
+  );
+}
+
+function ViewCounterInner({ slug }: { slug: string }) {
   const { isPreview } = useViewerContext();
 
   useQuery({

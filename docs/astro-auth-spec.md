@@ -166,11 +166,28 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   (`AccountDropdown`'s `setClientToken(undefined)`). Verified: the client bundle contains no cookie
   names, no `getClientToken`, and no `Bearer`/`authorization` header path.
 
-### 7. Convert search / browse / contributor to SSR-on-navigation
-- `SearchLayout`, `EntityOrderingLayout`, `ContributorDetail`: interactions (query/filter/page/order)
-  → `navigate()` with updated URL params; the `.astro` re-fetches server-side (token from locals when
-  preview/authed) and View Transitions swap content. Remove their client `useQuery`/`UrqlProvider`.
-- Result: deep/paginated states land in SSR HTML (crawlable, cacheable — consistent with the sitemap).
+### 7. Convert search / browse / contributor to SSR-on-navigation — DONE (2026-07-16)
+- The pivot was one helper: `lib/routing/hooks.ts` `push`/`replace` had a same-pathname special case
+  (pushState + custom event, no server render) so islands could re-query client-side. Removed — every
+  push is now Astro `navigate()` (view-transition swap, server re-render). The `notifyLocationChange`
+  event machinery in `RouteContext` went with it; the persisted-island re-seed now keys on
+  pathname **+ search** (query-only navigations re-render chrome islands with a same-pathname route prop).
+- `SearchLayout`, `EntityOrderingLayout`, `ContributorDetail`: deleted their `useQuery`/local-state
+  refetch machinery entirely — the hosting `.astro` pages already parsed the URL params into the
+  server queries (with `previewToken`), so the components now render purely from SSR fragment props.
+  Draft/preview data survives pagination and filtering — the anonymous client path never could.
+  Deleted documents: `SearchLayoutQuery`, `SearchLayoutEntityQuery`, `EntityOrderingLayoutRefetchQuery`,
+  `ContributorDetailRefetchQuery` (codegen regenerated). `Pagination`'s default URL push drives paging.
+- `UrqlProvider` moved out of `AppProviders` — `ViewCounter` and `ArticleAnalyticsBlock` (the only
+  remaining client GraphQL, both anonymous) now each provide their own client.
+- `FullTextCheckRedirect` was a latent 500: it called Next's `redirect()` (throws `NEXT_REDIRECT`)
+  mid-render, uncaught under Astro. Replaced with a real 302: `shouldRenderMainLayout(layouts)`
+  exported from `FullTextCheck`, evaluated in `items/[slug].astro` → `Astro.redirect(/items/…/metadata)`.
+- **`next` dependency removed** (the last Next remnant). Also deleted: `lib/routing/navigation.ts`
+  (`notFound` had no importers), `types/auth.d.ts` (dead next-auth augmentation),
+  `lib/metadata/toNextMetadata.ts` + `lib/request/headers.ts` (dead, 0 importers), stale `.next/`.
+- Verified: tsc green, `astro build` green; client bundle contains the two analytics queries and none
+  of the deleted ones; no `next/navigation`/`NEXT_REDIRECT` anywhere in dist; `node_modules/next` gone.
 
 ### 8. Cleanup — mostly DONE (2026-07-15); `next` dep deferred to #7
 Done in two commits:
@@ -189,10 +206,9 @@ Done in two commits:
   was already deleted in step 6. **No `jwt-decode`** (identity is the GraphQL viewer; expiry rides the
   access cookie's maxAge). Verified: client bundle carries no token; tsc + build green.
 
-**Deferred to #7:** the `next` package itself stays — `lib/routing/navigation.ts` re-exports
-`notFound`/`redirect` from `next/navigation` and is reachable from Astro (`FullTextCheck` → `ItemShell`).
-Porting that shim (and rechecking `FullTextCheck`'s redirect under Astro) drops the last `next` dep.
-Env: `AUTH_SECRET` no longer used (no next-auth); `lib/env/clientConfig.ts` stays the client-env swap point.
+**Deferred to #7 (since done there, 2026-07-16):** the `next` package itself stayed until
+`lib/routing/navigation.ts` was ported — see #7. Env: `AUTH_SECRET` no longer used (no next-auth);
+`lib/env/clientConfig.ts` stays the client-env swap point.
 
 ## Env vars
 
