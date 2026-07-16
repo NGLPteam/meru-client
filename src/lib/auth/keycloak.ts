@@ -6,25 +6,22 @@
 // token objects, the wrong shape for the cookie session model. Here the grants
 // return the raw Keycloak token response and the caller writes cookies.
 //
-// Env (server-only; this file is never client-bundled). Read runtime-first from
-// `process.env`, falling back to `import.meta.env`:
-//   - prod (standalone node): the deploy injects every var — incl. the unprefixed
-//     secret — into `process.env` at runtime, which is authoritative.
-//   - dev (astro dev): Vite loads .env into `import.meta.env` (server-side, all
-//     vars) but NOT into `process.env`, so the fallback supplies them.
-// (Verified 2026-07-14 — the older `process.env`-only reads were empty in dev.)
+// Env (server-only; this file is never client-bundled) via serverEnv
+// (process.env runtime-first, import.meta.env in dev). The NEXT_* names are the
+// legacy deploy fallbacks — drop them once the deploy config is renamed.
 import joinURL from "url-join";
+import serverEnv from "../env/serverEnv";
 
-const ime = import.meta.env as unknown as Record<string, string | undefined>;
-const env = (key: string): string => process.env[key] ?? ime[key] ?? "";
-
-const KEYCLOAK_URL = env("NEXT_PUBLIC_KEYCLOAK_URL");
-const REALM = env("NEXT_PUBLIC_KEYCLOAK_REALM");
-const CLIENT_SECRET = env("NEXT_KEYCLOAK_CLIENT_SECRET");
+const KEYCLOAK_URL =
+  serverEnv("KEYCLOAK_URL", "NEXT_PUBLIC_KEYCLOAK_URL") ?? "";
+const REALM = serverEnv("KEYCLOAK_REALM", "NEXT_PUBLIC_KEYCLOAK_REALM") ?? "";
+const CLIENT_SECRET =
+  serverEnv("KEYCLOAK_CLIENT_SECRET", "NEXT_KEYCLOAK_CLIENT_SECRET") ?? "";
 
 const ISSUER = joinURL(KEYCLOAK_URL, "realms", REALM);
 
-export const CLIENT_ID = env("NEXT_PUBLIC_KEYCLOAK_CLIENT_ID");
+export const CLIENT_ID =
+  serverEnv("KEYCLOAK_CLIENT_ID", "NEXT_PUBLIC_KEYCLOAK_CLIENT_ID") ?? "";
 export const AUTH_URL = joinURL(ISSUER, "/protocol/openid-connect/auth");
 export const TOKEN_URL = joinURL(ISSUER, "/protocol/openid-connect/token");
 export const LOGOUT_URL = joinURL(ISSUER, "/protocol/openid-connect/logout");

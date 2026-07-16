@@ -2,11 +2,12 @@
 // this server-side helper without tripping rules-of-hooks.
 import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import { getTruncatedText } from "@/helpers/strings";
+import serverEnv from "../env/serverEnv";
 import type { PageMeta } from "@/lib/metadata/types";
 import { collectionMetaFragment } from "../queries/collection";
 
 // Astro port of app/**/collections/[slug]/_metadata/collection.ts.
-const BASE_URL = import.meta.env.NEXT_PUBLIC_FE_URL as string | undefined;
+const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 
 export default function buildCollectionMeta(
   data: FragmentType<typeof collectionMetaFragment>,

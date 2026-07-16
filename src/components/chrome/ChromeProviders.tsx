@@ -8,7 +8,7 @@
 //
 // Deferred vs. the Next (pages)/layout.tsx stack:
 //   - UrqlProvider: omitted. No chrome child runs a client useQuery/useMutation,
-//     and the client urql bootstrap reads NEXT_PUBLIC_API_URL — that arrives
+//     and the client urql bootstrap reads PUBLIC_API_URL — that arrives
 //     with the same-origin /api/graphql proxy in the auth phase.
 //   - ViewerContext is seeded from the server-resolved `viewer` prop (getViewer);
 //     the token never reaches the browser and there is no client fetch.

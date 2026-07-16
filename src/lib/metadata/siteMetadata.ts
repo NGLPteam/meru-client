@@ -2,12 +2,13 @@ import { siteMetadataQuery } from "@/lib/metadata/siteMetadata.query";
 import { getTruncatedText } from "@/helpers/strings";
 import type { PageMeta } from "@/lib/metadata/types";
 import query from "../query";
+import serverEnv from "../env/serverEnv";
 
 // Astro port of app/**/_metadata/site.ts (generateSiteMetadata). Builds the
 // site-level PageMeta defaults — title/description/OG that every page inherits
 // (and the title template applied to child pages). Uses the Astro server query
-// helper + import.meta.env; returns the same framework-neutral PageMeta.
-const BASE_URL = import.meta.env.NEXT_PUBLIC_FE_URL as string | undefined;
+// helper + serverEnv; returns the same framework-neutral PageMeta.
+const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 
 export default async function getSiteMetadata(): Promise<PageMeta> {
   const { data } = await query(siteMetadataQuery, {});

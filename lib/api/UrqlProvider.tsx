@@ -9,7 +9,7 @@ import { getAPIURL } from "./client";
 // analytics widgets (ViewCounter, ArticleAnalyticsBlock), each of which wraps
 // itself in this provider. Both are ANONYMOUS: the access token never reaches
 // the browser, so this client sends no auth header. It talks straight to
-// NEXT_PUBLIC_API_URL (public counts only), which is why ViewCounter pauses
+// PUBLIC_API_URL (public counts only), which is why ViewCounter pauses
 // itself in preview rather than needing a token.
 export default function UrqlProvider({
   children,

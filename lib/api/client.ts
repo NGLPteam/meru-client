@@ -2,17 +2,21 @@ import makeUrqlClient from "./makeUrqlClient";
 import type { RequestPolicy } from "@urql/core";
 
 export function getAPIURL(): string {
-  // Astro/Vite exposes env on import.meta.env (all vars, server-side); Next on
-  // process.env. Support both so this shared client works under either build.
+  // Shared by the browser bundle (import.meta.env, gated by envPrefix) and the
+  // server (import.meta.env carries all vars; process.env wins at runtime).
+  // NEXT_PUBLIC_API_URL is the legacy deploy name — drop the fallbacks once the
+  // deploy config is renamed.
   const viteEnv = (
     import.meta as unknown as { env?: Record<string, string | undefined> }
   ).env;
-  const url = viteEnv?.NEXT_PUBLIC_API_URL ?? process.env.NEXT_PUBLIC_API_URL;
+  const url =
+    viteEnv?.PUBLIC_API_URL ??
+    viteEnv?.NEXT_PUBLIC_API_URL ??
+    process.env.PUBLIC_API_URL ??
+    process.env.NEXT_PUBLIC_API_URL;
   if (url) return url;
 
-  throw new Error(
-    "Missing NEXT_PUBLIC_API_URL (import.meta.env / process.env).",
-  );
+  throw new Error("Missing PUBLIC_API_URL (import.meta.env / process.env).");
 }
 
 // Anonymous singleton used for the vast majority of (public) server fetches,
