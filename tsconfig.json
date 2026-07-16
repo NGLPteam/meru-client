@@ -16,19 +16,9 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@/types/*": ["types/*"],
-      "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"],
-      "@/routes/*": ["routes/*"],
-      "@/hooks/*": ["hooks/*"],
-      "~/*": ["src/*"]
-    },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+      "@/*": ["./src/*"],
+      "~/*": ["./src/*"]
+    }
   },
   "ts-node": {
     "compilerOptions": {

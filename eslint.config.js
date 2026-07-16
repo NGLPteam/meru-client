@@ -1,3 +1,3 @@
-const config = require("./lib/lint/config.js");
+const config = require("./src/lib/lint/config.js");
 
 module.exports = config;

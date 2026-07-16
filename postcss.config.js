@@ -2,14 +2,14 @@ const path = require("path");
 const {
   fluidScaleRem: fluidScaleRemBase,
   fluidScalePx: fluidScalePxBase,
-} = require("./styles/helpers.cjs");
+} = require("./src/styles/helpers.cjs");
 
 module.exports = {
   // If any of these plugins are removed, they should also be removed from package.json
   // and from the .depcheckrc ignores configuration.
   plugins: {
     "postcss-mixins": {
-      mixinsDir: path.join(__dirname, "./styles/mixins"),
+      mixinsDir: path.join(__dirname, "./src/styles/mixins"),
       mixins: {
         fluidScaleRem: function (
           mixin,

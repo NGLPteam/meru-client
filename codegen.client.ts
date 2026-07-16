@@ -1,25 +1,15 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 // graphql-codegen client-preset — generates the typed `graphql()` tag,
-// TypedDocumentNode map, and fragment-masking helpers into lib/api/gql.
+// TypedDocumentNode map, and fragment-masking helpers into src/lib/api/gql.
 // This is the urql replacement for the Relay compiler (`__generated__/`).
 // The existing schema-only codegen still runs via `.graphqlrc.yml`.
 const config: CodegenConfig = {
   ignoreNoDocuments: true,
   schema: "./schema.graphql",
-  documents: [
-    "src/**/*.{ts,tsx}",
-    "app/**/*.{ts,tsx}",
-    "components/**/*.{ts,tsx}",
-    "contexts/**/*.{ts,tsx}",
-    "lib/**/*.{ts,tsx}",
-    "hooks/**/*.{ts,tsx}",
-    "helpers/**/*.{ts,tsx}",
-    "routes/**/*.{ts,tsx}",
-    "_sitemaps/**/*.{ts,tsx}",
-  ],
+  documents: ["src/**/*.{ts,tsx}"],
   generates: {
-    "./lib/api/gql/": {
+    "./src/lib/api/gql/": {
       preset: "client",
       config: {
         useTypeImports: true,

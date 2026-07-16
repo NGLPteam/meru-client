@@ -12,7 +12,7 @@ extensions:
       "__schema__/schema.json":
         plugins:
           - introspection
-      "types/graphql-schema.d.ts":
+      "src/types/graphql-schema.d.ts":
         config:
           defaultScalarType: string
           enumsAsTypes: true

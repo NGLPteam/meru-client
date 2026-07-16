@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 const { pxToRem } = require("@castiron/style-mixins");
-const { fluidScaleRem, fluidScalePx, colors } = require("./styles/helpers.cjs");
+const { fluidScaleRem, fluidScalePx, colors } = require("./src/styles/helpers.cjs");
 
 export const screens = {
   140: "1400px",
@@ -141,5 +141,10 @@ module.exports = {
     },
   },
   plugins: [],
-  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  // Enumerated rather than "./src/**" — the generated src/lib/api/gql/ output (2MB+) hangs
+  // the Tailwind extractor in dev, and v3 content globs don't support negation.
+  content: [
+    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/{pages,layouts}/**/*.astro",
+  ],
 };

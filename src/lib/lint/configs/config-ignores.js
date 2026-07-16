@@ -1,13 +1,11 @@
 module.exports = {
   ignores: [
-    ".next/",
-    "lib/api/gql/",
-    "lib/stubs/",
+    "src/lib/api/gql/",
+    "src/lib/stubs/",
     "__schema__/",
     "_sitemaps/",
-    "types/",
-    "lib/lint/",
-    "next.config.js",
+    "src/types/",
+    "src/lib/lint/",
     "eslint.config.js",
     ".graphqlrc.ts",
     "graphql-schema.d.ts",

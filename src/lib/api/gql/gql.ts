@@ -14,6 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": typeof types.SiteNameProofFragmentDoc,
     "\n  fragment BreadcrumbLinkFragment on EntityBreadcrumb {\n    label\n    kind\n    slug\n  }\n": typeof types.BreadcrumbLinkFragmentFragmentDoc,
     "\n  fragment BreadcrumbsFragment on Entity {\n    __typename\n    title\n    breadcrumbs {\n      depth\n      ...BreadcrumbLinkFragment\n    }\n\n    ... on Sluggable {\n      slug\n    }\n  }\n": typeof types.BreadcrumbsFragmentFragmentDoc,
     "\n  fragment PageCountFragment on PageInfo {\n    totalCount\n    page\n    perPage\n  }\n": typeof types.PageCountFragmentFragmentDoc,
@@ -132,10 +133,9 @@ type Documents = {
     "\n  fragment getEntityDisplayNumberFragment on Entity {\n    ... on Collection {\n      issueNumber: schemaProperty(fullPath: \"number\") {\n        ... on StringProperty {\n          content\n        }\n      }\n      ...getEntityVolumeNumberFragment\n    }\n  }\n": typeof types.getEntityDisplayNumberFragmentFragmentDoc,
     "\n  fragment getEntityVolumeNumberFragment on Entity {\n    __typename\n    ... on Collection {\n      vol: ancestorByName(name: \"volume\") {\n        ... on Collection {\n          number: schemaProperty(fullPath: \"id\") {\n            ... on StringProperty {\n              content\n            }\n          }\n        }\n      }\n      volumeNumber: schemaProperty(fullPath: \"volume.id\") {\n        ... on StringProperty {\n          content\n        }\n      }\n    }\n  }\n": typeof types.getEntityVolumeNumberFragmentFragmentDoc,
     "\n  fragment getThumbWithFallbackFragment on Entity {\n    ... on Collection {\n      thumbnail {\n        image: medium {\n          webp {\n            url\n          }\n        }\n        ...CoverImageFragment\n        ...CoverCardListFragment\n      }\n      breadcrumbs {\n        crumb {\n          ... on Collection {\n            thumbnail {\n              image: medium {\n                webp {\n                  url\n                }\n              }\n              ...CoverImageFragment\n              ...CoverCardListFragment\n            }\n          }\n        }\n      }\n    }\n    ... on Item {\n      thumbnail {\n        image: medium {\n          webp {\n            url\n          }\n        }\n        ...CoverImageFragment\n        ...CoverCardListFragment\n      }\n      breadcrumbs {\n        crumb {\n          ... on Collection {\n            thumbnail {\n              image: medium {\n                webp {\n                  url\n                }\n              }\n              ...CoverImageFragment\n              ...CoverCardListFragment\n            }\n          }\n          ... on Item {\n            thumbnail {\n              image: medium {\n                webp {\n                  url\n                }\n              }\n              ...CoverImageFragment\n              ...CoverCardListFragment\n            }\n          }\n        }\n      }\n    }\n  }\n": typeof types.getThumbWithFallbackFragmentFragmentDoc,
-    "\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n": typeof types.siteMetadataQueryDocument,
-    "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": typeof types.SiteNameProofFragmentDoc,
     "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n": typeof types.chromeLayoutQueryDocument,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": typeof types.Phase0FragProofQueryDocument,
+    "\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n": typeof types.siteMetadataQueryDocument,
     "\n  fragment CollectionLayoutFragment on Collection {\n    canPreview {\n      value\n    }\n    layouts {\n      hero {\n        ...HeroTemplateFragment\n      }\n      ...ProcessingCheckFragment\n    }\n    ...SearchButtonFragment\n    ...EntityNavBarFragment\n  }\n": typeof types.CollectionLayoutFragmentFragmentDoc,
     "\n  fragment CollectionMetaFragment on Collection {\n    title\n    heroImage {\n      image: large {\n        webp {\n          url\n        }\n      }\n    }\n    heroImageMetadata {\n      alt\n    }\n    thumbnail {\n      image: large {\n        webp {\n          url\n        }\n      }\n    }\n    thumbnailMetadata {\n      alt\n    }\n    about: schemaProperty(fullPath: \"about\") {\n      ... on MarkdownProperty {\n        content\n      }\n    }\n  }\n": typeof types.CollectionMetaFragmentFragmentDoc,
     "\n  query collectionQuery($slug: Slug!) {\n    collection(slug: $slug) {\n      ...CollectionLayoutFragment\n      ...CollectionMetaFragment\n      community {\n        ...CommunityContextFragment\n      }\n      layouts {\n        main {\n          ...MainLayoutFragment\n          templates {\n            ... on TemplateInstance {\n              templateKind\n            }\n          }\n        }\n      }\n    }\n  }\n": typeof types.collectionQueryDocument,
@@ -171,6 +171,7 @@ type Documents = {
     "\n  query sitemapItemsQuery($slug: Slug!, $page: Int) {\n    community(slug: $slug) {\n      descendants(scope: ITEM, page: $page, perPage: 200) {\n        nodes {\n          descendant {\n            ... on Item {\n              slug\n              updatedAt\n            }\n          }\n        }\n      }\n    }\n  }\n": typeof types.sitemapItemsQueryDocument,
 };
 const documents: Documents = {
+    "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": types.SiteNameProofFragmentDoc,
     "\n  fragment BreadcrumbLinkFragment on EntityBreadcrumb {\n    label\n    kind\n    slug\n  }\n": types.BreadcrumbLinkFragmentFragmentDoc,
     "\n  fragment BreadcrumbsFragment on Entity {\n    __typename\n    title\n    breadcrumbs {\n      depth\n      ...BreadcrumbLinkFragment\n    }\n\n    ... on Sluggable {\n      slug\n    }\n  }\n": types.BreadcrumbsFragmentFragmentDoc,
     "\n  fragment PageCountFragment on PageInfo {\n    totalCount\n    page\n    perPage\n  }\n": types.PageCountFragmentFragmentDoc,
@@ -289,10 +290,9 @@ const documents: Documents = {
     "\n  fragment getEntityDisplayNumberFragment on Entity {\n    ... on Collection {\n      issueNumber: schemaProperty(fullPath: \"number\") {\n        ... on StringProperty {\n          content\n        }\n      }\n      ...getEntityVolumeNumberFragment\n    }\n  }\n": types.getEntityDisplayNumberFragmentFragmentDoc,
     "\n  fragment getEntityVolumeNumberFragment on Entity {\n    __typename\n    ... on Collection {\n      vol: ancestorByName(name: \"volume\") {\n        ... on Collection {\n          number: schemaProperty(fullPath: \"id\") {\n            ... on StringProperty {\n              content\n            }\n          }\n        }\n      }\n      volumeNumber: schemaProperty(fullPath: \"volume.id\") {\n        ... on StringProperty {\n          content\n        }\n      }\n    }\n  }\n": types.getEntityVolumeNumberFragmentFragmentDoc,
     "\n  fragment getThumbWithFallbackFragment on Entity {\n    ... on Collection {\n      thumbnail {\n        image: medium {\n          webp {\n            url\n          }\n        }\n        ...CoverImageFragment\n        ...CoverCardListFragment\n      }\n      breadcrumbs {\n        crumb {\n          ... on Collection {\n            thumbnail {\n              image: medium {\n                webp {\n                  url\n                }\n              }\n              ...CoverImageFragment\n              ...CoverCardListFragment\n            }\n          }\n        }\n      }\n    }\n    ... on Item {\n      thumbnail {\n        image: medium {\n          webp {\n            url\n          }\n        }\n        ...CoverImageFragment\n        ...CoverCardListFragment\n      }\n      breadcrumbs {\n        crumb {\n          ... on Collection {\n            thumbnail {\n              image: medium {\n                webp {\n                  url\n                }\n              }\n              ...CoverImageFragment\n              ...CoverCardListFragment\n            }\n          }\n          ... on Item {\n            thumbnail {\n              image: medium {\n                webp {\n                  url\n                }\n              }\n              ...CoverImageFragment\n              ...CoverCardListFragment\n            }\n          }\n        }\n      }\n    }\n  }\n": types.getThumbWithFallbackFragmentFragmentDoc,
-    "\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n": types.siteMetadataQueryDocument,
-    "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n": types.SiteNameProofFragmentDoc,
     "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n": types.chromeLayoutQueryDocument,
     "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n": types.Phase0FragProofQueryDocument,
+    "\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n": types.siteMetadataQueryDocument,
     "\n  fragment CollectionLayoutFragment on Collection {\n    canPreview {\n      value\n    }\n    layouts {\n      hero {\n        ...HeroTemplateFragment\n      }\n      ...ProcessingCheckFragment\n    }\n    ...SearchButtonFragment\n    ...EntityNavBarFragment\n  }\n": types.CollectionLayoutFragmentFragmentDoc,
     "\n  fragment CollectionMetaFragment on Collection {\n    title\n    heroImage {\n      image: large {\n        webp {\n          url\n        }\n      }\n    }\n    heroImageMetadata {\n      alt\n    }\n    thumbnail {\n      image: large {\n        webp {\n          url\n        }\n      }\n    }\n    thumbnailMetadata {\n      alt\n    }\n    about: schemaProperty(fullPath: \"about\") {\n      ... on MarkdownProperty {\n        content\n      }\n    }\n  }\n": types.CollectionMetaFragmentFragmentDoc,
     "\n  query collectionQuery($slug: Slug!) {\n    collection(slug: $slug) {\n      ...CollectionLayoutFragment\n      ...CollectionMetaFragment\n      community {\n        ...CommunityContextFragment\n      }\n      layouts {\n        main {\n          ...MainLayoutFragment\n          templates {\n            ... on TemplateInstance {\n              templateKind\n            }\n          }\n        }\n      }\n    }\n  }\n": types.collectionQueryDocument,
@@ -342,6 +342,10 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n"): (typeof documents)["\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -817,19 +821,15 @@ export function graphql(source: "\n  fragment getThumbWithFallbackFragment on En
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n"): (typeof documents)["\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n"): (typeof documents)["\n  fragment SiteNameProof on GlobalConfiguration {\n    site {\n      installationName\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n"): (typeof documents)["\n  query chromeLayoutQuery {\n    ...AppHeaderFragment\n    ...AppFooterFragment\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n"): (typeof documents)["\n  query Phase0FragProofQuery {\n    globalConfiguration {\n      ...SiteNameProof\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n"): (typeof documents)["\n  query siteMetadataQuery {\n    globalConfiguration {\n      site {\n        installationName\n        installationHomePageCopy\n      }\n      logo {\n        original {\n          url\n        }\n      }\n      logoMetadata {\n        alt\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
