@@ -1,4 +1,9 @@
 schema: https://api.sandbox.meru.host/graphql
+# documents lets IDE GraphQL tooling resolve fragments across files; the
+# generated client-preset output is excluded (huge + not source documents).
+documents:
+  - "src/**/*.{ts,tsx}"
+  - "!src/lib/api/gql/**"
 extensions:
   customDirectives:
     - "directive @connection(key: String!, filters: [String]) on FIELD"

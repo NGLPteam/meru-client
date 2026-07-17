@@ -1,6 +1,6 @@
-import type { APIContext } from "astro";
 import { resolveViewer } from "@/contexts/ViewerContext/fetchViewer";
 import type { ViewerContextProps } from "@/contexts/ViewerContext/ViewerContext";
+import type { APIContext } from "astro";
 
 // Request-scoped viewer resolution (the settled `getViewer` memo). `Astro.locals`
 // is one stable object per request, so keying a WeakMap on it collapses the
@@ -17,7 +17,7 @@ const ANONYMOUS: ViewerContextProps = {
   allowedActions: [],
 };
 
-const cache = new WeakMap<App.Locals, Promise<ViewerContextProps>>();
+const cache = new WeakMap<APIContext["locals"], Promise<ViewerContextProps>>();
 
 export default function getViewer(
   context: ViewerHolder,

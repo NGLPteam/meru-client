@@ -20,5 +20,7 @@ export default function SiteNameProof({
   data: FragmentType<typeof fragment>;
 }) {
   const config = useFragment(fragment, data);
-  return <strong data-proof="site-name">{config.site?.installationName}</strong>;
+  return (
+    <strong data-proof="site-name">{config.site?.installationName}</strong>
+  );
 }

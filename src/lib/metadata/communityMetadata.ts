@@ -3,8 +3,8 @@
 // rules-of-hooks lint.
 import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import { getTruncatedText } from "@/helpers/strings";
-import serverEnv from "../env/serverEnv";
 import type { PageMeta } from "@/lib/metadata/types";
+import serverEnv from "../env/serverEnv";
 import { communityMetaFragment } from "../queries/community";
 
 // Astro port of app/**/communities/[slug]/_metadata/community.ts. A pure

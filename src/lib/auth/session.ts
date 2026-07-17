@@ -1,4 +1,3 @@
-import type { APIContext } from "astro";
 import {
   COOKIE,
   COOKIE_OPTIONS,
@@ -11,6 +10,7 @@ import {
   refreshTokens,
   type TokenResponse,
 } from "./keycloak";
+import type { APIContext } from "astro";
 
 export interface Session {
   accessToken: string;

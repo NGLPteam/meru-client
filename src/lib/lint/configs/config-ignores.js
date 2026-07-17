@@ -1,5 +1,7 @@
 module.exports = {
   ignores: [
+    "dist/",
+    ".astro/",
     "src/lib/api/gql/",
     "src/lib/stubs/",
     "__schema__/",
@@ -7,6 +9,7 @@ module.exports = {
     "src/types/",
     "src/lib/lint/",
     "eslint.config.js",
+    "astro.config.mjs",
     ".graphqlrc.ts",
     "graphql-schema.d.ts",
     "**/*.xml.ts",

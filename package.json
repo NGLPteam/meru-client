@@ -54,6 +54,7 @@
     "urql": "^5.0.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@castiron/common-types": "^2.0.1",
     "@csstools/postcss-oklab-function": "^4.0.6",
     "@eslint/js": "^9.35.0",

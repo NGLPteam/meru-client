@@ -26,6 +26,6 @@
       "moduleResolution": "Node"
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
   "exclude": ["node_modules", "dist", "./_sitemaps"]
 }

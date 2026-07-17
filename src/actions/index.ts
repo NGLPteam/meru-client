@@ -1,10 +1,7 @@
 import { defineAction } from "astro:actions";
 import { COOKIE } from "~/lib/auth/constants";
 import { backchannelLogout, refreshTokens } from "~/lib/auth/keycloak";
-import {
-  clearSessionCookies,
-  setSessionCookies,
-} from "~/lib/auth/session";
+import { clearSessionCookies, setSessionCookies } from "~/lib/auth/session";
 import { enableDraftMode, disableDraftMode } from "~/lib/request/draftMode";
 
 // Client-invocable auth actions. The grant + cookie logic lives in

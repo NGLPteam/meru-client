@@ -19,7 +19,9 @@ type Props = {
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
-  draftModeEnabled?: React.ComponentProps<typeof AppProviders>["draftModeEnabled"];
+  draftModeEnabled?: React.ComponentProps<
+    typeof AppProviders
+  >["draftModeEnabled"];
 };
 
 export default function CollectionAnnouncement({

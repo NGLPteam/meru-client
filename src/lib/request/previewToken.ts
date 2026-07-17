@@ -1,5 +1,5 @@
-import type { APIContext } from "astro";
 import { isDraftModeEnabled } from "./draftMode";
+import type { APIContext } from "astro";
 
 // The access token to fetch an entity's primary query WITH when — and only when
 // — draft mode is on, so the API returns draft content + a truthful canPreview

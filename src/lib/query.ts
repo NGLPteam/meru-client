@@ -8,7 +8,10 @@ import type { AnyVariables, DocumentInput, OperationResult } from "@urql/core";
 // `Astro.locals.session?.accessToken` (populated by the auth middleware) here.
 // Both paths funnel through measureQuery; env + request-policy resolution live
 // once in lib/api/client (getAPIURL supports import.meta.env and process.env).
-export default function query<Query, Variables extends AnyVariables = AnyVariables>(
+export default function query<
+  Query,
+  Variables extends AnyVariables = AnyVariables,
+>(
   document: DocumentInput<Query, Variables>,
   variables: Variables,
   token?: string,

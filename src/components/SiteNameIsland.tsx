@@ -21,7 +21,8 @@ export default function SiteNameIsland({
 
   return (
     <span data-proof="island">
-      name via client useFragment=<strong>{config.site?.installationName}</strong>
+      name via client useFragment=
+      <strong>{config.site?.installationName}</strong>
       {" — hydrated="}
       <em data-proof="hydrated">{hydrated ? "yes" : "no"}</em>
       {" — "}
