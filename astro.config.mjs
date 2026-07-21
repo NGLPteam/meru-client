@@ -37,5 +37,10 @@ export default defineConfig({
     // entries keep the old deploy names working during the rename transition —
     // drop them (and clientConfig's fallbacks) once the deploy config is renamed.
     envPrefix: ["PUBLIC_", "NEXT_PUBLIC_", "GOOGLE_MAPS_KEY"],
+    // Bundle the reakit family into the SSR build. reakit ships bare directory
+    // imports (`reakit/Popover`, `reakit-system/createComponent`, …) that Node's
+    // ESM runtime can't resolve, so the standalone node server crashes at boot
+    // with ERR_UNSUPPORTED_DIR_IMPORT unless these are bundled at build time.
+    ssr: { noExternal: [/^reakit/] },
   },
 });
