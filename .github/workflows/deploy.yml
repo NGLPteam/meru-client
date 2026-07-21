@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release
 
 jobs:
   deploy:
@@ -15,11 +16,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
+          images: |-
             registry.digitalocean.com/meru/meru-frontend
-          tags: |
+          tags: |-
             type=raw,value=latest,enable={{is_default_branch}}
-            type=ref,event=branch
+            type=raw,value=release,enable=${{ github.ref == 'refs/heads/release' }}
+          labels: |-
+            service=meru-frontend
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Install doctl
