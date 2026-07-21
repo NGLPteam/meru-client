@@ -3,6 +3,7 @@
 // (app/[frontend]/(pages)/communities/[slug]/{layout,page}.tsx). One query drives
 // the chrome community context, the hero/nav/main content island, and the head.
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { cacheEntity } from "@/lib/caching/setCache";
 import query from "../../lib/query";
 import getViewer from "../../lib/auth/viewer";
 import { previewToken } from "../../lib/request/previewToken";
@@ -29,6 +30,8 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
+
+cacheEntity(Astro, "community", slug);
 ---
 
 <BaseLayout meta={meta} community={community} routeParams={{ slug }}>

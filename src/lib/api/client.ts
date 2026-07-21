@@ -24,11 +24,14 @@ export function getAPIURL(): string {
 // setup just from importing this file and (b) throw if the API URL isn't
 // resolvable yet — which breaks any bundle that only reaches this module
 // transitively (e.g. an Astro SSR / island graph).
-// In production, route-level caching (revalidate) handles reuse, so stay
-// network-only (avoids stale/unbounded caching in the long-lived server
-// process). In dev there's no route cache, so use cache-first with a TTL to
-// dedupe repeated public/global queries (theme, global config, etc.) across
-// renders/navigations. Authed & preview fetches always stay network-only.
+// In production, the Astro response cache (astro.config `cache` + per-route
+// Astro.cache.set — see lib/caching/) handles reuse, so stay network-only
+// (avoids stale/unbounded caching in the long-lived server process). NODE_ENV
+// === production tracks Astro.cache.enabled exactly: the provider is active only
+// in prod SSR (dev gets a NoopAstroCache). In dev there's no route cache, so use
+// cache-first with a TTL to dedupe repeated public/global queries (theme, global
+// config, etc.) across renders/navigations. Authed & preview fetches always stay
+// network-only.
 let cachedAnonymousClient: ReturnType<typeof makeUrqlClient> | undefined;
 
 export function getAnonymousClient() {

@@ -2,6 +2,7 @@
 // Item file detail — Astro port of items/[slug]/files/[file]/page.tsx. The item
 // supplies the shell; the asset is a separate root query.
 import BaseLayout from "~/layouts/BaseLayout.astro";
+import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
@@ -32,6 +33,8 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
+
+cacheEntity(Astro, "item", slug);
 ---
 
 <BaseLayout meta={meta} community={item.community} routeParams={{ slug, file }}>

@@ -2,6 +2,7 @@
 // Contributor detail — Astro port of contributors/[slug]/page.tsx. Picks one of
 // three queries depending on the item/collection scope in the URL.
 import BaseLayout from "~/layouts/BaseLayout.astro";
+import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import getViewer from "~/lib/auth/viewer";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
@@ -51,6 +52,8 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
+
+cacheEntity(Astro, "contributor", slug);
 ---
 
 <BaseLayout community={community} routeParams={{ slug }}>

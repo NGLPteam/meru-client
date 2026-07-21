@@ -17,6 +17,18 @@ export default defineConfig({
   adapter: node({ mode: "standalone" }),
   integrations: [react()],
   server: { port: 4321 },
+  // Server-side response cache (docs/astro-caching-plan.md). memoryCache is
+  // per-instance/in-memory — lost on redeploy, and an invalidation webhook only
+  // purges the instance it hits (each tenant runs a single long-lived instance).
+  // The draft-aware wrapper bypasses the cache for draft-mode requests; per-route
+  // opt-in via Astro.cache.set lives in the pages. Only active in `output:server`
+  // production builds — dev gets a NoopAstroCache (Astro.cache.enabled === false).
+  cache: {
+    provider: {
+      name: "draft-aware-memory",
+      entrypoint: "./src/lib/caching/draftAwareProvider.ts",
+    },
+  },
   vite: {
     // Expose the app's public deploy vars to the client bundle via
     // import.meta.env — Astro's PUBLIC_ convention; everything else stays

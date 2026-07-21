@@ -118,6 +118,31 @@ Preview/authed fetches stay `network-only` and uncached.
 - `app/api/revalidate/entity` + `app/api/revalidate/instance` → one Astro `/api/revalidate`.
 - `export const revalidate = 3600` (replaced by per-route `cache.set`).
 
+## Implementation notes — deviations from the plan above
+
+Two things the plan didn't anticipate, found during implementation (2026-07-20) and
+verified against the standalone prod server:
+
+1. **A thin custom provider was required after all** (`src/lib/caching/draftAwareProvider.ts`).
+   The plan's "don't `cache.set` when authed/preview" prevents *storing* a draft
+   response, but Meru's draft mode is a **cookie on the same url** as public content
+   (hcc's preview used distinct url params). Astro's `memoryCache` keys purely on url
+   and strips `Cookie` from `Vary`, so a draft request would be *served* a cached
+   anonymous page. The wrapper bypasses the cache in `onRequest` (before the lookup)
+   when the `meru-draft-mode` cookie is present — no lookup, no store. It's referenced
+   by `cache.provider.entrypoint` in `astro.config.mjs` and delegates to `astro/cache/memory`.
+
+2. **The instance webhook needs a non-form `Content-Type`.** Astro's CSRF origin check
+   (`security.checkOrigin`, on by default) 403s cross-origin non-safe requests with no
+   content-type. The entity webhook sends JSON so it passes; the deploy must confirm the
+   instance (purge-all) call sends `Content-Type: application/json` too (empty body is
+   fine). See `src/pages/api/revalidate/instance.ts`. Fallback if it can't: `checkOrigin:false`
+   + reimplement the ~10-line origin check in middleware, exempting `/api/revalidate/*`.
+
+Unrelated blocker also surfaced: the standalone prod node server doesn't boot without
+`vite.ssr.noExternal` for the reakit family (bare dir imports) — needs its own fix
+before any prod deploy.
+
 ## Verification
 
 - Cacheable public page: first request MISS → renders; second within `maxAge` → HIT (served from

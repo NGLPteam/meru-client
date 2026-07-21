@@ -1,6 +1,7 @@
 ---
 // Named community sub-page — Astro port of communities/[slug]/page/[page]/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
+import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
@@ -26,6 +27,8 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
+
+cacheEntity(Astro, "community", slug);
 ---
 
 <BaseLayout meta={meta} community={community} routeParams={{ slug, page: pageSlug }}>

@@ -1,6 +1,7 @@
 ---
 // Named collection sub-page — Astro port of collections/[slug]/page/[page]/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
+import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
@@ -30,6 +31,8 @@ const route = {
 };
 const viewer = await getViewer(Astro);
 const draftModeEnabled = isDraftModeEnabled(Astro);
+
+cacheEntity(Astro, "collection", slug);
 ---
 
 <BaseLayout meta={meta} community={collection.community} routeParams={{ slug, page: pageSlug }}>

@@ -8,6 +8,7 @@ import getViewer from "~/lib/auth/viewer";
 import { instanceContentQuery } from "../lib/queries/home";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import InstanceContent from "../components/pages/InstanceContent";
+import { cacheGlobal } from "@/lib/caching/setCache";
 
 const { data: instance } = await query(instanceContentQuery, {});
 
@@ -30,6 +31,9 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
+
+// Home depends only on installation-wide data — GLOBAL_TAG, no entity tag.
+cacheGlobal(Astro);
 ---
 
 <BaseLayout>
