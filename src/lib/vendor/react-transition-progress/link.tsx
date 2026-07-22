@@ -24,13 +24,10 @@ function isModifiedEvent(event: React.MouseEvent): boolean {
 export const Link = forwardRef<
   HTMLAnchorElement,
   Parameters<typeof NextLink>[0]
->(function Link({ href, children, replace, scroll, ...rest }, ref) {
+>(function Link({ href, children, replace, ...rest }, ref) {
   const router = useRouter();
 
   const to = href as string;
-
-  const noScroll = typeof scroll === "boolean" && !scroll;
-  const options = noScroll ? { scroll: false } : {};
 
   return (
     <NextLink
@@ -40,9 +37,9 @@ export const Link = forwardRef<
         if (isModifiedEvent(e)) return;
         e.preventDefault();
         if (replace) {
-          router.replace(`${to}#top`, options);
+          router.replace(to);
         } else {
-          router.push(`${to}#top`, options);
+          router.push(to);
         }
       }}
       {...rest}
