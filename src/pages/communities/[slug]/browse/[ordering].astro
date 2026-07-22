@@ -2,7 +2,6 @@
 // Browse an ordering — Astro port of communities/[slug]/browse/[ordering]/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
@@ -24,7 +23,6 @@ const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
-const viewer = await getViewer(Astro);
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
 const route = {
@@ -40,7 +38,6 @@ const route = {
     community={community}
     globalData={globalData}
     route={route}
-    viewer={viewer}
     draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

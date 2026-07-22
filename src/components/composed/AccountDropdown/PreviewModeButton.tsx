@@ -2,13 +2,13 @@
 
 import { useTransition, useEffect, useRef } from "react";
 import { useDropdownContext } from "@/components/atomic/BaseDropdown/BaseDropdown";
-import { useProgress } from "@/lib/vendor/react-transition-progress";
+import { useRouter } from "@/lib/routing/hooks";
 import { Link } from "@/components/atomic";
 import { enterPreviewMode } from "./actions";
 
 export default function PreviewModeButton({ label }: { label: string }) {
   const dropdown = useDropdownContext();
-  const startProgress = useProgress();
+  const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
   const pendingRef = useRef(false);
@@ -17,7 +17,6 @@ export default function PreviewModeButton({ label }: { label: string }) {
     dropdown?.hide();
 
     startTransition(async () => {
-      startProgress();
       await enterPreviewMode();
     });
   };
@@ -29,10 +28,12 @@ export default function PreviewModeButton({ label }: { label: string }) {
     }
     if (!isPending && pendingRef.current) {
       pendingRef.current = false;
-      window.location.reload();
+      // Soft navigation (not a hard reload) so the ClientRouter loading bar
+      // animates while the server re-renders with the new draft cookie.
+      router.refresh();
       return;
     }
-  }, [isPending]);
+  }, [isPending, router]);
 
   return (
     <Link as="button" type="button" onClick={handleClick}>

@@ -14,16 +14,20 @@ import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { actions } from "astro:actions";
 import { Button } from "@/components/atomic";
+import { useRouter } from "@/lib/routing/hooks";
 import styles from "@/components/global/DraftModeBanner/DraftModeBanner.module.css";
 
 export default function DraftModeBannerIsland() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
 
   const handleExit = () => {
     startTransition(async () => {
       await actions.exitPreview();
-      window.location.reload();
+      // Soft navigation (not a hard reload) so the ClientRouter loading bar
+      // animates while the server re-renders with draft mode cleared.
+      router.refresh();
     });
   };
 

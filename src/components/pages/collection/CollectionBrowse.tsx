@@ -19,7 +19,6 @@ type Props = {
   showContext?: ComponentProps<typeof EntityOrderingLayout>["showContext"];
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
-  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
   draftModeEnabled?: React.ComponentProps<
     typeof AppProviders
   >["draftModeEnabled"];
@@ -31,7 +30,6 @@ export default function CollectionBrowse({
   showContext,
   globalData,
   route,
-  viewer,
   draftModeEnabled,
 }: Props) {
   return (
@@ -39,7 +37,6 @@ export default function CollectionBrowse({
       community={collection.community}
       globalData={globalData}
       route={route}
-      viewer={viewer}
       draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>

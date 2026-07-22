@@ -16,7 +16,6 @@ type Props = {
   community: Community;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
-  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
   draftModeEnabled?: React.ComponentProps<
     typeof AppProviders
   >["draftModeEnabled"];
@@ -26,7 +25,6 @@ export default function CommunityLanding({
   community,
   globalData,
   route,
-  viewer,
   draftModeEnabled,
 }: Props) {
   return (
@@ -34,7 +32,6 @@ export default function CommunityLanding({
       community={community}
       globalData={globalData}
       route={route}
-      viewer={viewer}
       draftModeEnabled={draftModeEnabled}
     >
       <CommunityShell data={community}>

@@ -4,7 +4,6 @@
 // instance 404, and renders the hero + community list island in the slot.
 import BaseLayout from "../layouts/BaseLayout.astro";
 import query from "../lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { instanceContentQuery } from "../lib/queries/home";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import InstanceContent from "../components/pages/InstanceContent";
@@ -24,7 +23,6 @@ if (!instance) {
 }
 
 const { data: globalData } = await query(globalStaticQuery, {});
-const viewer = await getViewer(Astro);
 
 const route = {
   pathname: Astro.url.pathname,
@@ -43,6 +41,5 @@ cacheGlobal(Astro);
     communities={instance.communities}
     globalData={globalData}
     route={route}
-    viewer={viewer}
   />
 </BaseLayout>

@@ -2,7 +2,6 @@
 // Scoped collection search — Astro port of collections/[slug]/search/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
@@ -42,7 +41,6 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
-const viewer = await getViewer(Astro);
 const draftModeEnabled = isDraftModeEnabled(Astro);
 ---
 
@@ -53,7 +51,6 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
     slug={slug}
     globalData={globalData}
     route={route}
-    viewer={viewer}
     draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

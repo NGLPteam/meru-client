@@ -1,0 +1,74 @@
+---
+// Framework-free toggle/close wiring for a native <dialog>-based menu (the header
+// mobile menu). Replaces the reakit useDialogState machinery so the dialog can be
+// authored in Astro and host a `server:defer` account island. Mirrors hcc-client's
+// DialogManager: it finds the <dialog> and the `[aria-controls=<dialog id>]`
+// toggle among its slotted children and wires open/close, Escape, click-outside,
+// and aria-expanded sync. Close is also available via any `<form method="dialog">`
+// button inside the dialog.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<mobile-menu-manager class={className}>
+  <slot />
+</mobile-menu-manager>
+
+<script>
+  class MobileMenuManager extends HTMLElement {
+    abortController = new AbortController();
+
+    get dialog() {
+      return this.querySelector("dialog");
+    }
+
+    get toggle() {
+      const id = this.dialog?.id;
+      return id
+        ? (this.querySelector(
+            `[aria-controls="${id}"]`,
+          ) as HTMLButtonElement | null)
+        : null;
+    }
+
+    connectedCallback() {
+      const { signal } = this.abortController;
+      this.toggle?.addEventListener("click", this.handleToggle, { signal });
+      this.dialog?.addEventListener("click", this.handleClickOutside, {
+        signal,
+      });
+      this.dialog?.addEventListener("close", this.handleClose, { signal });
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+
+    handleToggle = () => {
+      if (!this.dialog) return;
+      if (this.dialog.open) {
+        this.dialog.close();
+      } else {
+        this.dialog.showModal();
+        this.toggle?.setAttribute("aria-expanded", "true");
+      }
+    };
+
+    handleClose = () => {
+      this.toggle?.setAttribute("aria-expanded", "false");
+    };
+
+    // Native modal dialogs don't close on backdrop click by default. The dialog
+    // fills the viewport with an inner content box; a click whose target is the
+    // <dialog> element itself (not the content) is a backdrop click.
+    handleClickOutside = (event: MouseEvent) => {
+      if (event.target === this.dialog) this.dialog?.close();
+    };
+  }
+
+  if (!customElements.get("mobile-menu-manager")) {
+    customElements.define("mobile-menu-manager", MobileMenuManager);
+  }
+</script>

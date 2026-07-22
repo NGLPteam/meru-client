@@ -4,17 +4,17 @@
 // classes, fonts + global CSS (prep step 2), the global chrome (header/footer
 // islands), and a <slot/> for page content.
 //
-// The chrome is decomposed into two hydrated islands (AppHeaderIsland /
-// AppFooterIsland) around a plain Astro <slot/> — page content stays free to be
-// its own server HTML + independent islands. Each island carries its own
-// provider stack (see ChromeProviders); server data is fetched here and threaded
-// in as props.
+// The chrome is composed in Astro (AppHeader.astro / AppFooter.astro) around a
+// plain Astro <slot/> — page content stays free to be its own server HTML +
+// independent islands. Interactive chrome leaves are cache-safe islands
+// (ChromeLeafProviders); per-viewer bits (account nav, footer admin/sign-in)
+// render as `server:defer` islands that resolve the viewer per-request and opt
+// out of the cache — so no viewer identity is serialized into cached page HTML.
 import "@/styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { getThemeClasses } from "@/styles/theme-helpers";
 import LoadingBar from "../components/client/LoadingBar.astro";
 import query from "../lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import DraftModeBannerIsland from "../components/chrome/DraftModeBannerIsland";
 import { LayoutThemeAstroQuery } from "../lib/queries/layout";
@@ -23,12 +23,13 @@ import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getSt
 import getSiteMetadata from "../lib/metadata/siteMetadata";
 import resolvePageMeta from "../lib/metadata/resolvePageMeta";
 import PageHead from "../components/head/PageHead.astro";
-import AppHeaderIsland from "../components/chrome/AppHeaderIsland";
-import AppFooterIsland from "../components/chrome/AppFooterIsland";
+import AppHeader from "../components/global/AppHeader/AppHeader.astro";
+import AppFooter from "../components/global/AppFooter/AppFooter.astro";
+import type ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
 import type { ComponentProps } from "react";
 import type { PageMeta } from "@/lib/metadata/types";
 
-type CommunityRef = ComponentProps<typeof AppHeaderIsland>["community"];
+type CommunityRef = ComponentProps<typeof ChromeLeafProviders>["community"];
 
 interface Props {
   // Page-level metadata (title, description, og:images…). Merged over the
@@ -62,14 +63,12 @@ const route = {
   params: routeParams ?? {},
 };
 
-const [themeRes, chromeRes, globalStaticRes, siteMeta, viewer] =
-  await Promise.all([
-    query(LayoutThemeAstroQuery, {}),
-    query(chromeLayoutQuery, {}),
-    query(globalStaticQuery, {}),
-    getSiteMetadata(),
-    getViewer(Astro),
-  ]);
+const [themeRes, chromeRes, globalStaticRes, siteMeta] = await Promise.all([
+  query(LayoutThemeAstroQuery, {}),
+  query(chromeLayoutQuery, {}),
+  query(globalStaticQuery, {}),
+  getSiteMetadata(),
+]);
 
 const theme = themeRes.data?.globalConfiguration?.theme ?? undefined;
 const themeClasses = getThemeClasses(theme);
@@ -90,30 +89,20 @@ const head = resolvePageMeta(siteMeta, meta);
     <LoadingBar />
     {draftModeEnabled && <DraftModeBannerIsland client:load />}
     <div class="app-shell">
-      <AppHeaderIsland
-        client:load
-        transition:persist="app-header"
-        transition:persist-props={false}
+      <AppHeader
         data={chromeData}
         globalData={globalData}
         community={community}
         route={route}
-        viewer={viewer}
-        draftModeEnabled={draftModeEnabled}
       />
       <main id="main" tabindex="-1">
         <slot />
       </main>
-      <AppFooterIsland
-        client:load
-        transition:persist="app-footer"
-        transition:persist-props={false}
+      <AppFooter
         data={chromeData}
         globalData={globalData}
         community={community}
         route={route}
-        viewer={viewer}
-        draftModeEnabled={draftModeEnabled}
       />
     </div>
   </body>

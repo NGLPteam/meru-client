@@ -1,0 +1,74 @@
+/* Native-<dialog> mobile menu, mirroring BaseDrawer.module.css. Full-viewport
+   panel opened via showModal() (top layer + native focus trap + Escape). */
+.dialog {
+  inline-size: 100vw;
+  max-inline-size: 100vw;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  margin: 0;
+  margin-inline-start: auto; /* anchor to the inline-end edge */
+  padding: 0;
+  border: none;
+  overflow-y: auto;
+
+  @mixin a-bg-custom20;
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+.dialog:not([open]) {
+  display: none;
+}
+
+/* = BaseDrawer .wrapper: content is centred on the cross axis, so .content
+   shrink-wraps and centres while .header/.footer span full width. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-block-size: 100%;
+  inline-size: 100%;
+}
+
+.header {
+  inline-size: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  min-height: 100px;
+  padding-inline-start: var(--container-v-padding-sm);
+  padding-inline-end: var(--container-v-padding-sm);
+}
+
+.content {
+  flex: 1 1 auto;
+  padding-inline-start: var(--container-v-padding-sm);
+  padding-inline-end: var(--container-v-padding-sm);
+  padding-block-end: var(--container-v-padding-sm);
+}
+
+.contentInner {
+  inline-size: 100%;
+}
+
+.list {
+  /* gap rather than `> * + *`: the items are spread across island wrappers
+     (display:contents), so a direct-child selector misses them. */
+  display: flex;
+  flex-direction: column;
+  gap: 2.1875rem;
+  padding-block-start: 1.875rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  inline-size: 100%;
+  padding-block-start: 1.875rem;
+  padding-block-end: 2.125rem;
+}

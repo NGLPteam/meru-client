@@ -4,7 +4,6 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
@@ -33,7 +32,6 @@ const route = {
   search: Astro.url.search,
   params: Astro.params,
 };
-const viewer = await getViewer(Astro);
 const draftModeEnabled = isDraftModeEnabled(Astro);
 
 cacheEntity(Astro, "collection", slug);
@@ -46,7 +44,6 @@ cacheEntity(Astro, "collection", slug);
     slug={slug}
     globalData={globalData}
     route={route}
-    viewer={viewer}
     draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

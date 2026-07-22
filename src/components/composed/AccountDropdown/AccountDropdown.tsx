@@ -4,7 +4,6 @@ import useViewerContext from "@/contexts/useViewerContext";
 import { Avatar, Dropdown, Link } from "@/components/atomic";
 import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import IconFactory from "@/components/factories/IconFactory";
-import { useProgress } from "@/lib/vendor/react-transition-progress";
 import { ADMIN_URL } from "@/lib/env/clientConfig";
 import styles from "./AccountDropdown.module.css";
 import PreviewModeButton from "./PreviewModeButton";
@@ -16,18 +15,15 @@ export default function AccountDropdown({ condensed }: Props) {
 
   const { t } = useTranslation();
 
-  const startProgress = useProgress();
-
   const [, startTransition] = useTransition();
 
   const adminUrl = ADMIN_URL;
 
   const handleSignOut = useCallback(() => {
     startTransition(async () => {
-      startProgress();
       await signOut();
     });
-  }, [startProgress]);
+  }, []);
 
   const menuItems = [
     ...(adminUrl && canAccessAdmin

@@ -14,7 +14,6 @@ type Props = {
   community?: React.ComponentProps<typeof AppProviders>["community"];
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
-  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
 };
 
 export default function ContributorPage({
@@ -23,14 +22,12 @@ export default function ContributorPage({
   community,
   globalData,
   route,
-  viewer,
 }: Props) {
   return (
     <AppProviders
       community={community}
       globalData={globalData}
       route={route}
-      viewer={viewer}
     >
       {navData && <ContributorDetailNav data={navData} />}
       <ContributorDetail data={contributor} />

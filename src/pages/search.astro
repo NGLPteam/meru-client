@@ -2,7 +2,6 @@
 // Global search — Astro port of app/[frontend]/(pages)/search/page.tsx.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { globalSearchQuery } from "~/lib/queries/search";
 import GlobalSearch from "~/components/pages/GlobalSearch";
@@ -28,7 +27,6 @@ const { data } = await query(globalSearchQuery, {
 if (!data) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
-const viewer = await getViewer(Astro);
 const route = {
   pathname: Astro.url.pathname,
   search: Astro.url.search,
@@ -42,6 +40,5 @@ const route = {
     data={data}
     globalData={globalData}
     route={route}
-    viewer={viewer}
   />
 </BaseLayout>

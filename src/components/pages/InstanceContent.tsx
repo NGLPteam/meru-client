@@ -14,7 +14,9 @@ type Props = {
   communities: React.ComponentProps<typeof InstanceCommunities>["data"];
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof ChromeProviders>["route"];
-  viewer?: React.ComponentProps<typeof ChromeProviders>["viewer"];
+  draftModeEnabled?: React.ComponentProps<
+    typeof ChromeProviders
+  >["draftModeEnabled"];
 };
 
 export default function InstanceContent({
@@ -22,10 +24,14 @@ export default function InstanceContent({
   communities,
   globalData,
   route,
-  viewer,
+  draftModeEnabled,
 }: Props) {
   return (
-    <ChromeProviders globalData={globalData} route={route} viewer={viewer}>
+    <ChromeProviders
+      globalData={globalData}
+      route={route}
+      draftModeEnabled={draftModeEnabled}
+    >
       <InstanceHero data={data} />
       <InstanceCommunities data={communities} />
     </ChromeProviders>

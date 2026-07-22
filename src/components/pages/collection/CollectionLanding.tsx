@@ -19,7 +19,6 @@ type Props = {
   slug: string;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
-  viewer?: React.ComponentProps<typeof AppProviders>["viewer"];
   draftModeEnabled?: React.ComponentProps<
     typeof AppProviders
   >["draftModeEnabled"];
@@ -30,7 +29,6 @@ export default function CollectionLanding({
   slug,
   globalData,
   route,
-  viewer,
   draftModeEnabled,
 }: Props) {
   const main = collection.layouts.main;
@@ -47,7 +45,6 @@ export default function CollectionLanding({
       community={collection.community}
       globalData={globalData}
       route={route}
-      viewer={viewer}
       draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>

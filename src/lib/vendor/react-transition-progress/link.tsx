@@ -1,9 +1,8 @@
 "use client";
 
-import { startTransition, forwardRef } from "react";
+import { forwardRef } from "react";
 import NextLink from "@/lib/routing/Link";
 import { useRouter } from "@/lib/routing/hooks";
-import { useProgress } from "./";
 
 // Copied from  https://github.com/vercel/next.js/blob/canary/packages/next/src/client/link.tsx#L180-L191
 function isModifiedEvent(event: React.MouseEvent): boolean {
@@ -27,7 +26,6 @@ export const Link = forwardRef<
   Parameters<typeof NextLink>[0]
 >(function Link({ href, children, replace, scroll, ...rest }, ref) {
   const router = useRouter();
-  const startProgress = useProgress();
 
   const to = href as string;
 
@@ -41,14 +39,11 @@ export const Link = forwardRef<
       onClick={(e) => {
         if (isModifiedEvent(e)) return;
         e.preventDefault();
-        startTransition(() => {
-          startProgress();
-          if (replace) {
-            router.replace(`${to}#top`, options);
-          } else {
-            router.push(`${to}#top`, options);
-          }
-        });
+        if (replace) {
+          router.replace(`${to}#top`, options);
+        } else {
+          router.push(`${to}#top`, options);
+        }
       }}
       {...rest}
     >

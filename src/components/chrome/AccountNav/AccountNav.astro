@@ -1,0 +1,37 @@
+---
+// Per-viewer account nav as an Astro `server:defer` island. The cached page HTML
+// carries only the placeholder + anonymous `slot="fallback"`; the browser fetches
+// the real (authed-or-anonymous) menu out-of-band from /_server-islands/AccountNav.
+// This is what lets the surrounding page be cached for everyone without baking one
+// viewer's identity into the URL-keyed response cache. Mirrors hcc-client's
+// UserNav.astro.
+import getViewer from "~/lib/auth/viewer";
+import { isDraftModeEnabled } from "~/lib/request/draftMode";
+import AccountDropdownIsland from "./AccountDropdownIsland";
+
+interface Props {
+  mobile?: boolean;
+  condensed?: boolean;
+}
+
+const { mobile, condensed } = Astro.props;
+
+// Resolved per-request. getViewer is memoized on Astro.locals (anonymous
+// short-circuits with no network); the session comes from attachUserAndSession,
+// which runs on the server-island request too.
+const viewer = await getViewer(Astro);
+const isPreview = isDraftModeEnabled(Astro);
+
+// REQUIRED: the deferred response flows through the same URL-keyed memoryCache
+// (Cookie stripped from Vary), so without this a cached account response would
+// cross-serve one viewer's identity to everyone. Never store this render.
+if (Astro.cache.enabled) Astro.cache.set(false);
+---
+
+<AccountDropdownIsland
+  client:load
+  viewer={viewer}
+  isPreview={isPreview}
+  condensed={condensed}
+  mobile={mobile}
+/>

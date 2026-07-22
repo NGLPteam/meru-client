@@ -4,7 +4,6 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
-import getViewer from "~/lib/auth/viewer";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
@@ -24,7 +23,6 @@ const asset = data?.asset;
 if (!item || !asset) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
-const viewer = await getViewer(Astro);
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
@@ -46,7 +44,6 @@ cacheEntity(Astro, "item", slug);
     slug={slug}
     globalData={globalData}
     route={route}
-    viewer={viewer}
     draftModeEnabled={draftModeEnabled}
   />
 </BaseLayout>

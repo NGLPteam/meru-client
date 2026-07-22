@@ -1,0 +1,43 @@
+---
+// Global footer composition (Astro). Replaces the former AppFooter.tsx client
+// island so the per-viewer "Explore" nav (admin link / sign-in) can be a
+// `server:defer` island: the footer body is cache-safe and viewer-free, while
+// FooterNav renders per-request and opts out of the cache. Grid placement is by
+// named areas, so body and nav can be separate siblings in any DOM order.
+import { communityNameFragment } from "@/components/composed/instance/CommunityPicker/CommunityPicker";
+import type { FragmentType } from "@/lib/api/gql";
+import type { AppFooterFragment } from "./graphql";
+import type ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import FooterBodyIsland from "./FooterBodyIsland";
+import FooterNav from "./FooterNav.astro";
+import FooterNavIsland from "./FooterNavIsland";
+import styles from "./AppFooter.module.css";
+
+type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+
+interface Props {
+  data?: FragmentType<typeof AppFooterFragment> | null;
+  communityData?: FragmentType<typeof communityNameFragment> | null;
+  globalData?: LeafProviderProps["globalData"];
+  community?: LeafProviderProps["community"];
+  route?: LeafProviderProps["route"];
+}
+
+const { data, communityData, globalData, community, route } = Astro.props;
+---
+
+<footer class:list={["a-bg-custom20", styles.footer]}>
+  <div class:list={["l-container-wide", styles.inner]}>
+    <FooterBodyIsland
+      client:load
+      data={data}
+      communityData={communityData}
+      globalData={globalData}
+      community={community}
+      route={route}
+    />
+    <FooterNav server:defer>
+      <FooterNavIsland slot="fallback" />
+    </FooterNav>
+  </div>
+</footer>

@@ -1,0 +1,76 @@
+---
+// Header mobile menu as a native <dialog> (replaces the reakit BaseDrawer for the
+// header only — the shared BaseDrawer is untouched for SearchLayout). Authoring it
+// in Astro lets the per-viewer account nav be a real `server:defer` island placed
+// as a sibling in the dialog body, rather than baked into a client-only React tree.
+// MobileMenuManager (framework-free custom element) wires the toggle + close.
+import MobileMenuToggle from "@/components/layout/MobileMenuToggle";
+import { CloseModalButton } from "@/components/atomic";
+import MobileMenuManager from "@/components/chrome/MobileMenuManager.astro";
+import AccountNav from "@/components/chrome/AccountNav/AccountNav.astro";
+import AccountDropdownIsland from "@/components/chrome/AccountNav/AccountDropdownIsland";
+import { MobilePicker, MobileNav, MobileFooter } from "./HeaderMobileParts";
+import type { FragmentType } from "@/lib/api/gql";
+import type { AppHeaderFragment } from "./graphql";
+import type ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import styles from "./HeaderMobileMenu.module.css";
+
+type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+
+interface Props {
+  data?: FragmentType<typeof AppHeaderFragment> | null;
+  globalData?: LeafProviderProps["globalData"];
+  community?: LeafProviderProps["community"];
+  route?: LeafProviderProps["route"];
+}
+
+const { data, globalData, community, route } = Astro.props;
+
+// Keep in sync with MENU_ID in HeaderMobileParts.tsx.
+const MENU_ID = "app-header-menu";
+---
+
+<MobileMenuManager>
+  <MobileMenuToggle aria-controls={MENU_ID} aria-expanded="false" />
+  {/* aria-label is English until per-request i18n lands (deferred; single-locale). */}
+  <dialog id={MENU_ID} class={styles.dialog} aria-label="Menu">
+    <div class={styles.panel}>
+      <div class={styles.header}>
+        <MobilePicker
+          client:load
+          data={data}
+          globalData={globalData}
+          community={community}
+          route={route}
+        />
+        <form method="dialog">
+          <CloseModalButton />
+        </form>
+      </div>
+      <div class={styles.content}>
+        <div class={styles.contentInner}>
+          <div class={styles.list}>
+            <MobileNav
+              client:load
+              globalData={globalData}
+              community={community}
+              route={route}
+            />
+            <AccountNav server:defer mobile>
+              <AccountDropdownIsland slot="fallback" mobile />
+            </AccountNav>
+          </div>
+        </div>
+      </div>
+      <footer class:list={["a-bg-custom10", styles.footer]}>
+        <MobileFooter
+          client:load
+          data={data}
+          globalData={globalData}
+          community={community}
+          route={route}
+        />
+      </footer>
+    </div>
+  </dialog>
+</MobileMenuManager>

@@ -1,0 +1,17 @@
+---
+// The footer's per-viewer "Explore" nav as an Astro `server:defer` island: the
+// admin link + sign-in item depend on the viewer, so they must render per-request
+// and stay out of the URL-keyed cache. Same mechanism as AccountNav.astro.
+import getViewer from "~/lib/auth/viewer";
+import { isDraftModeEnabled } from "~/lib/request/draftMode";
+import FooterNavIsland from "./FooterNavIsland";
+
+const viewer = await getViewer(Astro);
+const isPreview = isDraftModeEnabled(Astro);
+
+// REQUIRED: keep this per-viewer render out of the URL-keyed memoryCache (see
+// AccountNav.astro).
+if (Astro.cache.enabled) Astro.cache.set(false);
+---
+
+<FooterNavIsland client:load viewer={viewer} isPreview={isPreview} />
