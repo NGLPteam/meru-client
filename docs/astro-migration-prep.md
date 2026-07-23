@@ -35,10 +35,10 @@ layout `generateMetadata` exports + `toNextMetadata` (`next` Metadata), `lib/req
 ## The thing to understand first
 
 This app is **deliberately architected to defeat static generation**, and unwinding that is
-the real work — not the framework swap. `middleware.ts` rewrites *every* request to a
+the real work — not the framework swap. `middleware.ts` rewrites _every_ request to a
 `/dynamic/*` prefix (the `[frontend]` segment catches the literal string `"dynamic"`),
 explicitly to opt every route out of Next's build-time rendering. The comment says why:
-*"Because we need runtime env vars, we need to avoid generating any pages at buildtime."*
+_"Because we need runtime env vars, we need to avoid generating any pages at buildtime."_
 Tenancy is **per-deployment** — one container per tenant, `NEXT_PUBLIC_API_URL` points at
 that tenant's backend — and every response is `no-store`. Nothing is static today, on purpose.
 
@@ -51,11 +51,11 @@ Separate the two, because only one of them goes away for free:
 
 - **The symptom** — the `/dynamic` rewrite + `[frontend]` catch segment — is a pure
   Next-App-Router artifact. It exists only because Next's default is "statically generate
-  every route at build time *unless* something forces it dynamic." No other framework has
+  every route at build time _unless_ something forces it dynamic." No other framework has
   that default, so the segment disappears the moment we leave Next. We never write this hack
   again.
-- **The cause** — *"build one artifact in CI, deploy it to N tenants, render each against a
-  per-deploy runtime API URL, bake no content at build time"* — is a real constraint that
+- **The cause** — _"build one artifact in CI, deploy it to N tenants, render each against a
+  per-deploy runtime API URL, bake no content at build time"_ — is a real constraint that
   travels with us. Switching stacks doesn't retire it; it just moves where we satisfy it.
 
 How each target rendering mode handles the cause:
@@ -69,7 +69,7 @@ How each target rendering mode handles the cause:
   A's content and build-time env into HTML served to every tenant. Pure SSG forces either
   build-per-tenant (abandoning "build once") or moving all data fetching to the client.
 
-### The client-side runtime-config wrinkle (does *not* fix itself)
+### The client-side runtime-config wrinkle (does _not_ fix itself)
 
 `UrqlProvider.tsx:21` (a `"use client"` component) reads `NEXT_PUBLIC_API_URL` via
 `getAPIURL()` (`lib/api/client.ts:5`). `NEXT_PUBLIC_*` is inlined into the browser bundle at
@@ -89,7 +89,7 @@ stack forces us to answer this explicitly. Two options:
 
 Decide the static-vs-request-time split before any framework work. Pure SSG can't do what this
 app relies on: per-request auth (`draftMode`, `/preview/*` gating in `middleware.ts`), a
-per-*deploy* API URL resolved at runtime, and the client queries (search/analytics/view-counter).
+per-_deploy_ API URL resolved at runtime, and the client queries (search/analytics/view-counter).
 The realistic target is **Astro SSR/hybrid**, marking only genuinely-public content pages
 `prerender = true`.
 
@@ -124,7 +124,7 @@ by leverage.
    bodies delegate to `_metadata/*.ts`. Make those return plain serializable data (drop the `next`
    `Metadata` type, 8 files) so the Astro side renders `<head>` from the same functions.
 5. **Isolate `next/headers` (9 files: `draftMode`, `headers`).** Already mostly funneled through
-   `lib/actions/*` and `ViewerContext`. Get *all* request-context reads behind a couple of
+   `lib/actions/*` and `ViewerContext`. Get _all_ request-context reads behind a couple of
    accessors so the Astro port swaps `Astro.request`/`Astro.locals` in one place. Also make
    `queryApi`'s token acquisition (currently `auth()` + `draftMode` via `next/headers`) take the
    token as a parameter instead of reaching into Next internals.
@@ -179,18 +179,18 @@ Start with #0 (the rendering-model decision) since it gates the rest.
 
 Snapshot of `from "next…"` imports across `app components contexts helpers hooks lib routes`:
 
-| Import               | Count      | Migration note                                              |
-| -------------------- | ---------- | ----------------------------------------------------------- |
-| `next/navigation`    | 51 / 49 files | Routing shim (step 1) — biggest surface                  |
-| `next/headers`       | 9          | Request-context accessors (step 5)                          |
-| `next` (`Metadata`)  | 8          | Pure metadata functions (step 4)                            |
-| `next/dynamic`       | 4          | `React.lazy` (step 3)                                        |
-| `next/font`          | 4          | `@font-face` (step 2)                                        |
-| `next/cache`         | 3          | Revalidation redesign (step 8)                              |
-| `next/server`        | 2          | Middleware re-home (step 9)                                 |
-| `next/link`          | 2          | Link wrapper (step 1)                                        |
-| `next/head`          | 1          | Metadata / `<head>` (step 1/4)                              |
-| `next/image`         | 0          | Already clean (step 6)                                       |
+| Import              | Count         | Migration note                          |
+| ------------------- | ------------- | --------------------------------------- |
+| `next/navigation`   | 51 / 49 files | Routing shim (step 1) — biggest surface |
+| `next/headers`      | 9             | Request-context accessors (step 5)      |
+| `next` (`Metadata`) | 8             | Pure metadata functions (step 4)        |
+| `next/dynamic`      | 4             | `React.lazy` (step 3)                   |
+| `next/font`         | 4             | `@font-face` (step 2)                   |
+| `next/cache`        | 3             | Revalidation redesign (step 8)          |
+| `next/server`       | 2             | Middleware re-home (step 9)             |
+| `next/link`         | 2             | Link wrapper (step 1)                   |
+| `next/head`         | 1             | Metadata / `<head>` (step 1/4)          |
+| `next/image`        | 0             | Already clean (step 6)                  |
 
 Server actions (`"use server"`): 4 files — `components/composed/AccountDropdown/actions.ts`,
 `components/global/DraftModeBanner/actions.ts`, `lib/actions/fetchPreviewAccess.ts`,

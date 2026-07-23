@@ -26,13 +26,13 @@ Design doc for migrating Meru's `middleware.ts` onto the Astro SSR stack. Compan
 `middleware.ts` currently does four things behind `matcher:
 ["/((?!api|_next/static|_next/image|favicon.ico|fonts).*)"]`:
 
-| Today | Astro |
-| --- | --- |
-| `/dynamic` catch-all rewrite (prepends `/dynamic` to every request) | **Deleted** — no build-time generation to defeat. |
-| `next/server` + `next/headers` imports + `matcher` config | Gone — Astro middleware is `onRequest(context, next)`; branch on `context.url.pathname`, no matcher. |
-| HTTPS redirect (prod, `x-forwarded-proto !== https`) | **Dropped** — handled at the CDN/LB. |
-| `/preview/*` gating (`auth()` + `fetchPreviewAccess` ACL) | **Folds into the `/preview/[entity]/[slug]` route.** |
-| `/permalink/*` rewrite (`fetchPermalink` → entity path) | **Becomes the `/permalink/[permalink]` route.** |
+| Today                                                               | Astro                                                                                                |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `/dynamic` catch-all rewrite (prepends `/dynamic` to every request) | **Deleted** — no build-time generation to defeat.                                                    |
+| `next/server` + `next/headers` imports + `matcher` config           | Gone — Astro middleware is `onRequest(context, next)`; branch on `context.url.pathname`, no matcher. |
+| HTTPS redirect (prod, `x-forwarded-proto !== https`)                | **Dropped** — handled at the CDN/LB.                                                                 |
+| `/preview/*` gating (`auth()` + `fetchPreviewAccess` ACL)           | **Folds into the `/preview/[entity]/[slug]` route.**                                                 |
+| `/permalink/*` rewrite (`fetchPermalink` → entity path)             | **Becomes the `/permalink/[permalink]` route.**                                                      |
 
 hcc-client middlewares Meru intentionally omits: `matchAllowlist` (Meru's routes are explicit,
 known shapes — Astro file routing 404s unknown paths natively, unlike Craft's arbitrary CMS URIs),
@@ -77,8 +77,7 @@ export async function GET(context) {
 
   // 2. must have preview access (GraphQL canUpdate, authed via locals token)
   const canUpdate = await fetchPreviewAccess(entity, slug, context);
-  if (!canUpdate)
-    return context.rewrite("/unauthorized?reason=forbidden");
+  if (!canUpdate) return context.rewrite("/unauthorized?reason=forbidden");
 
   // 3. enable preview/draft (the draft cookie from #7) and land on the entity
   enableDraftMode(context);
@@ -87,6 +86,7 @@ export async function GET(context) {
 ```
 
 Notes:
+
 - Preserves the current `LANDING` map and the unauthenticated/forbidden reasons that the existing
   `unauthorized` page reads.
 - `enableDraftMode` is the Astro draft cookie set (the #7 replacement for `next/headers` draftMode);
@@ -101,9 +101,8 @@ Replaces the middleware `/permalink/*` branch:
 export async function GET(context) {
   const { permalink } = context.params;
   const { kind, permalinkableSlug } = await fetchPermalink(permalink, context);
-  const route = getRouteByEntityKind(kind);            // helpers/routes.ts, unchanged
-  if (!route || !permalinkableSlug)
-    return new Response(null, { status: 404 });
+  const route = getRouteByEntityKind(kind); // helpers/routes.ts, unchanged
+  if (!route || !permalinkableSlug) return new Response(null, { status: 404 });
   return context.rewrite(`/${route}/${permalinkableSlug}${context.url.search}`);
 }
 ```
@@ -116,6 +115,7 @@ The `/dynamic` prefix in the current rewrite target disappears.
 Both are currently `"use server"` + `queryApi` + React `cache()`. Port to plain async helpers (or
 Astro actions) that take the Astro context and use the server urql client with the token from
 `locals`:
+
 - `fetchPreviewAccess` keeps `authAware` semantics — it needs the token to evaluate `canUpdate`.
 - React `cache()` (per-request memoization) → a request-scoped memo, or simply call once per
   request (each is called at most once in these routes anyway).

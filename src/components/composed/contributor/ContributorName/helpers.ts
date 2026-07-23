@@ -4,8 +4,7 @@ import { type DocumentType } from "@/lib/api/gql";
 
 export function getContributorDisplayName(
   contributor:
-    | Partial<AnyContributor>
-    | DocumentType<typeof ContributorNameFragment>,
+    Partial<AnyContributor> | DocumentType<typeof ContributorNameFragment>,
   reverse?: boolean,
 ): string {
   if (!contributor) return "";

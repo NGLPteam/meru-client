@@ -32,7 +32,9 @@ const MENU_ID = "app-header-menu";
 
 <MobileMenuManager>
   <MobileMenuToggle aria-controls={MENU_ID} aria-expanded="false" />
-  {/* aria-label is English until per-request i18n lands (deferred; single-locale). */}
+  {
+    /* aria-label is English until per-request i18n lands (deferred; single-locale). */
+  }
   <dialog id={MENU_ID} class={styles.dialog} aria-label="Menu">
     <div class={styles.panel}>
       <div class={styles.header}>

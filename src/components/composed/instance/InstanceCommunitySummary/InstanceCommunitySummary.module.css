@@ -9,12 +9,14 @@
   transition: boxShadow 170ms ease-in;
 
   &:hover {
-    box-shadow: theme("boxShadow.popUp"),
+    box-shadow:
+      theme("boxShadow.popUp"),
       0px 0px 0px 1px var(--border-color-focus);
   }
 
   a:focus-visible & {
-    box-shadow: 0px 0px 0px 1px var(--border-color-focus),
+    box-shadow:
+      0px 0px 0px 1px var(--border-color-focus),
       theme("boxShadow.focusGlow");
   }
 

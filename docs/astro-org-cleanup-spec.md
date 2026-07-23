@@ -17,19 +17,19 @@ chance to **reclassify** — most of these vars no longer need to reach the brow
 
 ### Inventory (current → proposed)
 
-| current | reaches client? | proposed | notes |
-|---|---|---|---|
-| `NEXT_PUBLIC_API_URL` | **yes** — analytics urql (`ViewCounter`/`ArticleAnalyticsBlock`) | `PUBLIC_API_URL` | the only var the browser genuinely needs post-migration |
-| `NEXT_PUBLIC_ADMIN_URL` | **yes** — `clientConfig.ADMIN_URL` | `PUBLIC_ADMIN_URL` | |
-| `GOOGLE_MAPS_KEY` | **yes** — `clientConfig.GOOGLE_MAPS_KEY` | `PUBLIC_GOOGLE_MAPS_KEY` | already unprefixed; fold into the `PUBLIC_` scheme |
-| `NEXT_PUBLIC_FE_URL` | no — `astro.config` `site`, `siteOrigin` | `SITE_URL` (server-only) | server-only; drop from client exposure |
-| `NEXT_PUBLIC_KEYCLOAK_URL` | no — server auth only | `KEYCLOAK_URL` | server-only now |
-| `NEXT_PUBLIC_KEYCLOAK_REALM` | no | `KEYCLOAK_REALM` | server-only |
-| `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID` | no | `KEYCLOAK_CLIENT_ID` | server-only |
-| `NEXT_KEYCLOAK_CLIENT_SECRET` | no (already server-only) | `KEYCLOAK_CLIENT_SECRET` | drop the `NEXT_` |
-| `NEXT_PUBLIC_SITEMAP_CACHE_MAXAGE` | no — sitemap endpoint | `SITEMAP_CACHE_MAXAGE` | server-only |
-| `NEXT_PUBLIC_SITEMAP_CACHE_REVALIDATE` | no | `SITEMAP_CACHE_REVALIDATE` | server-only |
-| `AUTH_SECRET` | — | **delete** | unused since next-auth was removed |
+| current                                | reaches client?                                                  | proposed                   | notes                                                   |
+| -------------------------------------- | ---------------------------------------------------------------- | -------------------------- | ------------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`                  | **yes** — analytics urql (`ViewCounter`/`ArticleAnalyticsBlock`) | `PUBLIC_API_URL`           | the only var the browser genuinely needs post-migration |
+| `NEXT_PUBLIC_ADMIN_URL`                | **yes** — `clientConfig.ADMIN_URL`                               | `PUBLIC_ADMIN_URL`         |                                                         |
+| `GOOGLE_MAPS_KEY`                      | **yes** — `clientConfig.GOOGLE_MAPS_KEY`                         | `PUBLIC_GOOGLE_MAPS_KEY`   | already unprefixed; fold into the `PUBLIC_` scheme      |
+| `NEXT_PUBLIC_FE_URL`                   | no — `astro.config` `site`, `siteOrigin`                         | `SITE_URL` (server-only)   | server-only; drop from client exposure                  |
+| `NEXT_PUBLIC_KEYCLOAK_URL`             | no — server auth only                                            | `KEYCLOAK_URL`             | server-only now                                         |
+| `NEXT_PUBLIC_KEYCLOAK_REALM`           | no                                                               | `KEYCLOAK_REALM`           | server-only                                             |
+| `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID`       | no                                                               | `KEYCLOAK_CLIENT_ID`       | server-only                                             |
+| `NEXT_KEYCLOAK_CLIENT_SECRET`          | no (already server-only)                                         | `KEYCLOAK_CLIENT_SECRET`   | drop the `NEXT_`                                        |
+| `NEXT_PUBLIC_SITEMAP_CACHE_MAXAGE`     | no — sitemap endpoint                                            | `SITEMAP_CACHE_MAXAGE`     | server-only                                             |
+| `NEXT_PUBLIC_SITEMAP_CACHE_REVALIDATE` | no                                                               | `SITEMAP_CACHE_REVALIDATE` | server-only                                             |
+| `AUTH_SECRET`                          | —                                                                | **delete**                 | unused since next-auth was removed                      |
 
 Net client-exposed surface shrinks from ~8 vars to **3** (`PUBLIC_API_URL`, `PUBLIC_ADMIN_URL`,
 `PUBLIC_GOOGLE_MAPS_KEY`).
@@ -49,8 +49,9 @@ Net client-exposed surface shrinks from ~8 vars to **3** (`PUBLIC_API_URL`, `PUB
 
 ### ⚠️ The real risk: deploy-time env coordination
 
-The **deploy injects these var *names*** into the runtime environment (prod `process.env`). A
+The **deploy injects these var _names_** into the runtime environment (prod `process.env`). A
 code-only rename **breaks prod** unless the deploy config is renamed in lockstep:
+
 - `docker/local.env`, `docker/sandbox.env` (in-repo — update in the same PR).
 - Any **out-of-repo** secrets/config: k8s/Helm values, CI/CD secrets, hosting-provider env panels.
   These must change at cutover. **Coordinate with whoever owns the deploy before merging.**
@@ -68,15 +69,15 @@ is vestigial. Consolidate everything into `src/` under one alias.
 
 ### What moves (into `src/`)
 
-| root dir | files | into | collision? |
-|---|---|---|---|
-| `components/` | ~556 | `src/components/` | none (disjoint subdirs) |
-| `contexts/` | 12 | `src/contexts/` | none |
-| `lib/` | 22 | `src/lib/` | **yes — `lib/metadata` + `lib/request`** already exist in `src/lib/` |
-| `helpers/` | 13 | `src/helpers/` | none |
-| `hooks/` | 5 | `src/hooks/` | none |
-| `styles/` | 16 | `src/styles/` | none |
-| `types/` | 4 | `src/types/` | none |
+| root dir      | files | into              | collision?                                                           |
+| ------------- | ----- | ----------------- | -------------------------------------------------------------------- |
+| `components/` | ~556  | `src/components/` | none (disjoint subdirs)                                              |
+| `contexts/`   | 12    | `src/contexts/`   | none                                                                 |
+| `lib/`        | 22    | `src/lib/`        | **yes — `lib/metadata` + `lib/request`** already exist in `src/lib/` |
+| `helpers/`    | 13    | `src/helpers/`    | none                                                                 |
+| `hooks/`      | 5     | `src/hooks/`      | none                                                                 |
+| `styles/`     | 16    | `src/styles/`     | none                                                                 |
+| `types/`      | 4     | `src/types/`      | none                                                                 |
 
 **Collision handling (`lib/`):** root `lib/metadata` + `src/lib/metadata` and root `lib/request` +
 `src/lib/request` both exist. Merge file-by-file (verify no same-named files clash) rather than moving
@@ -86,6 +87,7 @@ the dirs wholesale. Everything else merges cleanly.
 
 `bin/`, `docker/`, `__schema__/` (codegen schema), `public/`, `docs/`, and the root config files
 (`astro.config.mjs`, `tsconfig.json`, `codegen.client.ts`, `tailwind.config.js`, `postcss.config.js`).
+
 - `routes/baseRoutes.ts` — **0 importers found; likely dead.** Confirm, then delete (else move to
   `src/lib`). The `@/routes` alias has 0 uses.
 
@@ -98,7 +100,7 @@ There are ~490 import sites on `@/components` (181), `@/lib` (204), `@/contexts`
 2. In `tsconfig.json`, **repoint the root aliases to `src/`**: `"@/*": ["./src/*"]` and the specific
    `"@/components/*": ["src/components/*"]` etc. Then every existing `@/…` import resolves to the new
    location **unchanged**. `~/*` already → `src/*`, so `@/*` and `~/*` become synonyms (optionally
-   collapse to one alias in a later sweep — that one *is* a churny rename, defer/skip).
+   collapse to one alias in a later sweep — that one _is_ a churny rename, defer/skip).
 3. Update the **non-alias path configs** that name dirs literally:
    - `tailwind.config.js` `content`: drop `./app/**` (gone), `./components/**` → `./src/**/*.{ts,tsx}`.
    - `codegen.client.ts` `documents`: currently `["src/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"]` →

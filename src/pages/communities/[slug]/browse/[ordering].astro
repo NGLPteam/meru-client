@@ -14,11 +14,15 @@ if (!slug || !ordering) return Astro.rewrite("/404");
 
 const page = parseInt(Astro.url.searchParams.get("page") ?? "") || 1;
 
-const { data } = await query(communityBrowseQuery, {
-  slug,
-  identifier: ordering,
-  page,
-}, previewToken(Astro));
+const { data } = await query(
+  communityBrowseQuery,
+  {
+    slug,
+    identifier: ordering,
+    page,
+  },
+  previewToken(Astro),
+);
 const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 

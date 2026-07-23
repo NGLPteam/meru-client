@@ -1,7 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 
 const { pxToRem } = require("@castiron/style-mixins");
-const { fluidScaleRem, fluidScalePx, colors } = require("./src/styles/helpers.cjs");
+const {
+  fluidScaleRem,
+  fluidScalePx,
+  colors,
+} = require("./src/styles/helpers.cjs");
 
 export const screens = {
   140: "1400px",

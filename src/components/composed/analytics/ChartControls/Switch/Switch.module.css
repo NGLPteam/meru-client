@@ -13,7 +13,9 @@
 .button {
   @mixin t-label-mix;
   white-space: nowrap;
-  transition: color 170ms ease-in, background 170ms ease-in,
+  transition:
+    color 170ms ease-in,
+    background 170ms ease-in,
     opacity 170ms ease-in;
   background-color: var(--color-base-neutral00);
   color: var(--color-custom70);

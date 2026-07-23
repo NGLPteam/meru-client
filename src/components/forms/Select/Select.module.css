@@ -25,7 +25,8 @@
 
     &:has(select:focus-visible) {
       background: var(--Button-focus-color);
-      box-shadow: 0px 0px 0px 1px var(--border-color-focus),
+      box-shadow:
+        0px 0px 0px 1px var(--border-color-focus),
         theme("boxShadow.focusGlow");
       outline: none;
     }
@@ -37,7 +38,8 @@
     background-color: var(--color-base-neutral00);
 
     &:has(select:focus-visible) {
-      box-shadow: 0px 0px 0px 1px var(--border-color-focus),
+      box-shadow:
+        0px 0px 0px 1px var(--border-color-focus),
         theme("boxShadow.focusGlow");
     }
   }

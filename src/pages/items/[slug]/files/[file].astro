@@ -17,7 +17,11 @@ import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 const { slug, file } = Astro.params;
 if (!slug || !file) return Astro.rewrite("/404");
 
-const { data } = await query(itemFileDetailQuery, { slug, file }, previewToken(Astro));
+const { data } = await query(
+  itemFileDetailQuery,
+  { slug, file },
+  previewToken(Astro),
+);
 const item = data?.item;
 const asset = data?.asset;
 if (!item || !asset) return Astro.rewrite("/404");

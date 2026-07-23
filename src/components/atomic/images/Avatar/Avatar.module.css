@@ -4,7 +4,8 @@
   overflow: hidden;
   width: var(--Avatar-size);
   height: var(--Avatar-size);
-  transition: box-shadow theme("transitionTimingFunction.DEFAULT")
+  transition:
+    box-shadow theme("transitionTimingFunction.DEFAULT")
       theme("transitionDuration.DEFAULT"),
     border theme("transitionTimingFunction.DEFAULT")
       theme("transitionDuration.DEFAULT");

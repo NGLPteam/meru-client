@@ -41,6 +41,7 @@ hcc is the shape, but Meru differs in three ways — don't copy hcc blindly:
 ## Reuse vs. delete vs. convert (current code)
 
 **Reuse (as a reference, not by import):**
+
 - `lib/auth/keycloak.ts` — the root Next file stays live for the coexisting Next app (only
   `initAuth.ts`, itself Next-only, imports it) and is deleted in step 8. Build a **fresh**
   `src/lib/auth/keycloak.ts` instead — port only the clean core (the issuer + token-URL join logic)
@@ -59,6 +60,7 @@ hcc is the shape, but Meru differs in three ways — don't copy hcc blindly:
 - `contexts/ViewerContext/fetchViewer.ts` — `fetchViewer`/`resolveViewer` reused server-side.
 
 **Delete:**
+
 - `lib/auth/initAuth.ts`, `app/api/auth/[...nextauth]/route.ts` (next-auth handlers/config).
 - `lib/api/clientToken.ts` and `UrqlProvider`'s Bearer/`getClientToken` closure (token→browser path).
 - `app/api/viewer/route.ts` client fetch + the `accessToken` it ships; `ViewerContext`'s
@@ -67,6 +69,7 @@ hcc is the shape, but Meru differs in three ways — don't copy hcc blindly:
   is a GraphQL query; token expiry rides the access cookie's `maxAge`).
 
 **Convert (diverged from plan — I built these as client islands):**
+
 - `SearchLayout`, `EntityOrderingLayout` (browse), `ContributorDetail` → SSR-on-navigation. Their
   `.astro` pages already SSR the initial state; move interaction (page/order/filter changes) from
   client `useQuery` + `router.push` to URL-param navigations that re-render server-side. Drop their
@@ -82,6 +85,7 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
 `__prerender_bypass`.) Keycloak URLs come from the `KEYCLOAK_*` env builders in `lib/auth/keycloak.ts`.
 
 ### 1. Keycloak OIDC cookie auth (foundation)
+
 - `src/lib/auth/constants.ts` — cookie names (`meru-access-token`/`meru-refresh-token`/
   `meru-redirect-uri`) + `COOKIE_OPTIONS` (httpOnly/secure/sameSite=lax, unsigned); Keycloak
   `AUTH_URL`/`TOKEN_URL`/`LOGOUT_URL` from `KEYCLOAK_*` env (reuse `lib/auth/keycloak.ts` builders).
@@ -106,12 +110,14 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
 - `src/env.d.ts` — declare `App.Locals` (`isAuthenticated`, `session`).
 
 ### 2. Server token wiring — DONE (2026-07-15)
+
 - `src/lib/query.ts` — accepts an optional `token` third arg; delegates to `lib/api/client`'s
   `makeAuthorizedClient(token)` (Bearer) when present, else the shared `getAnonymousClient()`
   singleton (network-only in prod, cache-first in dev). `.astro` pages pass
   `Astro.locals.session?.accessToken` when preview/authed (else anonymous, unchanged).
 
 ### 3. Viewer via server props (delete client-token path) — DONE (2026-07-15)
+
 - `src/lib/auth/viewer.ts` — request-scoped `getViewer(context)` memoized on a `WeakMap<App.Locals>`
   (no new Locals field). Anonymous short-circuits to `{isAuthenticated:false, allowedActions:[]}`
   with NO GraphQL call; authed calls `resolveViewer(locals.session.accessToken)`.
@@ -126,6 +132,7 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   `UrqlProvider`/`AccountDropdown` callers (keeps the Astro build green meanwhile).
 
 ### 4. Sign-in / out / preview UI (un-stub) — signIn/signOut DONE (2026-07-15)
+
 - `components/composed/AccountDropdown/actions.ts` — now Astro-native:
   `signIn` → `window.location.assign("/api/signin?returnTo=<current URL>")` (→ `redirectToLogin`);
   `signOut` → `actions.logout()` (Keycloak backchannel + httpOnly cookie clear) then hard-nav to `/`.
@@ -133,16 +140,17 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   The dropdown's `isAuthenticated`/`canAccessAdmin` now come from the step-3 server-seeded viewer.
 
 ### 5. Preview / draft mode — DONE (2026-07-15)
+
 - `src/lib/request/draftMode.ts` — Astro-native, context-taking (`isDraftModeEnabled`/
   `enableDraftMode`/`disableDraftMode`) over an **unsigned** httpOnly cookie `meru-draft-mode`
   (decided 2026-07-15: not load-bearing — the API's per-entity `canPreview`/`canUpdate`, checked
   with the viewer's token, is what actually gates content). Fresh module (root `lib/request/
-  draftMode.ts` is Next-only, dies in cleanup). `src/lib/request/previewToken.ts` returns the
+draftMode.ts` is Next-only, dies in cleanup). `src/lib/request/previewToken.ts` returns the
   locals token only when draft mode is on, else undefined (queries stay anonymous/cacheable).
 - `src/pages/preview/[entity]/[slug].ts` — deep-link endpoint: `!isAuthenticated` →
   `/unauthorized?reason=unauthenticated`; `fetchPreviewAccess` (`src/lib/preview/`, token from
   locals, reuses the registered `fetchPreviewAccessQuery`) → `?reason=forbidden`; else enable draft
-  + redirect to `LANDING`. Hardens the Next route, which had no gate.
+  - redirect to `LANDING`. Hardens the Next route, which had no gate.
 - Global toggle: `enterPreview`/`exitPreview` Astro actions set/clear the cookie; `AccountDropdown`
   `enterPreviewMode` → `actions.enterPreview()`; `DraftModeBannerIsland` (BaseLayout renders it
   whenever the cookie is set — self-read, so the banner shows on every page) → `actions.exitPreview()`.
@@ -153,6 +161,7 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   reaches the shells; each entity page fetches its primary query with `previewToken(Astro)`.
 
 ### 6. Client analytics stay anonymous — NO proxy (revised + DONE 2026-07-15)
+
 - **Decision reversed (2026-07-15):** the `/api/graphql` proxy was only ever justified by token
   injection. But neither remaining client query needs the token: `ViewCounter` must NOT fire in
   preview at all (an editor previewing shouldn't record a view), and `ArticleAnalyticsBlock` always
@@ -167,6 +176,7 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   names, no `getClientToken`, and no `Bearer`/`authorization` header path.
 
 ### 7. Convert search / browse / contributor to SSR-on-navigation — DONE (2026-07-16)
+
 - The pivot was one helper: `lib/routing/hooks.ts` `push`/`replace` had a same-pathname special case
   (pushState + custom event, no server render) so islands could re-query client-side. Removed — every
   push is now Astro `navigate()` (view-transition swap, server re-render). The `notifyLocationChange`
@@ -190,7 +200,9 @@ hand-rolled token cookies to inherit — next-auth managed its own; draft mode u
   of the deleted ones; no `next/navigation`/`NEXT_REDIRECT` anywhere in dist; `node_modules/next` gone.
 
 ### 8. Cleanup — mostly DONE (2026-07-15); `next` dep deferred to #7
+
 Done in two commits:
+
 - **Remove the Next application** — deleted `app/**` (layouts, loading, preview route, `api/auth`,
   `api/revalidate`), root `middleware.ts`/`next.config.js`/`next-env.d.ts`, `components/global/AppBody`,
   the Next `DraftModeBanner` (`.tsx`/`actions`/`index`; kept `.module.css`), and `lib/actions/*`.
@@ -198,7 +210,7 @@ Done in two commits:
 - **Sever `next-auth`** — the shared `GlobalStaticContext` fetchers blocked it (the barrel re-exported
   `getStaticGlobalContextData`, imported by ~23 Astro files; `getStaticGoogleScholarData`/
   `getStaticEntityData` export fragments Astro uses — all statically pulled `queryApi → initAuth →
-  next-auth`). Decoupled: dropped the barrel's fetcher re-export and stripped the Next-only fetch
+next-auth`). Decoupled: dropped the barrel's fetcher re-export and stripped the Next-only fetch
   functions (kept the fragment exports byte-identical for codegen). Then deleted the chain
   (`lib/api/queryApi.ts`, `lib/auth/{initAuth,keycloak,types}.ts`, root `lib/request/draftMode.ts`,
   `getStaticCommunityData`, `getStaticGlobalContextData`) and removed deps `next-auth`, `@auth/core`,

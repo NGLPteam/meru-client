@@ -9,8 +9,10 @@
 // component from here, never from "next/link" directly.
 import { forwardRef, type AnchorHTMLAttributes, type MouseEvent } from "react";
 
-export interface LinkProps
-  extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
+export interface LinkProps extends Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  "href"
+> {
   href?: string;
   replace?: boolean;
   scroll?: boolean;

@@ -13,7 +13,7 @@ migration:
 - `.astro` pages/layouts are the **fetch + route layer**: they run `queryApi` server-side (token
   from `Astro.locals`, per #7), assemble fragment refs, and compose the React tree.
 - React components are the **pure view layer**: they take fragment refs as props and unmask with
-  codegen's `useFragment` (a pure identity function that runs in server render *and* client
+  codegen's `useFragment` (a pure identity function that runs in server render _and_ client
   hydration). **They port unchanged.**
 
 **This is only possible because of the relay→urql work.** Verified: no `components/` file fetches
@@ -42,8 +42,8 @@ aren't actually interactive and can be server-rendered. Right-size per component
    `GlobalStaticContext`, `ThemeProvider`, `CommunityContext`) are consumed by island widgets
    (AccountDropdown, CommunityPicker, nav). Fix: the server already has this data
    (`locals` for viewer per #7; global/theme/community fetched in the layout), so **pass it as
-   props** to each island. Use a nanostore only for state that must be *shared and mutable across
-   islands* (likely little to none once viewer comes from the server).
+   props** to each island. Use a nanostore only for state that must be _shared and mutable across
+   islands_ (likely little to none once viewer comes from the server).
 2. **No partial hydration inside a server-rendered React tree** — you can't nest a `client:load`
    child inside a non-island React parent and hydrate just the child. If an interactive widget is
    deep in a static tree, either hoist it to compose at the `.astro` level, or make a larger
@@ -57,6 +57,7 @@ urql outcome), so they cross the island boundary fine.
 ## Phases
 
 ### Phase 0 — Scaffold + prove the stack end-to-end
+
 - New Astro 7 app: `output: 'server'`, `@astrojs/node` adapter, `@astrojs/react`. **Decide repo
   structure** (open decision below).
 - Wire the settled infra: `postcss.config.js` + `tailwind.config.js` as-is (#10); reuse the
@@ -68,6 +69,7 @@ urql outcome), so they cross the island boundary fine.
   fragment masking across the boundary + styling + adapter in one shot before porting anything real.
 
 ### Phase 1 — Root layout + global chrome
+
 - Port `app/[frontend]/layout.tsx` + `(pages)/layout.tsx` → Astro layout(s): `<html>`/`<head>`,
   theme classes + fonts (prep step 2), global CSS, metadata (render `<head>` from the neutral
   `PageMeta` builders — prep step 4).
@@ -78,6 +80,7 @@ urql outcome), so they cross the island boundary fine.
   cross-island contexts with props here first (this is where they concentrate).
 
 ### Phase 2 — Port the pages (the bulk)
+
 - Each Next page → `.astro`: frontmatter fetches via `queryApi` (token from `locals`), assembles
   fragment refs, renders the existing React tree (server-rendered) + islands for interactive leaves.
 - `notFound()` → `Astro.rewrite('/404')`; `redirect()` → `Astro.redirect()` (the `@/lib/routing`
@@ -87,12 +90,14 @@ urql outcome), so they cross the island boundary fine.
   → contributors. ~28 `queryApi`-calling pages/layouts to port; components reused unchanged.
 
 ### Phase 3 — Client → server query conversions (#7)
+
 - `SearchLayout`, `EntityOrderingLayout`, `ContributorDetail`: rework from client `useQuery` +
   `useState(vars)` + `router.push` to **server-rendered + URL-param navigation** — the `.astro`
   page reads params and fetches; controls become forms/links; smooth with Astro **View
   Transitions**. These are the only components whose internals change.
 
 ### Phase 4 — Interactive islands + client data (#7)
+
 - `ArticleAnalyticsBlock` + `ViewCounter`: keep as React islands; point their urql client at the
   relative `/api/graphql` proxy (anonymous pass-through; cookie token injected server-side for
   preview). Delete the client-token path (`/api/viewer` token, `clientToken`, `UrqlProvider`
@@ -101,6 +106,7 @@ urql outcome), so they cross the island boundary fine.
   forms, progress bar) marked `client:*` with props.
 
 ### Phase 4b — Runtime MDX rendering (its own workstream)
+
 **Pervasive and core:** most entity content (descriptions, RTE fields) arrives as **MDX strings in
 the API payload** and is rendered at runtime — not from `.mdx` files. `BlockSlotWrapper` /
 `InlineSlotWrapper` (`"use client"`) call `next-mdx-remote`'s `serialize` in a `useEffect` and
@@ -125,12 +131,14 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
   the MDX island's React tree.
 
 ### Phase 5 — Auth / preview / revalidation end-to-end (#7/#8/#9)
+
 - `/api/login` callback + `refresh`/`logout` actions + `attachUserAndSession` (#7); `/preview/
-  [entity]/[slug]` + `/permalink/[permalink]` routes (#9); `/api/revalidate` + per-route
+[entity]/[slug]` + `/permalink/[permalink]` routes (#9); `/api/revalidate` + per-route
   `cache.set({maxAge,swr,tags})` (#8). Validate sign-in, preview (draft content + analytics refetch
   via proxy), logout, and webhook invalidation against real pages.
 
 ### Phase 6 — Cutover + teardown
+
 - Delete Next: `app/`, `next.config.js`, Next `middleware.ts`, `next-auth`/`@auth/core`, the Redis
   cache handler + `@trieb.work/nextjs-turbo-redis-cache` + `redis`, and the whole `[frontend]`/
   `/dynamic` scaffolding.
@@ -144,6 +152,7 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
 - Final verification via the `verify` / `run` skills against the full flow list in each design doc.
 
 ### Deferred (explicitly out of scope)
+
 - Island-granularity optimization (carve static regions out of coarse islands to cut JS/hydration
   payload).
 - Tailwind 3 → 4 (`astro-styling-plan.md`).
@@ -158,10 +167,10 @@ render `<MDXRemote components={...}>` with a rich custom component map (~15 comp
   down as fragment-ref props. Already the shape after relay→urql, so little hoisting needed.
 - **Astro inverts the layout/page data flow — this deletes `SetCommunityContext`.** In Next the
   layout renders the page (`children` is opaque), so the item page — which fetches the item and thus
-  discovers its community — must push that community *back up* to the already-rendered global header
+  discovers its community — must push that community _back up_ to the already-rendered global header
   via a `"use client"` context setter (`SetCommunityContext` + `useState`). In Astro the **page
   renders the layout**: `item.astro` fetches the item first, then `<BaseLayout community={item.community}>`
-  passes it *in* as a prop → header island. No setter, no cross-island state. `SetCommunityContext`
+  passes it _in_ as a prop → header island. No setter, no cross-island state. `SetCommunityContext`
   and `CommunityContext` both delete; the layout takes an optional `community` prop (item/collection
   pages derive it from the entity, community pages from the slug, home/search pass none). With View
   Transitions, let the header island re-render per navigation (not `transition:persist`) so the new

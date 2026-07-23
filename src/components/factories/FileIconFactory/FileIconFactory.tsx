@@ -16,8 +16,10 @@ export default function FileIconFactory({ kind, ...props }: Props) {
   }
 }
 
-interface Props
-  extends Omit<React.HTMLProps<SVGSVGElement>, "size" | "children"> {
+interface Props extends Omit<
+  React.HTMLProps<SVGSVGElement>,
+  "size" | "children"
+> {
   kind?: string;
   crossOrigin?: "" | "anonymous" | "use-credentials" | undefined;
 }

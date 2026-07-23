@@ -6,7 +6,7 @@ Companion to `docs/astro-migration-prep.md` (step 7). **Decisions below are sett
 ## Decision summary
 
 - **Drop `next-auth` / `@auth/core` entirely.** Port the hand-rolled Keycloak OIDC pattern from
-  the Astro reference app `../hcc-client` (which uses the *same* Keycloak backend, no Auth.js —
+  the Astro reference app `../hcc-client` (which uses the _same_ Keycloak backend, no Auth.js —
   only `jwt-decode`).
 - **The access token never reaches the browser.** It lives only in an httpOnly cookie and, per
   request, in `Astro.locals`. This replaces today's model, where `/api/viewer` ships the raw
@@ -32,7 +32,7 @@ Companion to `docs/astro-migration-prep.md` (step 7). **Decisions below are sett
   prefetch calls `queryApi` with no `authAware` flag. So neither needs a token for public content —
   the token can leave the browser.
 - **The one exception is preview mode.** `queryApi` attaches a token whenever draft mode is on
-  (`needsToken = isPreview || authAware`), so a *draft* item's metrics get an authed prefetch. An
+  (`needsToken = isPreview || authAware`), so a _draft_ item's metrics get an authed prefetch. An
   editor changing the analytics date range in preview triggers a client refetch that needs the
   token — which the browser won't have. The `/api/graphql` proxy resolves this by injecting the
   cookie token server-side.
@@ -60,16 +60,16 @@ Six pieces (`../hcc-client`):
 
 ## Current Meru auth → reuse vs. drop
 
-| Current (Next) | Fate |
-| --- | --- |
-| `lib/auth/keycloak.ts` — issuer/token/logout URLs, `refreshAccessToken`, refresh-body builder | **Reuse** (near line-for-line what hcc-client's refresh/logout actions do; adapt to set cookies instead of returning a JWT) |
-| `lib/auth/initAuth.ts` — `NextAuth(config)`, `jwt`/`session`/`redirect` callbacks, encrypted-JWT session | **Delete** — replaced by cookie set/read + `attachUserAndSession` middleware |
-| `app/api/auth/[...nextauth]/route.ts` — next-auth handlers | **Delete** — replaced by `/api/login` callback route |
-| `auth()` server session reads (`queryApi`, `app/api/viewer/route.ts`, `AccountDropdown/actions.ts`) | **Repoint** to `Astro.locals.session` (queryApi already has the `token` option seam from prep step 5) |
-| `app/api/viewer/route.ts` — returns viewer data **plus** raw `accessToken` | **Change** — resolve the viewer from `locals` (server); return viewer data **without** the token (or drop the endpoint and pass viewer via props/locals) |
-| `contexts/ViewerContext` + `lib/api/clientToken.ts` + `UrqlProvider` Bearer | **Delete the client-token path** — `UrqlProvider` points at `/api/graphql`; viewer state comes from server-provided data |
-| `AccountDropdown/actions.ts` `signIn`/`signOut` (server actions) | **Reimplement** as Astro: sign-in = redirect to Keycloak `/auth`; sign-out = logout action (Keycloak back-channel + cookie delete) |
-| `next-auth`, `@auth/core` deps | **Remove** (add `jwt-decode`) |
+| Current (Next)                                                                                           | Fate                                                                                                                                                     |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/auth/keycloak.ts` — issuer/token/logout URLs, `refreshAccessToken`, refresh-body builder            | **Reuse** (near line-for-line what hcc-client's refresh/logout actions do; adapt to set cookies instead of returning a JWT)                              |
+| `lib/auth/initAuth.ts` — `NextAuth(config)`, `jwt`/`session`/`redirect` callbacks, encrypted-JWT session | **Delete** — replaced by cookie set/read + `attachUserAndSession` middleware                                                                             |
+| `app/api/auth/[...nextauth]/route.ts` — next-auth handlers                                               | **Delete** — replaced by `/api/login` callback route                                                                                                     |
+| `auth()` server session reads (`queryApi`, `app/api/viewer/route.ts`, `AccountDropdown/actions.ts`)      | **Repoint** to `Astro.locals.session` (queryApi already has the `token` option seam from prep step 5)                                                    |
+| `app/api/viewer/route.ts` — returns viewer data **plus** raw `accessToken`                               | **Change** — resolve the viewer from `locals` (server); return viewer data **without** the token (or drop the endpoint and pass viewer via props/locals) |
+| `contexts/ViewerContext` + `lib/api/clientToken.ts` + `UrqlProvider` Bearer                              | **Delete the client-token path** — `UrqlProvider` points at `/api/graphql`; viewer state comes from server-provided data                                 |
+| `AccountDropdown/actions.ts` `signIn`/`signOut` (server actions)                                         | **Reimplement** as Astro: sign-in = redirect to Keycloak `/auth`; sign-out = logout action (Keycloak back-channel + cookie delete)                       |
+| `next-auth`, `@auth/core` deps                                                                           | **Remove** (add `jwt-decode`)                                                                                                                            |
 
 ## Client-query migration
 

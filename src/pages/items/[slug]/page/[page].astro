@@ -16,7 +16,11 @@ import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 const { slug, page: pageSlug } = Astro.params;
 if (!slug || !pageSlug) return Astro.rewrite("/404");
 
-const { data } = await query(itemPageQuery, { slug, pageSlug }, previewToken(Astro));
+const { data } = await query(
+  itemPageQuery,
+  { slug, pageSlug },
+  previewToken(Astro),
+);
 const item = data?.item;
 if (!item) return Astro.rewrite("/404");
 
@@ -33,7 +37,11 @@ const route = {
 cacheEntity(Astro, "item", slug);
 ---
 
-<BaseLayout meta={meta} community={item.community} routeParams={{ slug, page: pageSlug }}>
+<BaseLayout
+  meta={meta}
+  community={item.community}
+  routeParams={{ slug, page: pageSlug }}
+>
   <GoogleScholarMetaTags slot="head" entity={scholar} />
   <ItemPage
     client:load

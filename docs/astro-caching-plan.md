@@ -36,15 +36,15 @@ simplicity — no custom provider, no Redis dependency for caching. The Redis ca
 
 ## Meru today → Astro target
 
-| Current (Next) | Astro target |
-| --- | --- |
-| Next route/data cache in Redis (`customized-cache-handler.cjs`, `@trieb.work/nextjs-turbo-redis-cache`, `defaultStaleAge 3600`) | `cache: { provider: memoryCache(...) }` in `astro.config.ts` |
-| `export const revalidate = 3600` on root layouts | per-route `Astro.cache.set({ maxAge, swr, tags })` |
+| Current (Next)                                                                                                                                                     | Astro target                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Next route/data cache in Redis (`customized-cache-handler.cjs`, `@trieb.work/nextjs-turbo-redis-cache`, `defaultStaleAge 3600`)                                    | `cache: { provider: memoryCache(...) }` in `astro.config.ts`                                                                  |
+| `export const revalidate = 3600` on root layouts                                                                                                                   | per-route `Astro.cache.set({ maxAge, swr, tags })`                                                                            |
 | `/api/revalidate/entity` — maps entity → routes+subroutes via `baseRoutes`, `revalidatePath` across `/dynamic`, `/dynamic/(pages)`, `/[frontend]/(pages)` variants | `/api/revalidate` — `cache.invalidate({ path, tags })`; **the path-variant hack disappears** (no middleware rewrite in Astro) |
-| `/api/revalidate/instance` — `revalidatePath("/", "layout")` (purge all) | same endpoint, `cache.invalidate({ tags: ["global"] })` |
-| `no-store` CDN/browser headers | unchanged (keep server-side-only caching) |
-| draft/preview bypass (dynamic) | don't `cache.set` when authed/preview (`Astro.cache.enabled` guard) |
-| urql `requestPolicyExchange` dev cache-first optimization | `Astro.cache.enabled ? networkOnly : cacheFirst` (already in `lib/api/makeUrqlClient.ts`) |
+| `/api/revalidate/instance` — `revalidatePath("/", "layout")` (purge all)                                                                                           | same endpoint, `cache.invalidate({ tags: ["global"] })`                                                                       |
+| `no-store` CDN/browser headers                                                                                                                                     | unchanged (keep server-side-only caching)                                                                                     |
+| draft/preview bypass (dynamic)                                                                                                                                     | don't `cache.set` when authed/preview (`Astro.cache.enabled` guard)                                                           |
+| urql `requestPolicyExchange` dev cache-first optimization                                                                                                          | `Astro.cache.enabled ? networkOnly : cacheFirst` (already in `lib/api/makeUrqlClient.ts`)                                     |
 
 ## Tagging scheme
 
@@ -63,7 +63,10 @@ Every cacheable page carries:
 export const REVALIDATE = import.meta.env.REVALIDATE
   ? parseInt(import.meta.env.REVALIDATE)
   : 3600; // keep Meru's current 1h stale age; env-overridable
-export const DEFAULT_CACHE_CONFIG: CacheOptions = { maxAge: REVALIDATE, swr: 60 };
+export const DEFAULT_CACHE_CONFIG: CacheOptions = {
+  maxAge: REVALIDATE,
+  swr: 60,
+};
 ```
 
 ## The `/api/revalidate` endpoint
@@ -73,8 +76,10 @@ Signature-gated on `REVALIDATE_SECRET` (unchanged env). Payload keeps the curren
 
 ```ts
 export async function POST(context: APIContext) {
-  if (!context.cache.enabled) return json({ message: "Astro cache not enabled." }, 500);
-  if (!REVALIDATE_SECRET)   return json({ message: "Missing REVALIDATE_SECRET." }, 500);
+  if (!context.cache.enabled)
+    return json({ message: "Astro cache not enabled." }, 500);
+  if (!REVALIDATE_SECRET)
+    return json({ message: "Missing REVALIDATE_SECRET." }, 500);
   // verify Bearer/secret (same check as today) ...
 
   const { slug, type, scope } = await context.request.json();
@@ -86,7 +91,7 @@ export async function POST(context: APIContext) {
   }
 
   // entity change → invalidate the entity path + its tag (covers subpages)
-  const path = entityPathFor(type, slug);          // /items/<slug>, /collections/<slug>, ...
+  const path = entityPathFor(type, slug); // /items/<slug>, /collections/<slug>, ...
   const tags = [`${type}:${slug}`];
   await context.cache.invalidate({ path, tags });
   return Response.json({ revalidated: true, path, tags });
@@ -94,6 +99,7 @@ export async function POST(context: APIContext) {
 ```
 
 Notes:
+
 - `entityPathFor` replaces the `baseRoutes` route+subroute enumeration; because subpages share the
   parent's `${type}:${slug}` tag, one `invalidate` call clears the entity landing page and all its
   subpages. Search/browse routes were already excluded from entity revalidation today and stay
@@ -124,10 +130,10 @@ Two things the plan didn't anticipate, found during implementation (2026-07-20) 
 verified against the standalone prod server:
 
 1. **A thin custom provider was required after all** (`src/lib/caching/draftAwareProvider.ts`).
-   The plan's "don't `cache.set` when authed/preview" prevents *storing* a draft
+   The plan's "don't `cache.set` when authed/preview" prevents _storing_ a draft
    response, but Meru's draft mode is a **cookie on the same url** as public content
    (hcc's preview used distinct url params). Astro's `memoryCache` keys purely on url
-   and strips `Cookie` from `Vary`, so a draft request would be *served* a cached
+   and strips `Cookie` from `Vary`, so a draft request would be _served_ a cached
    anonymous page. The wrapper bypasses the cache in `onRequest` (before the lookup)
    when the `meru-draft-mode` cookie is present — no lookup, no store. It's referenced
    by `cache.provider.entrypoint` in `astro.config.mjs` and delegates to `astro/cache/memory`.
@@ -137,7 +143,7 @@ verified against the standalone prod server:
    content-type. The entity webhook sends JSON so it passes; the deploy must confirm the
    instance (purge-all) call sends `Content-Type: application/json` too (empty body is
    fine). See `src/pages/api/revalidate/instance.ts`. Fallback if it can't: `checkOrigin:false`
-   + reimplement the ~10-line origin check in middleware, exempting `/api/revalidate/*`.
+   - reimplement the ~10-line origin check in middleware, exempting `/api/revalidate/*`.
 
 Unrelated blocker also surfaced: the standalone prod node server doesn't boot without
 `vite.ssr.noExternal` for the reakit family (bare dir imports) — needs its own fix

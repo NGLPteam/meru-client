@@ -73,10 +73,12 @@ const showNav = !isCommunityRoot && !hideSearch;
           />
         )
       }
-      {/* Persist the resolved account island across soft navigations so authed
+      {
+        /* Persist the resolved account island across soft navigations so authed
           users don't see the sign-in fallback re-flash on every page change
           (identity is session-stable; sign-in/out hard-reload). The rest of the
-          header re-renders per nav for route-based gating. */}
+          header re-renders per nav for route-based gating. */
+      }
       <AccountNav
         server:defer
         transition:persist="account-nav"

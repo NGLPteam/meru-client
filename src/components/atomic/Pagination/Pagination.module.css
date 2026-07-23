@@ -38,7 +38,8 @@
   &:focus-within,
   &:focus-visible {
     background: var(--Button-focus-color);
-    box-shadow: 0px 0px 0px 1px var(--border-color-focus),
+    box-shadow:
+      0px 0px 0px 1px var(--border-color-focus),
       theme("boxShadow.focusGlow");
     outline: none;
   }
@@ -59,7 +60,8 @@
 
   &:focus-visible,
   &:focus-within {
-    box-shadow: 0px 0px 0px 1px var(--border-color-focus),
+    box-shadow:
+      0px 0px 0px 1px var(--border-color-focus),
       theme("boxShadow.focusGlow");
   }
 }

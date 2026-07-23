@@ -42,7 +42,11 @@ wrappers are `display:contents` (Astro default), so the flex layout is unaffecte
 The account slot is:
 
 ```astro
-<AccountNav server:defer transition:persist="account-nav" condensed={!isCommunityRoot}>
+<AccountNav
+  server:defer
+  transition:persist="account-nav"
+  condensed={!isCommunityRoot}
+>
   <AccountDropdownIsland slot="fallback" condensed={!isCommunityRoot} />
 </AccountNav>
 ```
@@ -91,12 +95,12 @@ calling `getViewer`). Consequences:
 ## Key files
 
 - Header: `src/components/global/AppHeader/{AppHeader.astro, HeaderBrandIsland.tsx,
-  HeaderNavIsland.tsx, HeaderMobileMenu.astro, HeaderMobileParts.tsx, HeaderPrintName.tsx,
-  graphql.ts}`
+HeaderNavIsland.tsx, HeaderMobileMenu.astro, HeaderMobileParts.tsx, HeaderPrintName.tsx,
+graphql.ts}`
 - Footer: `src/components/global/AppFooter/{AppFooter.astro, FooterBodyIsland.tsx,
-  FooterNav.astro, FooterNavIsland.tsx, FooterNavContent.tsx, graphql.ts}`
+FooterNav.astro, FooterNavIsland.tsx, FooterNavContent.tsx, graphql.ts}`
 - Account island: `src/components/chrome/AccountNav/{AccountNav.astro,
-  AccountDropdownIsland.tsx, AccountProviders.tsx}`
+AccountDropdownIsland.tsx, AccountProviders.tsx}`
 - Providers: `src/components/chrome/ChromeLeafProviders.tsx` (new, viewer-free),
   `src/components/chrome/ChromeProviders.tsx` (now isPreview-only),
   `src/components/chrome/MobileMenuManager.astro`
@@ -119,7 +123,7 @@ calling `getViewer`). Consequences:
    backdrop, close button); shared `BaseDrawer`/`SearchLayout` still work.
 5. Footer admin link only when `canAccessAdmin`, sign-in only when anonymous.
 6. Content islands: entity-page cached HTML has no viewer in island props; preview gate
-   + `ViewCounter` pause still behave via `draftModeEnabled`.
+   - `ViewCounter` pause still behave via `draftModeEnabled`.
 7. View transitions: header persists the account island (no flash), rest re-renders;
    community context updates per nav.
 8. Draft mode still bypasses the cache; account island reflects `isPreview`.

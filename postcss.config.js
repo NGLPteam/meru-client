@@ -17,7 +17,7 @@ module.exports = {
           max,
           min,
           maxBreak,
-          minBreak
+          minBreak,
         ) {
           const scale = fluidScaleRemBase(max, min, maxBreak, minBreak);
           return { [property]: scale };

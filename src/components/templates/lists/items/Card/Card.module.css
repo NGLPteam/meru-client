@@ -159,7 +159,9 @@
     a:hover &,
     a:focus-visible & {
       transform: scale(101%);
-      transition: transform 170ms ease-in, filter 170ms ease-in;
+      transition:
+        transform 170ms ease-in,
+        filter 170ms ease-in;
       filter: drop-shadow(1px 0px var(--border-color))
         drop-shadow(0px 1px var(--border-color))
         drop-shadow(0px -1px var(--border-color))

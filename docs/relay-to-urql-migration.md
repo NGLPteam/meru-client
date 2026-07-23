@@ -9,9 +9,10 @@ behavioral and tooling issues that are now fixed — see **Post-migration fixes*
 Not yet merged (pending review).
 
 DONE (committed on branch `migrate-relay-to-urql`):
+
 - Batch 0 scaffold: `lib/api/` (makeUrqlClient, measureQuery, client, queryApi, clientToken,
   UrqlProvider) + `codegen.client.ts` client-preset.
-- All ~158 `graphql` tag files converted `` graphql`` `` → `graphql()`, imports → `@/lib/api/gql`,
+- All ~158 `graphql` tag files converted ` graphql` `` → `graphql()`, imports → `@/lib/api/gql`,
   `$key` → `FragmentType<typeof X>`, `$data` → `DocumentType<typeof X>`, `@inline`/`readInlineData`
   → `useFragment` (aliased `readFragment` in plain helpers), `@arguments`/`@argumentDefinitions`
   removed.
@@ -23,6 +24,7 @@ DONE (committed on branch `migrate-relay-to-urql`):
 - **codegen validates all GraphQL documents over the whole repo (glob widened).**
 
 ALSO DONE:
+
 - Type-only `@/relay/` importers repointed to codegen `FragmentType`/`DocumentType`
   (shared fragment consts exported from their defining files).
 - AppBody/AppHeader/AppFooter/BrowseListLayout converted (own fragment + sibling refs).
@@ -38,6 +40,7 @@ ALSO DONE:
 - **`yarn graphql` clean; `tsc --noEmit` clean (0 errors).** `next build` = final gate.
 
 REMAINING (historical checklist — now completed above; final verification pending):
+
 1. **Type-only `@/relay/` importers (~24 files)** — files with NO graphql tag that import a
    sibling fragment's `$key`/`$data`/query `$data` type. Fix: `export` the referenced fragment
    const from its defining file (rename to a descriptive exported name, fix internal refs),
@@ -47,11 +50,11 @@ REMAINING (historical checklist — now completed above; final verification pend
    `getStaticGoogleScholarDataFragment`→GoogleScholarMetaTags; `SearchModalFragment`→SearchModalContent;
    `CoverImageFragment`→lists.types.ts; `sharedListItemTemplateFragment`→lists/List/List.tsx;
    `getStaticGlobalContextDataQuery`+`getStaticEntityDataFragment`→GlobalStaticContext.tsx;
-   `sharedListTemplateFragment`(already exported as `listTemplateFragment`)→lists/blocks/*,items/*.
+   `sharedListTemplateFragment`(already exported as `listTemplateFragment`)→lists/blocks/_,items/_.
 2. **4 files skipped by agents (cross-file $key):** AppBody, AppHeader, AppFooter,
    BrowseListLayout — convert own fragment tag + own `$key`, and repoint the sibling-prop
-   `$key` (`SearchButtonFragment`, `CommunityPickerCommunityNameFragment`, `BackButtonFragment`)
-   to `FragmentType<typeof exportedSibling>`.
+`$key` (`SearchButtonFragment`, `CommunityPickerCommunityNameFragment`, `BackButtonFragment`)
+to `FragmentType<typeof exportedSibling>`.
 3. **Auth/misc repoints:** `contexts/ViewerContext/fetchViewer.ts` (imports `@/lib/relay/apiHeaders`
    → use `getAPIURL` from `lib/api/client` + build headers locally); `types/graphql-helpers.d.ts`
    (imports `relay-runtime`).
@@ -74,12 +77,12 @@ future work.
 
 ### Runtime correctness
 
-- **Force POST — `preferGetMethod: false` in `makeUrqlClient`.** urql defaults *queries* to
+- **Force POST — `preferGetMethod: false` in `makeUrqlClient`.** urql defaults _queries_ to
   GET; the Meru API only accepts POST and returns 404, which surfaced as
   `Network Error halted: Not Found` on the very first query (`layoutThemeQuery`). Relay always
   POSTed. This affects every operation (server clients + the client Provider).
 - **Search — show the loading spinner immediately (`SearchLayout`).** The query was driven off
-  `useSearchParams`, which only updates *after* `router.push` completes an RSC navigation (a
+  `useSearchParams`, which only updates _after_ `router.push` completes an RSC navigation (a
   full round-trip under the `/dynamic` rewrite), so the spinner lagged the submit. Fix: hold
   the query variables in local `useState`, updated synchronously on submit/filter; a
   `useEffect` resyncs from the URL for back/forward; `router.push` runs in parallel — restoring
@@ -91,10 +94,10 @@ future work.
   `dateRange: {}`, so every range selection ("Last Year", etc.) returned all-time counts. The
   settings reducer computes `settings.dateRange = { startDate }` for week/month/year; fixed by
   passing `settings.dateRange ?? {}`.
-  - **Regression class to watch:** a query variable that *should* be dynamic getting
+  - **Regression class to watch:** a query variable that _should_ be dynamic getting
     hardcoded/dropped during the refetchable → `useQuery` conversion (or `@arguments` removal).
     All 4 interactive components + every server `queryApi` call site were audited against their
-    declared variables — this was the only one wrong. (The metrics *page* intentionally passes
+    declared variables — this was the only one wrong. (The metrics _page_ intentionally passes
     hardcoded analytics vars for its SSR fetch, which the client block immediately re-fetches
     with real settings, so it's harmless.)
 
@@ -150,6 +153,7 @@ hydration is needed. A small urql React `Provider` is added only for the handful
 client-initiated queries.
 
 **Decisions confirmed with the user:**
+
 - Keep fragment masking via graphql-codegen client-preset (lowest churn — 97 `useFragment`
   sites stay structurally identical).
 - The 5 client-initiated queries (4 `useRefetchableFragment` + 1 `useQueryLoader`) become
@@ -172,6 +176,7 @@ client-initiated queries.
 ## Target architecture
 
 New `lib/api/` mirroring `hcc-client/src/lib/api/`:
+
 - **`lib/api/makeUrqlClient.ts`** — `createClient` over `@urql/core` with
   `cacheExchange` + `fetchExchange` (skip `requestPolicyExchange` unless we want client-side
   cache-first; not needed for server fetches). Accepts `url`, `requestPolicy`, `fetchOptions`.
@@ -194,6 +199,7 @@ New `lib/api/` mirroring `hcc-client/src/lib/api/`:
   sessionStorage mirror). Only needed for the client-query subtree.
 
 `codegen.ts` (client-preset), replacing/extending the current schema-only codegen:
+
 ```ts
 {
   schema: "./schema.graphql",              // reuse existing local SDL; or NEXT_PUBLIC_API_URL
@@ -205,25 +211,34 @@ New `lib/api/` mirroring `hcc-client/src/lib/api/`:
 ## Migration pattern (applied per file)
 
 **Queries in server components** (`page.tsx` / `layout.tsx`, ~34 `fetchQuery` callers):
+
 ```tsx
 // before
 import { graphql } from "relay-runtime";
 import fetchQuery from "@/lib/relay/fetchQuery";
 import { pageCollectionTemplateQuery as Query } from "@/relay/pageCollectionTemplateQuery.graphql";
-const { data, records, sessionToken } = await fetchQuery<Query>(query, { slug });
-return <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
-         <MainLayout data={main} /></UpdateClientEnvironment>;
+const { data, records, sessionToken } = await fetchQuery<Query>(query, {
+  slug,
+});
+return (
+  <UpdateClientEnvironment records={records} sessionToken={sessionToken}>
+    <MainLayout data={main} />
+  </UpdateClientEnvironment>
+);
 const query = graphql`query pageCollectionTemplateQuery($slug: Slug!) { ... }`;
 
 // after
 import { graphql } from "@/lib/api/gql";
 import queryApi from "@/lib/api/queryApi";
 const { data } = await queryApi(query, { slug });
-return <MainLayout data={main} />;   // UpdateClientEnvironment wrapper removed
-const query = graphql(`query pageCollectionTemplateQuery($slug: Slug!) { ... }`);
+return <MainLayout data={main} />; // UpdateClientEnvironment wrapper removed
+const query = graphql(
+  `query pageCollectionTemplateQuery($slug: Slug!) { ... }`,
+);
 ```
 
 **Fragment consumers** (97 files — the bulk, mechanical):
+
 ```tsx
 // before
 import { graphql, useFragment } from "react-relay";
@@ -238,6 +253,7 @@ const page = useFragment(fragment, data);
 data?: FragmentType<typeof fragment> | null;
 const fragment = graphql(`fragment EntityPageLayoutFragment on Page { ... }`);
 ```
+
 Notes: codegen's `useFragment(doc, ref)` has the same shape as react-relay's, and is a pure
 function — `"use client"` components keep working, now receiving real serializable data
 objects as props instead of opaque store refs. Type imports move from `@/relay/*` to
@@ -245,6 +261,7 @@ objects as props instead of opaque store refs. Type imports move from `@/relay/*
 true under Relay), so the existing prop threading is unchanged.
 
 **Client-initiated queries** (5 files): wrap the relevant subtree in `UrqlProvider`, then:
+
 - 4 `useRefetchableFragment` (`SearchLayout`, `EntityOrderingLayout`, `ContributorDetail`,
   `ArticleAnalyticsBlock`) → `useQuery` from `urql` with variables held in `useState`;
   changing vars (page/order/query) re-runs the query. The `@refetchable`/`@argumentDefinitions`
@@ -258,12 +275,12 @@ true under Relay), so the existing prop threading is unchanged.
 
 ## Relay directive & API handling
 
-Beyond the mechanical `` graphql`` `` → `graphql()` + import/type swaps, these Relay-only
+Beyond the mechanical ` graphql` `` → `graphql()` + import/type swaps, these Relay-only
 constructs need real conversion (surveyed counts in parens):
 
 - **`@inline` + `readInlineData` (13 files)** — Relay's way to read masked fragment data
   outside React (helpers, context builders, sitemap/metadata). codegen's `useFragment` is a
-  *pure identity function at runtime* (masking is TS-only), so it works fine in plain
+  _pure identity function at runtime_ (masking is TS-only), so it works fine in plain
   functions: `readInlineData(FooFragment, ref)` → `useFragment(FooFragment, ref)` from
   `@/lib/api/gql`, and drop the `@inline` directive. Files:
   `contexts/GlobalStaticContext/getStatic*.ts`, `helpers/getThumbWithFallback.ts`,
@@ -309,6 +326,7 @@ everything downstream. (atomic components, `helpers/*`, `contexts/GlobalStaticCo
 `useQuery`.
 
 **Batch 4 — Auth simplification + Relay machinery removal.**
+
 - Delete `lib/auth/token.ts` (sessionStorage mirror) and all `setToken`/`getToken`/
   `removeToken` uses (`ViewerContext.tsx`, `AccountDropdown.tsx handleSignOut`, Relay env).
 - `ViewerContext` stores `accessToken` in context state (consumed by `UrqlProvider`'s
@@ -328,7 +346,8 @@ repo; regenerate. Delete `__generated__/`, `relay.config.js`, the `relay` block 
 `relay-runtime`, `relay-compiler`, `@types/react-relay`, `@types/relay-runtime`,
 `eslint-plugin-relay`) and the `relay` script. Repoint `@/types/graphql-schema` imports
 (e.g. `EntityOrder`) at `lib/api/gql` where possible. **First full green `next build` + `tsc`
-+ lint here.**
+
+- lint here.**
 
 ## Critical files
 

@@ -68,7 +68,7 @@ something to unwind.
 ## Dead code to drop (verify first)
 
 - **`styled-components` layer + `next.config.js` `compiler.styledComponents: true`** — `styled-
-  components` is not a dependency, so this is almost certainly vestigial. Confirm nothing renders
+components` is not a dependency, so this is almost certainly vestigial. Confirm nothing renders
   styled-components, then drop the layer from the `@layer` order and the compiler flag (the flag
   goes with `next.config.js`).
 - **`@csstools/postcss-oklab-function`** — no authored `oklab`/`oklch` in `styles/`. Confirm it
