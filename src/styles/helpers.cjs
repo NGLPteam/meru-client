@@ -1,6 +1,4 @@
 const {
-  stripUnit,
-  pxToRem,
   fluidScalePxBase,
   fluidScaleRemBase,
 } = require("@castiron/style-mixins");
@@ -18,7 +16,7 @@ function fluidScaleRem(
   maxPx,
   minPx,
   maxVwRem = "87.5rem",
-  minVwRem = "23.4375rem"
+  minVwRem = "23.4375rem",
 ) {
   return fluidScaleRemBase(maxPx, minPx, maxVwRem, minVwRem, pxPerRem);
 }

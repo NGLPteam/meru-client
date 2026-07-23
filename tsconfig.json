@@ -15,6 +15,10 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
+    // TS 6 deprecates baseUrl (removed in TS 7). Kept for now to preserve exact
+    // module-resolution semantics for the @/ and ~/ aliases (and Astro/vite
+    // alias resolution); revisit when the TS 7 upgrade is tackled.
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": ["./src/*"],
       "~/*": ["./src/*"]

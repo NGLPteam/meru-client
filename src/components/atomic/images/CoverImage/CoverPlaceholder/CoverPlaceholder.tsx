@@ -86,6 +86,9 @@ export default function CoverPlaceholder({
   if (titleHeight < gridSize) titleHeight = gridSize;
   const titlePositionY = titlePositionTop ? 0 : height - titleHeight;
 
+  /* eslint-disable prefer-const -- these shape nodes reference one another, so
+     they need split declaration + assignment; no const ordering satisfies the
+     mutual references. */
   let nw, ne, se, sw, circle, halfCircle;
 
   nw = {
@@ -149,6 +152,7 @@ export default function CoverPlaceholder({
       w: null,
     },
   };
+  /* eslint-enable prefer-const */
 
   const nextShape = mkNextElement([nw, ne, se, sw, circle, halfCircle]);
   const nextStart = mkNextElement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
