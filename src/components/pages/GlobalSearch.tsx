@@ -14,11 +14,7 @@ type Props = {
   route?: React.ComponentProps<typeof AppProviders>["route"];
 };
 
-export default function GlobalSearch({
-  data,
-  globalData,
-  route,
-}: Props) {
+export default function GlobalSearch({ data, globalData, route }: Props) {
   return (
     <AppProviders globalData={globalData} route={route}>
       <SearchLayout data={data} />

@@ -24,11 +24,7 @@ export default function ContributorPage({
   route,
 }: Props) {
   return (
-    <AppProviders
-      community={community}
-      globalData={globalData}
-      route={route}
-    >
+    <AppProviders community={community} globalData={globalData} route={route}>
       {navData && <ContributorDetailNav data={navData} />}
       <ContributorDetail data={contributor} />
     </AppProviders>

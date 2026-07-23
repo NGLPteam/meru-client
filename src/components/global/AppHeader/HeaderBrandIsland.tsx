@@ -28,8 +28,7 @@ export default function HeaderBrandIsland({
   route,
 }: Props) {
   const appData = useFragment(AppHeaderFragment, data);
-  const withText =
-    appData?.globalConfiguration?.site?.logoMode === "WITH_TEXT";
+  const withText = appData?.globalConfiguration?.site?.logoMode === "WITH_TEXT";
 
   return (
     <ChromeLeafProviders

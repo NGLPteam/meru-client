@@ -33,7 +33,10 @@ interface Props {
   route?: LeafProviderProps["route"];
 }
 
-function FooterBody({ data, communityData }: Pick<Props, "data" | "communityData">) {
+function FooterBody({
+  data,
+  communityData,
+}: Pick<Props, "data" | "communityData">) {
   const staticData = useGlobalStaticContext();
   const community = useContext(CommunityContext);
   const footer = staticData?.globalConfiguration?.site?.footer;
@@ -47,7 +50,10 @@ function FooterBody({ data, communityData }: Pick<Props, "data" | "communityData
           <CommunityName />
         ) : (
           <h4>
-            <InstallationName className="t-h4" data={app?.globalConfiguration} />
+            <InstallationName
+              className="t-h4"
+              data={app?.globalConfiguration}
+            />
           </h4>
         )}
       </div>
