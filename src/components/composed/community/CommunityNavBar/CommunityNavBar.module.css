@@ -19,7 +19,10 @@
   display: flex;
   align-items: center;
 
-  > * + * {
-    margin-inline-start: 2.25rem;
-  }
+  /* gap, not `> * + *`: the search modal's <dialog> is a DOM child of .right, and
+     a sibling-margin selector would put margin-inline-start on it, breaking its
+     centered `margin-inline: auto` once it opens. A closed dialog is display:none
+     and an open modal is in the top layer, so neither is a flex item — gap never
+     touches it. */
+  gap: 2.25rem;
 }
