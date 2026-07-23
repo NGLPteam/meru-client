@@ -1,8 +1,8 @@
 ---
-// Header mobile menu as a native <dialog> (replaces the reakit BaseDrawer for the
-// header only — the shared BaseDrawer is untouched for SearchLayout). Authoring it
-// in Astro lets the per-viewer account nav be a real `server:defer` island placed
-// as a sibling in the dialog body, rather than baked into a client-only React tree.
+// Header mobile menu as a native <dialog> (the reakit BaseDrawer it replaced is
+// gone — reakit is React-19-incompatible). Authoring it in Astro lets the
+// per-viewer account nav be a real `server:defer` island placed as a sibling in
+// the dialog body, rather than baked into a client-only React tree.
 // MobileMenuManager (framework-free custom element) wires the toggle + close.
 import MobileMenuToggle from "@/components/layout/MobileMenuToggle";
 import { CloseModalButton } from "@/components/atomic";

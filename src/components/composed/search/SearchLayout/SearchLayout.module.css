@@ -35,3 +35,45 @@
   min-inline-size: 60%;
   max-width: 823px;
 }
+
+/* Mobile filters drawer — native <dialog> opened via showModal (top layer, so no
+   z-index), ported from the former BaseDrawer look: full-viewport panel anchored
+   to the inline-end edge. */
+.drawer {
+  inline-size: 100vw;
+  max-inline-size: 100vw;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: none;
+  overflow-y: auto;
+
+  @mixin a-bg-custom20;
+}
+
+.drawer::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+.drawerInner {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+}
+
+.drawerHeader {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 100px;
+  padding-inline-start: var(--container-v-padding-sm);
+  padding-inline-end: var(--container-v-padding-sm);
+}
+
+.drawerContent {
+  flex: 1 1 auto;
+  padding-inline-start: var(--container-v-padding-sm);
+  padding-inline-end: var(--container-v-padding-sm);
+  padding-block-end: var(--container-v-padding-sm);
+}

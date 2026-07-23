@@ -5,13 +5,12 @@
 // into the query variables and fetches server-side; every interaction here
 // (submit, filter, order, pagination) is a router.push that re-renders the
 // page on the server (SSR-on-navigation). No client-side GraphQL.
+import { useRef } from "react";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
-import { useDialogState, DialogDisclosure } from "reakit/Dialog";
 import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import BaseDrawer from "@/components/layout/BaseDrawer";
-import { Button } from "@/components/atomic";
+import { Button, CloseModalButton } from "@/components/atomic";
 import { NoContent } from "@/components/layout";
 import SearchBar from "../SearchBar";
 import SearchResults from "../SearchResults";
@@ -39,7 +38,8 @@ export default function SearchLayout({ data, scoped }: Props) {
 
   const search = scoped ? entityData?.search : globalData?.search;
 
-  const dialog = useDialogState({ animated: true });
+  // Native <dialog> for the mobile filters drawer (reakit is React-19-incompatible).
+  const drawerRef = useRef<HTMLDialogElement>(null);
 
   const { register, handleSubmit } = useForm({
     shouldUseNativeValidation: true,
@@ -69,15 +69,14 @@ export default function SearchLayout({ data, scoped }: Props) {
           </form>
         </div>
         <div className={styles.filterToggle}>
-          <DialogDisclosure
-            as={Button}
-            {...dialog}
+          <Button
+            onClick={() => drawerRef.current?.showModal()}
             size="sm"
             icon="hamburger"
             secondary
           >
             Show Filters
-          </DialogDisclosure>
+          </Button>
         </div>
         <div className={styles.sidebar}>
           {search && <SearchFilters id="sidebarFilters" data={search} />}
@@ -90,15 +89,31 @@ export default function SearchLayout({ data, scoped }: Props) {
           )}
         </div>
       </div>
-      <BaseDrawer label="Filters" dialog={dialog}>
-        {search && (
-          <SearchFilters
-            id="mobileFilters"
-            data={search}
-            onSubmit={() => dialog.hide()}
-          />
-        )}
-      </BaseDrawer>
+      <dialog
+        ref={drawerRef}
+        className={styles.drawer}
+        aria-label="Filters"
+        onClick={(e) => {
+          if (e.target === drawerRef.current) drawerRef.current?.close();
+        }}
+      >
+        <div className={styles.drawerInner}>
+          <div className={styles.drawerHeader}>
+            <form method="dialog">
+              <CloseModalButton />
+            </form>
+          </div>
+          <div className={styles.drawerContent}>
+            {search && (
+              <SearchFilters
+                id="mobileFilters"
+                data={search}
+                onSubmit={() => drawerRef.current?.close()}
+              />
+            )}
+          </div>
+        </div>
+      </dialog>
     </section>
   );
 }
