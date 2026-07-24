@@ -8801,7 +8801,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     markdown-to-txt: "npm:^2.0.1"
     next-mdx-remote: "npm:^6.0.0"
-    pdfjs-dist: "npm:5.3.93"
+    pdfjs-dist: "npm:5.4.296"
     postcss: "npm:^8.5.22"
     postcss-assign-layer: "npm:^0.4.0"
     postcss-import: "npm:^16.1.0"
