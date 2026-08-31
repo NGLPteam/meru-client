@@ -1,7 +1,5 @@
 "use client";
 
-// Hydrated island: top-level global search (/search). Unscoped SearchLayout,
-// under the page provider stack (no active community).
 import SearchLayout from "@/components/composed/search/SearchLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

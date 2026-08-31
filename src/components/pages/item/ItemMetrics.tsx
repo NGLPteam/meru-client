@@ -1,7 +1,5 @@
 "use client";
 
-// Hydrated island: the item metrics sub-page (/items/[slug]/metrics) — article
-// analytics.
 import { Suspense } from "react";
 import ArticleAnalyticsBlock from "@/components/composed/analytics/ArticleAnalyticsBlock";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";

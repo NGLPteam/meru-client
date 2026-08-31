@@ -1,9 +1,7 @@
 import { graphql } from "@/lib/api/gql";
 
-// Site-level metadata query, split into a queryApi-free module so both the Next
-// builder (app/**/_metadata/site.ts, via queryApi) and the Astro builder
-// (src/lib/metadata/siteMetadata.ts, via src/lib/query) share one definition
-// without a duplicate operation name or dragging the server client into a bundle.
+// Kept in its own queryApi-free module so importing the document never drags
+// the server urql client into a client/island bundle.
 export const siteMetadataQuery = graphql(`
   query siteMetadataQuery {
     globalConfiguration {

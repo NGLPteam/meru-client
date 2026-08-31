@@ -1,12 +1,8 @@
 "use client";
 
-// The shared item chrome (hero + view counter + entity nav bar + processing
-// check + full-text check + inline navigation template) that wraps every item
-// route's content — the React equivalent of the Next item layout.tsx. Unmasks
-// ItemLayoutFragment; the parent community for the header context is provided
-// separately (AppProviders). GoogleScholarMetaTags is intentionally omitted:
-// those <meta> tags are rendered into the Astro <head> server-side rather than
-// relying on React 19 head-hoisting from inside an island.
+// GoogleScholarMetaTags is intentionally omitted: those <meta> tags are
+// rendered into the Astro <head> server-side rather than relying on React 19
+// head-hoisting from inside an island.
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import useViewerContext from "@/contexts/useViewerContext";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";

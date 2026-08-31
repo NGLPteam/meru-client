@@ -1,7 +1,5 @@
 "use client";
 
-// Hydrated island: a collection announcement
-// (/collections/[slug]/announcements/[announcement]).
 import EntityAnnouncementLayout from "@/components/composed/entity/EntityAnnouncementLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

@@ -7,9 +7,6 @@ import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
 import { communityMetaFragment } from "../queries/community";
 
-// Astro port of app/**/communities/[slug]/_metadata/community.ts. A pure
-// function over the community already fetched by the page (no extra request);
-// returns an inheritParent PageMeta extending the site defaults.
 const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 
 export default function buildCommunityMeta(

@@ -3,10 +3,9 @@ import { enableDraftMode } from "~/lib/request/draftMode";
 import { fetchPreviewAccess } from "~/lib/preview/fetchPreviewAccess";
 
 // Preview deep-link: enable draft mode for one entity and land on its page.
-// Astro port of Next `app/[frontend]/preview/[entity]/[slug]/route.ts`, hardened
-// with the gate the Next route lacked (spec #7): must be authenticated AND have
-// edit access on the target, else bounce to /unauthorized with a reason. The
-// per-entity canPreview guard on the landing page is the final backstop.
+// Gated: must be authenticated AND have edit access on the target, else bounce
+// to /unauthorized with a reason. The per-entity canPreview guard on the
+// landing page is the final backstop.
 const LANDING: Record<string, (slug: string) => string> = {
   items: (slug) => `/items/${slug}/metadata`,
   collections: (slug) => `/collections/${slug}`,

@@ -15,9 +15,9 @@
 // useViewerContext read `isPreview` for the draft gate; identity fields resolve to
 // anonymous defaults (so MDX admin error copy is disabled — acceptable).
 //
-// Deferred vs. the Next (pages)/layout.tsx stack: UrqlProvider omitted (no content
-// child runs a client useQuery/useMutation; the two analytics widgets provide
-// their own urql client). Side-effect: initialize the i18next singleton (SSR-safe).
+// UrqlProvider is deliberately omitted: no content child runs a client
+// useQuery/useMutation (the two analytics widgets provide their own urql
+// client). Side-effect: initialize the i18next singleton (SSR-safe).
 import "@/i18n";
 import {
   GlobalStaticContextProvider,

@@ -1,6 +1,5 @@
 "use client";
 
-// Hydrated island: the item files sub-page (/items/[slug]/files).
 import AssetsBlock from "@/components/composed/asset/AssetsBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

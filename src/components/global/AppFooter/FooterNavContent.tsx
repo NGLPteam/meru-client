@@ -3,7 +3,7 @@
 // The footer's per-viewer "Explore" nav: Home (always) + Admin (canAccessAdmin) +
 // Sign in (anonymous). Consumes ViewerContext, so it renders only inside the
 // FooterNav `server:defer` island (real viewer) or as its anonymous fallback (no
-// viewer → Home + Sign in). Lifted verbatim from the former AppFooter.tsx.
+// viewer → Home + Sign in).
 import { useTranslation } from "react-i18next";
 import startCase from "lodash/startCase";
 import classNames from "classnames";

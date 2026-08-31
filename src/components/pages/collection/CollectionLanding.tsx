@@ -1,8 +1,5 @@
 "use client";
 
-// Hydrated island: the collection landing body — the collection shell wrapping
-// the main layout. The parent community is threaded through AppProviders for the
-// header context.
 import MainLayout from "@/components/templates/MainLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

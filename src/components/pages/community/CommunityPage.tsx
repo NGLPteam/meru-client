@@ -1,7 +1,5 @@
 "use client";
 
-// Hydrated island: a named community sub-page (/communities/[slug]/page/[page])
-// — the community shell wrapping CommunityPageLayout.
 import CommunityPageLayout from "@/components/composed/community/CommunityPageLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

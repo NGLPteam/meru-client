@@ -6,7 +6,6 @@ import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
 import { itemMetaFragment } from "../queries/item";
 
-// Astro port of app/**/items/[slug]/_metadata/item.ts.
 const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 
 export default function buildItemMeta(

@@ -42,9 +42,8 @@ export default function GoogleScholarHtmlHead({
     case "dissertation":
     case "paper":
       return (
-        // Bare metadata tags: React 19 hoists <meta> into <head> (next/head was
-        // a Pages-Router API and inert here). In Astro these move to the layout
-        // <head>.
+        // Bare metadata tags — React 19 hoists <meta> into <head>. When
+        // rendered from Astro these go into the layout <head> instead.
         <>
           <meta name="citation_title" content={entity.title} />
           {authors.map(({ contributor }, i) => (

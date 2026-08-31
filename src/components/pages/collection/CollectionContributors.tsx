@@ -1,6 +1,5 @@
 "use client";
 
-// Hydrated island: collection contributors (/collections/[slug]/contributors).
 import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

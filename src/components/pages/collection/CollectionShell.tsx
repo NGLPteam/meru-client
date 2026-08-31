@@ -1,9 +1,5 @@
 "use client";
 
-// The shared collection chrome (hero + view counter + entity nav bar + processing
-// check) that wraps every collection route's content — the React equivalent of
-// the Next collection layout.tsx. Unmasks CollectionLayoutFragment; the parent
-// community for the header context is provided separately (AppProviders).
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import useViewerContext from "@/contexts/useViewerContext";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";

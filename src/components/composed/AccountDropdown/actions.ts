@@ -1,18 +1,5 @@
 "use client";
 
-// Auth UI actions for the global chrome (AccountDropdown / PreviewModeButton).
-//
-// Astro-native (the Next `"use server"` next-auth versions are gone — Next is
-// deleted before this branch merges):
-//   - signIn: a plain browser navigation to the /api/signin endpoint, which
-//     starts the Keycloak Authorization-Code flow and returns to the current URL.
-//   - signOut: calls the `logout` Astro Action (Keycloak back-channel logout +
-//     httpOnly cookie clear), then hard-navigates so the server re-renders
-//     anonymous chrome.
-//   - enterPreviewMode: still inert — wired in the preview/draft-mode step.
-//
-// Signatures are unchanged so AccountDropdown / PreviewModeButton compile
-// untouched.
 import { actions } from "astro:actions";
 
 function currentReturnTo(): string {

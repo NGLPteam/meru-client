@@ -1,6 +1,5 @@
 "use client";
 
-// Hydrated island: a named collection sub-page (/collections/[slug]/page/[page]).
 import EntityPageLayout from "@/components/composed/entity/EntityPageLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

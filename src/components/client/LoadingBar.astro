@@ -81,7 +81,6 @@
     }
 
     disconnectedCallback() {
-      // remove all event listeners
       this.abortController.abort();
       document.removeEventListener(
         "astro:before-preparation",

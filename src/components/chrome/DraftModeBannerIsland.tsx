@@ -1,10 +1,5 @@
 "use client";
 
-// Sticky "you're in draft/preview mode" banner. Rendered by BaseLayout whenever
-// the draft cookie is set (global toggle). Astro port of the Next
-// DraftModeBanner — reuses its CSS; "exit" calls the exitPreview Action and
-// reloads so the next SSR render drops draft mode.
-//
 // Standalone island: `import "@/i18n"` initializes the shared i18next singleton
 // (idempotent) so react-i18next's `useTranslation` resolves against it without
 // needing the chrome provider stack.

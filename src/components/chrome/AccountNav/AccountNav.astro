@@ -3,8 +3,7 @@
 // carries only the placeholder + anonymous `slot="fallback"`; the browser fetches
 // the real (authed-or-anonymous) menu out-of-band from /_server-islands/AccountNav.
 // This is what lets the surrounding page be cached for everyone without baking one
-// viewer's identity into the URL-keyed response cache. Mirrors hcc-client's
-// UserNav.astro.
+// viewer's identity into the URL-keyed response cache.
 import getViewer from "~/lib/auth/viewer";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import AccountDropdownIsland from "./AccountDropdownIsland";

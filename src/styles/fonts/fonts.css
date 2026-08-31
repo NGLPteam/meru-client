@@ -1,18 +1,14 @@
 /*
  * Self-hosted @font-face declarations.
  *
- * Replaces the previous next/font/local modules (styles/fonts/<name>/index.ts).
- * next/font generated a hashed family name and exposed it via a CSS variable
- * (e.g. --font-ilisarniq); we reproduce that contract with plain @font-face +
- * :root variables so nothing downstream changes. Consumers:
+ * The family-name :root variables (e.g. --font-ilisarniq) reproduce the
+ * contract of the old next/font/local modules (which generated hashed family
+ * names) so nothing downstream changes. Consumers:
  *   styles/utilities/_theme.css, styles/base/_root.css  (--font-face-base/header)
  *
  * Assets live in public/fonts/ and are referenced by absolute /fonts/... URLs
- * (served statically, no bundler url() rebasing needed, and covered by the
- * `/fonts/(.*)` immutable-cache header in next.config.js). This carries over to
- * the Astro SSR migration unchanged (public/ is static in both frameworks).
- * Weight/style mappings are copied verbatim from the old next/font configs —
- * note Libre Franklin's "600" files are intentionally mapped to weight 500.
+ * (served statically, no bundler url() rebasing needed).
+ * Note Libre Franklin's "600" files are intentionally mapped to weight 500.
  */
 
 /* ---- Ilisarniq ---- */

@@ -1,6 +1,5 @@
 "use client";
 
-// Hydrated island: browse a collection ordering (/collections/[slug]/browse/[ordering]).
 import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

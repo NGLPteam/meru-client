@@ -1,7 +1,5 @@
 "use client";
 
-// Hydrated island: a single item file detail (/items/[slug]/files/[file]). The
-// shell comes from the item; the content is a separately-queried asset.
 import AssetDetailBlock from "@/components/composed/asset/AssetDetailBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

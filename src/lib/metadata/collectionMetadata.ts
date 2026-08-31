@@ -6,7 +6,6 @@ import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
 import { collectionMetaFragment } from "../queries/collection";
 
-// Astro port of app/**/collections/[slug]/_metadata/collection.ts.
 const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 
 export default function buildCollectionMeta(

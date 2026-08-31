@@ -1,8 +1,5 @@
 "use client";
 
-// Hydrated island: the item metadata sub-page (/items/[slug]/metadata) — the
-// metadata template plus, when there is no full-text detail, the main layout
-// fallback.
 import MetadataTemplate from "@/components/templates/Metadata";
 import MainLayout from "@/components/templates/MainLayout";
 import { FullTextFallback } from "@/components/templates/FullTextCheck/FullTextCheck";

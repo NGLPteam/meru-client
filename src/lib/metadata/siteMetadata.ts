@@ -4,10 +4,8 @@ import type { PageMeta } from "@/lib/metadata/types";
 import query from "../query";
 import serverEnv from "../env/serverEnv";
 
-// Astro port of app/**/_metadata/site.ts (generateSiteMetadata). Builds the
-// site-level PageMeta defaults — title/description/OG that every page inherits
-// (and the title template applied to child pages). Uses the Astro server query
-// helper + serverEnv; returns the same framework-neutral PageMeta.
+// Builds the site-level PageMeta defaults — title/description/OG that every
+// page inherits (and the title template applied to child pages).
 const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 
 export default async function getSiteMetadata(): Promise<PageMeta> {

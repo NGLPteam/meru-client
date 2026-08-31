@@ -6,7 +6,7 @@ import { enableDraftMode, disableDraftMode } from "~/lib/request/draftMode";
 
 // Client-invocable auth actions. The grant + cookie logic lives in
 // src/lib/auth so server code (getSession/middleware) calls it directly; these
-// are the wrappers UI reaches for (e.g. AccountDropdown → logout, step 4).
+// are the wrappers UI reaches for.
 export const server = {
   // Keycloak back-channel logout + clear local cookies. The backchannel call is
   // best-effort — cookies are cleared regardless so the user is logged out here.

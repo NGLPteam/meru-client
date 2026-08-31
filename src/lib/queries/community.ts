@@ -57,7 +57,6 @@ export const communityMetaFragment = graphql(`
   }
 `);
 
-// Landing — community shell + the main layout content.
 export const communityQuery = graphql(`
   query communityQuery($slug: Slug!) {
     community(slug: $slug) {
@@ -73,7 +72,6 @@ export const communityQuery = graphql(`
   }
 `);
 
-// Named community sub-page (/communities/[slug]/page/[pageSlug]).
 export const communityPageQuery = graphql(`
   query communityPageQuery($slug: Slug!, $pageSlug: String!) {
     community(slug: $slug) {
@@ -87,7 +85,6 @@ export const communityPageQuery = graphql(`
   }
 `);
 
-// Browse an ordering (/communities/[slug]/browse/[ordering]).
 export const communityBrowseQuery = graphql(`
   query communityBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {
     community(slug: $slug) {
@@ -102,7 +99,6 @@ export const communityBrowseQuery = graphql(`
   }
 `);
 
-// Scoped search (/communities/[slug]/search).
 export const communitySearchQuery = graphql(`
   query communitySearchQuery(
     $slug: Slug!

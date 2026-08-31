@@ -1,6 +1,5 @@
 "use client";
 
-// Hydrated island: the item contributors sub-page (/items/[slug]/contributors).
 import ContributionsBlock from "@/components/composed/contribution/ContributionsBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

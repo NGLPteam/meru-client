@@ -1,6 +1,5 @@
 "use client";
 
-// Hydrated island: scoped collection search (/collections/[slug]/search).
 import SearchLayout from "@/components/composed/search/SearchLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

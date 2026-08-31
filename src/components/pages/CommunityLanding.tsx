@@ -1,8 +1,5 @@
 "use client";
 
-// Hydrated island: the community landing body — the community shell (nav + hero
-// + processing check) wrapping the main layout. Community threaded as a prop
-// (replacing SetCommunity) so the header chrome and this content share it.
 import MainLayout from "@/components/templates/MainLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

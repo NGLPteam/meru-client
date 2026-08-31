@@ -1,9 +1,6 @@
 "use client";
 
-// Hydrated island: the home/instance page body (hero + community list). Wraps
-// the unchanged Meru InstanceHero / InstanceCommunities in the app provider
-// stack (own React root, separate from the chrome islands), fed fragment refs
-// as props. Hydrated because the hero embeds an interactive SearchHero.
+// Hydrated because the hero embeds an interactive SearchHero.
 import InstanceHero from "@/components/composed/instance/InstanceHero";
 import InstanceCommunities from "@/components/composed/instance/InstanceCommunities";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

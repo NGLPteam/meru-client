@@ -1,9 +1,8 @@
 import { graphql } from "@/lib/api/gql";
 
-// Astro layout queries. Operation names are suffixed `AstroQuery` to avoid
-// colliding with the still-present Next page queries of the same shape while the
-// codegen documents glob scans both app/ and src/ during coexistence. The names
-// can be normalized after the Phase 6 cutover.
+// Operation names keep the `AstroQuery` suffix from the Next-coexistence
+// period (they had to avoid colliding with same-shape Next queries in codegen);
+// they can be normalized now that app/ is gone.
 export const LayoutThemeAstroQuery = graphql(`
   query LayoutThemeAstroQuery {
     globalConfiguration {

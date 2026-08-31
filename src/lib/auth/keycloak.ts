@@ -1,10 +1,5 @@
-// Keycloak OIDC endpoints + grant calls (server-only).
-//
-// Astro port of the CLEAN CORE of the Next `lib/auth/keycloak.ts` — the issuer /
-// URL-join logic only. The next-auth provider and the `@auth/core` `JWT`-typed
-// refresh helpers are intentionally NOT ported: they return next-auth-shaped
-// token objects, the wrong shape for the cookie session model. Here the grants
-// return the raw Keycloak token response and the caller writes cookies.
+// Keycloak OIDC endpoints + grant calls (server-only). The grants return the
+// raw Keycloak token response and the caller writes cookies.
 //
 // Env (server-only; this file is never client-bundled) via serverEnv
 // (process.env runtime-first, import.meta.env in dev). The NEXT_* names are the

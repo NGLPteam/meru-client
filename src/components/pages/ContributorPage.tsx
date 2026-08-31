@@ -1,8 +1,5 @@
 "use client";
 
-// Hydrated island: contributor detail (/contributors/[slug]). Optional item/
-// collection breadcrumb nav + the contributor detail (which paginates via
-// client-side urql). The scoping entity's parent community feeds the header.
 import ContributorDetail from "@/components/composed/contributor/ContributorDetail";
 import ContributorDetailNav from "@/components/composed/contributor/ContributorDetailNav";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

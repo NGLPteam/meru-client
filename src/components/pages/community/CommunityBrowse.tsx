@@ -1,8 +1,5 @@
 "use client";
 
-// Hydrated island: browse an ordering (/communities/[slug]/browse/[ordering]) —
-// the community shell wrapping EntityOrderingLayout. The layout renders the SSR
-// fragment data immediately; its urql refetch only fires on pagination.
 import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

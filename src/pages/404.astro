@@ -1,7 +1,6 @@
 ---
-// 404 — Astro port of app/[frontend]/(pages)/not-found.tsx. Rendered for
-// unmatched routes and via Astro.rewrite("/404") when a page can't find its
-// resource. Shows the global chrome + a not-found message.
+// Rendered for unmatched routes and via Astro.rewrite("/404") when a page
+// can't find its resource.
 import BaseLayout from "~/layouts/BaseLayout.astro";
 
 Astro.response.status = 404;

@@ -57,7 +57,6 @@ export const itemMetaFragment = graphql(`
   }
 `);
 
-// Detail (/items/[slug]) — item shell + the main layout content.
 export const itemQuery = graphql(`
   query itemQuery($slug: Slug!) {
     item(slug: $slug) {

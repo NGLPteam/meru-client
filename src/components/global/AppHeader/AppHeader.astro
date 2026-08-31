@@ -40,7 +40,6 @@ const isCommunityRoot = /^\/communities\/[A-Za-z0-9]{30,32}/.test(pathname);
 const hideSearch = pathname === "/" || pathname === "/search";
 const totalCommunities = appData?.communities?.pageInfo.totalCount || 0;
 
-// Match the former AppHeader.tsx branching.
 const showBrand = !isCommunityRoot || totalCommunities > 1;
 const showNav = !isCommunityRoot && !hideSearch;
 ---

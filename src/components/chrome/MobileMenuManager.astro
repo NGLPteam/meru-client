@@ -1,8 +1,8 @@
 ---
 // Framework-free toggle/close wiring for a native <dialog>-based menu (the header
 // mobile menu). Replaces the reakit useDialogState machinery so the dialog can be
-// authored in Astro and host a `server:defer` account island. Mirrors hcc-client's
-// DialogManager: it finds the <dialog> and the `[aria-controls=<dialog id>]`
+// authored in Astro and host a `server:defer` account island. It finds the
+// <dialog> and the `[aria-controls=<dialog id>]`
 // toggle among its slotted children and wires open/close, Escape, click-outside,
 // and aria-expanded sync. Close is also available via any `<form method="dialog">`
 // button inside the dialog.

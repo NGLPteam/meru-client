@@ -1,9 +1,7 @@
 import { graphql } from "@/lib/api/gql";
 
-// The `getStaticGoogleScholarData` fetch function was Next-only (server data path
-// via queryApi) and left with the Next app. Astro selects this fragment inside
-// its own item query and renders the Google Scholar <meta> tags server-side, so
-// only the fragment is kept.
+// Fragment only — no fetch function. The item query selects it and the Google
+// Scholar <meta> tags render server-side.
 export const fragment = graphql(`
   fragment getStaticGoogleScholarDataFragment on Entity {
     __typename

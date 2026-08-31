@@ -51,8 +51,7 @@ export const collectionMetaFragment = graphql(`
   }
 `);
 
-// Landing — collection shell + the main layout content (with first-template kind
-// for the computed background start).
+// Selects the first template's kind for the computed background start.
 export const collectionQuery = graphql(`
   query collectionQuery($slug: Slug!) {
     collection(slug: $slug) {

@@ -1,8 +1,5 @@
 "use client";
 
-// Hydrated island: scoped community search (/communities/[slug]/search) — the
-// community shell wrapping SearchLayout. SearchLayout drives results via a
-// client-side urql query keyed off the URL search params.
 import SearchLayout from "@/components/composed/search/SearchLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";

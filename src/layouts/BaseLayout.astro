@@ -36,8 +36,7 @@ interface Props {
   // site-level defaults; omit on the home page to use the site meta as-is.
   meta?: PageMeta;
   // Present on entity/community/collection pages — the page knows the active
-  // community server-side and threads it into the chrome (replacing Next's
-  // client-side SetCommunityContext). Undefined elsewhere.
+  // community server-side and threads it into the chrome. Undefined elsewhere.
   community?: CommunityRef;
   // Route params (e.g. { slug }) for the routing shim's useParams. Pathname and
   // search come from Astro.url; params are page-supplied. Threaded into the

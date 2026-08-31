@@ -1,14 +1,12 @@
 import type { PageMeta } from "@/lib/metadata/types";
 
-// Framework-neutral resolver — the Astro counterpart of lib/metadata/
-// toNextMetadata. Merges the site-level PageMeta (defaults) with an optional
-// page-level PageMeta into a flat set of <head> values, applying the same rules
-// Next's metadata inheritance did:
+// Merges the site-level PageMeta (defaults) with an optional page-level
+// PageMeta into a flat set of <head> values:
 //   - the site title template wraps child page titles; the site/home page uses
 //     its own title verbatim
 //   - inheritParent pages take the site's OG description and append the site's
 //     og:images after their own (entity subpages extending the site defaults)
-//   - relative URLs resolve against the site baseUrl (Next's metadataBase)
+//   - relative URLs resolve against the site baseUrl
 export type ResolvedHead = {
   title?: string;
   description?: string;
@@ -43,7 +41,6 @@ export default function resolvePageMeta(
       ...(i.alt !== undefined && { alt: i.alt }),
     }));
 
-  // Site / home page: the site meta is the page.
   if (!page) {
     return {
       title: site.title,
@@ -69,10 +66,8 @@ export default function resolvePageMeta(
     : site.title;
 
   const description = page.description ?? site.description;
-  // Inheriting subpages take the site's og:description; others use their own.
   const ogDescription = inherit ? site.description : description;
 
-  // Inheriting subpages append the site's og:images after their own.
   const images = mapImages(
     inherit ? [...(page.images ?? []), ...(site.images ?? [])] : page.images,
   );
