@@ -6,7 +6,7 @@ import type { APIContext } from "astro";
 // `Authorization: Bearer <REVALIDATE_SECRET>`, JSON body. See the two route files
 // and docs/astro-caching-plan.md.
 
-export function getRevalidateSecret(): string | undefined {
+function getRevalidateSecret(): string | undefined {
   return serverEnv("REVALIDATE_SECRET");
 }
 

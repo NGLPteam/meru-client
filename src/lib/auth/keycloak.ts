@@ -18,8 +18,8 @@ const ISSUER = joinURL(KEYCLOAK_URL, "realms", REALM);
 export const CLIENT_ID =
   serverEnv("KEYCLOAK_CLIENT_ID", "NEXT_PUBLIC_KEYCLOAK_CLIENT_ID") ?? "";
 export const AUTH_URL = joinURL(ISSUER, "/protocol/openid-connect/auth");
-export const TOKEN_URL = joinURL(ISSUER, "/protocol/openid-connect/token");
-export const LOGOUT_URL = joinURL(ISSUER, "/protocol/openid-connect/logout");
+const TOKEN_URL = joinURL(ISSUER, "/protocol/openid-connect/token");
+const LOGOUT_URL = joinURL(ISSUER, "/protocol/openid-connect/logout");
 
 // The subset of the Keycloak token endpoint response we consume. `expires_in` /
 // `refresh_expires_in` are seconds.

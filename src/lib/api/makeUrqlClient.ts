@@ -9,7 +9,7 @@ import { requestPolicyExchange } from "@urql/exchange-request-policy";
 
 // How long a cache-first result is reused before requestPolicyExchange upgrades
 // it to cache-and-network (revalidate). Only affects cache-first clients.
-export const CACHE_TTL_MS = 30_000;
+const CACHE_TTL_MS = 30_000;
 
 // Factory for a plain @urql/core client. Server-side callers (queryApi) use
 // this directly; the client-side React Provider builds its own client with a

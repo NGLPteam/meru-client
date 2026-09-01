@@ -1,0 +1,33 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true,
+  },
+  "ignoreDependencies": [
+    "globals", // peer requirement of @castiron/eslint-config
+    "@astrojs/check", // used by ad-hoc `npx astro check` runs
+    "@graphql-typed-document-node/core", // provided by graphql-codegen
+  ],
+  "ignoreIssues": {
+    "src/lib/api/gql/**": ["types", "exports"], // generated codegen files
+  },
+  "ignoreFiles": [
+    "src/styles/mixins/*.css", // loaded by postcss-mixins mixinsDir, not imported from JS/TS
+  ],
+  "astro": {
+    "config": ["astro.config.mjs"],
+    "entry": [
+      "src/pages/**/*.{astro,js,ts}",
+      "!src/pages/**/_*",
+      "!src/pages/**/_*/**",
+      "src/middleware.ts",
+      "src/actions/index.ts",
+      "src/lib/caching/draftAwareProvider.ts", // cache.provider.entrypoint in astro.config.mjs (string reference)
+    ],
+    "project": ["src/**/*"],
+  },
+  "graphql-codegen": {
+    "config": ["codegen.client.ts", ".graphqlrc.yml"],
+  },
+}

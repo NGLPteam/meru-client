@@ -55,9 +55,7 @@ export interface ViewerData {
   } | null;
 }
 
-export async function fetchViewer(
-  sessionToken?: string,
-): Promise<ViewerData | null> {
+async function fetchViewer(sessionToken?: string): Promise<ViewerData | null> {
   try {
     const resp = await fetch(getAPIURL(), {
       method: "POST",

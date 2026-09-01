@@ -1,10 +1,8 @@
-// Sitemap plumbing: page size, base-URL resolution, XML builders, and the
-// cached XML response. The API caps descendants `perPage` at 200, so one child
-// sitemap file maps 1:1 to one API page — the index and the child endpoints
-// share this page size so page numbers line up.
+// Sitemap plumbing: base-URL resolution, XML builders, and the cached XML
+// response. The API caps descendants `perPage` at 200, so one child sitemap
+// file maps 1:1 to one API page — the queries in queries.ts hardcode that page
+// size so index and child page numbers line up.
 import serverEnv from "../env/serverEnv";
-
-export const SITEMAP_PAGE_SIZE = 200;
 
 // NEXT_PUBLIC_* are the legacy deploy names — drop the fallbacks once the
 // deploy config is renamed.

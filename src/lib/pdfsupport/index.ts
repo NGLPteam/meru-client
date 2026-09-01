@@ -11,5 +11,3 @@ const PDF_JS_WORKER_SRC = new URL(
 ).toString();
 
 pdfjs.GlobalWorkerOptions.workerSrc = PDF_JS_WORKER_SRC;
-
-export default pdfjs;

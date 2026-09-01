@@ -114,7 +114,7 @@ interface Props {
   className?: string;
 }
 
-export const fragment = graphql(`
+const fragment = graphql(`
   fragment BreadcrumbsBarFragment on Entity {
     __typename
     title

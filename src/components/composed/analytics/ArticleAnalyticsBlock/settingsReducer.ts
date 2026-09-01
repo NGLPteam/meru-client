@@ -21,7 +21,7 @@ export type Action = {
   value: string;
 };
 
-export const getDateVars = (minDate: string | null, value: string) => {
+const getDateVars = (minDate: string | null, value: string) => {
   const now = Date.now();
 
   const hasMultipleYears = minDate

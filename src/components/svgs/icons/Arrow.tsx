@@ -1,9 +1,4 @@
-import { encodeSvg } from "../helpers/encodeSvg";
 import Props from "./iconType";
-
-export function encodedIconArrowRight(props: Props): string {
-  return encodeSvg(<ArrowRight {...props} />);
-}
 
 export function ArrowRight({ title, fill, ...props }: Props) {
   return (

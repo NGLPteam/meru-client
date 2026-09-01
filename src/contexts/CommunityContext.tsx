@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, type PropsWithChildren, useState } from "react";
+import { createContext, type PropsWithChildren } from "react";
 import {
   graphql,
   useFragment,
@@ -31,25 +31,3 @@ const fragment = graphql(`
     ...CommunityPickerCommunityNameFragment
   }
 `);
-
-type Setter = (data: FragmentType<typeof fragment> | null) => void;
-export const SetCommunityContext = createContext<Setter | undefined | null>(
-  null,
-);
-
-export const SetCommunityContextProvider = ({
-  children,
-}: PropsWithChildren) => {
-  const [data, setData] = useState<
-    FragmentType<typeof fragment> | undefined | null
-  >();
-  const community = useFragment(fragment, data);
-
-  return (
-    <SetCommunityContext.Provider value={setData}>
-      <CommunityContext.Provider value={community}>
-        {children}
-      </CommunityContext.Provider>
-    </SetCommunityContext.Provider>
-  );
-};

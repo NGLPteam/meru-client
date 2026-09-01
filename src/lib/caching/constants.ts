@@ -6,7 +6,7 @@ import type { CacheOptions } from "astro";
 // Stale age in seconds. Keeps Meru's historical 1h Next `revalidate = 3600`,
 // overridable via the REVALIDATE env var. Read from import.meta.env so it's
 // inlined at build time (this is a build-time constant, not a per-request read).
-export const REVALIDATE = import.meta.env.REVALIDATE
+const REVALIDATE = import.meta.env.REVALIDATE
   ? parseInt(import.meta.env.REVALIDATE, 10)
   : 3600;
 

@@ -21,7 +21,7 @@ export default function BreadcrumbLink({ data }: Props) {
   );
 }
 
-export const fragment = graphql(`
+const fragment = graphql(`
   fragment BreadcrumbLinkFragment on EntityBreadcrumb {
     label
     kind

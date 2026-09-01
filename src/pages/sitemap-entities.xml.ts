@@ -16,7 +16,7 @@ import {
 //   /sitemap-entities.xml?type=communities&page=N
 //   /sitemap-entities.xml?type=collections&community=SLUG&page=N
 //   /sitemap-entities.xml?type=items&community=SLUG&page=N
-// Each page is a single 200-item API page (see SITEMAP_PAGE_SIZE).
+// Each page is a single 200-item API page (the API's perPage cap).
 export async function GET(context: APIContext): Promise<Response> {
   const base = siteBase(context);
   const params = context.url.searchParams;

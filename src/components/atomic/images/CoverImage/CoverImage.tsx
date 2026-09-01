@@ -69,7 +69,7 @@ interface PlaceholderProps {
   objectPosition?: string;
 }
 
-export const fragment = graphql(`
+const fragment = graphql(`
   fragment CoverImageFragment on ImageAttachment {
     image: medium {
       webp {

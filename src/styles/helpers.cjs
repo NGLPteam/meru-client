@@ -5,8 +5,6 @@ const {
 
 const pxPerRem = 16;
 
-const minSpacing = "24px";
-
 function fluidScalePx(max, min, maxVw = "1400px", minVw = "375px") {
   if (max === min) return `${max}`;
   return fluidScalePxBase(max, min, maxVw, minVw);
@@ -27,9 +25,7 @@ function fluidScaleRem(
 const colors = require("./colors.json");
 
 module.exports = {
-  pxPerRem,
   fluidScalePx,
   fluidScaleRem,
-  minSpacing,
   colors,
 };

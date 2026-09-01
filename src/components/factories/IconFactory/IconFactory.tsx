@@ -36,8 +36,6 @@ export const ICON_MAP = {
   x: Icons.X,
 };
 
-export const ICON_KEYS = Object.keys(ICON_MAP);
-
 export type IconKeys = keyof typeof ICON_MAP;
 
 function IconFactory({ icon, ...props }: Props) {

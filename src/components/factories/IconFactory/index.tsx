@@ -1,4 +1,3 @@
-import IconFactory, { ICON_KEYS } from "./IconFactory";
+import IconFactory from "./IconFactory";
 
 export default IconFactory;
-export { ICON_KEYS };

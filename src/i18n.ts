@@ -4,13 +4,9 @@ import { initReactI18next } from "react-i18next";
 import get from "lodash/get";
 import * as resources from "@/lib/locales";
 
-export const updateI18n = (lang: string) => {
-  if (i18n.language !== lang) i18n.changeLanguage(lang);
-};
+const DEFAULT_LNG = "en-US";
 
-export const DEFAULT_LNG = "en-US";
-
-export const SUPPORTED_LOCALES: Record<string, string | undefined> = {};
+const SUPPORTED_LOCALES: Record<string, string | undefined> = {};
 
 Object.keys(resources).forEach(
   (key) => (SUPPORTED_LOCALES[key] = get(resources, `${key}.translation.key`)),
@@ -39,8 +35,6 @@ i18n.use(initReactI18next).init({
     transSupportBasicHtmlNodes: true,
   },
 });
-
-export default i18n;
 
 // TODO: Upgrade to ^21.3.0
 // i18n.services.formatter?.add("capitalize", (value: string) => {

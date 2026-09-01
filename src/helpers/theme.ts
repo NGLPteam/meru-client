@@ -1,4 +1,4 @@
-export const stripUnit = (unit: number) => {
+const stripUnit = (unit: number) => {
   return parseInt(unit.toString().replace(/[^\d\.]/g, ""));
 };
 export function pxToRem(px: number, base = 16) {

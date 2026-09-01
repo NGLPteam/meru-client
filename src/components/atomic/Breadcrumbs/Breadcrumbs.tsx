@@ -95,7 +95,7 @@ interface Props {
   data?: FragmentType<typeof fragment> | null;
 }
 
-export const fragment = graphql(`
+const fragment = graphql(`
   fragment BreadcrumbsFragment on Entity {
     __typename
     title
