@@ -1,18 +1,16 @@
 "use client";
 
-import SearchLayout from "@/components/composed/search/SearchLayout";
+import AssetsBlock from "@/components/composed/asset/AssetsBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
-import CollectionShell from "./CollectionShell";
-import type { collectionSearchQuery } from "../../../lib/queries/collection";
+import AppProviders from "@/components/providers/AppProviders";
+import type { itemFilesQuery } from "@/lib/queries/item";
+import ItemShell from "./ItemShell";
 
-type Collection = NonNullable<
-  DocumentType<typeof collectionSearchQuery>["collection"]
->;
+type Item = NonNullable<DocumentType<typeof itemFilesQuery>["item"]>;
 
 type Props = {
-  collection: Collection;
+  item: Item;
   slug: string;
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
@@ -21,8 +19,8 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function CollectionSearch({
-  collection,
+export default function ItemFiles({
+  item,
   slug,
   globalData,
   route,
@@ -30,14 +28,14 @@ export default function CollectionSearch({
 }: Props) {
   return (
     <AppProviders
-      community={collection.community}
+      community={item.community}
       globalData={globalData}
       route={route}
       draftModeEnabled={draftModeEnabled}
     >
-      <CollectionShell data={collection} slug={slug}>
-        <SearchLayout data={collection} scoped />
-      </CollectionShell>
+      <ItemShell data={item} slug={slug}>
+        <AssetsBlock data={item.assets} />
+      </ItemShell>
     </AppProviders>
   );
 }

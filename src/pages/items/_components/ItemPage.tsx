@@ -3,9 +3,9 @@
 import EntityPageLayout from "@/components/composed/entity/EntityPageLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { itemPageQuery } from "@/lib/queries/item";
 import ItemShell from "./ItemShell";
-import type { itemPageQuery } from "../../../lib/queries/item";
 
 type Item = NonNullable<DocumentType<typeof itemPageQuery>["item"]>;
 

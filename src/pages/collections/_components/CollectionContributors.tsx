@@ -1,21 +1,19 @@
 "use client";
 
-import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
+import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { collectionContributorsQuery } from "@/lib/queries/collection";
 import CollectionShell from "./CollectionShell";
-import type { ComponentProps } from "react";
-import type { collectionBrowseQuery } from "../../../lib/queries/collection";
 
 type Collection = NonNullable<
-  DocumentType<typeof collectionBrowseQuery>["collection"]
+  DocumentType<typeof collectionContributorsQuery>["collection"]
 >;
 
 type Props = {
   collection: Collection;
   slug: string;
-  showContext?: ComponentProps<typeof EntityOrderingLayout>["showContext"];
   globalData?: GlobalStaticData;
   route?: React.ComponentProps<typeof AppProviders>["route"];
   draftModeEnabled?: React.ComponentProps<
@@ -23,10 +21,9 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function CollectionBrowse({
+export default function CollectionContributors({
   collection,
   slug,
-  showContext,
   globalData,
   route,
   draftModeEnabled,
@@ -39,9 +36,10 @@ export default function CollectionBrowse({
       draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>
-        <EntityOrderingLayout
-          data={collection.ordering}
-          showContext={showContext}
+        <CollectionContributionsBlock
+          data={collection}
+          slug={slug}
+          background="neutral00"
         />
       </CollectionShell>
     </AppProviders>

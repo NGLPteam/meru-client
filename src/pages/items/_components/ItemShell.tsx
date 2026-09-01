@@ -12,7 +12,7 @@ import FullTextCheck from "@/components/templates/FullTextCheck";
 import NavigationTemplate from "@/components/templates/EntityNavigation";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar";
-import { itemShellFragment } from "../../../lib/queries/item";
+import { itemShellFragment } from "@/lib/queries/item";
 import type { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{

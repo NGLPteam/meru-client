@@ -1,14 +1,14 @@
 "use client";
 
-import CommunityPageLayout from "@/components/composed/community/CommunityPageLayout";
+import EntityOrderingLayout from "@/components/composed/entity/EntityOrderingLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { communityBrowseQuery } from "@/lib/queries/community";
 import CommunityShell from "./CommunityShell";
-import type { communityPageQuery } from "../../../lib/queries/community";
 
 type Community = NonNullable<
-  DocumentType<typeof communityPageQuery>["community"]
+  DocumentType<typeof communityBrowseQuery>["community"]
 >;
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function CommunityPage({
+export default function CommunityBrowse({
   community,
   globalData,
   route,
@@ -34,7 +34,7 @@ export default function CommunityPage({
       draftModeEnabled={draftModeEnabled}
     >
       <CommunityShell data={community}>
-        <CommunityPageLayout data={community.page} />
+        <EntityOrderingLayout data={community.ordering} showContext="FULL" />
       </CommunityShell>
     </AppProviders>
   );

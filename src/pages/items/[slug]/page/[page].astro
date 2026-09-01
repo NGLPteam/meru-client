@@ -9,7 +9,7 @@ import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getSt
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import { itemPageQuery } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
-import ItemPage from "~/components/pages/item/ItemPage";
+import ItemPage from "../../_components/ItemPage";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 
 const { slug, page: pageSlug } = Astro.params;

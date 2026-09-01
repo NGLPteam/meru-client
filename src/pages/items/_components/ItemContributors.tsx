@@ -3,9 +3,9 @@
 import ContributionsBlock from "@/components/composed/contribution/ContributionsBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { itemContributorsQuery } from "@/lib/queries/item";
 import ItemShell from "./ItemShell";
-import type { itemContributorsQuery } from "../../../lib/queries/item";
 
 type Item = NonNullable<DocumentType<typeof itemContributorsQuery>["item"]>;
 

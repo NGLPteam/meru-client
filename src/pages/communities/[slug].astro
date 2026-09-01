@@ -7,7 +7,7 @@ import { isDraftModeEnabled } from "../../lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityQuery } from "../../lib/queries/community";
 import buildCommunityMeta from "../../lib/metadata/communityMetadata";
-import CommunityLanding from "../../components/pages/community/CommunityLanding";
+import CommunityLanding from "./_components/CommunityLanding";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");

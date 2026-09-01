@@ -1,15 +1,15 @@
 "use client";
 
-// Items without full text never reach this island: the .astro page 302s them
-// to /metadata server-side (shouldRenderMainLayout).
+import MetadataTemplate from "@/components/templates/Metadata";
 import MainLayout from "@/components/templates/MainLayout";
+import { FullTextFallback } from "@/components/templates/FullTextCheck/FullTextCheck";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { itemMetadataQuery } from "@/lib/queries/item";
 import ItemShell from "./ItemShell";
-import type { itemQuery } from "../../../lib/queries/item";
 
-type Item = NonNullable<DocumentType<typeof itemQuery>["item"]>;
+type Item = NonNullable<DocumentType<typeof itemMetadataQuery>["item"]>;
 
 type Props = {
   item: Item;
@@ -21,13 +21,16 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function ItemLanding({
+export default function ItemMetadata({
   item,
   slug,
   globalData,
   route,
   draftModeEnabled,
 }: Props) {
+  const { metadata, main } = item.layouts;
+  const template = metadata?.template;
+
   return (
     <AppProviders
       community={item.community}
@@ -36,7 +39,14 @@ export default function ItemLanding({
       draftModeEnabled={draftModeEnabled}
     >
       <ItemShell data={item} slug={slug}>
-        <MainLayout data={item.layouts.main} />
+        {template ? (
+          <>
+            <MetadataTemplate data={template} />
+            <FullTextFallback>
+              <MainLayout data={main} fallback />
+            </FullTextFallback>
+          </>
+        ) : null}
       </ItemShell>
     </AppProviders>
   );

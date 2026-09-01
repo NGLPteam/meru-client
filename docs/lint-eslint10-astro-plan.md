@@ -357,3 +357,9 @@ Other execution facts:
   (792 KB) and vendored `public/` beyond the plan's list.
 - **Benign peer warnings** remain (informational): `eslint-plugin-import` and
   `typescript` against ESLint 10 / TS 6 — the same ones hcc tolerates.
+- **`import/order` removed post-ship (2026-09-01)** — eslint-plugin-import 2.32.0
+  is not ESLint 10-compatible: when the rule fires, its fixer calls the removed
+  `sourceCode.getTokenOrCommentBefore` and crashes the whole lint run instead of
+  reporting. The rule and local plugin registration were dropped from
+  `eslint.config.mjs`; the package stays in `package.json` only to satisfy
+  `@castiron/eslint-config`'s peer requirement.

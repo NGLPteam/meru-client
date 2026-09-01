@@ -1,14 +1,14 @@
 "use client";
 
-import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock";
+import EntityAnnouncementLayout from "@/components/composed/entity/EntityAnnouncementLayout";
+import AppProviders from "@/components/providers/AppProviders";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import type { collectionAnnouncementQuery } from "@/lib/queries/collection";
 import CollectionShell from "./CollectionShell";
-import type { collectionContributorsQuery } from "../../../lib/queries/collection";
 
 type Collection = NonNullable<
-  DocumentType<typeof collectionContributorsQuery>["collection"]
+  DocumentType<typeof collectionAnnouncementQuery>["collection"]
 >;
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function CollectionContributors({
+export default function CollectionAnnouncement({
   collection,
   slug,
   globalData,
@@ -36,11 +36,7 @@ export default function CollectionContributors({
       draftModeEnabled={draftModeEnabled}
     >
       <CollectionShell data={collection} slug={slug}>
-        <CollectionContributionsBlock
-          data={collection}
-          slug={slug}
-          background="neutral00"
-        />
+        <EntityAnnouncementLayout data={collection.announcement} />
       </CollectionShell>
     </AppProviders>
   );

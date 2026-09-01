@@ -7,7 +7,7 @@ import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar";
-import { collectionShellFragment } from "../../../lib/queries/collection";
+import { collectionShellFragment } from "@/lib/queries/collection";
 import type { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{

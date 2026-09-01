@@ -6,7 +6,7 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionBrowseQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionBrowse from "~/components/pages/collection/CollectionBrowse";
+import CollectionBrowse from "../../_components/CollectionBrowse";
 import type { ListEntityContext } from "@/types/graphql-schema";
 
 const { slug, ordering } = Astro.params;

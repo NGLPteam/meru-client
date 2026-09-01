@@ -4,7 +4,7 @@
 import InstanceHero from "@/components/composed/instance/InstanceHero";
 import InstanceCommunities from "@/components/composed/instance/InstanceCommunities";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
 
 type Props = {
   data: React.ComponentProps<typeof InstanceHero>["data"];

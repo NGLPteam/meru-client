@@ -8,7 +8,6 @@ import {
 } from "@castiron/eslint-config";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
-import importPlugin from "eslint-plugin-import";
 
 export default [
   // 1) Global ignores (carried from the old config-ignores.js; src/lib/lint/ dropped)
@@ -80,27 +79,14 @@ export default [
   // 6) Astro
   ...eslintPluginAstro.configs.recommended,
 
-  // 7a) meru local TS/TSX rule deltas not covered by the shared package
+  // 7a) meru local TS/TSX rule deltas not covered by the shared package.
+  //     No import/order: eslint-plugin-import 2.x crashes under ESLint 10
+  //     (fixer calls the removed sourceCode.getTokenOrCommentBefore), and
+  //     import grouping isn't worth a broken lint run. The package itself stays
+  //     installed only to satisfy @castiron/eslint-config's peer requirement.
   {
     files: ["**/*.{ts,tsx}"],
-    plugins: { import: importPlugin },
     rules: {
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-            "object",
-            "type",
-          ],
-          pathGroups: [{ pattern: "@/**", group: "internal" }],
-        },
-      ],
       "unused-imports/no-unused-imports": "warn",
       "@typescript-eslint/triple-slash-reference": "off",
     },

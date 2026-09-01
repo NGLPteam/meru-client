@@ -149,6 +149,7 @@ module.exports = {
   // the Tailwind extractor in dev, and v3 content globs don't support negation.
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/{pages,layouts}/**/*.astro",
   ],
 };

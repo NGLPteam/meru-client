@@ -1,14 +1,14 @@
 "use client";
 
-import SearchLayout from "@/components/composed/search/SearchLayout";
+import CommunityPageLayout from "@/components/composed/community/CommunityPageLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { communityPageQuery } from "@/lib/queries/community";
 import CommunityShell from "./CommunityShell";
-import type { communitySearchQuery } from "../../../lib/queries/community";
 
 type Community = NonNullable<
-  DocumentType<typeof communitySearchQuery>["community"]
+  DocumentType<typeof communityPageQuery>["community"]
 >;
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function CommunitySearch({
+export default function CommunityPage({
   community,
   globalData,
   route,
@@ -34,7 +34,7 @@ export default function CommunitySearch({
       draftModeEnabled={draftModeEnabled}
     >
       <CommunityShell data={community}>
-        <SearchLayout data={community} scoped />
+        <CommunityPageLayout data={community.page} />
       </CommunityShell>
     </AppProviders>
   );

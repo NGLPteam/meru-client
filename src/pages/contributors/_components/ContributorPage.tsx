@@ -3,7 +3,7 @@
 import ContributorDetail from "@/components/composed/contributor/ContributorDetail";
 import ContributorDetailNav from "@/components/composed/contributor/ContributorDetailNav";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
 
 type Props = {
   contributor: React.ComponentProps<typeof ContributorDetail>["data"];

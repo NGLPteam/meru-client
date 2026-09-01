@@ -1,13 +1,15 @@
 "use client";
 
-import AssetsBlock from "@/components/composed/asset/AssetsBlock";
+// Items without full text never reach this island: the .astro page 302s them
+// to /metadata server-side (shouldRenderMainLayout).
+import MainLayout from "@/components/templates/MainLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { itemQuery } from "@/lib/queries/item";
 import ItemShell from "./ItemShell";
-import type { itemFilesQuery } from "../../../lib/queries/item";
 
-type Item = NonNullable<DocumentType<typeof itemFilesQuery>["item"]>;
+type Item = NonNullable<DocumentType<typeof itemQuery>["item"]>;
 
 type Props = {
   item: Item;
@@ -19,7 +21,7 @@ type Props = {
   >["draftModeEnabled"];
 };
 
-export default function ItemFiles({
+export default function ItemLanding({
   item,
   slug,
   globalData,
@@ -34,7 +36,7 @@ export default function ItemFiles({
       draftModeEnabled={draftModeEnabled}
     >
       <ItemShell data={item} slug={slug}>
-        <AssetsBlock data={item.assets} />
+        <MainLayout data={item.layouts.main} />
       </ItemShell>
     </AppProviders>
   );

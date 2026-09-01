@@ -7,7 +7,7 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionAnnouncementQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionAnnouncement from "~/components/pages/collection/CollectionAnnouncement";
+import CollectionAnnouncement from "../../_components/CollectionAnnouncement";
 
 const { slug, announcement } = Astro.params;
 if (!slug || !announcement) return Astro.rewrite("/404");

@@ -6,7 +6,7 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityBrowseQuery } from "~/lib/queries/community";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
-import CommunityBrowse from "~/components/pages/community/CommunityBrowse";
+import CommunityBrowse from "../../_components/CommunityBrowse";
 
 const { slug, ordering } = Astro.params;
 if (!slug || !ordering) return Astro.rewrite("/404");

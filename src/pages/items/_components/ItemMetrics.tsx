@@ -5,9 +5,9 @@ import ArticleAnalyticsBlock from "@/components/composed/analytics/ArticleAnalyt
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { itemMetricsQuery } from "@/lib/queries/item";
 import ItemShell from "./ItemShell";
-import type { itemMetricsQuery } from "../../../lib/queries/item";
 
 type Item = NonNullable<DocumentType<typeof itemMetricsQuery>["item"]>;
 

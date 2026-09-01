@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import query from "../lib/query";
 import { instanceContentQuery } from "../lib/queries/home";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
-import InstanceContent from "../components/pages/InstanceContent";
+import InstanceContent from "./_components/InstanceContent";
 import { cacheGlobal } from "@/lib/caching/setCache";
 
 const { data: instance } = await query(instanceContentQuery, {});

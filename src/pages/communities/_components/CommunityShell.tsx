@@ -6,7 +6,7 @@ import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
-import { communityShellFragment } from "../../../lib/queries/community";
+import { communityShellFragment } from "@/lib/queries/community";
 import type { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{

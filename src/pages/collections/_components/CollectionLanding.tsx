@@ -3,9 +3,9 @@
 import MainLayout from "@/components/templates/MainLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../../providers/AppProviders";
+import AppProviders from "@/components/providers/AppProviders";
+import type { collectionQuery } from "@/lib/queries/collection";
 import CollectionShell from "./CollectionShell";
-import type { collectionQuery } from "../../../lib/queries/collection";
 
 type Collection = NonNullable<
   DocumentType<typeof collectionQuery>["collection"]

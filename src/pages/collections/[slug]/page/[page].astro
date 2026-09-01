@@ -7,7 +7,7 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionPageQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionPage from "~/components/pages/collection/CollectionPage";
+import CollectionPage from "../../_components/CollectionPage";
 
 const { slug, page: pageSlug } = Astro.params;
 if (!slug || !pageSlug) return Astro.rewrite("/404");

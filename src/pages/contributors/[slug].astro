@@ -8,7 +8,7 @@ import {
   contributorItemQuery,
   contributorCollectionQuery,
 } from "~/lib/queries/contributor";
-import ContributorPage from "~/components/pages/ContributorPage";
+import ContributorPage from "./_components/ContributorPage";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
