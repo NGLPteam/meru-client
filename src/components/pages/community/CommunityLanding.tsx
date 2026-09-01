@@ -3,9 +3,9 @@
 import MainLayout from "@/components/templates/MainLayout";
 import type { DocumentType } from "@/lib/api/gql";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "../providers/AppProviders";
-import CommunityShell from "./community/CommunityShell";
-import type { communityQuery } from "../../lib/queries/community";
+import AppProviders from "../../providers/AppProviders";
+import CommunityShell from "./CommunityShell";
+import type { communityQuery } from "../../../lib/queries/community";
 
 type Community = NonNullable<DocumentType<typeof communityQuery>["community"]>;
 

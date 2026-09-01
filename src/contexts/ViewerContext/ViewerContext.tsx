@@ -47,7 +47,7 @@ function ViewerContextProvider({ children, viewer, isPreview }: Props) {
   }, [isPreview]);
 
   // Re-seed when the server viewer changes across a navigation (the persisted
-  // chrome island updates its props on View-Transitions navigations, and content
+  // header/footer island updates its props on View-Transitions navigations, and content
   // islands remount). `viewer` omits `isPreview`, so it never clobbers the sync
   // above. Loop-safe: within a stable parent render the prop reference is stable.
   useEffect(() => {

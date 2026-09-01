@@ -4,15 +4,15 @@
 import InstanceHero from "@/components/composed/instance/InstanceHero";
 import InstanceCommunities from "@/components/composed/instance/InstanceCommunities";
 import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import ChromeProviders from "../chrome/ChromeProviders";
+import AppProviders from "../providers/AppProviders";
 
 type Props = {
   data: React.ComponentProps<typeof InstanceHero>["data"];
   communities: React.ComponentProps<typeof InstanceCommunities>["data"];
   globalData?: GlobalStaticData;
-  route?: React.ComponentProps<typeof ChromeProviders>["route"];
+  route?: React.ComponentProps<typeof AppProviders>["route"];
   draftModeEnabled?: React.ComponentProps<
-    typeof ChromeProviders
+    typeof AppProviders
   >["draftModeEnabled"];
 };
 
@@ -24,13 +24,13 @@ export default function InstanceContent({
   draftModeEnabled,
 }: Props) {
   return (
-    <ChromeProviders
+    <AppProviders
       globalData={globalData}
       route={route}
       draftModeEnabled={draftModeEnabled}
     >
       <InstanceHero data={data} />
       <InstanceCommunities data={communities} />
-    </ChromeProviders>
+    </AppProviders>
   );
 }

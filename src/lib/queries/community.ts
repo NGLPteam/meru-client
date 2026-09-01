@@ -1,11 +1,11 @@
 import { graphql } from "@/lib/api/gql";
 
-// Shared community-chrome selection (hero + nav bar + processing check) reused by
+// Shared community shell selection (hero + nav bar + processing check) reused by
 // the landing and every sub-route, so they all render the same community shell.
 // CommunityContext + metadata are spread directly on each query (not nested
 // here) so the .astro can read them without unmasking.
-export const communityLayoutFragment = graphql(`
-  fragment CommunityLayoutFragment on Community {
+export const communityShellFragment = graphql(`
+  fragment CommunityShellFragment on Community {
     canPreview {
       value
     }
@@ -60,7 +60,7 @@ export const communityMetaFragment = graphql(`
 export const communityQuery = graphql(`
   query communityQuery($slug: Slug!) {
     community(slug: $slug) {
-      ...CommunityLayoutFragment
+      ...CommunityShellFragment
       ...CommunityMetaFragment
       ...CommunityContextFragment
       layouts {
@@ -75,7 +75,7 @@ export const communityQuery = graphql(`
 export const communityPageQuery = graphql(`
   query communityPageQuery($slug: Slug!, $pageSlug: String!) {
     community(slug: $slug) {
-      ...CommunityLayoutFragment
+      ...CommunityShellFragment
       ...CommunityMetaFragment
       ...CommunityContextFragment
       page(slug: $pageSlug) {
@@ -88,7 +88,7 @@ export const communityPageQuery = graphql(`
 export const communityBrowseQuery = graphql(`
   query communityBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {
     community(slug: $slug) {
-      ...CommunityLayoutFragment
+      ...CommunityShellFragment
       ...CommunityMetaFragment
       ...CommunityContextFragment
       ordering(identifier: $identifier) {
@@ -109,7 +109,7 @@ export const communitySearchQuery = graphql(`
     $schema: [String!]
   ) {
     community(slug: $slug) {
-      ...CommunityLayoutFragment
+      ...CommunityShellFragment
       ...CommunityMetaFragment
       ...CommunityContextFragment
       ...SearchLayoutEntityFragment

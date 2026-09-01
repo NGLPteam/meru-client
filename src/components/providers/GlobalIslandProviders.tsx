@@ -1,20 +1,20 @@
 "use client";
 
-// Provider stack for the NON-viewer chrome leaf islands (header nav, community
-// picker, search, footer nav). Cache-safe: unlike the former ChromeProviders it
-// carries NO ViewerContext, so nothing viewer-specific is serialized into a leaf
+// Provider stack for the NON-viewer header/footer islands (header nav,
+// community picker, search, footer nav). Cache-safe: unlike AppProviders it
+// carries NO ViewerContext, so nothing viewer-specific is serialized into an
 // island's hydration props (and therefore never into cached page HTML). The
-// per-viewer account UI is rendered separately by the AccountNav / FooterAccountNav
+// per-viewer account UI is rendered separately by the AccountNav / FooterNav
 // `server:defer` islands, which resolve the viewer per-request and opt out of the
 // cache.
 //
-// Astro renders each `client:*` component as its own React root, so a leaf can't
-// inherit context from an Astro-level wrapper — each leaf island wraps itself in
+// Astro renders each `client:*` component as its own React root, so an island
+// can't inherit context from an Astro-level wrapper — each one wraps itself in
 // this stack, fed server-known data via props.
 //
 // Side-effect: initialize the i18next singleton (SSR-safe — the browser
 // LanguageDetector is only wired under `window`). react-i18next hooks in the
-// chrome depend on this having run.
+// header/footer depend on this having run.
 import "@/i18n";
 import {
   GlobalStaticContextProvider,
@@ -37,7 +37,7 @@ type Props = PropsWithChildren & {
   route?: Partial<RouteState>;
 };
 
-export default function ChromeLeafProviders({
+export default function GlobalIslandProviders({
   children,
   globalData,
   community,

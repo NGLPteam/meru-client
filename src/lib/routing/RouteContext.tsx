@@ -40,7 +40,7 @@ export function RouteProvider({ route, children }: Props) {
 
   const [state, setState] = useState<RouteState>(seeded);
 
-  // When a persisted chrome island survives a view-transition navigation, Astro
+  // When a persisted header/footer island survives a view-transition navigation, Astro
   // re-renders it with the new page's route prop while keeping React state (so
   // ViewerContext doesn't re-fetch). The useState seed above won't re-run, so
   // re-seed from the new prop when its location changes. Every navigation is a

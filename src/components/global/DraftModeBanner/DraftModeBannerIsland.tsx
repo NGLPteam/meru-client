@@ -2,7 +2,7 @@
 
 // Standalone island: `import "@/i18n"` initializes the shared i18next singleton
 // (idempotent) so react-i18next's `useTranslation` resolves against it without
-// needing the chrome provider stack.
+// needing the full provider stack.
 import "@/i18n";
 import { useTransition } from "react";
 import { useTranslation } from "react-i18next";

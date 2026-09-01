@@ -1,8 +1,8 @@
 import { graphql } from "@/lib/api/gql";
 
-// Header data fragment, unmasked by the Astro header composition and its leaf
-// islands (HeaderBrandIsland / HeaderNavIsland). Spread into chromeLayoutQuery
-// (src/lib/chrome/queries.ts).
+// Header data fragment, unmasked by the Astro header composition and its
+// islands (HeaderBrandIsland / HeaderNavIsland). Spread into globalLayoutQuery
+// (src/lib/queries/layout.ts).
 export const AppHeaderFragment = graphql(`
   fragment AppHeaderFragment on Query {
     communities(order: POSITION_ASCENDING) {

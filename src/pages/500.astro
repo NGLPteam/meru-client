@@ -1,6 +1,6 @@
 ---
 // Deliberately self-contained (no BaseLayout data fetches): a server error may
-// well be the chrome/API itself, so this page must render without them.
+// well be the global layout data / API itself, so this page must render without them.
 import "@/styles/global.css";
 
 Astro.response.status = 500;

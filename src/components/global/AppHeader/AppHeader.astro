@@ -6,7 +6,7 @@
 //
 // Route-based visibility (community-root vs. elsewhere) is computed here from
 // Astro.url and re-evaluated on every navigation, so the header no longer needs a
-// client usePathname() for gating. Interactive leaves stay React islands; their
+// client usePathname() for gating. Interactive parts stay React islands; their
 // <astro-island> wrappers are display:contents, so the flex layout is unaffected.
 import SkipLink from "@/components/global/SkipLink";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
@@ -16,19 +16,19 @@ import HeaderBrandIsland from "./HeaderBrandIsland";
 import HeaderNavIsland from "./HeaderNavIsland";
 import HeaderMobileMenu from "./HeaderMobileMenu.astro";
 import HeaderPrintName from "./HeaderPrintName";
-import AccountNav from "@/components/chrome/AccountNav/AccountNav.astro";
-import AccountDropdownIsland from "@/components/chrome/AccountNav/AccountDropdownIsland";
-import type ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import AccountNav from "@/components/global/AccountNav/AccountNav.astro";
+import AccountDropdownIsland from "@/components/global/AccountNav/AccountDropdownIsland";
+import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 import styles from "./AppHeader.module.css";
 
-type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppHeaderFragment> | null;
   searchData?: FragmentType<typeof SearchButtonFragment> | null;
-  globalData?: LeafProviderProps["globalData"];
-  community?: LeafProviderProps["community"];
-  route?: LeafProviderProps["route"];
+  globalData?: IslandProviderProps["globalData"];
+  community?: IslandProviderProps["community"];
+  route?: IslandProviderProps["route"];
 }
 
 const { data, searchData, globalData, community, route } = Astro.props;

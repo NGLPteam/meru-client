@@ -7,7 +7,7 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemQuery, itemLayoutFragment } from "~/lib/queries/item";
+import { itemQuery, itemShellFragment } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemLanding from "~/components/pages/item/ItemLanding";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
@@ -22,8 +22,8 @@ if (!item) return Astro.rewrite("/404");
 
 // An item whose FULL detail template wants a body but has no full text has no
 // landing content — 302 readers to the metadata sub-route instead.
-const layout = readFragment(itemLayoutFragment, item);
-if (!shouldRenderMainLayout(layout.layouts)) {
+const shell = readFragment(itemShellFragment, item);
+if (!shouldRenderMainLayout(shell.layouts)) {
   return Astro.redirect(`/items/${slug}/metadata`);
 }
 

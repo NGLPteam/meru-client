@@ -17,7 +17,7 @@ export async function signIn() {
 export async function signOut() {
   // Best-effort backchannel logout + cookie clear (server-side). Cookies are
   // cleared regardless of the Keycloak call's outcome, so a hard nav to "/"
-  // lands on freshly-anonymous SSR chrome.
+  // lands on a freshly-anonymous SSR page.
   await actions.logout();
   if (typeof window !== "undefined") window.location.assign("/");
 }

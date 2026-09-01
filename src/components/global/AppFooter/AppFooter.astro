@@ -7,20 +7,20 @@
 import { communityNameFragment } from "@/components/composed/instance/CommunityPicker/CommunityPicker";
 import type { FragmentType } from "@/lib/api/gql";
 import type { AppFooterFragment } from "./graphql";
-import type ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 import FooterBodyIsland from "./FooterBodyIsland";
 import FooterNav from "./FooterNav.astro";
 import FooterNavIsland from "./FooterNavIsland";
 import styles from "./AppFooter.module.css";
 
-type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppFooterFragment> | null;
   communityData?: FragmentType<typeof communityNameFragment> | null;
-  globalData?: LeafProviderProps["globalData"];
-  community?: LeafProviderProps["community"];
-  route?: LeafProviderProps["route"];
+  globalData?: IslandProviderProps["globalData"];
+  community?: IslandProviderProps["community"];
+  route?: IslandProviderProps["route"];
 }
 
 const { data, communityData, globalData, community, route } = Astro.props;

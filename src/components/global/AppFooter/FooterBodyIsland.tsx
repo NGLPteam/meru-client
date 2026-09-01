@@ -2,7 +2,7 @@
 
 // Footer body: everything except the per-viewer "Explore" nav — community name /
 // installation name, search, about/description, community picker, copyright. A
-// cache-safe leaf island (no viewer) wrapped in ChromeLeafProviders. The nav's
+// cache-safe island (no viewer) wrapped in GlobalIslandProviders. The nav's
 // admin/sign-in items are rendered separately by the FooterNav `server:defer`
 // island. Grid placement is by named areas (AppFooter.module.css), so DOM order
 // vs. the sibling nav island doesn't matter.
@@ -17,20 +17,20 @@ import CommunityName from "@/components/composed/community/CommunityName";
 import { Markdown } from "@/components/atomic";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
 import { CommunityContext } from "@/contexts/CommunityContext";
-import ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 import { AppFooterFragment } from "./graphql";
 import styles from "./AppFooter.module.css";
 
-type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppFooterFragment> | null;
   communityData?: FragmentType<
     typeof CommunityPickerCommunityNameFragment
   > | null;
-  globalData?: LeafProviderProps["globalData"];
-  community?: LeafProviderProps["community"];
-  route?: LeafProviderProps["route"];
+  globalData?: IslandProviderProps["globalData"];
+  community?: IslandProviderProps["community"];
+  route?: IslandProviderProps["route"];
 }
 
 function FooterBody({
@@ -102,12 +102,12 @@ export default function FooterBodyIsland({
   route,
 }: Props) {
   return (
-    <ChromeLeafProviders
+    <GlobalIslandProviders
       globalData={globalData}
       community={community}
       route={route}
     >
       <FooterBody data={data} communityData={communityData} />
-    </ChromeLeafProviders>
+    </GlobalIslandProviders>
   );
 }

@@ -1,13 +1,12 @@
 import { graphql } from "@/lib/api/gql";
 
-// Shared item-chrome selection (hero + view counter target + entity nav +
+// Shared item shell selection (hero + view counter target + entity nav +
 // processing check + full-text check + inline navigation template), reused by
-// the detail page and every sub-route — the React equivalent of the Next item
-// layout.tsx. `community` (parent community for the header context), metadata,
-// and the Google Scholar head data are spread directly on each query so the
-// .astro can read them unmasked.
-export const itemLayoutFragment = graphql(`
-  fragment ItemLayoutFragment on Item {
+// the detail page and every sub-route. `community` (parent community for the
+// header context), metadata, and the Google Scholar head data are spread
+// directly on each query so the .astro can read them unmasked.
+export const itemShellFragment = graphql(`
+  fragment ItemShellFragment on Item {
     canPreview {
       value
     }
@@ -60,7 +59,7 @@ export const itemMetaFragment = graphql(`
 export const itemQuery = graphql(`
   query itemQuery($slug: Slug!) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
@@ -78,7 +77,7 @@ export const itemQuery = graphql(`
 export const itemPageQuery = graphql(`
   query itemPageQuery($slug: Slug!, $pageSlug: String!) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
@@ -94,7 +93,7 @@ export const itemPageQuery = graphql(`
 export const itemContributorsQuery = graphql(`
   query itemContributorsQuery($slug: Slug!) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
@@ -108,7 +107,7 @@ export const itemContributorsQuery = graphql(`
 export const itemFilesQuery = graphql(`
   query itemFilesQuery($slug: Slug!) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
@@ -124,7 +123,7 @@ export const itemFilesQuery = graphql(`
 export const itemFileDetailQuery = graphql(`
   query itemFileDetailQuery($slug: Slug!, $file: Slug!) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
@@ -140,7 +139,7 @@ export const itemFileDetailQuery = graphql(`
 export const itemMetadataQuery = graphql(`
   query itemMetadataQuery($slug: Slug!) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
@@ -168,7 +167,7 @@ export const itemMetricsQuery = graphql(`
     $usOnly: Boolean!
   ) {
     item(slug: $slug) {
-      ...ItemLayoutFragment
+      ...ItemShellFragment
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {

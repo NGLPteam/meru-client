@@ -4,7 +4,7 @@ import type { APIContext } from "astro";
 
 // Request-scoped viewer resolution (the settled `getViewer` memo). `Astro.locals`
 // is one stable object per request, so keying a WeakMap on it collapses the
-// chrome (BaseLayout) and each page's content island to ≤1 `viewer` GraphQL query
+// layout (BaseLayout) and each page's content island to ≤1 `viewer` GraphQL query
 // per request — without adding an internal field to App.Locals.
 //
 // Anonymous requests short-circuit to a logged-out viewer with NO network call.

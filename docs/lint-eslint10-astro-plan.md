@@ -59,11 +59,13 @@ This is a lint/tooling change only — no application behavior changes.
 ## Dependency changes (`package.json`)
 
 **Add**
+
 - `@castiron/eslint-config`: `2.0.0-beta.0` (exact — beta; `^` on prereleases is unreliable)
 - `eslint-plugin-astro`: `^2.1.1`
 - `prettier-plugin-astro`: `^0.14.1`
 
 **Bump**
+
 - `eslint`: `^9.39.5` → `^10.7.0`
 - `@eslint/js`: `^9.39.5` → `^10.0.1`
 - `eslint-plugin-react-hooks`: `^5.2.0` → `^7.1.1` (hard blocker: v5 peers eslint ≤9)
@@ -72,12 +74,14 @@ This is a lint/tooling change only — no application behavior changes.
 - `typescript`: `^5.9.2` → `^6.0.3`
 
 **Keep** (now function as shared-config peers; stay direct devDeps)
+
 - `@typescript-eslint/parser` + `@typescript-eslint/eslint-plugin` `^8.65.0`
 - `eslint-plugin-react` `^7.37.5` (now needed for local registration)
 - `eslint-plugin-import` `^2.32.0`, `eslint-plugin-jsx-a11y` `^6.10.2`,
   `eslint-plugin-unused-imports` `^4.4.1`
 
 **Remove**
+
 - `typescript-eslint` (meta-package — shared config uses split packages)
 - `eslint-plugin-prettier` (moving to separate-Prettier model)
 - `@graphql-eslint/eslint-plugin` (inert in meru — no `.graphql` glob, no processor)
@@ -85,6 +89,7 @@ This is a lint/tooling change only — no application behavior changes.
 ## File changes
 
 **Delete**
+
 - `eslint.config.js` (CJS re-export)
 - entire `src/lib/lint/` dir (`config.js` + `configs/config-all.js`,
   `config-ts.js`, `config-react.js`, `config-ignores.js`, `config-gql.js`)
@@ -95,7 +100,12 @@ This is a lint/tooling change only — no application behavior changes.
 ```js
 // @ts-check
 import eslintPluginAstro from "eslint-plugin-astro";
-import { baseConfig, jsConfig, tsConfig, reactConfig } from "@castiron/eslint-config";
+import {
+  baseConfig,
+  jsConfig,
+  tsConfig,
+  reactConfig,
+} from "@castiron/eslint-config";
 import react from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
 
@@ -103,10 +113,21 @@ export default [
   // 1) Global ignores (carried from old config-ignores.js; src/lib/lint/ dropped)
   {
     ignores: [
-      "dist/", ".astro/", "src/lib/api/gql/", "src/lib/stubs/", "__schema__/",
-      "_sitemaps/", "src/types/", "graphql-schema.d.ts", "**/*.xml.ts",
-      "tailwind.config.js", "postcss.config.js", "astro.config.mjs",
-      "eslint.config.mjs", "prettier.config.mjs", ".graphqlrc.ts",
+      "dist/",
+      ".astro/",
+      "src/lib/api/gql/",
+      "src/lib/stubs/",
+      "__schema__/",
+      "_sitemaps/",
+      "src/types/",
+      "graphql-schema.d.ts",
+      "**/*.xml.ts",
+      "tailwind.config.js",
+      "postcss.config.js",
+      "astro.config.mjs",
+      "eslint.config.mjs",
+      "prettier.config.mjs",
+      ".graphqlrc.ts",
     ],
   },
 
@@ -132,10 +153,22 @@ export default [
     files: ["**/*.{ts,tsx}"],
     plugins: { import: importPlugin },
     rules: {
-      "import/order": ["error", {
-        groups: ["builtin","external","internal","parent","sibling","index","object","type"],
-        pathGroups: [{ pattern: "@/**", group: "internal" }],
-      }],
+      "import/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type",
+          ],
+          pathGroups: [{ pattern: "@/**", group: "internal" }],
+        },
+      ],
       "unused-imports/no-unused-imports": "warn",
       "@typescript-eslint/triple-slash-reference": "off",
     },
@@ -179,12 +212,14 @@ graphql-schema.d.ts
 ```
 
 **Scripts (`package.json`)**
+
 ```jsonc
 "lint": "eslint .",                                            // `eslint .` pulls in .astro
 "fix":  "eslint . --fix && prettier . --write --cache --log-level warn",
 "format": "prettier . --write --cache --log-level warn",       // optional convenience
 "types": "npx tsc --strict"                                    // keep (TS6 verification)
 ```
+
 Drop `--cache` from `lint` for a clean first run; add `eslint --cache .` back once
 the baseline is green. Optionally add hcc-style `"check": "yarn lint && yarn types"`.
 
@@ -223,8 +258,8 @@ the baseline is green. Optionally add hcc-style `"check": "yarn lint && yarn typ
   (e.g. 100) — but **keep it in sync with Prettier `printWidth`** or they fight.
 - **`no-alert`** — 0 occurrences, no action.
 - **`.astro` (32 files, mostly `src/pages/**`)** — first-time linting surfaces astro
-  + a11y findings (unused frontmatter vars, a11y). Fix cheap ones; targeted disables
-  for intentional cases. Land as warnings where possible so they don't block.
+  - a11y findings (unused frontmatter vars, a11y). Fix cheap ones; targeted disables
+    for intentional cases. Land as warnings where possible so they don't block.
 - **react-hooks v5→v7** — v7's recommended may add `exhaustive-deps` warnings;
   `rules-of-hooks` is `warn` in reactConfig so no hard errors. Triage, not blocker.
 
@@ -265,6 +300,7 @@ beyond the plan's snippet:
    `version: "detect"`), which skips detection while keeping the full
    react-recommended rule set. Watch for a future `eslint-plugin-react` release
    that supports ESLint 10 to drop this pin.
+
    ```js
    { files: ["**/*.{jsx,tsx}"], settings: { react: { version: "19.2" } } }
    ```
@@ -277,6 +313,7 @@ beyond the plan's snippet:
    **warning** (matches meru's long-standing `warn` posture for `rules-of-hooks`).
    The 4 remaining lint warnings are all `set-state-in-effect` on intentional
    hydration / preview-sync effects (SiteNameIsland, ViewerContext×2, useIsMounted).
+
    ```js
    { files: ["**/*.ts"], plugins: { "react-hooks": reactHooks },
      rules: { ...reactHooks.configs.recommended.rules } },
@@ -288,6 +325,7 @@ beyond the plan's snippet:
 3. **`spaced-comment` vs TS triple-slash directives.** The shared base's
    `spaced-comment` flags `/// <reference ... />` (required syntax in `env.d.ts`).
    Added the `markers: ["/"]` exception (scoped off `.astro`).
+
    ```js
    { files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
      rules: { "spaced-comment": ["error", "always", { markers: ["/"] }] } },

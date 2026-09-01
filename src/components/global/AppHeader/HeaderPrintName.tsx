@@ -1,17 +1,17 @@
 "use client";
 
 // Print-only community name (the header's `@media print` block). No viewer, no
-// interactivity — rendered statically (no client directive) inside ChromeLeafProviders
-// so CommunityName can read the community from context.
+// interactivity — rendered statically (no client directive) inside
+// GlobalIslandProviders so CommunityName can read the community from context.
 import CommunityName from "@/components/composed/community/CommunityName";
-import ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 
-type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 type Props = {
-  globalData?: LeafProviderProps["globalData"];
-  community?: LeafProviderProps["community"];
-  route?: LeafProviderProps["route"];
+  globalData?: IslandProviderProps["globalData"];
+  community?: IslandProviderProps["community"];
+  route?: IslandProviderProps["route"];
 };
 
 export default function HeaderPrintName({
@@ -20,12 +20,12 @@ export default function HeaderPrintName({
   route,
 }: Props) {
   return (
-    <ChromeLeafProviders
+    <GlobalIslandProviders
       globalData={globalData}
       community={community}
       route={route}
     >
       <CommunityName />
-    </ChromeLeafProviders>
+    </GlobalIslandProviders>
   );
 }

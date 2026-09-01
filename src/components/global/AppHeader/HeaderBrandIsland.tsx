@@ -1,24 +1,24 @@
 "use client";
 
 // Left header cluster: installation name/logo + community picker. A cache-safe
-// leaf island (no viewer) wrapped in ChromeLeafProviders. Visibility gating
+// island (no viewer) wrapped in GlobalIslandProviders. Visibility gating
 // (community-root vs. elsewhere) is decided server-side in AppHeader.astro; this
 // island only renders the cluster.
 import classNames from "classnames";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
-import ChromeLeafProviders from "@/components/chrome/ChromeLeafProviders";
+import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 import { AppHeaderFragment } from "./graphql";
 import styles from "./AppHeader.module.css";
 
-type LeafProviderProps = React.ComponentProps<typeof ChromeLeafProviders>;
+type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 type Props = {
   data?: FragmentType<typeof AppHeaderFragment> | null;
-  globalData?: LeafProviderProps["globalData"];
-  community?: LeafProviderProps["community"];
-  route?: LeafProviderProps["route"];
+  globalData?: IslandProviderProps["globalData"];
+  community?: IslandProviderProps["community"];
+  route?: IslandProviderProps["route"];
 };
 
 export default function HeaderBrandIsland({
@@ -31,7 +31,7 @@ export default function HeaderBrandIsland({
   const withText = appData?.globalConfiguration?.site?.logoMode === "WITH_TEXT";
 
   return (
-    <ChromeLeafProviders
+    <GlobalIslandProviders
       globalData={globalData}
       community={community}
       route={route}
@@ -44,6 +44,6 @@ export default function HeaderBrandIsland({
         <InstallationName data={appData?.globalConfiguration} />
       </span>
       <CommunityPicker data={appData} />
-    </ChromeLeafProviders>
+    </GlobalIslandProviders>
   );
 }
