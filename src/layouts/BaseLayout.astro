@@ -13,10 +13,7 @@ import LoadingBar from "../components/client/LoadingBar.astro";
 import query from "../lib/query";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import DraftModeBannerIsland from "../components/global/DraftModeBanner/DraftModeBannerIsland";
-import {
-  LayoutThemeAstroQuery,
-  globalLayoutQuery,
-} from "../lib/queries/layout";
+import { layoutThemeQuery, globalLayoutQuery } from "../lib/queries/layout";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import getSiteMetadata from "../lib/metadata/siteMetadata";
 import resolvePageMeta from "../lib/metadata/resolvePageMeta";
@@ -64,7 +61,7 @@ const route = {
 
 const [themeRes, globalLayoutRes, globalStaticRes, siteMeta] =
   await Promise.all([
-    query(LayoutThemeAstroQuery, {}),
+    query(layoutThemeQuery, {}),
     query(globalLayoutQuery, {}),
     query(globalStaticQuery, {}),
     getSiteMetadata(),
