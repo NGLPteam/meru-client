@@ -1,5 +1,6 @@
 "use client";
 
+import "@/i18n";
 import classNames from "classnames";
 import { useParams } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
@@ -14,9 +15,10 @@ import {
 import AssetPDFPreview from "../AssetPDFPreview";
 import styles from "./AssetDetailBlock.module.css";
 
-export default function AssetDetailBlock({ data }: Props) {
+export default function AssetDetailBlock({ data, slug: slugProp }: Props) {
   const asset = useFragment(fragment, data);
-  const { slug } = useParams();
+  const { slug: routeSlug } = useParams();
+  const slug = slugProp ?? routeSlug;
 
   return asset ? (
     <section className={classNames("l-container-wide", styles.section)}>
@@ -60,6 +62,7 @@ export default function AssetDetailBlock({ data }: Props) {
 
 interface Props {
   data?: FragmentType<typeof fragment> | null;
+  slug?: string;
 }
 
 const fragment = graphql(`

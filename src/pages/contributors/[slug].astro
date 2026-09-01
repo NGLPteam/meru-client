@@ -2,7 +2,6 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
-import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import {
   contributorDetailQuery,
   contributorItemQuery,
@@ -42,7 +41,6 @@ if (item) {
 
 if (!contributor) return Astro.rewrite("/404");
 
-const { data: globalData } = await query(globalStaticQuery, {});
 const route = {
   pathname: Astro.url.pathname,
   search: Astro.url.search,
@@ -57,8 +55,6 @@ cacheEntity(Astro, "contributor", slug);
     client:load
     contributor={contributor}
     navData={navData}
-    community={community}
-    globalData={globalData}
     route={route}
   />
 </BaseLayout>

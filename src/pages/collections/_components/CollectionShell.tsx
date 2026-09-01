@@ -6,7 +6,9 @@ import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import HeroTemplate from "@/components/templates/Hero";
 import ProcessingCheck from "@/components/templates/ProcessingCheck";
 import ViewCounter from "@/components/composed/analytics/ViewCounter";
-import EntityNavBar from "@/components/composed/entity/EntityNavBar";
+import EntityNavBar, {
+  getEntityNavBarData,
+} from "@/components/composed/entity/EntityNavBar";
 import { collectionShellFragment } from "@/lib/queries/collection";
 import type { PropsWithChildren } from "react";
 
@@ -30,7 +32,7 @@ export default function CollectionShell({ data, slug, children }: Props) {
       {shell.layouts.hero && <HeroTemplate data={shell.layouts.hero} />}
       <ProcessingCheck data={shell.layouts} entityType="collection">
         {slug && <ViewCounter slug={slug} />}
-        <EntityNavBar data={shell} />
+        <EntityNavBar data={getEntityNavBarData(shell)} />
         {children}
       </ProcessingCheck>
     </>

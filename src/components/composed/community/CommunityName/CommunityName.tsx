@@ -1,13 +1,15 @@
 import { useContext } from "react";
 import classNames from "classnames";
-import { graphql, useFragment } from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { CommunityContext } from "@/contexts/CommunityContext";
 import styles from "./CommunityName.module.css";
 import CommunityNameContent from "./CommunityNameContent";
 
-export default function CommunityName() {
-  const communityData = useContext(CommunityContext);
-  const community = useFragment(fragment, communityData);
+export default function CommunityName({ data }: Props) {
+  // Mounted from .astro the community arrives as a prop; inside legacy islands
+  // it still comes from CommunityContext.
+  const contextData = useContext(CommunityContext);
+  const community = useFragment(fragment, data ?? contextData);
 
   return (
     <div
@@ -17,6 +19,10 @@ export default function CommunityName() {
       {community && <CommunityNameContent community={community} />}
     </div>
   );
+}
+
+interface Props {
+  data?: FragmentType<typeof fragment> | null;
 }
 
 export const fragment = graphql(`

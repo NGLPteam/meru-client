@@ -1,57 +1,22 @@
-"use client";
-
-import { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
-import useWindowSize from "@/hooks/useWindowSize";
 import { BackToTopButton } from "@/components/atomic";
 import styles from "./BackToTopBlock.module.css";
 
 /**
- * A block of content with a contained back to top button.
- * When clicked, the back to top button scrolls to the top of the wrapper.
- * Can be used with other styled components:
- * <Styled.SectionInner as={BackToTopBlock}>
+ * A block of content with a contained back to top button. Static markup only;
+ * the <back-to-top-block> custom element (src/components/client/BackToTopBlock.astro) toggles the
+ * button's visibility against the viewport and wires the scroll-to-top click.
  */
 export default function BackToTopBlock({ className, children }: Props) {
-  const [hideButton, setHideButton] = useState(true);
-
-  const elRef = useRef<HTMLDivElement | null>(null);
-
-  const childRef = useRef<HTMLDivElement | null>(null);
-
-  const size = useWindowSize();
-
-  const handleClick = useCallback(() => {
-    if (!elRef || !elRef.current || !document) return;
-
-    // Get the top position
-    const bounding = elRef.current.getBoundingClientRect();
-    const scrollTop = window.scrollY + bounding.top;
-
-    // Scroll to top
-    document.body.scrollTop = scrollTop; // For Safari
-    document.documentElement.scrollTop = scrollTop; // For Chrome, Firefox, IE and Opera
-  }, [elRef]);
-
-  useEffect(() => {
-    const bounding = childRef?.current?.getBoundingClientRect();
-
-    if (bounding && size?.height && bounding.height > size.height) {
-      setHideButton(false);
-    } else {
-      setHideButton(true);
-    }
-  }, [size, childRef, setHideButton]);
-
   return (
-    <div ref={elRef} className={classNames(styles.section, className)}>
-      <div className={styles.children} ref={childRef}>
+    <back-to-top-block className={classNames(styles.section, className)}>
+      <div className={styles.children} data-back-to-top-content>
         {children}
       </div>
-      <div className={styles.button} hidden={hideButton}>
-        <BackToTopButton onClick={handleClick} />
+      <div className={styles.button} data-back-to-top-wrapper hidden>
+        <BackToTopButton data-back-to-top-button />
       </div>
-    </div>
+    </back-to-top-block>
   );
 }
 

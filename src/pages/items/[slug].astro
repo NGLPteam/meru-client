@@ -9,9 +9,14 @@ import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getSt
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import { itemQuery, itemShellFragment } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
-import ItemLanding from "./_components/ItemLanding";
+import ItemShell from "./_components/ItemShell.astro";
+import MainLayout from "@/components/templates/MainLayout";
+import MainLayoutIsland from "@/components/templates/MainLayout/MainLayoutIsland";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
-import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
+import {
+  shouldRenderMainLayout,
+  hasPDFFullText,
+} from "@/components/templates/FullTextCheck/FullTextCheck";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -28,9 +33,14 @@ if (!shouldRenderMainLayout(shell.layouts)) {
 }
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
+
+// PDF full text must hydrate (clientOnly react-pdf viewer); prose stays static.
+const pdfBody = hasPDFFullText(shell.layouts);
 const route = {
   pathname: Astro.url.pathname,
   search: Astro.url.search,
@@ -42,12 +52,18 @@ cacheEntity(Astro, "item", slug);
 
 <BaseLayout meta={meta} community={item.community} routeParams={{ slug }}>
   <GoogleScholarMetaTags slot="head" entity={scholar} />
-  <ItemLanding
-    client:load
-    item={item}
+  <ItemShell
+    data={item}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    {
+      pdfBody ? (
+        <MainLayoutIsland client:load data={item.layouts.main} route={route} />
+      ) : (
+        <MainLayout data={item.layouts.main} />
+      )
+    }
+  </ItemShell>
 </BaseLayout>

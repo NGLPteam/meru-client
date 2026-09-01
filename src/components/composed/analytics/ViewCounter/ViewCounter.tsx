@@ -14,7 +14,10 @@ import useViewerContext from "@/contexts/useViewerContext";
  * never needs the session token. Provides its own (anonymous) urql client —
  * analytics widgets are the only client-side GraphQL left.
  */
-export default function ViewCounter(props: { slug: string }) {
+export default function ViewCounter(props: {
+  slug: string;
+  isPreview?: boolean;
+}) {
   return (
     <UrqlProvider>
       <ViewCounterInner {...props} />
@@ -22,14 +25,23 @@ export default function ViewCounter(props: { slug: string }) {
   );
 }
 
-function ViewCounterInner({ slug }: { slug: string }) {
-  const { isPreview } = useViewerContext();
+function ViewCounterInner({
+  slug,
+  isPreview,
+}: {
+  slug: string;
+  isPreview?: boolean;
+}) {
+  // Mounted from .astro the flag arrives as a prop; inside legacy content
+  // islands it still comes from ViewerContext.
+  const viewer = useViewerContext();
+  const paused = isPreview ?? viewer.isPreview;
 
   useQuery({
     query,
     variables: { slug },
     requestPolicy: "network-only",
-    pause: isPreview,
+    pause: paused,
   });
 
   return <></>;

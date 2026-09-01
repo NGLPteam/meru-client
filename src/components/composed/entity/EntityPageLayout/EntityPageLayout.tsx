@@ -2,14 +2,11 @@
 
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import useIsMounted from "@/hooks/useIsMounted";
-import { ContentImage, Markdown, LoadingBlock } from "@/components/atomic";
+import { ContentImage, Markdown } from "@/components/atomic";
 import styles from "./EntityPageLayout.module.css";
 
 export default function EntityPageLayout({ data }: Props) {
   const page = useFragment(fragment, data);
-
-  const isMounted = useIsMounted();
 
   return page ? (
     <section
@@ -18,13 +15,7 @@ export default function EntityPageLayout({ data }: Props) {
       <div className={classNames("t-rte", styles.inner)}>
         {page.heroImage && <ContentImage data={page.heroImage} />}
         <h2 className="t-h3">{page.title}</h2>
-        {isMounted ? (
-          <Markdown.Page>{page.body}</Markdown.Page>
-        ) : (
-          <div className={classNames("t-rte", styles.loading)}>
-            <LoadingBlock />
-          </div>
-        )}
+        <Markdown.Page>{page.body}</Markdown.Page>
       </div>
     </section>
   ) : null;

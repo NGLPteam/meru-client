@@ -1,32 +1,25 @@
-import { useParams } from "@/lib/routing/hooks";
-import {
-  graphql,
-  useFragment,
-  type FragmentType,
-  type DocumentType,
-} from "@/lib/api/gql";
-import { getRouteByEntityType } from "@/helpers";
+import { graphql, type DocumentType } from "@/lib/api/gql";
 import BrowseButton from "./BrowseButton";
 import Dropdown from "./Dropdown";
 import PagesList from "./PagesList";
 import styles from "./EntityNavList.module.css";
 
-export default function EntityNavList({ data }: Props) {
-  const { slug } = useParams();
-  const entity = useFragment(fragment, data);
+type NavListData = DocumentType<typeof fragment>;
+type Ordering = NavListData["orderings"]["nodes"][number];
 
-  if (!entity || !slug) return null;
-
-  const typeRoute = getRouteByEntityType(entity.__typename);
-  const basePath = `/${typeRoute}/${slug}`;
-
-  const orderings = entity.orderings?.nodes || [];
-  const pages = entity.pages?.nodes;
-
+// Plain props (extracted server-side by getEntityNavBarData) — see the
+// EntityNavBar header comment for why this island doesn't take fragment refs.
+export default function EntityNavList({
+  basePath,
+  schemaIdentifier,
+  orderings,
+  pages,
+  pathname,
+}: Props) {
   const renderOrderingButton =
     orderings.length === 1 &&
-    entity.schemaVersion.identifier !== "journal_issue" &&
-    entity.schemaVersion.identifier !== "journal_volume";
+    schemaIdentifier !== "journal_issue" &&
+    schemaIdentifier !== "journal_volume";
 
   const renderOrderings = renderOrderingButton ? (
     <BrowseButton basePath={basePath} ordering={orderings[0]} />
@@ -36,8 +29,7 @@ export default function EntityNavList({ data }: Props) {
       items={orderings}
       getItemProps={(item) => {
         const context =
-          entity.schemaVersion.identifier === "journal" &&
-          item.identifier === "articles"
+          schemaIdentifier === "journal" && item.identifier === "articles"
             ? "ABBR"
             : "NONE";
 
@@ -53,16 +45,20 @@ export default function EntityNavList({ data }: Props) {
   return (
     <ul className={styles.list}>
       {renderOrderings}
-      {!!pages?.length && <PagesList pages={pages} basePath={basePath} />}
+      {!!pages?.length && (
+        <PagesList pages={pages} basePath={basePath} pathname={pathname} />
+      )}
     </ul>
   );
 }
 
 type Props = {
-  data?: FragmentType<typeof fragment> | null;
+  basePath: string;
+  schemaIdentifier: string;
+  orderings: NavListData["orderings"]["nodes"];
+  pages: NavListData["pages"]["nodes"];
+  pathname?: string;
 };
-
-type Ordering = DocumentType<typeof fragment>["orderings"]["nodes"][number];
 
 export const fragment = graphql(`
   fragment EntityNavListFragment on Entity {

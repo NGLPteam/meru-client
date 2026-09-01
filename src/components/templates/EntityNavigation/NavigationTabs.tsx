@@ -11,12 +11,23 @@ import styles from "./EntityNavigation.module.css";
 
 export default function NavigationTabs({
   data,
+  slug: slugProp,
+  pathname: pathnameProp,
+  renderMainLayout: renderMainLayoutProp,
 }: {
   data?: FragmentType<typeof fragment> | null;
+  // Rendered statically from an .astro shell these arrive as props; inside
+  // legacy content islands they come from route context / FullTextCheck.
+  slug?: string;
+  pathname?: string;
+  renderMainLayout?: boolean;
 }) {
-  const { slug } = useParams();
-  const pathname = usePathname();
+  const { slug: routeSlug } = useParams();
+  const routePathname = usePathname();
   const { t } = useTranslation();
+
+  const slug = slugProp ?? routeSlug;
+  const pathname = pathnameProp ?? routePathname;
 
   const template = useFragment(fragment, data);
 
@@ -24,7 +35,8 @@ export default function NavigationTabs({
 
   const entityLabel = useSharedInlineFragment(slots?.entityLabel);
 
-  const renderMainLayout = useFullTextCheck();
+  const contextRenderMainLayout = useFullTextCheck();
+  const renderMainLayout = renderMainLayoutProp ?? contextRenderMainLayout;
 
   if (!entity || (entity.__typename as string) === "%other") return null;
 

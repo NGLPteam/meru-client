@@ -35,6 +35,11 @@ export const Link = forwardRef<
       href={href}
       onClick={(e) => {
         if (isModifiedEvent(e)) return;
+        // scroll={false} links must be handled by ClientRouter's own click
+        // interception: it sets the preparation event's sourceElement, which
+        // the KeepScroll script needs to see the data-keep-scroll marker.
+        // A programmatic router.push carries no sourceElement.
+        if (rest.scroll === false && !replace) return;
         e.preventDefault();
         if (replace) {
           router.replace(to);

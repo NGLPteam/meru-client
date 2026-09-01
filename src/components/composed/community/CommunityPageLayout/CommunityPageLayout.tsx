@@ -2,16 +2,13 @@
 
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import useIsMounted from "@/hooks/useIsMounted";
-import { LoadingBlock, Markdown } from "@/components/atomic";
+import { Markdown } from "@/components/atomic";
 import Container from "@/components/layout/Container";
 import { generateSrcSet, sizes } from "@/helpers/generateSrcSet";
 import styles from "./CommunityPageLayout.module.css";
 
 export default function CommunityPageLayout({ data }: Props) {
   const page = useFragment(fragment, data);
-
-  const isMounted = useIsMounted();
 
   const hero = page?.heroImage?.hero?.webp;
 
@@ -35,19 +32,11 @@ export default function CommunityPageLayout({ data }: Props) {
       <Container as="div">
         <div className={classNames("t-rte", styles.content)}>
           <h2>{page.title}</h2>
-          {isMounted ? (
-            <Markdown.Page>{page.body}</Markdown.Page>
-          ) : (
-            <div className={classNames("t-rte", styles.loading)}>
-              <LoadingBlock />
-            </div>
-          )}
+          <Markdown.Page>{page.body}</Markdown.Page>
         </div>
       </Container>
     </section>
-  ) : (
-    <LoadingBlock className="a-bg-custom10" />
-  );
+  ) : null;
 }
 
 interface Props {

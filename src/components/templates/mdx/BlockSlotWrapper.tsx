@@ -1,16 +1,23 @@
 "use client";
 
+// Slot content is compiled synchronously (evaluateSync) so it renders during
+// server rendering — both static trees and island SSR — instead of appearing
+// only after hydration. The same string compiles to the same tree on server and
+// client, so hydration is mismatch-free.
+import "@/i18n";
 import { useTranslation } from "react-i18next";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote";
+import { evaluateSync } from "@mdx-js/mdx";
+import * as runtime from "react/jsx-runtime";
+import { renderToStaticMarkup } from "react-dom/server";
 import remarkGfm from "remark-gfm";
-import { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import useViewerContext from "@/contexts/useViewerContext";
 import NoContent from "@/components/layout/messages/NoContent";
 import { blockSlotComponents } from "./components";
 import AssetButton from "./components/AssetButton";
 import ButtonLink from "./components/ButtonLink";
+import { createElement } from "react";
+import type { MDXComponents } from "mdx/types";
 
 export default function BlockSlotWrapper({
   content,
@@ -25,31 +32,42 @@ export default function BlockSlotWrapper({
 
   const isAdmin = allowedActions?.includes("admin.access");
 
-  const [mdxContent, setMdxContent] = useState<MDXRemoteSerializeResult>();
+  if (!content) return null;
 
-  useEffect(() => {
-    const renderMDX = async () => {
-      if (content) {
-        try {
-          const mdx = await serialize(content, {
-            mdxOptions: { remarkPlugins: [remarkGfm] },
-          });
-          if (mdx) setMdxContent(mdx);
-        } catch (err) {
-          console.debug(`MDX error: ${err}`);
-          console.debug(`raw content: ${content}`);
+  const components = (
+    assetAsButton
+      ? { ...blockSlotComponents, Asset: AssetButton, a: ButtonLink }
+      : blockSlotComponents
+  ) as MDXComponents;
+
+  let Content;
+  try {
+    Content = evaluateSync(content, {
+      ...runtime,
+      remarkPlugins: [remarkGfm],
+    }).default;
+    // On the server, trial-render so a throwing MDX component degrades to the
+    // error message below instead of failing the whole page render. (Client
+    // render errors are caught by the ErrorBoundary instead.) createElement
+    // rather than JSX: rendering here is eager, so the catch does see errors.
+    if (import.meta.env.SSR) {
+      renderToStaticMarkup(createElement(Content, { components }));
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return (
+      <NoContent
+        inline
+        message={
+          isAdmin
+            ? t("messages.admin_content", { error: message })
+            : t("messages.content")
         }
-      }
-    };
+      />
+    );
+  }
 
-    renderMDX();
-  }, [content]);
-
-  const components = assetAsButton
-    ? { ...blockSlotComponents, Asset: AssetButton, a: ButtonLink }
-    : blockSlotComponents;
-
-  return mdxContent ? (
+  return (
     <ErrorBoundary
       fallbackRender={({ error }) => (
         <NoContent
@@ -62,7 +80,7 @@ export default function BlockSlotWrapper({
         />
       )}
     >
-      <MDXRemote {...mdxContent} components={components} />
+      <Content components={components} />
     </ErrorBoundary>
-  ) : null;
+  );
 }

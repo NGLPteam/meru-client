@@ -1,1 +1,1 @@
-export { default } from "./ProcessingCheck";
+export { default, hasMainContent } from "./ProcessingCheck";

@@ -1,3 +1,4 @@
+import "@/i18n";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
@@ -6,12 +7,19 @@ import { useRouter, useSearchParams } from "@/lib/routing/hooks";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./SearchHero.module.css";
 
-export default function SearchHero({ prompt }: { prompt?: string | null }) {
+export default function SearchHero({
+  prompt,
+  pathname: pathnameProp,
+}: {
+  prompt?: string | null;
+  pathname?: string;
+}) {
   const { t } = useTranslation();
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const routePathname = usePathname();
+  const pathname = pathnameProp ?? routePathname;
 
   const { register, handleSubmit } = useForm({
     shouldUseNativeValidation: true,

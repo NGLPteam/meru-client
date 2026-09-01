@@ -7,12 +7,13 @@ import { getRouteByEntityType } from "@/helpers";
 import BreadcrumbLink from "./BreadcrumbLink";
 import styles from "./Breadcrumbs.module.css";
 
-export default function Breadcrumbs({ data }: Props) {
+export default function Breadcrumbs({ data, pathname: pathnameProp }: Props) {
   const entity = useFragment(fragment, data);
 
   const { t } = useTranslation();
 
-  const pathname = usePathname();
+  const routePathname = usePathname();
+  const pathname = pathnameProp ?? routePathname;
 
   const breadcrumbs = entity?.breadcrumbs || [];
 
@@ -93,6 +94,7 @@ export default function Breadcrumbs({ data }: Props) {
 
 interface Props {
   data?: FragmentType<typeof fragment> | null;
+  pathname?: string;
 }
 
 const fragment = graphql(`

@@ -1,5 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
+import {
+  graphql,
+  useFragment,
+  useFragment as readFragment,
+  type FragmentType,
+} from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
 import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar";
 import { getBgClass } from "@/components/templates/helpers/bgColor";
@@ -9,8 +14,10 @@ import HeroImage from "../Image";
 
 export default function EntityHeroHeader({
   data,
+  hideBreadcrumbsBar,
 }: {
   data?: FragmentType<typeof fragment> | null;
+  hideBreadcrumbsBar?: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -53,7 +60,7 @@ export default function EntityHeroHeader({
 
   return (
     <>
-      {renderBreadcrumbs && (
+      {renderBreadcrumbs && !hideBreadcrumbsBar && (
         <BreadcrumbsBar
           data={entity}
           showShare={showSharingLink ?? false}
@@ -71,6 +78,24 @@ export default function EntityHeroHeader({
       {renderHeroImage && <HeroImage data={heroImage} />}
     </>
   );
+}
+
+// What an .astro shell should pass its BreadcrumbsBar island when it hoists
+// the bar out of this statically-rendered hero (hideBreadcrumbsBar). See
+// getHeroBreadcrumbProps in ../Hero.tsx.
+export function getBreadcrumbsBarProps(
+  data?: FragmentType<typeof fragment> | null,
+) {
+  const layout = readFragment(fragment, data);
+  const { template, entity } = layout ?? {};
+  const { background, showBreadcrumbs, showSharingLink } =
+    template?.definition ?? {};
+  if (!entity || (!showBreadcrumbs && !showSharingLink)) return null;
+  return {
+    data: entity,
+    showShare: showSharingLink ?? false,
+    className: getBgClass(background),
+  };
 }
 
 const fragment = graphql(`

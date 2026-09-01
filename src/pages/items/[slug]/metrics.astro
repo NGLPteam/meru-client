@@ -9,7 +9,9 @@ import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getSt
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import { itemMetricsQuery } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
-import ItemMetrics from "../_components/ItemMetrics";
+import ItemShell from "../_components/ItemShell.astro";
+import ItemMetricsIsland from "../_components/ItemMetricsIsland";
+import { layoutThemeQuery } from "~/lib/queries/layout";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
 
@@ -30,26 +32,25 @@ const item = data?.item;
 if (!item) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
+const { data: themeData } = await query(layoutThemeQuery, {});
+const theme = themeData?.globalConfiguration?.theme ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 
 cacheEntity(Astro, "item", slug);
 ---
 
 <BaseLayout meta={meta} community={item.community} routeParams={{ slug }}>
   <GoogleScholarMetaTags slot="head" entity={scholar} />
-  <ItemMetrics
-    client:load
-    item={item}
+  <ItemShell
+    data={item}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    <ItemMetricsIsland client:load data={data?.analytics} theme={theme} />
+  </ItemShell>
 </BaseLayout>

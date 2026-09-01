@@ -6,8 +6,14 @@ import NavigationTabs from "./NavigationTabs";
 
 export default function EntityNavigationTemplate({
   data,
+  slug,
+  pathname,
+  renderMainLayout,
 }: {
   data?: FragmentType<typeof fragment> | null;
+  slug?: string;
+  pathname?: string;
+  renderMainLayout?: boolean;
 }) {
   const { template } = useFragment(fragment, data) ?? {};
 
@@ -15,7 +21,12 @@ export default function EntityNavigationTemplate({
 
   return template ? (
     <Container bgColor={definition?.background}>
-      <NavigationTabs data={template} />
+      <NavigationTabs
+        data={template}
+        slug={slug}
+        pathname={pathname}
+        renderMainLayout={renderMainLayout}
+      />
     </Container>
   ) : null;
 }

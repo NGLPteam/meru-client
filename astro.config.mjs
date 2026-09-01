@@ -38,5 +38,13 @@ export default defineConfig({
     // ESM runtime can't resolve, so the standalone node server crashes at boot
     // with ERR_UNSUPPORTED_DIR_IMPORT unless these are bundled at build time.
     ssr: { noExternal: [/^reakit/] },
+    // Pre-bundle deps reached only through clientOnly() dynamic imports
+    // (ChartBlock → react-google-charts, AssetInlinePDF/AssetPDFPreview →
+    // react-pdf). Vite's startup scan doesn't see them, so without this the
+    // dev server discovers them on the first visit to a metrics/PDF page and
+    // re-optimizes mid-session: stale ?v= module URLs fail with empty-MIME
+    // errors (unmounting the chart island) and Vite forces a full page reload.
+    // Dev-only concern; production builds bundle everything up front.
+    optimizeDeps: { include: ["react-google-charts", "react-pdf"] },
   },
 });

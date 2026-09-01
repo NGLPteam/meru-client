@@ -10,6 +10,10 @@ import "@/styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { getThemeClasses } from "@/styles/theme-helpers";
 import LoadingBar from "../components/client/LoadingBar.astro";
+import KeepScroll from "../components/client/KeepScroll.astro";
+import TableOfContents from "../components/client/TableOfContents.astro";
+import BackToTopBlock from "../components/client/BackToTopBlock.astro";
+import CopyLink from "../components/client/CopyLink.astro";
 import query from "../lib/query";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import DraftModeBannerIsland from "../components/global/DraftModeBanner/DraftModeBannerIsland";
@@ -81,25 +85,21 @@ const head = resolvePageMeta(siteMeta, meta);
     <PageHead head={head} />
     <slot name="head" />
     {
-      /* Google Charts loader (react-google-charts / analytics GeoChart + LineColChart).
-       Declared statically in the shared head so it is a stable element across every
-       page: ClientRouter keeps it across view-transition swaps instead of removing it.
-       If react-google-charts injected loader.js itself, the swap would strip that
-       runtime-added script while window.google persisted, so on the next visit it
-       would inject a SECOND loader.js into a window that already has google —
-       corrupting Google Charts ("gvjs_2d[a] is undefined"). Pre-declaring it means
-       react-google-charts always finds it already loaded and reuses the one instance.
-       onload sets data-loaded so react-google-charts takes its "already loaded" fast
-       path (see node_modules/react-google-charts useLoadScript). */
+      /* Load Google Charts only once. Requires data-astro-transition-persist with view transitions. */
     }
     <script
       is:inline
+      data-astro-transition-persist="google-charts-loader"
       src="https://www.gstatic.com/charts/loader.js"
       onload="this.dataset.loaded = '1'"></script>
     <ClientRouter />
   </head>
   <body>
     <LoadingBar />
+    <KeepScroll />
+    <TableOfContents />
+    <BackToTopBlock />
+    <CopyLink />
     {draftModeEnabled && <DraftModeBannerIsland client:load />}
     <div class="app-shell">
       <AppHeader

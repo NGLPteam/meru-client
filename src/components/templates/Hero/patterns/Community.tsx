@@ -1,24 +1,43 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { usePathname } from "@/lib/routing/hooks";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
+import {
+  graphql,
+  useFragment,
+  useFragment as readFragment,
+  type FragmentType,
+} from "@/lib/api/gql";
 import SearchHero from "@/components/composed/search/SearchHero";
-import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
+import {
+  useSharedInlineFragment,
+  templateSlotInlineFragment,
+} from "@/components/templates/shared/shared.slots.graphql";
 import HeroHeader from "../Header";
 import HeroImage from "../Image";
 import styles from "./patterns.module.css";
 
+const mainRegex = /^\/communities\/[A-Za-z0-9]{30,32}$/;
+
+const isMainPath = (pathname: string) =>
+  mainRegex.test(pathname) || pathname.startsWith("/permalink");
+
 export default function CommunityHeroHeader({
   data,
+  pathname: pathnameProp,
+  hideSearchHero,
 }: {
   data?: FragmentType<typeof fragment> | null;
+  // Rendered statically from an .astro shell, pathname arrives as a prop and
+  // the SearchHero form is mounted by the shell as its own island.
+  pathname?: string;
+  hideSearchHero?: boolean;
 }) {
   const { t } = useTranslation();
 
-  const pathname = usePathname();
-  const mainRegex = /^\/communities\/[A-Za-z0-9]{30,32}$/;
+  const routePathname = usePathname();
+  const pathname = pathnameProp ?? routePathname;
 
-  const isMain = mainRegex.test(pathname) || pathname.startsWith("/permalink");
+  const isMain = isMainPath(pathname);
 
   const layout = useFragment(fragment, data);
 
@@ -65,9 +84,27 @@ export default function CommunityHeroHeader({
           </div>
         </section>
       )}
-      {showBigSearchPrompt && <SearchHero prompt={bigSearchPrompt?.content} />}
+      {showBigSearchPrompt && !hideSearchHero && (
+        <SearchHero prompt={bigSearchPrompt?.content} />
+      )}
     </>
   ) : null;
+}
+
+// Server-side companion to hideSearchHero: what the .astro shell should pass
+// its SearchHero island, or null when the hero renders none.
+export function getSearchHeroProps(
+  data: FragmentType<typeof fragment> | null | undefined,
+  pathname: string,
+) {
+  const layout = readFragment(fragment, data);
+  const { showBigSearchPrompt } = layout?.template?.definition ?? {};
+  if (!isMainPath(pathname) || !showBigSearchPrompt) return null;
+  const prompt = readFragment(
+    templateSlotInlineFragment,
+    layout?.template?.slots?.bigSearchPrompt,
+  );
+  return { prompt: prompt?.content ?? null };
 }
 
 const fragment = graphql(`

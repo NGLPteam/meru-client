@@ -7,7 +7,8 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionLanding from "./_components/CollectionLanding";
+import CollectionShell from "./_components/CollectionShell.astro";
+import MainLayout from "@/components/templates/MainLayout";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -17,24 +18,31 @@ const collection = data?.collection;
 if (!collection) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const meta = buildCollectionMeta(collection, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 const draftModeEnabled = isDraftModeEnabled(Astro);
+
+// Selects the first template's kind for the computed background start.
+const main = collection.layouts.main;
+const firstKind = main?.templates?.[0];
+const computedBgStart =
+  firstKind &&
+  "templateKind" in firstKind &&
+  firstKind.templateKind === "DETAIL"
+    ? "LIGHT"
+    : undefined;
 
 cacheEntity(Astro, "collection", slug);
 ---
 
 <BaseLayout meta={meta} community={collection.community} routeParams={{ slug }}>
-  <CollectionLanding
-    client:load
-    collection={collection}
+  <CollectionShell
+    data={collection}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    <MainLayout data={main} computedBgStart={computedBgStart} />
+  </CollectionShell>
 </BaseLayout>

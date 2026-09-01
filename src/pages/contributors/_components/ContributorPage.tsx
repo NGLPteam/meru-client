@@ -1,29 +1,29 @@
 "use client";
 
+// Hydrated island: contributor detail embeds BrowseListLayout's Pagination
+// (URL-push navigation reading RouteContext), so the page body hydrates for
+// now, wrapped in its own RouteProvider. Splitting the static detail from the
+// pagination control is planned alongside the search-layout split.
+import "@/i18n";
 import ContributorDetail from "@/components/composed/contributor/ContributorDetail";
 import ContributorDetailNav from "@/components/composed/contributor/ContributorDetailNav";
-import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import AppProviders from "@/components/providers/AppProviders";
+import { RouteProvider, type RouteState } from "@/lib/routing/RouteContext";
 
 type Props = {
   contributor: React.ComponentProps<typeof ContributorDetail>["data"];
   navData?: React.ComponentProps<typeof ContributorDetailNav>["data"] | null;
-  community?: React.ComponentProps<typeof AppProviders>["community"];
-  globalData?: GlobalStaticData;
-  route?: React.ComponentProps<typeof AppProviders>["route"];
+  route?: Partial<RouteState>;
 };
 
 export default function ContributorPage({
   contributor,
   navData,
-  community,
-  globalData,
   route,
 }: Props) {
   return (
-    <AppProviders community={community} globalData={globalData} route={route}>
+    <RouteProvider route={route}>
       {navData && <ContributorDetailNav data={navData} />}
       <ContributorDetail data={contributor} />
-    </AppProviders>
+    </RouteProvider>
   );
 }

@@ -173,6 +173,11 @@ export const itemMetricsQuery = graphql(`
       community {
         ...CommunityContextFragment
       }
+    }
+    # Aliased re-selection so the analytics island gets an object carrying ONLY
+    # its own data — passing the item above would serialize the entire shell
+    # into island props.
+    analytics: item(slug: $slug) {
       ...ArticleAnalyticsBlockFragment
     }
   }

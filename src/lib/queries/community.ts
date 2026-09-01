@@ -62,12 +62,19 @@ export const communityQuery = graphql(`
     community(slug: $slug) {
       ...CommunityShellFragment
       ...CommunityMetaFragment
-      ...CommunityContextFragment
       layouts {
         main {
           ...MainLayoutFragment
         }
       }
+    }
+    # Aliased re-selection so nav/header islands get an object carrying ONLY
+    # this data — passing the community above would serialize its entire
+    # layouts (all template slot content) into island props.
+    communityRef: community(slug: $slug) {
+      ...CommunityContextFragment
+      ...CommunityNavBarFragment
+      ...CommunityNavBarEntityFragment
     }
   }
 `);
@@ -77,20 +84,37 @@ export const communityPageQuery = graphql(`
     community(slug: $slug) {
       ...CommunityShellFragment
       ...CommunityMetaFragment
-      ...CommunityContextFragment
       page(slug: $pageSlug) {
         ...CommunityPageLayoutFragment
       }
+    }
+    communityRef: community(slug: $slug) {
+      ...CommunityContextFragment
+      ...CommunityNavBarFragment
+      ...CommunityNavBarEntityFragment
     }
   }
 `);
 
 export const communityBrowseQuery = graphql(`
-  query communityBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {
+  query communityBrowseQuery($slug: Slug!) {
     community(slug: $slug) {
       ...CommunityShellFragment
       ...CommunityMetaFragment
+    }
+    communityRef: community(slug: $slug) {
       ...CommunityContextFragment
+      ...CommunityNavBarFragment
+      ...CommunityNavBarEntityFragment
+    }
+  }
+`);
+
+// See collectionOrderingQuery: fetched by the OrderingList server island so
+// the browse shell renders without waiting on the slow ordering selection.
+export const communityOrderingQuery = graphql(`
+  query communityOrderingQuery($slug: Slug!, $identifier: String!, $page: Int) {
+    community(slug: $slug) {
       ordering(identifier: $identifier) {
         disabled
         ...EntityOrderingLayoutFragment

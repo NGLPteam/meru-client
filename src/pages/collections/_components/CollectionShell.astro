@@ -1,0 +1,65 @@
+---
+// Collection shell: statically-rendered React composed with the hydrated
+// islands (breadcrumbs bar, entity nav, view counter). See ItemShell.astro.
+import "@/i18n";
+import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { collectionShellFragment } from "@/lib/queries/collection";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
+import HeroTemplate, {
+  getHeroBreadcrumbProps,
+} from "@/components/templates/Hero";
+import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar";
+import ProcessingCheck, {
+  hasMainContent,
+} from "@/components/templates/ProcessingCheck";
+import EntityNavBar, {
+  getEntityNavBarData,
+} from "@/components/composed/entity/EntityNavBar";
+import ViewCounter from "@/components/composed/analytics/ViewCounter";
+
+interface Props {
+  data: FragmentType<typeof collectionShellFragment>;
+  slug: string;
+  draftModeEnabled: boolean;
+  installationName?: string;
+}
+
+const { data, slug, draftModeEnabled, installationName } = Astro.props;
+
+const shell = readFragment(collectionShellFragment, data);
+
+const unauthorized = draftModeEnabled && !shell.canPreview?.value;
+
+const hero = shell.layouts.hero;
+const breadcrumbs = hero ? getHeroBreadcrumbProps(hero) : null;
+const navBarData = getEntityNavBarData(shell);
+const empty = !hasMainContent(shell.layouts);
+const pathname = Astro.url.pathname;
+---
+
+{
+  unauthorized ? (
+    <UnauthorizedMessage reason="forbidden" entity="collection" />
+  ) : (
+    <>
+      {breadcrumbs && (
+        <BreadcrumbsBar
+          client:load
+          {...breadcrumbs}
+          installationName={installationName}
+          pathname={pathname}
+        />
+      )}
+      {hero && <HeroTemplate data={hero} hideBreadcrumbsBar />}
+      {empty ? (
+        <ProcessingCheck data={shell.layouts} entityType="collection" />
+      ) : (
+        <>
+          <ViewCounter client:load slug={slug} isPreview={draftModeEnabled} />
+          <EntityNavBar client:load data={navBarData} pathname={pathname} />
+          <slot />
+        </>
+      )}
+    </>
+  )
+}

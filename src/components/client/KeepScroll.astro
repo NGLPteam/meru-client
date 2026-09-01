@@ -1,0 +1,27 @@
+{
+  /* Preserves scroll position across ClientRouter soft navigations triggered
+from anchors marked `data-keep-scroll` (rendered by the routing Link for
+`scroll={false}` — e.g. the entity tab nav). Astro's router scrolls to the top
+inside moveToLocation, then fires astro:after-swap, so restoring in that event
+happens before paint — no flicker. Back/forward traversals carry their own
+saved positions and are untouched (their preparation event has no marked
+sourceElement). Included once from BaseLayout; document-level listeners persist
+across swaps. */
+}
+
+<script>
+  let pending: { x: number; y: number } | null = null;
+
+  document.addEventListener("astro:before-preparation", (e) => {
+    const source = (e as Event & { sourceElement?: Element }).sourceElement;
+    pending = source?.closest?.("a[data-keep-scroll]")
+      ? { x: window.scrollX, y: window.scrollY }
+      : null;
+  });
+
+  document.addEventListener("astro:after-swap", () => {
+    if (!pending) return;
+    window.scrollTo({ left: pending.x, top: pending.y, behavior: "instant" });
+    pending = null;
+  });
+</script>

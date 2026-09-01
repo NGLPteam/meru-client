@@ -4,10 +4,10 @@ import { cacheEntity } from "@/lib/caching/setCache";
 import query from "../../lib/query";
 import { previewToken } from "../../lib/request/previewToken";
 import { isDraftModeEnabled } from "../../lib/request/draftMode";
-import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityQuery } from "../../lib/queries/community";
 import buildCommunityMeta from "../../lib/metadata/communityMetadata";
-import CommunityLanding from "./_components/CommunityLanding";
+import CommunityShell from "./_components/CommunityShell.astro";
+import MainLayout from "@/components/templates/MainLayout";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -16,25 +16,22 @@ const { data } = await query(communityQuery, { slug }, previewToken(Astro));
 const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
-const { data: globalData } = await query(globalStaticQuery, {});
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
 
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
+// The narrow aliased selection — the full `community` (with all template slot
+// content) must never be passed to islands or BaseLayout.
+const communityRef = data?.communityRef;
 
 cacheEntity(Astro, "community", slug);
 ---
 
-<BaseLayout meta={meta} community={community} routeParams={{ slug }}>
-  <CommunityLanding
-    client:load
-    community={community}
-    globalData={globalData}
-    route={route}
+<BaseLayout meta={meta} community={communityRef} routeParams={{ slug }}>
+  <CommunityShell
+    data={community}
+    communityRef={communityRef}
     draftModeEnabled={draftModeEnabled}
-  />
+  >
+    <MainLayout data={community.layouts.main} computedBgStart="NONE" />
+  </CommunityShell>
 </BaseLayout>

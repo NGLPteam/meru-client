@@ -9,7 +9,8 @@ import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getSt
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import { itemFileDetailQuery } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
-import ItemFileDetail from "../../_components/ItemFileDetail";
+import ItemShell from "../../_components/ItemShell.astro";
+import AssetDetailBlock from "@/components/composed/asset/AssetDetailBlock";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 
 const { slug, file } = Astro.params;
@@ -25,27 +26,23 @@ const asset = data?.asset;
 if (!item || !asset) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 
 cacheEntity(Astro, "item", slug);
 ---
 
 <BaseLayout meta={meta} community={item.community} routeParams={{ slug, file }}>
   <GoogleScholarMetaTags slot="head" entity={scholar} />
-  <ItemFileDetail
-    client:load
-    item={item}
-    asset={asset}
+  <ItemShell
+    data={item}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    <AssetDetailBlock client:load data={asset} slug={slug} />
+  </ItemShell>
 </BaseLayout>

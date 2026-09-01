@@ -6,7 +6,9 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionBrowseQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionBrowse from "../../_components/CollectionBrowse";
+import CollectionShell from "../../_components/CollectionShell.astro";
+import OrderingList from "@/components/composed/entity/EntityOrderingLayout/OrderingList.astro";
+import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import type { ListEntityContext } from "@/types/graphql-schema";
 
 const { slug, ordering } = Astro.params;
@@ -19,17 +21,15 @@ const showContext =
 
 const { data } = await query(
   collectionBrowseQuery,
-  {
-    slug,
-    identifier: ordering,
-    page,
-  },
+  { slug },
   previewToken(Astro),
 );
 const collection = data?.collection;
 if (!collection) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const meta = buildCollectionMeta(collection, slug);
 const route = {
   pathname: Astro.url.pathname,
@@ -44,13 +44,26 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
   community={collection.community}
   routeParams={{ slug, ordering }}
 >
-  <CollectionBrowse
-    client:load
-    collection={collection}
+  <CollectionShell
+    data={collection}
     slug={slug}
-    showContext={showContext}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    <OrderingList
+      server:defer
+      entityType="collection"
+      slug={slug}
+      identifier={ordering}
+      page={page}
+      showContext={showContext}
+      pathname={route.pathname}
+      search={route.search}
+    >
+      <LoadingBlock
+        slot="fallback"
+        className="l-container-wide l-container-wide--p-lg"
+      />
+    </OrderingList>
+  </CollectionShell>
 </BaseLayout>

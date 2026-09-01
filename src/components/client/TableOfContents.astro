@@ -1,0 +1,60 @@
+{
+  /* Defines <table-of-contents>, emitted by the statically-rendered React TOC
+component (src/components/templates/Detail/Full/TOC). Definition-only — markup
+comes from React; included once from BaseLayout. The define() guard keeps
+ClientRouter's script re-execution from throwing. */
+}
+
+<style is:global>
+  table-of-contents {
+    display: block;
+  }
+</style>
+
+<script>
+  import { convertToSlug } from "@/helpers/strings";
+
+  /**
+   * Table of contents for a prose body.
+   * Slot contract:
+   *   - the element and the prose share an ancestor marked `data-toc-scope`
+   *   - the prose container is marked `data-toc-source`
+   *   - the list target inside the element is marked `data-toc-list`
+   *   - `data-item-class` carries the class for generated <li> entries
+   * Starts `hidden`; unhides only when the source has headings. Scans h1–h3,
+   * assigns slug ids, and fills the list with anchor links.
+   */
+  class TableOfContents extends HTMLElement {
+    connectedCallback() {
+      const scope = this.closest("[data-toc-scope]") ?? document;
+      const source = scope.querySelector("[data-toc-source]");
+      const list = this.querySelector("[data-toc-list]");
+      if (!source || !list) return;
+
+      const headings = source.querySelectorAll("h1, h2, h3");
+      if (headings.length === 0) return;
+
+      const itemClass = this.dataset.itemClass;
+      for (const heading of headings) {
+        const text = heading.textContent;
+        if (!text) continue;
+        const id = convertToSlug(text);
+        heading.setAttribute("id", id);
+
+        const li = document.createElement("li");
+        if (itemClass) li.className = itemClass;
+        const a = document.createElement("a");
+        a.href = `#${id}`;
+        a.textContent = text;
+        li.appendChild(a);
+        list.appendChild(li);
+      }
+
+      this.hidden = false;
+    }
+  }
+
+  if (!customElements.get("table-of-contents")) {
+    customElements.define("table-of-contents", TableOfContents);
+  }
+</script>

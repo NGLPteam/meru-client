@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { BackToTopBlock } from "@/components/layout";
 import ContentImage from "@/components/atomic/images/ContentImage";
@@ -23,8 +22,6 @@ export default function FullVariant({
 
   const body = useSharedBlockFragment(slots?.body);
 
-  const textEl = useRef<HTMLDivElement>(null);
-
   if ((entity?.__typename as string | undefined) === "%other") return null;
 
   const { showHeroImage, showBody } = detailDefinition ?? {};
@@ -45,10 +42,10 @@ export default function FullVariant({
         </div>
       ) : (
         <BackToTopBlock className={styles.outer}>
-          <div className={styles.inner}>
-            <TOC textRef={textEl} />
+          <div className={styles.inner} data-toc-scope>
+            <TOC />
             {body?.valid && !!body.content ? (
-              <div className={styles.text} ref={textEl}>
+              <div className={styles.text} data-toc-source>
                 {showHeroImage && entity?.heroImage?.storage && (
                   <div className={styles.image}>
                     <ContentImage data={entity.heroImage} />

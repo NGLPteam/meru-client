@@ -1,9 +1,11 @@
 ---
+import "@/i18n";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import query from "../lib/query";
 import { instanceContentQuery } from "../lib/queries/home";
-import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
-import InstanceContent from "./_components/InstanceContent";
+import InstanceHero from "@/components/composed/instance/InstanceHero";
+import InstanceCommunities from "@/components/composed/instance/InstanceCommunities";
+import SearchHero from "@/components/composed/search/SearchHero";
 import { cacheGlobal } from "@/lib/caching/setCache";
 
 const { data: instance } = await query(instanceContentQuery, {});
@@ -19,24 +21,12 @@ if (!instance) {
   return Astro.rewrite("/404");
 }
 
-const { data: globalData } = await query(globalStaticQuery, {});
-
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
-
 // Home depends only on installation-wide data — GLOBAL_TAG, no entity tag.
 cacheGlobal(Astro);
 ---
 
 <BaseLayout>
-  <InstanceContent
-    client:load
-    data={instance}
-    communities={instance.communities}
-    globalData={globalData}
-    route={route}
-  />
+  <InstanceHero data={instance} hideSearchHero />
+  <SearchHero client:load pathname="/" />
+  <InstanceCommunities data={instance.communities} />
 </BaseLayout>

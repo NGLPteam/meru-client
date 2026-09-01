@@ -7,9 +7,10 @@ import { DownloadLink, NamedLink } from "@/components/atomic";
 import AssetThumbnail from "../../AssetThumbnail";
 import styles from "./AssetBlockItem.module.css";
 
-export default function AssetBlockItem({ data }: Props) {
+export default function AssetBlockItem({ data, slug: slugProp }: Props) {
   const file = useFragment(fragment, data);
-  const slug = useRouteSlug();
+  const routeSlug = useRouteSlug();
+  const slug = slugProp ?? routeSlug;
 
   return file ? (
     <div className={styles.wrapper}>
@@ -51,6 +52,7 @@ export default function AssetBlockItem({ data }: Props) {
 
 interface Props {
   data?: FragmentType<typeof fragment> | null;
+  slug?: string;
 }
 
 const fragment = graphql(`

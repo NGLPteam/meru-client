@@ -74,7 +74,7 @@ export default function TitleBlock({ data, layout }: TitleBlockProps) {
         )}
         {!!headerSubtitle?.content && headerSubtitle.valid && (
           <span className={styles.subtitle}>
-            <InlineSlotWrapper content={""} />
+            <InlineSlotWrapper content={headerSubtitle.content} />
           </span>
         )}
         {!compact && !!headerSummary?.content && headerSummary.valid && (

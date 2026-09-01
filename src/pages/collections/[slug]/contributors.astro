@@ -7,7 +7,8 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionContributorsQuery } from "~/lib/queries/collection";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionContributors from "../_components/CollectionContributors";
+import CollectionShell from "../_components/CollectionShell.astro";
+import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -21,24 +22,25 @@ const collection = data?.collection;
 if (!collection) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const meta = buildCollectionMeta(collection, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 const draftModeEnabled = isDraftModeEnabled(Astro);
 
 cacheEntity(Astro, "collection", slug);
 ---
 
 <BaseLayout meta={meta} community={collection.community} routeParams={{ slug }}>
-  <CollectionContributors
-    client:load
-    collection={collection}
+  <CollectionShell
+    data={collection}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    <CollectionContributionsBlock
+      data={collection}
+      slug={slug}
+      background="neutral00"
+    />
+  </CollectionShell>
 </BaseLayout>

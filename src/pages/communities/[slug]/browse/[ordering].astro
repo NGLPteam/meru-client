@@ -3,10 +3,11 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityBrowseQuery } from "~/lib/queries/community";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
-import CommunityBrowse from "../../_components/CommunityBrowse";
+import CommunityShell from "../../_components/CommunityShell.astro";
+import OrderingList from "@/components/composed/entity/EntityOrderingLayout/OrderingList.astro";
+import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 
 const { slug, ordering } = Astro.params;
 if (!slug || !ordering) return Astro.rewrite("/404");
@@ -15,17 +16,12 @@ const page = parseInt(Astro.url.searchParams.get("page") ?? "") || 1;
 
 const { data } = await query(
   communityBrowseQuery,
-  {
-    slug,
-    identifier: ordering,
-    page,
-  },
+  { slug },
   previewToken(Astro),
 );
 const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
-const { data: globalData } = await query(globalStaticQuery, {});
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
 const route = {
@@ -35,12 +31,30 @@ const route = {
 };
 ---
 
-<BaseLayout meta={meta} community={community} routeParams={{ slug, ordering }}>
-  <CommunityBrowse
-    client:load
-    community={community}
-    globalData={globalData}
-    route={route}
+<BaseLayout
+  meta={meta}
+  community={data?.communityRef}
+  routeParams={{ slug, ordering }}
+>
+  <CommunityShell
+    data={community}
+    communityRef={data?.communityRef}
     draftModeEnabled={draftModeEnabled}
-  />
+  >
+    <OrderingList
+      server:defer
+      entityType="community"
+      slug={slug}
+      identifier={ordering}
+      page={page}
+      showContext="FULL"
+      pathname={route.pathname}
+      search={route.search}
+    >
+      <LoadingBlock
+        slot="fallback"
+        className="l-container-wide l-container-wide--p-lg"
+      />
+    </OrderingList>
+  </CommunityShell>
 </BaseLayout>

@@ -90,13 +90,27 @@ export const collectionPageQuery = graphql(`
 `);
 
 export const collectionBrowseQuery = graphql(`
-  query collectionBrowseQuery($slug: Slug!, $identifier: String!, $page: Int) {
+  query collectionBrowseQuery($slug: Slug!) {
     collection(slug: $slug) {
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
         ...CommunityContextFragment
       }
+    }
+  }
+`);
+
+// The ordering page itself is fetched separately by the OrderingList server
+// island: it is by far the slowest selection on browse pages, so the shell
+// renders immediately and the list streams in behind a loading fallback.
+export const collectionOrderingQuery = graphql(`
+  query collectionOrderingQuery(
+    $slug: Slug!
+    $identifier: String!
+    $page: Int
+  ) {
+    collection(slug: $slug) {
       ordering(identifier: $identifier) {
         disabled
         ...EntityOrderingLayoutFragment

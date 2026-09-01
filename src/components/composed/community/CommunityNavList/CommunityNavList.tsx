@@ -5,9 +5,11 @@ import { CommunityContext } from "@/contexts/CommunityContext";
 import CommunityNavListContent from "./CommunityNavListContent";
 import styles from "./CommunityNavlist.module.css";
 
-export default function CommunityNavList({ condensed, mobile }: Props) {
-  const communityData = useContext(CommunityContext);
-  const community = useFragment(fragment, communityData);
+export default function CommunityNavList({ condensed, mobile, data }: Props) {
+  // Mounted from .astro the community arrives as a prop; inside legacy islands
+  // it still comes from CommunityContext.
+  const contextData = useContext(CommunityContext);
+  const community = useFragment(fragment, data ?? contextData);
 
   const listClasses = mobile
     ? styles.mobileList

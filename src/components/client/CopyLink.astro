@@ -1,0 +1,38 @@
+{
+  /* Defines <copy-link>, emitted by the CopyLink MDX component
+(src/components/templates/mdx/components/CopyLink.tsx) — the one custom element
+that originates from CMS-authored MDX slot content. Definition-only — markup
+comes from React; included once from BaseLayout. The define() guard keeps
+ClientRouter's script re-execution from throwing. */
+}
+
+<script>
+  /**
+   * Copy button beside a rendered value.
+   * Slot contract: value marked `data-copy-source`, button `data-copy-button`.
+   */
+  class CopyLink extends HTMLElement {
+    abortController: AbortController | undefined;
+
+    connectedCallback() {
+      this.abortController = new AbortController();
+      const source = this.querySelector("[data-copy-source]");
+      const button = this.querySelector("[data-copy-button]");
+      if (!source || !button) return;
+
+      button.addEventListener(
+        "click",
+        () => navigator.clipboard.writeText(source.textContent ?? ""),
+        { signal: this.abortController.signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController?.abort();
+    }
+  }
+
+  if (!customElements.get("copy-link")) {
+    customElements.define("copy-link", CopyLink);
+  }
+</script>

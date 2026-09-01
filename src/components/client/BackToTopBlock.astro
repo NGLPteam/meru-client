@@ -1,0 +1,67 @@
+{
+  /* Defines <back-to-top-block>, emitted by the statically-rendered React
+BackToTopBlock component (src/components/layout/BackToTopBlock). Definition-only
+— markup comes from React; included once from BaseLayout. One AbortController
+for all listeners, aborted in disconnectedCallback (ClientRouter tears elements
+down and recreates them on soft navigation); the define() guard keeps script
+re-execution from throwing. */
+}
+
+<style is:global>
+  back-to-top-block {
+    display: block;
+  }
+</style>
+
+<script>
+  /**
+   * Contained back-to-top button.
+   * Slot contract:
+   *   - content wrapper marked `data-back-to-top-content`
+   *   - button wrapper (starts `hidden`) marked `data-back-to-top-wrapper`
+   *   - the button itself marked `data-back-to-top-button`
+   * Shows the button only while the content is taller than the viewport;
+   * clicking scrolls to the top of the element.
+   */
+  class BackToTopBlock extends HTMLElement {
+    abortController: AbortController | undefined;
+
+    connectedCallback() {
+      this.abortController = new AbortController();
+      const { signal } = this.abortController;
+
+      const content = this.querySelector("[data-back-to-top-content]");
+      const wrapper = this.querySelector<HTMLElement>(
+        "[data-back-to-top-wrapper]",
+      );
+      const button = this.querySelector("[data-back-to-top-button]");
+      if (!content || !wrapper || !button) return;
+
+      const update = () => {
+        wrapper.hidden =
+          content.getBoundingClientRect().height <= window.innerHeight;
+      };
+
+      window.addEventListener("resize", update, { signal });
+      update();
+
+      button.addEventListener(
+        "click",
+        () => {
+          const top = window.scrollY + this.getBoundingClientRect().top;
+          document.body.scrollTop = top; // Safari
+          document.documentElement.scrollTop = top;
+        },
+        { signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController?.abort();
+    }
+  }
+
+  if (!customElements.get("back-to-top-block")) {
+    customElements.define("back-to-top-block", BackToTopBlock);
+  }
+</script>

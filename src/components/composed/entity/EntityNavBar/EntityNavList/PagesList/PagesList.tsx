@@ -12,11 +12,14 @@ type Page = DocumentType<
 export default function PagesList({
   pages,
   basePath,
+  pathname: pathnameProp,
 }: {
   pages: readonly Page[];
   basePath: string;
+  pathname?: string;
 }) {
-  const pathname = usePathname();
+  const routePathname = usePathname();
+  const pathname = pathnameProp ?? routePathname;
 
   const count = pages.length;
 

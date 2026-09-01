@@ -1,1 +1,1 @@
-export { default } from "./EntityNavBar";
+export { default, getEntityNavBarData } from "./EntityNavBar";

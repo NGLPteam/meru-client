@@ -6,7 +6,7 @@ import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import AssetBlockItem from "./AssetBlockItem";
 import styles from "./AssetsBlock.module.css";
 
-const AssetsBlock = ({ data }: Props) => {
+const AssetsBlock = ({ data, slug }: Props) => {
   const { t } = useTranslation();
   const files = useFragment(fragment, data);
 
@@ -18,7 +18,7 @@ const AssetsBlock = ({ data }: Props) => {
           <ul className={styles.list}>
             {files.edges.map(({ node }, i) => (
               <li className={styles.item} key={i}>
-                <AssetBlockItem key={i} data={node} />
+                <AssetBlockItem key={i} data={node} slug={slug} />
               </li>
             ))}
           </ul>
@@ -32,6 +32,7 @@ const AssetsBlock = ({ data }: Props) => {
 
 interface Props {
   data?: FragmentType<typeof fragment> | null;
+  slug?: string;
 }
 
 export default AssetsBlock;

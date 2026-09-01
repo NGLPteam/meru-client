@@ -1,5 +1,6 @@
 "use client";
 
+import "@/i18n";
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { SearchButton } from "@/components/atomic";
@@ -15,7 +16,7 @@ export default function CommunityNavBar({ data, entityData }: Props) {
     <div className="a-bg-custom10">
       <nav className={classNames("l-container-wide", styles.nav)}>
         <div>
-          <CommunityName />
+          <CommunityName data={community} />
         </div>
         <div className={styles.right}>
           <CommunityNavList data={community} />

@@ -1,44 +1,20 @@
-import { useEffect, useState, RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
-import { convertToSlug } from "@/helpers/strings";
 import styles from "./TOC.module.css";
 
-type TOCItem = {
-  text: string;
-  id: string;
-};
-
-export default function TOC({
-  textRef,
-}: {
-  textRef?: RefObject<HTMLDivElement | null>;
-}) {
+// Static markup only; the <table-of-contents> custom element (defined in
+// src/components/client/) scans the prose marked
+// data-toc-source within the shared data-toc-scope ancestor, assigns heading
+// ids, fills the list, and unhides the block.
+export default function TOC() {
   const { t } = useTranslation();
 
-  const [toc, setTOC] = useState<TOCItem[]>();
-
-  useEffect(() => {
-    const headerEls = textRef?.current?.querySelectorAll("h1, h2, h3");
-
-    if (!headerEls || headerEls.length === 0) return;
-
-    const tocList: TOCItem[] = [];
-
-    [...headerEls].forEach((header) => {
-      const text = header.textContent;
-
-      if (!text) return;
-
-      const id = convertToSlug(text);
-      header.setAttribute("id", id);
-      tocList.push({ text, id });
-    });
-
-    setTOC(tocList);
-  }, [textRef]);
-  return toc ? (
-    <div className={styles.toc}>
+  return (
+    <table-of-contents
+      hidden
+      className={styles.toc}
+      data-item-class={styles["toc__item"]}
+    >
       <div className={styles["toc__inner"]}>
         <h3
           className={classNames(
@@ -48,14 +24,8 @@ export default function TOC({
         >
           {t("glossary.table_of_contents")}
         </h3>
-        <ul className={styles["toc__list"]}>
-          {toc.map(({ id, text }, i: number) => (
-            <li className={styles["toc__item"]} key={i}>
-              <a href={`#${id}`}>{text}</a>
-            </li>
-          ))}
-        </ul>
+        <ul className={styles["toc__list"]} data-toc-list />
       </div>
-    </div>
-  ) : null;
+    </table-of-contents>
+  );
 }

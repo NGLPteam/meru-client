@@ -7,9 +7,12 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemMetadataQuery } from "~/lib/queries/item";
+import { itemMetadataQuery, itemShellFragment } from "~/lib/queries/item";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
-import ItemMetadata from "../_components/ItemMetadata";
+import ItemShell from "../_components/ItemShell.astro";
+import MetadataTemplate from "@/components/templates/Metadata";
+import MainLayout from "@/components/templates/MainLayout";
+import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 
 const { slug } = Astro.params;
@@ -20,26 +23,36 @@ const item = data?.item;
 if (!item) return Astro.rewrite("/404");
 
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = readFragment(googleScholarFragment, item);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
+
+const shell = readFragment(itemShellFragment, item);
+const template = item.layouts.metadata?.template;
+// The main layout renders here as a fallback only when the landing has no full
+// text (mirrors the FullTextFallback context behavior).
+const showMainFallback = !shouldRenderMainLayout(shell.layouts);
 
 cacheEntity(Astro, "item", slug);
 ---
 
 <BaseLayout meta={meta} community={item.community} routeParams={{ slug }}>
   <GoogleScholarMetaTags slot="head" entity={scholar} />
-  <ItemMetadata
-    client:load
-    item={item}
+  <ItemShell
+    data={item}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    {
+      template && (
+        <>
+          <MetadataTemplate data={template} />
+          {showMainFallback && <MainLayout data={item.layouts.main} fallback />}
+        </>
+      )
+    }
+  </ItemShell>
 </BaseLayout>

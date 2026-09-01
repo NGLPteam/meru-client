@@ -1,18 +1,25 @@
 "use client";
 
+// Inline counterpart of BlockSlotWrapper (see its header comment): synchronous
+// compile, no remark-gfm (parity with the previous serialize() call), and a
+// p→span override since inline slots render inside heading/span elements.
+import "@/i18n";
 import { useTranslation } from "react-i18next";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote";
-import { useEffect, useState } from "react";
+import { evaluateSync } from "@mdx-js/mdx";
+import * as runtime from "react/jsx-runtime";
+import { renderToStaticMarkup } from "react-dom/server";
 import { ErrorBoundary } from "react-error-boundary";
 import useViewerContext from "@/contexts/useViewerContext";
 import NoContent from "@/components/layout/messages/NoContent";
 import { inlineSlotComponents } from "./components";
-import type { PropsWithChildren } from "react";
+import { createElement, type PropsWithChildren } from "react";
+import type { MDXComponents } from "mdx/types";
 
 const overrides = {
   p: (props: PropsWithChildren) => <span {...props}>{props.children}</span>,
 };
+
+const components = { ...inlineSlotComponents, ...overrides } as MDXComponents;
 
 export default function InlineSlotWrapper({
   content,
@@ -25,25 +32,29 @@ export default function InlineSlotWrapper({
 
   const isAdmin = allowedActions?.includes("admin.access");
 
-  const [mdxContent, setMdxContent] = useState<MDXRemoteSerializeResult>();
+  if (!content) return null;
 
-  useEffect(() => {
-    const renderMDX = async () => {
-      if (content) {
-        try {
-          const mdx = await serialize(content);
-          if (mdx) setMdxContent(mdx);
-        } catch (err) {
-          console.debug(`MDX error: ${err}`);
-          console.debug(`raw content: ${content}`);
+  let Content;
+  try {
+    Content = evaluateSync(content, { ...runtime }).default;
+    if (import.meta.env.SSR) {
+      renderToStaticMarkup(createElement(Content, { components }));
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return (
+      <NoContent
+        inline
+        message={
+          isAdmin
+            ? t("messages.admin_content", { error: message })
+            : t("messages.content")
         }
-      }
-    };
+      />
+    );
+  }
 
-    renderMDX();
-  }, [content]);
-
-  return mdxContent ? (
+  return (
     <ErrorBoundary
       fallbackRender={({ error }) => (
         <NoContent
@@ -56,10 +67,7 @@ export default function InlineSlotWrapper({
         />
       )}
     >
-      <MDXRemote
-        {...mdxContent}
-        components={{ ...inlineSlotComponents, ...overrides }}
-      />
+      <Content components={components} />
     </ErrorBoundary>
-  ) : null;
+  );
 }

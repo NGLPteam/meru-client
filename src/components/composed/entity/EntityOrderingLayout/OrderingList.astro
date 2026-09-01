@@ -1,0 +1,51 @@
+---
+// The ordering browse list as a `server:defer` island. The ordering query is
+// by far the slowest selection on browse pages (multi-second on large
+// orderings), so the page shell renders immediately with a LoadingBlock
+// fallback and the list streams in out-of-band from /_server-islands.
+// Scalar props only (they are serialized into the island request URL).
+import query from "~/lib/query";
+import { previewToken } from "~/lib/request/previewToken";
+import { cacheEntity } from "@/lib/caching/setCache";
+import { collectionOrderingQuery } from "~/lib/queries/collection";
+import { communityOrderingQuery } from "~/lib/queries/community";
+import EntityOrderingIsland from "./EntityOrderingIsland";
+import type { ListEntityContext } from "@/types/graphql-schema";
+
+interface Props {
+  entityType: "collection" | "community";
+  slug: string;
+  identifier: string;
+  page: number;
+  showContext?: ListEntityContext;
+  // The browse PAGE's location (not the island request URL) — seeds the nested
+  // island's RouteProvider so Pagination builds correct URL pushes.
+  pathname: string;
+  search: string;
+}
+
+const { entityType, slug, identifier, page, showContext, pathname, search } =
+  Astro.props;
+
+const variables = { slug, identifier, page };
+const ordering =
+  entityType === "collection"
+    ? (await query(collectionOrderingQuery, variables, previewToken(Astro)))
+        .data?.collection?.ordering
+    : (await query(communityOrderingQuery, variables, previewToken(Astro))).data
+        ?.community?.ordering;
+
+// Public content on a props-keyed URL — safe to cache, tagged like the parent
+// entity pages so one purge clears the family. Draft-mode requests bypass the
+// cache upstream (draftAwareProvider), so preview renders are never stored.
+cacheEntity(Astro, entityType, slug);
+
+const route = { pathname, search, params: { slug, ordering: identifier } };
+---
+
+<EntityOrderingIsland
+  client:load
+  data={ordering}
+  showContext={showContext}
+  route={route}
+/>

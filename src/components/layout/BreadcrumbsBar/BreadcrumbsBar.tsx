@@ -1,5 +1,6 @@
 "use client";
 
+import "@/i18n";
 import { useMemo } from "react";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
@@ -15,11 +16,15 @@ export default function BreadcrumbsBar({
   data,
   showShare = true,
   className,
+  installationName,
+  pathname,
 }: Props) {
   const breadcrumbData = useFragment(fragment, data);
 
   const { t } = useTranslation();
 
+  // Mounted from .astro these arrive as props; inside legacy content islands
+  // they still come from context.
   const globalData = useGlobalStaticContext();
 
   const url = useMemo(() => {
@@ -43,12 +48,14 @@ export default function BreadcrumbsBar({
   }, [breadcrumbData]);
 
   const installation =
-    globalData?.globalConfiguration?.site?.installationName || "WDP";
+    installationName ||
+    globalData?.globalConfiguration?.site?.installationName ||
+    "WDP";
 
   return breadcrumbData ? (
     <nav className={classNames(className ?? "a-bg-custom10", styles.outer)}>
       <div className={classNames("l-container-wide", styles.inner)}>
-        <Breadcrumbs data={breadcrumbData} />
+        <Breadcrumbs data={breadcrumbData} pathname={pathname} />
         <div className={styles.buttons}>
           {breadcrumbData.submissionTarget?.state === "OPEN" && (
             <Button
@@ -112,6 +119,8 @@ interface Props {
   data?: FragmentType<typeof fragment> | null;
   showShare?: boolean;
   className?: string;
+  installationName?: string;
+  pathname?: string;
 }
 
 const fragment = graphql(`

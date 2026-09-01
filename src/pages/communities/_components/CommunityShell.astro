@@ -1,0 +1,70 @@
+---
+// Community shell: statically-rendered React composed with the hydrated
+// islands (community nav bar, search hero). See ItemShell.astro.
+import "@/i18n";
+import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { communityShellFragment } from "@/lib/queries/community";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
+import HeroTemplate, { getHeroSearchProps } from "@/components/templates/Hero";
+import SearchHero from "@/components/composed/search/SearchHero";
+import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
+import ProcessingCheck, {
+  hasMainContent,
+} from "@/components/templates/ProcessingCheck";
+import type { ComponentProps } from "react";
+
+type NavBarProps = ComponentProps<typeof CommunityNavBar>;
+
+interface Props {
+  data: FragmentType<typeof communityShellFragment>;
+  // Aliased narrow re-selection (communityRef) — see communityQuery.
+  communityRef?: NavBarProps["data"] & NavBarProps["entityData"];
+  draftModeEnabled: boolean;
+}
+
+const { data, communityRef, draftModeEnabled } = Astro.props;
+
+const shell = readFragment(communityShellFragment, data);
+
+const unauthorized = draftModeEnabled && !shell.canPreview?.value;
+
+const showNavBar =
+  shell.layouts?.hero?.template?.definition?.enableDescendantBrowsing;
+const hero = shell.layouts.hero;
+const empty = !hasMainContent(shell.layouts);
+const pathname = Astro.url.pathname;
+const searchHero = hero ? getHeroSearchProps(hero, pathname) : null;
+---
+
+{
+  unauthorized ? (
+    <UnauthorizedMessage reason="forbidden" entity="community" />
+  ) : (
+    <>
+      {showNavBar && (
+        <CommunityNavBar
+          client:load
+          data={communityRef}
+          entityData={communityRef}
+        />
+      )}
+      {empty ? (
+        <ProcessingCheck data={shell.layouts} entityType="community" />
+      ) : (
+        <>
+          {hero && (
+            <HeroTemplate data={hero} pathname={pathname} hideSearchHero />
+          )}
+          {searchHero && (
+            <SearchHero
+              client:load
+              prompt={searchHero.prompt}
+              pathname={pathname}
+            />
+          )}
+          <slot />
+        </>
+      )}
+    </>
+  )
+}

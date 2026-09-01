@@ -1,52 +1,113 @@
 "use client";
 
+// Hydrated island mounted from the .astro entity shells. Takes the plain data
+// shape produced by getEntityNavBarData (extracted server-side) rather than a
+// fragment ref: the fragment's fields live merged into the full entity object,
+// so passing a fragment ref would serialize the entire entity — full-text body
+// included — into the island's props.
+import "@/i18n";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { markdownToTxt } from "markdown-to-txt";
 import { usePathname } from "@/lib/routing/hooks";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
+import {
+  graphql,
+  useFragment as readFragment,
+  type FragmentType,
+  type DocumentType,
+} from "@/lib/api/gql";
+import { getRouteByEntityType } from "@/helpers";
+import { templateSlotInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
+import { fragment as entityNavListFragment } from "./EntityNavList/EntityNavList";
 import { Search } from "@/components/forms";
-import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import EntityNavList from "./EntityNavList";
 import styles from "./EntityNavBar.module.css";
 
-export default function EntityNavBar({ data }: Props) {
-  const { t } = useTranslation();
-  const entity = useFragment(fragment, data);
+type NavListData = DocumentType<typeof entityNavListFragment>;
 
-  const hero = entity?.layouts?.hero;
+export type EntityNavBarData = {
+  slug: string;
+  title: string;
+  basePath: string;
+  enableDescendantBrowsing: boolean;
+  enableDescendantSearch: boolean;
+  // Search placeholder from the descendantSearchPrompt slot, already reduced
+  // to plain text server-side (markdown stripped); null → t() fallback.
+  searchPrompt: string | null;
+  schemaIdentifier: string;
+  orderings: NavListData["orderings"]["nodes"];
+  pages: NavListData["pages"]["nodes"];
+};
+
+// Server-side extraction for the .astro shells (readFragment is codegen's
+// identity unmask — not a hook).
+export function getEntityNavBarData(
+  data?: FragmentType<typeof fragment> | null,
+): EntityNavBarData | null {
+  const entity = readFragment(fragment, data);
+  if (!entity || !entity.slug || !entity.title) return null;
 
   const { enableDescendantSearch, enableDescendantBrowsing } =
-    hero?.template?.definition ?? {};
+    entity.layouts?.hero?.template?.definition ?? {};
 
-  const descendantSearchPrompt = useSharedInlineFragment(
-    hero?.template?.slots.descendantSearchPrompt,
+  const prompt = readFragment(
+    templateSlotInlineFragment,
+    entity.layouts?.hero?.template?.slots.descendantSearchPrompt,
   );
 
-  const pathname = usePathname();
+  const navList = readFragment(entityNavListFragment, entity);
+
+  return {
+    slug: entity.slug,
+    title: entity.title,
+    basePath: `/${getRouteByEntityType(navList.__typename)}/${entity.slug}`,
+    enableDescendantBrowsing: !!enableDescendantBrowsing,
+    enableDescendantSearch: !!enableDescendantSearch,
+    searchPrompt:
+      prompt?.valid && prompt.content ? markdownToTxt(prompt.content) : null,
+    schemaIdentifier: navList.schemaVersion.identifier,
+    orderings: navList.orderings?.nodes ?? [],
+    pages: navList.pages?.nodes ?? [],
+  };
+}
+
+export default function EntityNavBar({ data, pathname: pathnameProp }: Props) {
+  const { t } = useTranslation();
+
+  const routePathname = usePathname();
+  const pathname = pathnameProp ?? routePathname;
   const hideSearch = pathname.includes("search");
 
   const canRender =
-    !!entity && (enableDescendantSearch || enableDescendantBrowsing);
+    !!data && (data.enableDescendantSearch || data.enableDescendantBrowsing);
+
+  if (!canRender) return null;
 
   const placeholder =
-    descendantSearchPrompt?.valid && !!descendantSearchPrompt?.content
-      ? markdownToTxt(descendantSearchPrompt?.content)
-      : t("search.placeholder_name", {
-          name: entity?.title,
-        });
+    data.searchPrompt ??
+    t("search.placeholder_name", {
+      name: data.title,
+    });
 
-  return canRender ? (
+  return (
     <nav className={classNames("a-bg-custom20", styles.nav)}>
       <div className={classNames("l-container-wide", styles.inner)}>
         <div className={styles.left}>
-          {enableDescendantBrowsing && <EntityNavList data={entity} />}
+          {data.enableDescendantBrowsing && (
+            <EntityNavList
+              basePath={data.basePath}
+              schemaIdentifier={data.schemaIdentifier}
+              orderings={data.orderings}
+              pages={data.pages}
+              pathname={pathname}
+            />
+          )}
         </div>
         {!hideSearch && (
           <div className={styles.right}>
-            {enableDescendantSearch && (
+            {data.enableDescendantSearch && (
               <Search
-                pathname={`/collections/${entity.slug}/search`}
+                pathname={`/collections/${data.slug}/search`}
                 id="entitySearch"
                 placeholder={placeholder}
               />
@@ -55,11 +116,12 @@ export default function EntityNavBar({ data }: Props) {
         )}
       </div>
     </nav>
-  ) : null;
+  );
 }
 
 type Props = {
-  data?: FragmentType<typeof fragment> | null;
+  data?: EntityNavBarData | null;
+  pathname?: string;
 };
 
 const fragment = graphql(`

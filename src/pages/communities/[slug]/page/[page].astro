@@ -4,10 +4,10 @@ import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { communityPageQuery } from "~/lib/queries/community";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
-import CommunityPage from "../../_components/CommunityPage";
+import CommunityShell from "../../_components/CommunityShell.astro";
+import CommunityPageLayout from "@/components/composed/community/CommunityPageLayout";
 
 const { slug, page: pageSlug } = Astro.params;
 if (!slug || !pageSlug) return Astro.rewrite("/404");
@@ -20,28 +20,22 @@ const { data } = await query(
 const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
-const { data: globalData } = await query(globalStaticQuery, {});
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 
 cacheEntity(Astro, "community", slug);
 ---
 
 <BaseLayout
   meta={meta}
-  community={community}
+  community={data?.communityRef}
   routeParams={{ slug, page: pageSlug }}
 >
-  <CommunityPage
-    client:load
-    community={community}
-    globalData={globalData}
-    route={route}
+  <CommunityShell
+    data={community}
+    communityRef={data?.communityRef}
     draftModeEnabled={draftModeEnabled}
-  />
+  >
+    <CommunityPageLayout data={community.page} />
+  </CommunityShell>
 </BaseLayout>

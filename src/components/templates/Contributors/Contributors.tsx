@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import capitalize from "lodash/capitalize";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
-import InlineSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
+import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
 import Container from "@/components/layout/Container";
 import type { HeroBackground } from "@/types/graphql-schema";
 import SeeAll from "@/components/templates/lists/SeeAll";
