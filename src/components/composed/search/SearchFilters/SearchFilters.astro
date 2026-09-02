@@ -1,0 +1,85 @@
+---
+import flatMap from "lodash/flatMap";
+import uniqBy from "lodash/uniqBy";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { filterSearchableProperties, getFilterValues } from "@/helpers/search";
+import { Fieldset } from "@/components/forms";
+import { Button } from "@/components/atomic";
+import SearchFilterForm from "@/components/client/SearchFilterForm.astro";
+import SearchFilter from "../SearchFilter/SearchFilter.astro";
+import SearchOrderBy from "../SearchOrderBy/SearchOrderBy.astro";
+import SearchSchemaFilter from "../SearchSchemaFilter/SearchSchemaFilter.astro";
+import { searchFiltersFragment } from "./graphql";
+import styles from "./SearchFilters.module.css";
+
+interface Props {
+  data: FragmentType<typeof searchFiltersFragment>;
+  /** a11y ID for form components */
+  id?: string;
+  // The search page's location; submits push a new query string onto it.
+  pathname: string;
+  search: string;
+}
+
+const { data, id, pathname, search } = Astro.props;
+
+const formId = `${id ?? "search-filters"}-form`;
+const { t } = Astro.locals;
+
+const searchData = useFragment(searchFiltersFragment, data);
+
+const { filters, schema } = getFilterValues(search);
+const sp = new URLSearchParams(search);
+const q = sp.get("q");
+
+// The clear link keeps only q; a GET submit resets the query string, so the
+// filter form carries q forward as a hidden field and order via the associated
+// sort select (`page` deliberately restarts at 1).
+const clearParams = new URLSearchParams();
+if (q) clearParams.set("q", q);
+const clearHref = `${pathname}${clearParams.size ? `?${clearParams}` : ""}`;
+
+type FilterNode = Parameters<typeof filterSearchableProperties>[0][number] & {
+  searchPath: string;
+};
+
+const schemaProps = filterSearchableProperties(
+  uniqBy(
+    flatMap(searchData.schemas, (args) => args.searchableProperties),
+    "searchPath",
+  ) as FilterNode[],
+);
+const coreProps = filterSearchableProperties(
+  searchData.coreProperties as FilterNode[],
+);
+---
+
+<div class={styles.filters} id={id}>
+  <SearchOrderBy formId={formId} search={search} />
+  {
+    searchData && (
+      <SearchFilterForm>
+        <form id={formId} action={pathname} method="get">
+          {q && <input type="hidden" name="q" value={q} />}
+          <Fieldset legend={t("filter.results_header")}>
+            <SearchSchemaFilter data={searchData} selected={schema} />
+            {coreProps.map((prop) => (
+              <SearchFilter data={prop} values={filters} />
+            ))}
+            {schemaProps.map((prop) => (
+              <SearchFilter data={prop} values={filters} />
+            ))}
+          </Fieldset>
+          <div class={styles.buttons}>
+            <Button type="submit" size="sm">
+              {t("common.submit")}
+            </Button>
+            <Button as="a" href={clearHref} secondary size="sm">
+              {t("filter.clear_filters")}
+            </Button>
+          </div>
+        </form>
+      </SearchFilterForm>
+    )
+  }
+</div>

@@ -1,0 +1,50 @@
+---
+import DynamicForm from "@/components/client/DynamicForm.astro";
+import { Fieldset, Select } from "@/components/forms";
+
+interface Props {
+  // The filter form this select is associated with (HTML form= attribute);
+  // changing the sort submits that form.
+  formId: string;
+  search: string;
+}
+
+const { formId, search } = Astro.props;
+const { t } = Astro.locals;
+
+const order = new URLSearchParams(search).get("order") || "PUBLISHED_ASCENDING";
+
+const OPTIONS = [
+  ["PUBLISHED_ASCENDING", "Publish Date, Ascending"],
+  ["PUBLISHED_DESCENDING", "Publish Date, Descending"],
+  ["OLDEST", "Date Created, Ascending"],
+  ["RECENT", "Date Created, Descending"],
+  ["TITLE_ASCENDING", "Title, A-Z"],
+  ["TITLE_DESCENDING", "Title, Z-A"],
+  ["SCHEMA_NAME_ASCENDING", "Schema, Ascending"],
+  ["SCHEMA_NAME_DESCENDING", "Schema, Descending"],
+];
+---
+
+<Fieldset legend={t("sort.results_header")}>
+  <DynamicForm>
+    <Select
+      id={`${formId}-sort`}
+      label={t("sort.label")}
+      size="lg"
+      block
+      hideLabel
+      name="order"
+      form={formId}
+    >
+      <option disabled>{t("list.order_by_label")}</option>
+      {
+        OPTIONS.map(([value, label]) => (
+          <option value={value} selected={value === order}>
+            {label}
+          </option>
+        ))
+      }
+    </Select>
+  </DynamicForm>
+</Fieldset>

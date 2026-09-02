@@ -1,0 +1,149 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { pxToRem } from "@/helpers/theme";
+import IconFactory from "@/components/factories/IconFactory";
+import SearchBar from "@/components/composed/search/SearchBar";
+import { Select } from "@/components/forms";
+import { searchButtonFragment, searchModalFragment } from "./graphql";
+import styles from "./SearchButton.module.css";
+import modalStyles from "@/components/layout/SearchModal/SearchModal.module.css";
+
+interface Props {
+  data?: FragmentType<typeof searchButtonFragment> | null;
+  size?: "sm" | "lg";
+}
+
+const { data, size = "sm" } = Astro.props;
+const { t } = Astro.locals;
+
+const searchData = useFragment(
+  searchModalFragment,
+  useFragment(searchButtonFragment, data),
+);
+
+const imageSize = size === "sm" ? 32 : 72;
+
+function searchRouteByType(type?: string, slug?: string | null) {
+  if (!slug) return "";
+  if (type === "Community") return `/communities/${slug}/search`;
+  if (type === "Collection") return `/collections/${slug}/search`;
+  return "";
+}
+
+const breadcrumbs =
+  searchData?.breadcrumbs && searchData.breadcrumbs.length > 0
+    ? [...searchData.breadcrumbs]
+        .reverse()
+        .filter((entity) => entity?.crumb?.__typename !== "Item")
+    : null;
+
+const scopes: { value: string; label: string }[] = [];
+if (searchData && searchData.__typename !== "Item") {
+  scopes.push({
+    value: searchRouteByType(searchData.__typename, searchData.slug),
+    label: searchData.title,
+  });
+}
+for (const item of breadcrumbs ?? []) {
+  const { __typename, slug, title } = item?.crumb ?? {};
+  scopes.push({
+    value: searchRouteByType(__typename, slug),
+    label: title ?? "",
+  });
+}
+---
+
+<search-modal>
+  <button
+    type="button"
+    class={styles.button}
+    style={`--search-button-size: ${pxToRem(imageSize)}`}
+    aria-haspopup="dialog"
+    data-search-modal-toggle
+  >
+    <IconFactory
+      icon={size === "sm" ? "search" : "search32"}
+      role="presentation"
+    />
+    <span class="sr-only">{t("search.label")}</span>
+  </button>
+  <dialog class={modalStyles.dialog} aria-label={t("search.label")}>
+    <form class={modalStyles.form} action="/search" method="get">
+      <SearchBar id="searchInput" name="q" />
+      {
+        scopes.length > 0 && (
+          <div class={modalStyles.selectWrapper}>
+            <label
+              for="searchFilter"
+              class:list={[
+                "t-label-mix a-color-lighter",
+                modalStyles.selectLabel,
+              ]}
+            >
+              {t("search.search_area_label")}
+            </label>
+            <Select id="searchFilter" data-search-scope>
+              {scopes.map(({ value, label }) => (
+                <option value={value}>{label}</option>
+              ))}
+              <option value="">{t("search.instance_scope_label")}</option>
+            </Select>
+          </div>
+        )
+      }
+    </form>
+  </dialog>
+</search-modal>
+
+<script>
+  class SearchModal extends HTMLElement {
+    abortController = new AbortController();
+
+    get dialog() {
+      return this.querySelector("dialog");
+    }
+
+    connectedCallback() {
+      const { signal } = this.abortController;
+
+      this.querySelector("[data-search-modal-toggle]")?.addEventListener(
+        "click",
+        () => this.dialog?.showModal(),
+        { signal },
+      );
+
+      // Backdrop click closes: a click whose target is the <dialog> itself
+      // (not its content) is a backdrop click.
+      this.dialog?.addEventListener(
+        "click",
+        (event) => {
+          if (event.target === this.dialog) this.dialog?.close();
+        },
+        { signal },
+      );
+
+      // The selected scope becomes the form action; runs before ClientRouter's
+      // document-level submit listener reads it.
+      this.querySelector("form")?.addEventListener(
+        "submit",
+        (event) => {
+          const form = event.currentTarget as HTMLFormElement;
+          const scope = this.querySelector<HTMLSelectElement>(
+            "[data-search-scope]",
+          );
+          form.action = scope?.value || "/search";
+          this.dialog?.close();
+        },
+        { signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("search-modal")) {
+    customElements.define("search-modal", SearchModal);
+  }
+</script>

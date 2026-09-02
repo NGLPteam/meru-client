@@ -1,0 +1,48 @@
+<search-filter-form><slot /></search-filter-form>
+
+<style is:global>
+  @layer meru-base {
+    search-filter-form {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // Keeps submitted URLs clean: empty controls are disabled for the duration
+  // of the submit (disabled fields aren't serialized), then re-enabled. Runs
+  // on the form itself, so it precedes ClientRouter's document-level listener.
+  // The re-enable must be a MACROTASK: trusted events run a microtask
+  // checkpoint between listeners, so a queueMicrotask re-enable would land
+  // before ClientRouter reads the FormData.
+  class SearchFilterForm extends HTMLElement {
+    abortController = new AbortController();
+
+    connectedCallback() {
+      this.querySelector("form")?.addEventListener(
+        "submit",
+        (event) => {
+          const form = event.currentTarget as HTMLFormElement;
+          const emptied = [...form.elements].filter(
+            (el): el is HTMLInputElement | HTMLSelectElement =>
+              (el instanceof HTMLInputElement ||
+                el instanceof HTMLSelectElement) &&
+              !el.disabled &&
+              el.value === "",
+          );
+          emptied.forEach((el) => (el.disabled = true));
+          setTimeout(() => emptied.forEach((el) => (el.disabled = false)), 0);
+        },
+        { signal: this.abortController.signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("search-filter-form")) {
+    customElements.define("search-filter-form", SearchFilterForm);
+  }
+</script>

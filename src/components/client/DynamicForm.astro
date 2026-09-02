@@ -1,0 +1,39 @@
+<dynamic-form><slot /></dynamic-form>
+
+<style is:global>
+  @layer meru-base {
+    dynamic-form {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  class DynamicForm extends HTMLElement {
+    abortController = new AbortController();
+
+    connectedCallback() {
+      this.addEventListener(
+        "change",
+        (event) => {
+          const target = event.target as HTMLElement;
+          if (
+            target instanceof HTMLSelectElement ||
+            (target instanceof HTMLInputElement && target.type === "checkbox")
+          ) {
+            target.form?.requestSubmit();
+          }
+        },
+        { signal: this.abortController.signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("dynamic-form")) {
+    customElements.define("dynamic-form", DynamicForm);
+  }
+</script>

@@ -22,7 +22,41 @@ export function getPredicates(
   return predicates ? (predicates as [SearchPredicateInput]) : undefined;
 }
 
-export function removeEmptyKeys(data: Record<string, string>) {
+// Reads the filter state from a search-page query string. Filter fields are
+// flat params named `<searchPath>--<operator>` (hyphens for dots); the legacy
+// shapes — a `filters` JSON-blob param and comma-joined `schema` — are still
+// accepted so old bookmarked URLs keep working.
+export function getFilterValues(search: string): {
+  filters: Record<string, string>;
+  schema: string[];
+} {
+  const sp = new URLSearchParams(search);
+  const filters: Record<string, string> = {};
+
+  const legacy = sp.get("filters");
+  if (legacy) {
+    try {
+      Object.assign(filters, JSON.parse(legacy));
+    } catch {
+      // ignore malformed legacy blobs
+    }
+  }
+
+  for (const [key, value] of sp) {
+    if (key.includes("--") && value) filters[key] = value;
+  }
+
+  removeEmptyKeys(filters);
+
+  const schema = sp
+    .getAll("schema")
+    .flatMap((v) => v.split(","))
+    .filter(Boolean);
+
+  return { filters, schema };
+}
+
+function removeEmptyKeys(data: Record<string, string>) {
   Object.keys(data).forEach((key) => {
     if (!data[key]) {
       delete data[key];

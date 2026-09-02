@@ -1,7 +1,7 @@
 ---
 import { useFragment, type FragmentType } from "@/lib/api/gql";
-import SearchButtonIsland from "@/components/atomic/SearchButton/SearchButtonIsland";
-import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
+import SearchButton from "@/components/atomic/SearchButton/SearchButton.astro";
+import { searchButtonFragment } from "@/components/atomic/SearchButton/graphql";
 import CommunityNavList from "@/components/composed/community/CommunityNavList/CommunityNavList.astro";
 import {
   ActiveCommunityFragment,
@@ -9,7 +9,7 @@ import {
 } from "@/components/global/graphql";
 
 interface Props {
-  searchData?: FragmentType<typeof SearchButtonFragment> | null;
+  searchData?: FragmentType<typeof searchButtonFragment> | null;
   community?: ActiveCommunityRef;
   pageSlug?: string;
 }
@@ -20,4 +20,4 @@ const activeCommunity = useFragment(ActiveCommunityFragment, community);
 ---
 
 <CommunityNavList condensed data={activeCommunity} pageSlug={pageSlug} />
-<SearchButtonIsland client:load size="sm" data={searchData} />
+<SearchButton size="sm" data={searchData} />

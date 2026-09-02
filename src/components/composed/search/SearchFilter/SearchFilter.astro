@@ -1,0 +1,61 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { Checkbox, Input, Select } from "@/components/forms";
+import { getFilterInputLabel, getFilterInputType } from "@/helpers/search";
+import { searchFilterFragment, searchFilterSelectFragment } from "./graphql";
+
+interface Props {
+  data: FragmentType<typeof searchFilterFragment>;
+  // Current values keyed by field name (`<searchPath>--<operator>`).
+  values: Record<string, string>;
+}
+
+const { data, values } = Astro.props;
+
+const filter = useFragment(searchFilterFragment, data);
+const type = "type" in filter ? filter.type : undefined;
+
+const fieldName = (operator: string) =>
+  `${filter.searchPath.replace(".", "-")}--${operator}`;
+
+const selectFilter =
+  type === "SELECT" ? useFragment(searchFilterSelectFragment, data) : null;
+const selectOptions =
+  selectFilter && "options" in selectFilter ? (selectFilter.options ?? []) : [];
+---
+
+{
+  type === "SELECT" ? (
+    <Select label={filter.label} block secondary name={fieldName("equals")}>
+      <option value="" />
+      {selectOptions.map(({ label, value }) => (
+        <option value={value} selected={values[fieldName("equals")] === value}>
+          {label}
+        </option>
+      ))}
+    </Select>
+  ) : type === "BOOLEAN" ? (
+    <Checkbox
+      label={filter.label}
+      value="true"
+      name={fieldName("equals")}
+      defaultChecked={values[fieldName("equals")] === "true"}
+    />
+  ) : (
+    (filter.searchOperators ?? []).map((operator) => (
+      <div>
+        <Input
+          label={getFilterInputLabel(filter.label, operator)}
+          type={type === "INTEGER" ? "number" : getFilterInputType(operator)}
+          name={fieldName(operator)}
+          defaultValue={values[fieldName(operator)] ?? ""}
+        />
+        {(type === "INTEGER" || type === "VARIABLE_DATE") && (
+          <span class="t-copy-xs t-copy-lighter">
+            {filter.searchPath} - {operator}
+          </span>
+        )}
+      </div>
+    ))
+  )
+}

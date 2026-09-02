@@ -1,6 +1,6 @@
 ---
 import { useFragment, type FragmentType } from "@/lib/api/gql";
-import SearchButtonIsland from "@/components/atomic/SearchButton/SearchButtonIsland";
+import SearchButton from "@/components/atomic/SearchButton/SearchButton.astro";
 import CommunityName from "../CommunityName";
 import CommunityNavList from "../CommunityNavList/CommunityNavList.astro";
 import {
@@ -30,7 +30,7 @@ const entity = useFragment(communityNavBarEntityFragment, entityData);
         </div>
         <div class={styles.right}>
           <CommunityNavList data={community} pageSlug={pageSlug} />
-          <SearchButtonIsland client:load size="lg" data={entity} />
+          <SearchButton size="lg" data={entity} />
         </div>
       </nav>
     </div>

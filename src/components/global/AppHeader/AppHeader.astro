@@ -3,7 +3,7 @@
 // Astro.url and re-evaluated on every navigation.
 import SkipLink from "@/components/global/SkipLink";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
-import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
+import { searchButtonFragment } from "@/components/atomic/SearchButton/graphql";
 import CommunityName from "@/components/composed/community/CommunityName";
 import { AppHeaderFragment } from "./graphql";
 import HeaderBrand from "./HeaderBrand.astro";
@@ -19,7 +19,7 @@ import styles from "./AppHeader.module.css";
 
 interface Props {
   data?: FragmentType<typeof AppHeaderFragment> | null;
-  searchData?: FragmentType<typeof SearchButtonFragment> | null;
+  searchData?: FragmentType<typeof searchButtonFragment> | null;
   community?: ActiveCommunityRef;
   // The current route's community-page slug, for the nav's active-page state.
   pageSlug?: string;

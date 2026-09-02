@@ -12,15 +12,16 @@ import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import { NoContent } from "@/components/layout";
 import SearchBar from "../SearchBar";
 import SearchResults from "../SearchResults/SearchResults.astro";
-import SearchFiltersIsland from "../SearchFilters/SearchFiltersIsland";
-import type SearchFilters from "../SearchFilters";
-import type { ComponentProps } from "react";
+import SearchFilters from "../SearchFilters/SearchFilters.astro";
+import { getFilterValues } from "@/helpers/search";
+import type { searchFiltersFragment } from "../SearchFilters/graphql";
+import type { FragmentType } from "@/lib/api/gql";
 import styles from "./SearchLayout.module.css";
 
 interface Props {
   scope: "global" | "collection" | "community";
   slug?: string;
-  searchFilters?: ComponentProps<typeof SearchFilters>["data"] | null;
+  searchFilters?: FragmentType<typeof searchFiltersFragment> | null;
   // The search page's own location.
   pathname: string;
   search: string;
@@ -30,14 +31,13 @@ const { scope, slug, searchFilters, pathname, search } = Astro.props;
 
 const sp = new URLSearchParams(search);
 const q = sp.get("q") ?? undefined;
-const noSearchQuery = !q && !sp.get("filters") && !sp.get("schema");
+const { filters, schema } = getFilterValues(search);
+const noSearchQuery = !q && !Object.keys(filters).length && !schema.length;
 
 // Params the plain GET query form must carry forward (a GET submit replaces
 // the whole query string). `page` is deliberately dropped — a new query
 // restarts at page 1, matching the old submit handler.
-const preserved = (["filters", "schema", "order"] as const)
-  .map((k) => [k, sp.get(k)] as const)
-  .filter(([, v]) => v !== null) as [string, string][];
+const preserved = [...sp].filter(([name]) => name !== "q" && name !== "page");
 ---
 
 <SearchDrawer />
@@ -63,8 +63,7 @@ const preserved = (["filters", "schema", "order"] as const)
       <div class={styles.sidebar}>
         {
           searchFilters && (
-            <SearchFiltersIsland
-              client:load
+            <SearchFilters
               id="sidebarFilters"
               data={searchFilters}
               pathname={pathname}
@@ -101,8 +100,7 @@ const preserved = (["filters", "schema", "order"] as const)
         <div class={styles.drawerContent}>
           {
             searchFilters && (
-              <SearchFiltersIsland
-                client:load
+              <SearchFilters
                 id="mobileFilters"
                 data={searchFilters}
                 pathname={pathname}

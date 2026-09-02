@@ -1,0 +1,30 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { Checkbox, CheckboxGroup } from "@/components/forms";
+import { searchSchemaFilterFragment } from "./graphql";
+
+interface Props {
+  data: FragmentType<typeof searchSchemaFilterFragment>;
+  selected: string[];
+}
+
+const { data, selected } = Astro.props;
+const { t } = Astro.locals;
+
+const schemaData = useFragment(searchSchemaFilterFragment, data);
+---
+
+<CheckboxGroup label={t("filter.type_header")}>
+  {
+    schemaData.schemas
+      .filter(({ namespace }) => namespace !== "default")
+      .map(({ schemaDefinition, name }) => (
+        <Checkbox
+          label={name}
+          name="schema"
+          value={schemaDefinition.slug}
+          defaultChecked={selected.includes(schemaDefinition.slug)}
+        />
+      ))
+  }
+</CheckboxGroup>
