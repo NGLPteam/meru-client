@@ -1,11 +1,4 @@
 ---
-// The global header/footer is composed in Astro (AppHeader.astro /
-// AppFooter.astro) around a plain Astro <slot/> — page content stays free to be
-// its own server HTML + independent islands. Interactive header/footer parts
-// are cache-safe islands (GlobalIslandProviders); per-viewer bits (account nav,
-// footer admin/sign-in) render as `server:defer` islands that resolve the
-// viewer per-request and opt out of the cache — so no viewer identity is
-// serialized into cached page HTML.
 import "@/styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { getThemeClasses } from "@/styles/theme-helpers";
@@ -28,19 +21,10 @@ import type { ActiveCommunityRef } from "@/components/global/graphql";
 import type { PageMeta } from "@/lib/metadata/types";
 
 interface Props {
-  // Page-level metadata (title, description, og:images…). Merged over the
-  // site-level defaults; omit on the home page to use the site meta as-is.
   meta?: PageMeta;
-  // Present on entity/community/collection pages — the page knows the active
-  // community server-side and threads it into the header/footer. Undefined
-  // elsewhere.
   community?: ActiveCommunityRef;
-  // Route params (e.g. { slug, page }). Only `page` is consumed today — the
-  // header's community nav highlights the active community page.
   routeParams?: Record<string, string | undefined>;
-  // Optional override; by default draft mode is read from the cookie here, since
-  // it is a global toggle that must surface the banner + preview UI on every
-  // page, not only entity pages that happen to thread it through.
+  // Optional override; by default draft mode is read from the cookie here
   draftModeEnabled?: boolean;
 }
 

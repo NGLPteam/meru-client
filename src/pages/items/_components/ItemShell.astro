@@ -1,8 +1,4 @@
 ---
-// Item shell: statically-rendered React (hero, nav tabs, main layout via the
-// page's slot) composed with the small hydrated islands (breadcrumbs bar,
-// entity nav, view counter). Conditional logic that used to live in client
-// components (preview gate, processing check) runs here in frontmatter.
 import "@/i18n";
 import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import { itemShellFragment } from "@/pages/items/_components/graphql";
@@ -32,9 +28,6 @@ const { data, slug, draftModeEnabled, installationName } = Astro.props;
 
 const shell = readFragment(itemShellFragment, data);
 
-// In preview/draft mode, an entity the viewer isn't allowed to preview shows
-// the unauthorized message in place (keeping the entity URL + surrounding
-// layout) rather than its draft content. Outside preview this never fires.
 const unauthorized = draftModeEnabled && !shell.canPreview?.value;
 
 const { hero, navigation } = shell.layouts ?? {};
