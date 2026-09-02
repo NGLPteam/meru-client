@@ -6,15 +6,11 @@ import {
 } from "./constants";
 import type { CacheOptions } from "astro";
 
-// Per-route cache opt-in helpers, called from page frontmatter. Structural type
-// so both `Astro` (in .astro pages) and an APIContext satisfy it.
 type CacheHolder = {
   cache: { enabled: boolean; set(input: CacheOptions | false): void };
 };
 
-// Cache a page that only depends on installation-wide data (home). Draft-mode
-// requests never reach here as a store — the provider bypasses them upstream;
-// this only needs to gate on `enabled` (false in dev / when no provider).
+// Cache a page that only depends on installation-wide data
 export function cacheGlobal(
   astro: CacheHolder,
   extraTags: string[] = [],

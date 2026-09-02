@@ -1,0 +1,46 @@
+---
+import startCase from "lodash/startCase";
+import { NamedLink } from "@/components/atomic";
+import { ADMIN_URL } from "@/lib/env/clientConfig";
+import SignInButton from "@/components/client/SignInButton.astro";
+import styles from "./AppFooter.module.css";
+
+interface Props {
+  isAuthenticated?: boolean;
+  canAccessAdmin?: boolean;
+}
+
+const { isAuthenticated, canAccessAdmin } = Astro.props;
+const { t } = Astro.locals;
+
+const routes = [
+  { href: "/", label: "nav.home" },
+  ...(canAccessAdmin && ADMIN_URL
+    ? [{ href: ADMIN_URL, label: "nav.admin" }]
+    : []),
+];
+---
+
+<nav class={styles.nav}>
+  <h5 class="t-label-lg">{t("nav.explore")}</h5>
+  <ul class:list={["t-unstyled-list", styles.navList]}>
+    {
+      routes.map(({ href, label }) => (
+        <li class:list={["t-copy-sm t-copy-light", styles.navItem]}>
+          <NamedLink href={href}>
+            <span>{startCase(t(label))}</span>
+          </NamedLink>
+        </li>
+      ))
+    }
+    {
+      !isAuthenticated && (
+        <li class:list={["t-copy-sm t-copy-light", styles.navItem]}>
+          <SignInButton>
+            <button>{t("common.sign_in")}</button>
+          </SignInButton>
+        </li>
+      )
+    }
+  </ul>
+</nav>

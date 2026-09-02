@@ -7,15 +7,13 @@ import EntityHeroHeader, { getBreadcrumbsBarProps } from "./patterns/Entity";
 export default function HeroTemplate({
   data,
   hideBreadcrumbsBar,
-  hideSearchHero,
   pathname,
 }: {
   data: FragmentType<typeof fragment> | null;
-  // Set by .astro shells that mount BreadcrumbsBar / SearchHero themselves as
-  // hydrated islands (they can't hydrate from inside this statically-rendered
-  // tree). pathname is threaded for the community pattern's main-page gate.
+  // Set by .astro shells that mount BreadcrumbsBar themselves as a hydrated
+  // island (it can't hydrate from inside this statically-rendered tree).
+  // pathname is threaded for the community pattern's main-page gate.
   hideBreadcrumbsBar?: boolean;
-  hideSearchHero?: boolean;
   pathname?: string;
 }) {
   const layout = useFragment(fragment, data);
@@ -25,11 +23,7 @@ export default function HeroTemplate({
   const isCommunity = entity?.__typename === "Community";
 
   return isCommunity ? (
-    <CommunityHeroHeader
-      data={layout}
-      pathname={pathname}
-      hideSearchHero={hideSearchHero}
-    />
+    <CommunityHeroHeader data={layout} pathname={pathname} />
   ) : (
     <EntityHeroHeader data={layout} hideBreadcrumbsBar={hideBreadcrumbsBar} />
   );
@@ -45,8 +39,8 @@ export function getHeroBreadcrumbProps(
   return getBreadcrumbsBarProps(layout);
 }
 
-// Community counterpart for hideSearchHero: what the .astro shell should pass
-// its SearchHero island, or null when the hero renders none.
+// What the .astro shell should pass its SearchHero, or null when the hero
+// renders none.
 export function getHeroSearchProps(
   data: FragmentType<typeof fragment> | null,
   pathname: string,

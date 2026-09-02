@@ -1,11 +1,6 @@
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import SearchHero from "@/components/composed/search/SearchHero";
-import {
-  useSharedInlineFragment,
-  templateSlotInlineFragment,
-} from "@/components/templates/shared/shared.slots.graphql";
+import { templateSlotInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import HeroHeader from "../Header";
 import HeroImage from "../Image";
 import styles from "./patterns.module.css";
@@ -18,16 +13,12 @@ const isMainPath = (pathname: string) =>
 export default function CommunityHeroHeader({
   data,
   pathname = "/",
-  hideSearchHero,
 }: {
   data?: FragmentType<typeof fragment> | null;
   // Rendered statically from an .astro shell, pathname arrives as a prop and
   // the SearchHero form is mounted by the shell as its own island.
   pathname?: string;
-  hideSearchHero?: boolean;
 }) {
-  const { t } = useTranslation();
-
   const isMain = isMainPath(pathname);
 
   const layout = useFragment(fragment, data);
@@ -38,11 +29,7 @@ export default function CommunityHeroHeader({
 
   const { definition, slots } = template ?? {};
 
-  const { showHeroImage, showBigSearchPrompt } = definition ?? {};
-
-  const bigSearchPrompt = useSharedInlineFragment(
-    template?.slots?.bigSearchPrompt,
-  ) ?? { content: t("search.community_placeholder") };
+  const { showHeroImage } = definition ?? {};
 
   const hasTextContent =
     slots &&
@@ -75,15 +62,12 @@ export default function CommunityHeroHeader({
           </div>
         </section>
       )}
-      {showBigSearchPrompt && !hideSearchHero && (
-        <SearchHero prompt={bigSearchPrompt?.content} pathname={pathname} />
-      )}
     </>
   ) : null;
 }
 
-// Server-side companion to hideSearchHero: what the .astro shell should pass
-// its SearchHero island, or null when the hero renders none.
+// What the .astro shell should pass its SearchHero, or null when the hero
+// renders none.
 export function getSearchHeroProps(
   data: FragmentType<typeof fragment> | null | undefined,
   pathname: string,

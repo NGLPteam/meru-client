@@ -2,11 +2,10 @@
 
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import SearchHero from "@/components/composed/search/SearchHero";
 import { Markdown } from "@/components/atomic";
 import styles from "./InstanceHero.module.css";
 
-export default function InstanceHero({ data, hideSearchHero }: Props) {
+export default function InstanceHero({ data }: Props) {
   const app = useFragment(fragment, data);
 
   return (
@@ -25,16 +24,12 @@ export default function InstanceHero({ data, hideSearchHero }: Props) {
           )}
         </div>
       </header>
-      {!hideSearchHero && <SearchHero pathname="/" />}
     </>
   );
 }
 
 interface Props {
   data: FragmentType<typeof fragment>;
-  // Set by index.astro, which mounts SearchHero itself as a hydrated island
-  // (it can't hydrate from inside this statically-rendered tree).
-  hideSearchHero?: boolean;
 }
 
 const fragment = graphql(`

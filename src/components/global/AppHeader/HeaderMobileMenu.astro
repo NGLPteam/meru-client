@@ -9,9 +9,10 @@ import { CloseModalButton } from "@/components/atomic";
 import MobileMenuManager from "@/components/global/MobileMenuManager.astro";
 import AccountNav from "@/components/global/AccountNav/AccountNav.astro";
 import AccountDropdownIsland from "@/components/global/AccountNav/AccountDropdownIsland";
-import { MobilePicker, MobileNav, MobileFooter } from "./HeaderMobileParts";
-import type { FragmentType } from "@/lib/api/gql";
-import type { AppHeaderFragment } from "./graphql";
+import { MobilePicker, MobileNav } from "./HeaderMobileParts";
+import InstallationName from "@/components/composed/instance/InstallationName";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { AppHeaderFragment } from "./graphql";
 import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 import type { ActiveCommunityRef } from "@/components/global/graphql";
 import styles from "./HeaderMobileMenu.module.css";
@@ -26,6 +27,8 @@ interface Props {
 }
 
 const { data, globalData, community, pageSlug } = Astro.props;
+
+const appData = useFragment(AppHeaderFragment, data);
 
 // Keep in sync with MENU_ID in HeaderMobileParts.tsx.
 const MENU_ID = "app-header-menu";
@@ -65,7 +68,7 @@ const MENU_ID = "app-header-menu";
         </div>
       </div>
       <footer class:list={["a-bg-custom10", styles.footer]}>
-        <MobileFooter client:load data={data} globalData={globalData} />
+        <InstallationName data={appData?.globalConfiguration} />
       </footer>
     </div>
   </dialog>

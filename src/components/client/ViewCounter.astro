@@ -1,0 +1,67 @@
+---
+interface Props {
+  slug: string;
+  paused?: boolean;
+}
+
+const { slug, paused } = Astro.props;
+---
+
+<view-counter data-slug={slug} data-paused={paused ? "true" : undefined}
+></view-counter>
+
+<script>
+  import { getAPIURL } from "@/lib/api/client";
+
+  // The API records a view as a side effect of an entity query arriving from a
+  // browser (server-side fetches don't count). Anonymous by design; paused in
+  // preview so editors don't pollute the metrics.
+  const QUERY = `
+    query ViewCounterQuery($slug: Slug!) {
+      item(slug: $slug) {
+        __typename
+        entityViews {
+          total
+        }
+        assetDownloads {
+          total
+        }
+      }
+      collection(slug: $slug) {
+        __typename
+        entityViews {
+          total
+        }
+        assetDownloads {
+          total
+        }
+      }
+      community(slug: $slug) {
+        __typename
+      }
+    }
+  `;
+
+  class ViewCounter extends HTMLElement {
+    abortController = new AbortController();
+
+    connectedCallback() {
+      const { slug, paused } = this.dataset;
+      if (!slug || paused !== undefined) return;
+      fetch(getAPIURL(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: QUERY, variables: { slug } }),
+        signal: this.abortController.signal,
+      }).catch(() => {});
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("view-counter")) {
+    customElements.define("view-counter", ViewCounter);
+  }
+</script>

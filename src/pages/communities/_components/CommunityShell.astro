@@ -4,7 +4,7 @@ import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { communityShellFragment } from "@/pages/communities/_components/graphql";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
 import HeroTemplate, { getHeroSearchProps } from "@/components/templates/Hero";
-import SearchHero from "@/components/composed/search/SearchHero";
+import SearchHero from "@/components/composed/search/SearchHero/SearchHero.astro";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
 import ProcessingCheck, {
   hasMainContent,
@@ -53,15 +53,9 @@ const searchHero = hero ? getHeroSearchProps(hero, pathname) : null;
         <ProcessingCheck data={shell.layouts} entityType="community" />
       ) : (
         <>
-          {hero && (
-            <HeroTemplate data={hero} pathname={pathname} hideSearchHero />
-          )}
+          {hero && <HeroTemplate data={hero} pathname={pathname} />}
           {searchHero && (
-            <SearchHero
-              client:load
-              prompt={searchHero.prompt}
-              pathname={pathname}
-            />
+            <SearchHero prompt={searchHero.prompt} pathname={pathname} />
           )}
           <slot />
         </>

@@ -10,7 +10,7 @@ import type GlobalIslandProviders from "@/components/providers/GlobalIslandProvi
 import type { ActiveCommunityRef } from "@/components/global/graphql";
 import FooterBodyIsland from "./FooterBodyIsland";
 import FooterNav from "./FooterNav.astro";
-import FooterNavIsland from "./FooterNavIsland";
+import FooterNavContent from "./FooterNavContent.astro";
 import styles from "./AppFooter.module.css";
 
 type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
@@ -33,7 +33,7 @@ const { data, globalData, community } = Astro.props;
       community={community}
     />
     <FooterNav server:defer>
-      <FooterNavIsland slot="fallback" />
+      <FooterNavContent slot="fallback" />
     </FooterNav>
   </div>
 </footer>

@@ -14,7 +14,7 @@ import NavigationTemplate from "@/components/templates/EntityNavigation";
 import EntityNavBar, {
   getEntityNavBarData,
 } from "@/components/composed/entity/EntityNavBar";
-import ViewCounter from "@/components/composed/analytics/ViewCounter";
+import ViewCounter from "@/components/client/ViewCounter.astro";
 import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
 
 interface Props {
@@ -56,7 +56,7 @@ const pathname = Astro.url.pathname;
         <ProcessingCheck data={shell.layouts} entityType="item" />
       ) : (
         <>
-          <ViewCounter client:load slug={slug} isPreview={draftModeEnabled} />
+          <ViewCounter slug={slug} paused={draftModeEnabled} />
           <EntityNavBar client:load data={navBarData} pathname={pathname} />
           <NavigationTemplate
             data={navigation}

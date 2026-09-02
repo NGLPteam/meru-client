@@ -1,0 +1,66 @@
+---
+import { Button } from "@/components/atomic";
+import styles from "./DraftModeBanner.module.css";
+
+const { t } = Astro.locals;
+---
+
+<draft-mode-banner>
+  <div
+    class:list={["a-bg-neutral80", styles.banner]}
+    role="status"
+    aria-live="polite"
+  >
+    <div class={styles.content}>
+      <span class="t-copy-sm">{t("preview.draft_mode_message")}</span>
+      <Button
+        className={styles.exit}
+        size="sm"
+        secondary
+        icon="close"
+        type="button"
+        data-exit-preview
+      >
+        {t("preview.exit_draft_mode")}
+      </Button>
+    </div>
+  </div>
+</draft-mode-banner>
+
+<script>
+  import { actions } from "astro:actions";
+  import refresh from "@/lib/routing/refresh";
+
+  class DraftModeBanner extends HTMLElement {
+    abortController = new AbortController();
+
+    connectedCallback() {
+      const button = this.querySelector<HTMLButtonElement>(
+        "[data-exit-preview]",
+      );
+      button?.addEventListener(
+        "click",
+        async () => {
+          button.disabled = true;
+          try {
+            await actions.exitPreview();
+            // Soft navigation so the loading bar animates while the server
+            // re-renders with draft mode cleared.
+            refresh();
+          } finally {
+            button.disabled = false;
+          }
+        },
+        { signal: this.abortController.signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("draft-mode-banner")) {
+    customElements.define("draft-mode-banner", DraftModeBanner);
+  }
+</script>

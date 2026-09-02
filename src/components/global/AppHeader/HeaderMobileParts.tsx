@@ -8,7 +8,6 @@
 // itself in GlobalIslandProviders.
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
 import CommunityNavList from "@/components/composed/community/CommunityNavList";
-import InstallationName from "@/components/composed/instance/InstallationName";
 import Search from "@/components/forms/Search";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
@@ -53,15 +52,6 @@ export function MobileNav({ globalData, community, pageSlug }: CommonProps) {
     <GlobalIslandProviders globalData={globalData}>
       <CommunityNavList mobile data={activeCommunity} pageSlug={pageSlug} />
       <Search id="headerSearch" onSubmit={closeMenu} mobile />
-    </GlobalIslandProviders>
-  );
-}
-
-export function MobileFooter({ data, globalData }: WithData) {
-  const appData = useFragment(AppHeaderFragment, data);
-  return (
-    <GlobalIslandProviders globalData={globalData}>
-      <InstallationName data={appData?.globalConfiguration} />
     </GlobalIslandProviders>
   );
 }

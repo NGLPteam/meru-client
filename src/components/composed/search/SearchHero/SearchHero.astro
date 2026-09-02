@@ -1,0 +1,40 @@
+---
+import IconFactory from "@/components/factories/IconFactory";
+import styles from "./SearchHero.module.css";
+
+interface Props {
+  prompt?: string | null;
+  pathname: string;
+}
+
+const { prompt, pathname } = Astro.props;
+const { t } = Astro.locals;
+
+const action = `${pathname !== "/" ? pathname : ""}/search`;
+---
+
+<section class="a-bg-custom10">
+  <form
+    class:list={["l-container-wide", styles.form]}
+    action={action}
+    method="get"
+  >
+    <div class={styles.wrapper}>
+      <label class={styles.label} for="heroSearch">
+        <IconFactory icon="search32" role="presentation" />
+        <span class="sr-only">{t("search.label")}</span>
+      </label>
+      <input
+        type="search"
+        id="heroSearch"
+        name="q"
+        class:list={[styles.input, "t-h4"]}
+        placeholder={prompt ?? t("search.community_placeholder")}
+      />
+      <button type="submit" class={styles.button}>
+        <IconFactory icon="arrowRight" />
+        <span class="sr-only">{t("search.submit")}</span>
+      </button>
+    </div>
+  </form>
+</section>

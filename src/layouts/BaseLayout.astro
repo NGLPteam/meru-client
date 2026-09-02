@@ -9,7 +9,7 @@ import BackToTopBlock from "../components/client/BackToTopBlock.astro";
 import CopyLink from "../components/client/CopyLink.astro";
 import query from "../lib/query";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import DraftModeBannerIsland from "../components/global/DraftModeBanner/DraftModeBannerIsland";
+import DraftModeBanner from "../components/global/DraftModeBanner/DraftModeBanner.astro";
 import { layoutThemeQuery, globalLayoutQuery } from "./graphql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import getSiteMetadata from "../lib/metadata/siteMetadata";
@@ -74,7 +74,7 @@ const head = resolvePageMeta(siteMeta, meta);
     <TableOfContents />
     <BackToTopBlock />
     <CopyLink />
-    {draftModeEnabled && <DraftModeBannerIsland client:load />}
+    {draftModeEnabled && <DraftModeBanner />}
     <div class="app-shell">
       <AppHeader
         data={globalLayoutData}

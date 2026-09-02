@@ -1,0 +1,28 @@
+<sign-in-button><slot /></sign-in-button>
+
+<script>
+  class SignInButton extends HTMLElement {
+    abortController = new AbortController();
+
+    connectedCallback() {
+      this.querySelector("button")?.addEventListener(
+        "click",
+        () => {
+          const returnTo = window.location.pathname + window.location.search;
+          window.location.assign(
+            `/api/signin?returnTo=${encodeURIComponent(returnTo)}`,
+          );
+        },
+        { signal: this.abortController.signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("sign-in-button")) {
+    customElements.define("sign-in-button", SignInButton);
+  }
+</script>

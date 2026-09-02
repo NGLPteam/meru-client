@@ -13,7 +13,7 @@ import ProcessingCheck, {
 import EntityNavBar, {
   getEntityNavBarData,
 } from "@/components/composed/entity/EntityNavBar";
-import ViewCounter from "@/components/composed/analytics/ViewCounter";
+import ViewCounter from "@/components/client/ViewCounter.astro";
 
 interface Props {
   data: FragmentType<typeof collectionShellFragment>;
@@ -53,7 +53,7 @@ const pathname = Astro.url.pathname;
         <ProcessingCheck data={shell.layouts} entityType="collection" />
       ) : (
         <>
-          <ViewCounter client:load slug={slug} isPreview={draftModeEnabled} />
+          <ViewCounter slug={slug} paused={draftModeEnabled} />
           <EntityNavBar client:load data={navBarData} pathname={pathname} />
           <slot />
         </>
