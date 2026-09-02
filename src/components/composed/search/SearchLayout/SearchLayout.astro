@@ -1,0 +1,114 @@
+---
+// Search page body: static results + small hydrated islands (the filter forms
+// and pagination), replacing the former single client:load SearchLayout island.
+// The query form is a plain GET form — ClientRouter intercepts the submit into
+// a soft navigation, and the page re-renders server-side (SSR-on-navigation).
+// The mobile drawer opens via the <search-drawer> custom element; closing is
+// native <dialog> behavior.
+import "@/i18n";
+import SearchDrawer from "@/components/client/SearchDrawer.astro";
+import { Button, CloseModalButton } from "@/components/atomic";
+import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
+import { NoContent } from "@/components/layout";
+import SearchBar from "../SearchBar";
+import SearchResults from "../SearchResults/SearchResults.astro";
+import SearchFiltersIsland from "../SearchFilters/SearchFiltersIsland";
+import type SearchFilters from "../SearchFilters";
+import type { RouteState } from "@/lib/routing/RouteContext";
+import type { ComponentProps } from "react";
+import styles from "./SearchLayout.module.css";
+
+interface Props {
+  scope: "global" | "collection" | "community";
+  slug?: string;
+  searchFilters?: ComponentProps<typeof SearchFilters>["data"] | null;
+  route: Partial<RouteState> & { pathname: string; search: string };
+}
+
+const { scope, slug, searchFilters, route } = Astro.props;
+
+const sp = new URLSearchParams(route.search);
+const q = sp.get("q") ?? undefined;
+const noSearchQuery = !q && !sp.get("filters") && !sp.get("schema");
+
+// Params the plain GET query form must carry forward (a GET submit replaces
+// the whole query string). `page` is deliberately dropped — a new query
+// restarts at page 1, matching the old submit handler.
+const preserved = (["filters", "schema", "order"] as const)
+  .map((k) => [k, sp.get(k)] as const)
+  .filter(([, v]) => v !== null) as [string, string][];
+---
+
+<SearchDrawer />
+
+<search-drawer>
+  <section class="a-bg-neutral00">
+    <div class:list={["l-container-wide", styles.inner]}>
+      <div class={styles.search}>
+        <form action={route.pathname} method="get">
+          {
+            preserved.map(([name, value]) => (
+              <input type="hidden" name={name} value={value} />
+            ))
+          }
+          <SearchBar id="searchPageInput" name="q" defaultValue={q} />
+        </form>
+      </div>
+      <div class={styles.filterToggle}>
+        <Button size="sm" icon="hamburger" secondary data-search-drawer-toggle>
+          Show Filters
+        </Button>
+      </div>
+      <div class={styles.sidebar}>
+        {
+          searchFilters && (
+            <SearchFiltersIsland
+              client:load
+              id="sidebarFilters"
+              data={searchFilters}
+              route={route}
+            />
+          )
+        }
+      </div>
+      <div class={styles.results}>
+        {
+          noSearchQuery ? (
+            <NoContent message="search.start_search" />
+          ) : (
+            <SearchResults
+              server:defer
+              scope={scope}
+              slug={slug}
+              pathname={route.pathname}
+              search={route.search}
+            >
+              <LoadingBlock slot="fallback" />
+            </SearchResults>
+          )
+        }
+      </div>
+    </div>
+    <dialog class={styles.drawer} aria-label="Filters" data-search-drawer>
+      <div class={styles.drawerInner}>
+        <div class={styles.drawerHeader}>
+          <form method="dialog">
+            <CloseModalButton />
+          </form>
+        </div>
+        <div class={styles.drawerContent}>
+          {
+            searchFilters && (
+              <SearchFiltersIsland
+                client:load
+                id="mobileFilters"
+                data={searchFilters}
+                route={route}
+              />
+            )
+          }
+        </div>
+      </div>
+    </dialog>
+  </section>
+</search-drawer>

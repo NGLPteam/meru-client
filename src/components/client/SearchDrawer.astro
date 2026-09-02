@@ -1,0 +1,48 @@
+{
+  /* Defines <search-drawer>, emitted by SearchLayout.astro around the search
+grid: opens the mobile filters <dialog> from the toggle button. Closing is
+native (the drawer's method="dialog" form and Escape); backdrop clicks close
+via the dialog click handler here. Definition-only; the define() guard keeps
+ClientRouter's script re-execution from throwing. */
+}
+
+<script>
+  /**
+   * Mobile filters drawer opener.
+   * Slot contract: toggle marked `data-search-drawer-toggle`, the <dialog>
+   * marked `data-search-drawer`.
+   */
+  class SearchDrawer extends HTMLElement {
+    abortController: AbortController | undefined;
+
+    connectedCallback() {
+      this.abortController = new AbortController();
+      const { signal } = this.abortController;
+
+      const toggle = this.querySelector("[data-search-drawer-toggle]");
+      const dialog = this.querySelector<HTMLDialogElement>(
+        "dialog[data-search-drawer]",
+      );
+      if (!toggle || !dialog) return;
+
+      toggle.addEventListener("click", () => dialog.showModal(), { signal });
+
+      // Backdrop click closes; Escape is handled natively by showModal().
+      dialog.addEventListener(
+        "click",
+        (e) => {
+          if (e.target === dialog) dialog.close();
+        },
+        { signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController?.abort();
+    }
+  }
+
+  if (!customElements.get("search-drawer")) {
+    customElements.define("search-drawer", SearchDrawer);
+  }
+</script>

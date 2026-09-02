@@ -120,14 +120,7 @@ export const collectionOrderingQuery = graphql(`
 `);
 
 export const collectionSearchQuery = graphql(`
-  query collectionSearchQuery(
-    $slug: Slug!
-    $query: String
-    $predicates: [SearchPredicateInput!]
-    $page: Int
-    $order: EntityOrder
-    $schema: [String!]
-  ) {
+  query collectionSearchQuery($slug: Slug!) {
     collection(slug: $slug) {
       ...CollectionShellFragment
       ...CollectionMetaFragment

@@ -3,41 +3,29 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
+import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionSearchQuery } from "~/lib/queries/collection";
+import { searchLayoutEntityFragment } from "~/lib/queries/search";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
-import CollectionSearch from "../_components/CollectionSearch";
-import { getPredicates } from "@/helpers/search";
-import type { EntityOrder } from "@/types/graphql-schema";
+import CollectionShell from "../_components/CollectionShell.astro";
+import SearchLayout from "@/components/composed/search/SearchLayout/SearchLayout.astro";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
 
-const sp = Astro.url.searchParams;
-const q = sp.get("q") ?? undefined;
-const filters = sp.get("filters");
-const page = sp.get("page");
-const order = sp.get("order");
-const schema = sp.get("schema");
-
-const predicates = filters ? getPredicates(JSON.parse(filters)) : [];
-
 const { data } = await query(
   collectionSearchQuery,
-  {
-    slug,
-    ...(q && { query: q }),
-    predicates,
-    page: page ? parseInt(page) : 1,
-    order: (order ?? "PUBLISHED_ASCENDING") as EntityOrder,
-    schema: schema ? schema.split(",") : [],
-  },
+  { slug },
   previewToken(Astro),
 );
 const collection = data?.collection;
 if (!collection) return Astro.rewrite("/404");
 
+const layout = readFragment(searchLayoutEntityFragment, collection);
 const { data: globalData } = await query(globalStaticQuery, {});
+const installationName =
+  globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const meta = buildCollectionMeta(collection, slug);
 const route = {
   pathname: Astro.url.pathname,
@@ -48,12 +36,17 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
 ---
 
 <BaseLayout meta={meta} community={collection.community} routeParams={{ slug }}>
-  <CollectionSearch
-    client:load
-    collection={collection}
+  <CollectionShell
+    data={collection}
     slug={slug}
-    globalData={globalData}
-    route={route}
     draftModeEnabled={draftModeEnabled}
-  />
+    installationName={installationName}
+  >
+    <SearchLayout
+      scope="collection"
+      slug={slug}
+      searchFilters={layout.searchFilters}
+      route={route}
+    />
+  </CollectionShell>
 </BaseLayout>

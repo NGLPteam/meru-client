@@ -1,0 +1,81 @@
+---
+// Search results as a `server:defer` island. A search can be multi-second, so
+// the page shell (search bar, filters) renders immediately with a LoadingBlock
+// fallback in the results cell and the results stream in out-of-band from
+// /_server-islands. Scalar props only; the search variables are parsed here
+// from the page's query string. No cache opt-in — the search space is
+// unbounded, matching the (uncached) search pages themselves.
+import "@/i18n";
+import query from "~/lib/query";
+import { previewToken } from "~/lib/request/previewToken";
+import { getPredicates } from "@/helpers/search";
+import {
+  globalSearchResultsQuery,
+  collectionSearchResultsQuery,
+  communitySearchResultsQuery,
+} from "~/lib/queries/search";
+import SearchResults from "./SearchResults";
+import PaginationIsland from "@/components/atomic/Pagination/PaginationIsland";
+import { useFragment as readFragment } from "@/lib/api/gql";
+import { fragment as searchResultsFragment } from "./SearchResults";
+import type { EntityOrder } from "@/types/graphql-schema";
+
+interface Props {
+  scope: "global" | "collection" | "community";
+  slug?: string;
+  // The search PAGE's location (not the island request URL).
+  pathname: string;
+  search: string;
+}
+
+const { scope, slug, pathname, search } = Astro.props;
+
+const sp = new URLSearchParams(search);
+const q = sp.get("q") ?? undefined;
+const filters = sp.get("filters");
+const page = sp.get("page");
+const order = sp.get("order");
+const schema = sp.get("schema");
+
+const variables = {
+  ...(q && { query: q }),
+  predicates: filters ? getPredicates(JSON.parse(filters)) : [],
+  page: page ? parseInt(page) : 1,
+  order: (order ?? "PUBLISHED_ASCENDING") as EntityOrder,
+  schema: schema ? schema.split(",") : [],
+};
+
+const token = previewToken(Astro);
+const results =
+  scope === "global"
+    ? (await query(globalSearchResultsQuery, variables, token)).data?.search
+        ?.results
+    : scope === "collection" && slug
+      ? (
+          await query(
+            collectionSearchResultsQuery,
+            { slug, ...variables },
+            token,
+          )
+        ).data?.collection?.search?.results
+      : slug
+        ? (
+            await query(
+              communitySearchResultsQuery,
+              { slug, ...variables },
+              token,
+            )
+          ).data?.community?.search?.results
+        : null;
+
+const resultsData = readFragment(searchResultsFragment, results ?? null);
+const hasResults = !!resultsData && resultsData.nodes.length > 0;
+const route = { pathname, search, params: { slug } };
+---
+
+<SearchResults data={results ?? undefined} q={q} />
+{
+  hasResults && (
+    <PaginationIsland client:load data={resultsData.pageInfo} route={route} />
+  )
+}

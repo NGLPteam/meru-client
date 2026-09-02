@@ -124,19 +124,16 @@ export const communityOrderingQuery = graphql(`
 `);
 
 export const communitySearchQuery = graphql(`
-  query communitySearchQuery(
-    $slug: Slug!
-    $query: String
-    $predicates: [SearchPredicateInput!]
-    $page: Int
-    $order: EntityOrder
-    $schema: [String!]
-  ) {
+  query communitySearchQuery($slug: Slug!) {
     community(slug: $slug) {
       ...CommunityShellFragment
       ...CommunityMetaFragment
-      ...CommunityContextFragment
       ...SearchLayoutEntityFragment
+    }
+    communityRef: community(slug: $slug) {
+      ...CommunityContextFragment
+      ...CommunityNavBarFragment
+      ...CommunityNavBarEntityFragment
     }
   }
 `);
