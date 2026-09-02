@@ -6,8 +6,12 @@ ClientRouter's script re-execution from throwing. */
 }
 
 <style is:global>
-  table-of-contents {
-    display: block;
+  /* Layered so component module classes (which live in meru-components) can
+     override this element default — unlayered rules would always win. */
+  @layer meru-base {
+    table-of-contents {
+      display: block;
+    }
   }
 </style>
 

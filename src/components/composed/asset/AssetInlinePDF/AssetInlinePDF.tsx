@@ -114,28 +114,30 @@ export default function AssetInlinePDF({ url, size }: Props) {
                 <AssetInlinePDFPage key={i} pageId="page" pageNumber={i + 1} />
               );
             })}
-            <NoContent
-              message={
-                <Trans
-                  i18nKey="asset.view_full_pdf"
-                  components={{
-                    downloadLink: (
-                      <a
-                        key="no-content"
-                        className="no-hover-shadow hover:text-neutral-90"
-                        style={{
-                          marginInlineStart: "5px",
-                        }}
-                        href={url || ""}
-                        download
-                      >
-                        Download PDF
-                      </a>
-                    ),
-                  }}
-                />
-              }
-            />
+            {numPages > 25 && (
+              <NoContent
+                message={
+                  <Trans
+                    i18nKey="asset.view_full_pdf"
+                    components={{
+                      downloadLink: (
+                        <a
+                          key="no-content"
+                          className="no-hover-shadow hover:text-neutral-90"
+                          style={{
+                            marginInlineStart: "5px",
+                          }}
+                          href={url || ""}
+                          download
+                        >
+                          Download PDF
+                        </a>
+                      ),
+                    }}
+                  />
+                }
+              />
+            )}
             <div className={styles.backToTop}>
               <BackToTopButton onClick={handleBackToTop} />
             </div>
