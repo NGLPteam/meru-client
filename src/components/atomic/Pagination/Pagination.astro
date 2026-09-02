@@ -1,0 +1,80 @@
+---
+import IconFactory from "@/components/factories/IconFactory";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { paginationFragment } from "./graphql";
+import styles from "./Pagination.module.css";
+
+interface Props {
+  data?: FragmentType<typeof paginationFragment> | null;
+  // The hosting PAGE's location — required inside server islands, where
+  // Astro.url is the island request URL.
+  pathname?: string;
+  search?: string;
+}
+
+const { data } = Astro.props;
+const pathname = Astro.props.pathname ?? Astro.url.pathname;
+const search = Astro.props.search ?? Astro.url.search;
+const { t } = Astro.locals;
+
+const pageInfo = useFragment(paginationFragment, data);
+const pageCount = pageInfo?.pageCount ?? 0;
+const currentPage = pageInfo?.page || 1;
+
+const pageUrl = (page: number) => {
+  const params = new URLSearchParams(search);
+  params.set("page", String(page));
+  return `${pathname}?${params.toString()}`;
+};
+
+// A GET submit replaces the whole query string, so carry the other params.
+const preserved = [...new URLSearchParams(search)].filter(
+  ([name]) => name !== "page",
+);
+
+const width = pageCount ? `${String(pageCount).length + 2}rem` : "3rem";
+---
+
+{
+  pageCount > 1 && (
+    <nav class={styles.nav} aria-label="Pagination Navigation">
+      {currentPage > 1 && (
+        <a
+          href={pageUrl(currentPage - 1)}
+          aria-label="Previous Page"
+          class={styles.prevNextButton}
+        >
+          <IconFactory icon="arrowLeft" />
+        </a>
+      )}
+      <form action={pathname} method="get">
+        {preserved.map(([name, value]) => (
+          <input type="hidden" name={name} value={value} />
+        ))}
+        <input
+          class={styles.input}
+          type="number"
+          name="page"
+          min={1}
+          max={pageCount}
+          value={currentPage}
+          style={`width: ${width}`}
+          aria-label="Page"
+        />
+        <button type="submit" class="sr-only">
+          {t("common.submit")}
+        </button>
+      </form>
+      <span>{t("list.of_count", { count: pageCount })}</span>
+      {currentPage < pageCount && (
+        <a
+          href={pageUrl(currentPage + 1)}
+          aria-label="Next Page"
+          class={styles.prevNextButton}
+        >
+          <IconFactory icon="arrowRight" />
+        </a>
+      )}
+    </nav>
+  )
+}

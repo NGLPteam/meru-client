@@ -8,7 +8,7 @@ import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { cacheEntity } from "@/lib/caching/setCache";
 import { collectionOrderingQuery, communityOrderingQuery } from "./graphql";
-import EntityOrderingIsland from "./EntityOrderingIsland";
+import EntityOrderingLayout from "./EntityOrderingLayout.astro";
 import type { ListEntityContext } from "@/types/graphql-schema";
 
 interface Props {
@@ -17,9 +17,13 @@ interface Props {
   identifier: string;
   page: number;
   showContext?: ListEntityContext;
+  // The browse PAGE's location (not this island request's URL).
+  pathname: string;
+  search: string;
 }
 
-const { entityType, slug, identifier, page, showContext } = Astro.props;
+const { entityType, slug, identifier, page, showContext, pathname, search } =
+  Astro.props;
 
 const variables = { slug, identifier, page };
 const ordering =
@@ -35,4 +39,9 @@ const ordering =
 cacheEntity(Astro, entityType, slug);
 ---
 
-<EntityOrderingIsland client:load data={ordering} showContext={showContext} />
+<EntityOrderingLayout
+  data={ordering}
+  showContext={showContext}
+  pathname={pathname}
+  search={search}
+/>

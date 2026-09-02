@@ -43,6 +43,8 @@ const meta = buildCommunityMeta(community, slug);
       identifier={ordering}
       page={page}
       showContext="FULL"
+      pathname={Astro.url.pathname}
+      search={Astro.url.search}
     >
       <LoadingBlock
         slot="fallback"

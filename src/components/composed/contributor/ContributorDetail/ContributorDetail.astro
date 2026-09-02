@@ -1,0 +1,80 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { ExternalLink, Markdown, ORCIDLink } from "@/components/atomic";
+import BrowseListLayout from "@/components/layout/BrowseListLayout/BrowseListLayout.astro";
+import ContributionSummary from "@/components/composed/contribution/ContributionSummary";
+import ContributorName from "../ContributorName";
+import ContributorAvatar from "../ContributorAvatar";
+import { contributorDetailFragment } from "./graphql";
+import styles from "./ContributorDetail.module.css";
+
+interface Props {
+  data?: FragmentType<typeof contributorDetailFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const contributor = useFragment(contributorDetailFragment, data);
+
+const attributions = contributor?.attributions;
+const hasAttributions = !!attributions?.pageInfo?.totalCount;
+const hasLinks = !!contributor?.links && contributor.links.length > 0;
+---
+
+{
+  contributor && (
+    <>
+      <section class="a-bg-custom10">
+        <div class:list={["l-container-wide", styles.contributorWrapper]}>
+          <header class={styles.name}>
+            {contributor.image?.storage && (
+              <ContributorAvatar data={contributor.image} />
+            )}
+            <h1 class="t-h3">
+              <ContributorName data={contributor} />
+            </h1>
+          </header>
+          {"title" in contributor && contributor.title && (
+            <p class="t-label-lg">{contributor.title}</p>
+          )}
+          {"affiliation" in contributor && contributor.affiliation && (
+            <p class="t-copy-lighter">{contributor.affiliation}</p>
+          )}
+          {contributor.bio && (
+            <div class="t-copy-light t-rte">
+              <Markdown.Base>{contributor.bio}</Markdown.Base>
+            </div>
+          )}
+          {(hasLinks || contributor.orcid) && (
+            <ul class="t-label-sm">
+              {contributor.orcid && (
+                <li class={styles.bioLink}>
+                  <ORCIDLink href={contributor.orcid}>
+                    {contributor.orcid}
+                  </ORCIDLink>
+                </li>
+              )}
+              {hasLinks &&
+                contributor.links.map(({ title, url }) => (
+                  <li class={styles.bioLink}>
+                    <ExternalLink href={url}>{title}</ExternalLink>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </div>
+      </section>
+      {hasAttributions && attributions && (
+        <BrowseListLayout
+          data={attributions.pageInfo}
+          header="layouts.contributions_header"
+          hasItems={attributions.nodes.length > 0}
+        >
+          {attributions.nodes.map((node) => (
+            <ContributionSummary data={node} />
+          ))}
+        </BrowseListLayout>
+      )}
+    </>
+  )
+}

@@ -28,3 +28,38 @@ export const communityOrderingQuery = graphql(`
     }
   }
 `);
+
+export const entityOrderingLayoutFragment = graphql(`
+  fragment EntityOrderingLayoutFragment on Ordering {
+    id
+    name
+    header
+    render {
+      mode
+    }
+    entity {
+      __typename
+      ... on Sluggable {
+        slug
+      }
+      ...BackButtonFragment
+    }
+    children(page: $page) {
+      edges {
+        node {
+          id
+          entry {
+            ... on Sluggable {
+              slug
+            }
+            ...EntitySummaryFragment
+          }
+        }
+      }
+      pageInfo {
+        ...BrowseListLayoutFragment
+      }
+      ...BrowseTreeLayoutFragment
+    }
+  }
+`);

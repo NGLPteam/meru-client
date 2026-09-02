@@ -1,0 +1,62 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { PageCount } from "@/components/atomic";
+import Pagination from "@/components/atomic/Pagination/Pagination.astro";
+import { fragment as BackButtonFragment } from "@/components/layout/BrowseListLayout/BackButton/BackButton";
+import Container from "@/components/layout/Container";
+import NoContent from "@/components/layout/messages/NoContent";
+import BackButton from "./BackButton";
+import { browseListLayoutFragment } from "./graphql";
+import styles from "./BrowseListLayout.module.css";
+
+interface Props {
+  header?: string | [string, Record<string, string | number>] | null;
+  data?: FragmentType<typeof browseListLayoutFragment> | null;
+  entityData?: FragmentType<typeof BackButtonFragment> | null;
+  hasItems?: boolean;
+  pathname?: string;
+  search?: string;
+}
+
+const {
+  data,
+  entityData,
+  header: headerProp,
+  hasItems,
+  pathname,
+  search,
+} = Astro.props;
+const { t } = Astro.locals;
+
+const pageInfo = useFragment(browseListLayoutFragment, data);
+
+const header =
+  headerProp &&
+  (Array.isArray(headerProp) ? t(headerProp[0], headerProp[1]) : t(headerProp));
+---
+
+{
+  pageInfo && (
+    <Container width="wide" bgColor="NONE" className={styles.grid}>
+      {entityData && <BackButton data={entityData} />}
+      <header class={styles.header}>
+        {header && <h2 class="t-capitalize t-h3">{header}</h2>}
+        <div class={styles.pageCount}>
+          <PageCount data={pageInfo} className="t-label-lg" />
+        </div>
+      </header>
+      <div class={styles.listColumn}>
+        {hasItems ? (
+          <ul class="t-unstyled-list">
+            <slot />
+          </ul>
+        ) : (
+          <NoContent />
+        )}
+        <div class={styles.footer}>
+          <Pagination data={pageInfo} pathname={pathname} search={search} />
+        </div>
+      </div>
+    </Container>
+  )
+}

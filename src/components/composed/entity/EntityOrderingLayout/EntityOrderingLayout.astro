@@ -1,0 +1,57 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import BrowseListLayout from "@/components/layout/BrowseListLayout/BrowseListLayout.astro";
+import BrowseTreeLayout from "@/components/layout/BrowseTreeLayout/BrowseTreeLayout.astro";
+import { NoContent } from "@/components/layout";
+import EntitySummary from "@/components/composed/entity/EntitySummary";
+import { entityOrderingLayoutFragment } from "./graphql";
+import type { ListEntityContext } from "@/types/graphql-schema";
+import type { ComponentProps } from "react";
+
+interface Props {
+  data?: FragmentType<typeof entityOrderingLayoutFragment> | null;
+  showContext?: ListEntityContext;
+  // The browse PAGE's location — this renders inside the OrderingList server
+  // island, where Astro.url is the island request URL.
+  pathname?: string;
+  search?: string;
+}
+
+const { data, showContext, pathname, search } = Astro.props;
+
+const ordering = useFragment(entityOrderingLayoutFragment, data);
+
+const mode = ordering?.render?.mode;
+---
+
+{
+  !ordering ? (
+    <div class="l-container-wide l-container-wide--p-lg">
+      <NoContent />
+    </div>
+  ) : mode === "TREE" ? (
+    <BrowseTreeLayout
+      data={ordering.children}
+      header={ordering.header || ordering.name}
+      pathname={pathname}
+      search={search}
+    />
+  ) : (
+    <BrowseListLayout
+      data={ordering.children.pageInfo}
+      entityData={ordering.entity}
+      header={ordering.header || ordering.name}
+      hasItems={ordering.children.edges.length > 0}
+      pathname={pathname}
+      search={search}
+    >
+      {ordering.children.edges.map(({ node: { entry } }) => (
+        <EntitySummary
+          data={entry as ComponentProps<typeof EntitySummary>["data"]}
+          showContext={showContext}
+          browseStyle
+        />
+      ))}
+    </BrowseListLayout>
+  )
+}

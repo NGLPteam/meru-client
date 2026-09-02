@@ -15,7 +15,7 @@ import {
   communitySearchResultsQuery,
 } from "../graphql";
 import SearchResults from "./SearchResults";
-import PaginationIsland from "@/components/atomic/Pagination/PaginationIsland";
+import Pagination from "@/components/atomic/Pagination/Pagination.astro";
 import { useFragment } from "@/lib/api/gql";
 import { fragment as searchResultsFragment } from "./SearchResults";
 import type { EntityOrder } from "@/types/graphql-schema";
@@ -23,11 +23,12 @@ import type { EntityOrder } from "@/types/graphql-schema";
 interface Props {
   scope: "global" | "collection" | "community";
   slug?: string;
-  // The search PAGE's query string (not the island request URL's).
+  // The search PAGE's location (not this island request's URL).
+  pathname: string;
   search: string;
 }
 
-const { scope, slug, search } = Astro.props;
+const { scope, slug, pathname, search } = Astro.props;
 
 const sp = new URLSearchParams(search);
 const q = sp.get("q") ?? undefined;
@@ -72,4 +73,20 @@ const hasResults = !!resultsData && resultsData.nodes.length > 0;
 ---
 
 <SearchResults data={results ?? undefined} q={q} />
-{hasResults && <PaginationIsland client:load data={resultsData.pageInfo} />}
+{
+  hasResults && (
+    <div class="pagination-footer">
+      <Pagination
+        data={resultsData.pageInfo}
+        pathname={pathname}
+        search={search}
+      />
+    </div>
+  )
+}
+
+<style>
+  .pagination-footer {
+    padding-block-start: 3.5rem;
+  }
+</style>

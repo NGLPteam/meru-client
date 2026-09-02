@@ -1,0 +1,49 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { PageCount } from "@/components/atomic";
+import Pagination from "@/components/atomic/Pagination/Pagination.astro";
+import NoContent from "@/components/layout/messages/NoContent";
+import BrowseTreeList from "./BrowseTreeList";
+import { browseTreeLayoutFragment } from "./graphql";
+import styles from "./BrowseTreeLayout.module.css";
+
+interface Props {
+  header?: string | null;
+  data?: FragmentType<typeof browseTreeLayoutFragment> | null;
+  pathname?: string;
+  search?: string;
+}
+
+const { data, header, pathname, search } = Astro.props;
+
+const listData = useFragment(browseTreeLayoutFragment, data);
+---
+
+{
+  listData && (
+    <section class="a-bg-neutral00">
+      <div class="l-container-wide">
+        <header class={styles.header}>
+          {header && <h3 class="t-capitalize">{header}</h3>}
+          <div class={styles.pageCount}>
+            <PageCount data={listData.pageInfo} className="t-label-lg" />
+          </div>
+        </header>
+        <div class={styles.listItems}>
+          {listData.nodes.length > 0 ? (
+            <BrowseTreeList nodes={listData.nodes} />
+          ) : (
+            <NoContent />
+          )}
+        </div>
+        <footer class={styles.footer}>
+          <Pagination
+            data={listData.pageInfo}
+            pathname={pathname}
+            search={search}
+          />
+        </footer>
+      </div>
+    </section>
+  )
+}
