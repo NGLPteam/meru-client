@@ -9,7 +9,6 @@ import "@/i18n";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { markdownToTxt } from "markdown-to-txt";
-import { usePathname } from "@/lib/routing/hooks";
 import {
   graphql,
   useFragment as readFragment,
@@ -71,11 +70,9 @@ export function getEntityNavBarData(
   };
 }
 
-export default function EntityNavBar({ data, pathname: pathnameProp }: Props) {
+export default function EntityNavBar({ data, pathname }: Props) {
   const { t } = useTranslation();
 
-  const routePathname = usePathname();
-  const pathname = pathnameProp ?? routePathname;
   const hideSearch = pathname.includes("search");
 
   const canRender =
@@ -121,7 +118,7 @@ export default function EntityNavBar({ data, pathname: pathnameProp }: Props) {
 
 type Props = {
   data?: EntityNavBarData | null;
-  pathname?: string;
+  pathname: string;
 };
 
 const fragment = graphql(`

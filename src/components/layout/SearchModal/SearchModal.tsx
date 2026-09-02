@@ -6,7 +6,7 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { useRouter } from "@/lib/routing/hooks";
+import { navigate } from "astro:transitions/client";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchBar from "@/components/composed/search/SearchBar";
 import SearchModalContent from "./SearchModalContent";
@@ -41,7 +41,6 @@ const SearchModal = forwardRef<SearchModalHandle, Props>(function SearchModal(
   const searchId = "searchInput";
   const { t } = useTranslation();
   const searchData = useFragment(fragment, data);
-  const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const { register, handleSubmit } = useForm();
@@ -62,7 +61,7 @@ const SearchModal = forwardRef<SearchModalHandle, Props>(function SearchModal(
     }
     const params = new URLSearchParams({ q: formData.q });
 
-    router.push(`${pathname}?${params.toString()}`);
+    navigate(`${pathname}?${params.toString()}`);
     dialogRef.current?.close();
   };
 

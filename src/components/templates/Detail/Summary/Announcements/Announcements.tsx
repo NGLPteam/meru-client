@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import useRouteSlug from "@/hooks/useRouteSlug";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import ReadMoreLink from "@/components/atomic/links/Link/patterns/ReadMoreLink";
 import styles from "./Announcements.module.css";
 
-export default function EntityAnnouncements({ data }: Props) {
+export default function EntityAnnouncements({ data, slug }: Props) {
   const announcements = useFragment(fragment, data);
 
   const { t } = useTranslation();
-
-  const slug = useRouteSlug();
 
   return !!announcements.nodes.length && slug ? (
     <aside className={classNames("a-bg-neutral00", styles.block)}>
@@ -43,6 +40,8 @@ export default function EntityAnnouncements({ data }: Props) {
 
 interface Props {
   data: FragmentType<typeof fragment>;
+  // The announcements' owning entity — hrefs live under its route.
+  slug?: string | null;
 }
 
 const fragment = graphql(`

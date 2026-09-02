@@ -5,7 +5,6 @@ import {
   type FragmentType,
   type DocumentType,
 } from "@/lib/api/gql";
-import useRoutePageSlug from "@/hooks/useRoutePageSlug";
 import { NamedLink, Accordion, NavMenuLink, Link } from "@/components/atomic";
 import NavDropdown from "@/components/composed/entity/EntityNavBar/EntityNavList/Dropdown";
 
@@ -13,18 +12,19 @@ interface Props {
   condensed?: boolean;
   mobile?: boolean;
   data: FragmentType<typeof fragment>;
+  // The current route's community-page slug, for the active-page highlight.
+  pageSlug?: string;
 }
 
 export default function CommunityNavList({
   condensed,
   mobile,
+  pageSlug: page,
   ...props
 }: Props) {
   const community = useFragment(fragment, props.data);
 
   const { t } = useTranslation();
-
-  const page = useRoutePageSlug();
 
   const linkClassName = condensed ? "t-label-sm" : "t-label-lg";
 

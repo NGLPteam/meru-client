@@ -29,9 +29,13 @@ const TEMPLATE_COMPONENT_MAP = {
 export default function TemplateFactory({
   data,
   bgOverride,
+  slug,
 }: {
   data: FragmentType<typeof fragment> | null;
   bgOverride?: HeroBackground | null;
+  // The current page's entity slug, threaded to templates whose blocks need it
+  // (e.g. list blocks suppressing self-links).
+  slug?: string;
 }) {
   const template = useFragment(fragment, data);
 
@@ -46,7 +50,11 @@ export default function TemplateFactory({
   // its own fragment ref, so type the dispatched component loosely and hand it
   // the template data (correct at runtime for the selected kind).
   const Template = TEMPLATE_COMPONENT_MAP[template.templateKind] as
-    | ComponentType<{ data: unknown; bgOverride?: HeroBackground | null }>
+    | ComponentType<{
+        data: unknown;
+        bgOverride?: HeroBackground | null;
+        slug?: string;
+      }>
     | undefined;
 
   if (
@@ -58,7 +66,9 @@ export default function TemplateFactory({
     return null;
   }
 
-  return Template ? <Template data={template} bgOverride={bgOverride} /> : null;
+  return Template ? (
+    <Template data={template} bgOverride={bgOverride} slug={slug} />
+  ) : null;
 }
 
 const fragment = graphql(`

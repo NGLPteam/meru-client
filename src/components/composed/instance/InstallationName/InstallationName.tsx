@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import { Link } from "@/lib/vendor/react-transition-progress/link";
+import Link from "@/components/atomic/links/BaseLink";
 import styles from "./InstallationName.module.css";
 
 const LOGO_SIZE = 40;

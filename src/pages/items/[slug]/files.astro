@@ -7,7 +7,7 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemFilesQuery } from "~/lib/queries/item";
+import { itemFilesQuery } from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "../_components/ItemShell.astro";
 import AssetsBlock from "@/components/composed/asset/AssetsBlock";

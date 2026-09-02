@@ -1,6 +1,6 @@
 import type { APIContext } from "astro";
 import query from "~/lib/query";
-import { previewAccessQuery } from "~/lib/queries/preview";
+import { previewAccessQuery } from "~/lib/preview/graphql";
 
 // Resolves whether the current viewer may preview the given entity (server
 // `canUpdate`), fetched with the session token from `locals`. Anonymous → false

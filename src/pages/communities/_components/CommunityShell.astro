@@ -3,7 +3,7 @@
 // islands (community nav bar, search hero). See ItemShell.astro.
 import "@/i18n";
 import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
-import { communityShellFragment } from "@/lib/queries/community";
+import { communityShellFragment } from "@/pages/communities/_components/graphql";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import HeroTemplate, { getHeroSearchProps } from "@/components/templates/Hero";
 import SearchHero from "@/components/composed/search/SearchHero";
@@ -20,9 +20,11 @@ interface Props {
   // Aliased narrow re-selection (communityRef) — see communityQuery.
   communityRef?: NavBarProps["data"] & NavBarProps["entityData"];
   draftModeEnabled: boolean;
+  // The current route's community-page slug, for the nav's active-page state.
+  pageSlug?: string;
 }
 
-const { data, communityRef, draftModeEnabled } = Astro.props;
+const { data, communityRef, draftModeEnabled, pageSlug } = Astro.props;
 
 const shell = readFragment(communityShellFragment, data);
 
@@ -46,6 +48,7 @@ const searchHero = hero ? getHeroSearchProps(hero, pathname) : null;
           client:load
           data={communityRef}
           entityData={communityRef}
+          pageSlug={pageSlug}
         />
       )}
       {empty ? (

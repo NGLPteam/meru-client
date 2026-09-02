@@ -18,14 +18,14 @@ export default function InstanceHero({ data, hideSearchHero }: Props) {
           </h1>
           {app?.globalConfiguration.site.installationHomePageCopy && (
             <div className={styles.text}>
-              <Markdown.Summary skipMountCheck>
+              <Markdown.Summary>
                 {app.globalConfiguration.site.installationHomePageCopy}
               </Markdown.Summary>
             </div>
           )}
         </div>
       </header>
-      {!hideSearchHero && <SearchHero />}
+      {!hideSearchHero && <SearchHero pathname="/" />}
     </>
   );
 }

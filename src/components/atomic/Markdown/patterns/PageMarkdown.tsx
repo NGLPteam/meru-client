@@ -20,7 +20,6 @@ export default function PageMarkdown({
         h4: (props) => <h4 className="t-h5">{props.children}</h4>,
         h5: (props) => <h5 className="t-h6">{props.children}</h5>,
       }}
-      skipMountCheck
       {...props}
     >
       {children}

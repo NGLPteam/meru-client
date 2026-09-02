@@ -63,7 +63,7 @@ export const itemQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       layouts {
         main {
@@ -81,7 +81,7 @@ export const itemPageQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       page(slug: $pageSlug) {
         ...EntityPageLayoutFragment
@@ -97,7 +97,7 @@ export const itemContributorsQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       ...ContributionsBlockFragment
     }
@@ -111,7 +111,7 @@ export const itemFilesQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       assets {
         ...AssetsBlockFragment
@@ -127,7 +127,7 @@ export const itemFileDetailQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
     }
     asset(slug: $file) {
@@ -143,7 +143,7 @@ export const itemMetadataQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       layouts {
         metadata {
@@ -171,7 +171,7 @@ export const itemMetricsQuery = graphql(`
       ...ItemMetaFragment
       ...getStaticGoogleScholarDataFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
     }
     # Aliased re-selection so the analytics island gets an object carrying ONLY

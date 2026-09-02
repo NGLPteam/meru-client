@@ -54,7 +54,10 @@ export default function Summary({
         </div>
         {detailDefinition?.showAnnouncements && !!entity?.announcements && (
           <div className={styles.announcements}>
-            <Announcements data={entity.announcements} />
+            <Announcements
+              data={entity.announcements}
+              slug={"slug" in entity ? entity.slug : undefined}
+            />
           </div>
         )}
       </div>
@@ -65,6 +68,9 @@ export default function Summary({
 const fragment = graphql(`
   fragment SummaryDetailFragment on DetailTemplateInstance {
     entity {
+      ... on Sluggable {
+        slug
+      }
       ... on Collection {
         __typename
         announcements {

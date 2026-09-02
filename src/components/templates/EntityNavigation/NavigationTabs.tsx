@@ -1,42 +1,30 @@
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
-import { useParams, usePathname } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
 import type { TemplateSlotInlineInstance } from "@/types/graphql-schema";
 import { getRouteByEntityType } from "@/helpers/routes";
-import { useFullTextCheck } from "../FullTextCheck/FullTextCheck";
 import styles from "./EntityNavigation.module.css";
 
 export default function NavigationTabs({
   data,
-  slug: slugProp,
-  pathname: pathnameProp,
-  renderMainLayout: renderMainLayoutProp,
+  slug,
+  pathname,
+  renderMainLayout,
 }: {
   data?: FragmentType<typeof fragment> | null;
-  // Rendered statically from an .astro shell these arrive as props; inside
-  // legacy content islands they come from route context / FullTextCheck.
-  slug?: string;
-  pathname?: string;
-  renderMainLayout?: boolean;
+  slug: string;
+  pathname: string;
+  renderMainLayout: boolean;
 }) {
-  const { slug: routeSlug } = useParams();
-  const routePathname = usePathname();
   const { t } = useTranslation();
-
-  const slug = slugProp ?? routeSlug;
-  const pathname = pathnameProp ?? routePathname;
 
   const template = useFragment(fragment, data);
 
   const { slots, entity, definition } = template ?? {};
 
   const entityLabel = useSharedInlineFragment(slots?.entityLabel);
-
-  const contextRenderMainLayout = useFullTextCheck();
-  const renderMainLayout = renderMainLayoutProp ?? contextRenderMainLayout;
 
   if (!entity || (entity.__typename as string) === "%other") return null;
 

@@ -6,18 +6,19 @@
 // admin/sign-in items are rendered separately by the FooterNav `server:defer`
 // island. Grid placement is by named areas (AppFooter.module.css), so DOM order
 // vs. the sibling nav island doesn't matter.
-import { useContext } from "react";
 import classNames from "classnames";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import { Search } from "@/components/forms";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
-import { communityNameFragment as CommunityPickerCommunityNameFragment } from "@/components/composed/instance/CommunityPicker/CommunityPicker";
 import CommunityName from "@/components/composed/community/CommunityName";
 import { Markdown } from "@/components/atomic";
 import { useGlobalStaticContext } from "@/contexts/GlobalStaticContext";
-import { CommunityContext } from "@/contexts/CommunityContext";
 import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
 import { AppFooterFragment } from "./graphql";
 import styles from "./AppFooter.module.css";
 
@@ -25,20 +26,13 @@ type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppFooterFragment> | null;
-  communityData?: FragmentType<
-    typeof CommunityPickerCommunityNameFragment
-  > | null;
   globalData?: IslandProviderProps["globalData"];
-  community?: IslandProviderProps["community"];
-  route?: IslandProviderProps["route"];
+  community?: ActiveCommunityRef;
 }
 
-function FooterBody({
-  data,
-  communityData,
-}: Pick<Props, "data" | "communityData">) {
+function FooterBody({ data, community }: Pick<Props, "data" | "community">) {
   const staticData = useGlobalStaticContext();
-  const community = useContext(CommunityContext);
+  const activeCommunity = useFragment(ActiveCommunityFragment, community);
   const footer = staticData?.globalConfiguration?.site?.footer;
   const app = useFragment(AppFooterFragment, data);
   const communityCount = app?.communities?.pageInfo?.totalCount || 0;
@@ -46,8 +40,8 @@ function FooterBody({
   return (
     <>
       <div className={styles.communityName}>
-        {community ? (
-          <CommunityName />
+        {activeCommunity ? (
+          <CommunityName data={activeCommunity} />
         ) : (
           <h4>
             <InstallationName
@@ -64,7 +58,7 @@ function FooterBody({
         <Search mobile id="footerMobileSearch" />
       </div>
       <div className={styles.about}>
-        {!!community && (
+        {!!activeCommunity && (
           <div className={styles.installationMobile}>
             <InstallationName data={app?.globalConfiguration} />
           </div>
@@ -75,13 +69,13 @@ function FooterBody({
           </Markdown.Base>
         )}
         <div className={styles.installationDesktop}>
-          {!!community && (
+          {!!activeCommunity && (
             <div className={styles["installationDesktop__name"]}>
               <InstallationName data={app?.globalConfiguration} />
             </div>
           )}
           {communityCount > 1 && (
-            <CommunityPicker data={app} activeData={communityData} />
+            <CommunityPicker data={app} activeData={activeCommunity} />
           )}
         </div>
       </div>
@@ -96,18 +90,12 @@ function FooterBody({
 
 export default function FooterBodyIsland({
   data,
-  communityData,
   globalData,
   community,
-  route,
 }: Props) {
   return (
-    <GlobalIslandProviders
-      globalData={globalData}
-      community={community}
-      route={route}
-    >
-      <FooterBody data={data} communityData={communityData} />
+    <GlobalIslandProviders globalData={globalData}>
+      <FooterBody data={data} community={community} />
     </GlobalIslandProviders>
   );
 }

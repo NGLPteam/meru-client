@@ -48,7 +48,6 @@ export default function InstanceCommunitySummary({ data }: Props) {
           )}
           {community.summary && (
             <Markdown.Summary
-              skipMountCheck
               className={classNames(
                 styles.summary,
                 "t-color-light t-copy-sm line-clamp-3",

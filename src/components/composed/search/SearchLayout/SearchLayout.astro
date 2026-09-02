@@ -14,7 +14,6 @@ import SearchBar from "../SearchBar";
 import SearchResults from "../SearchResults/SearchResults.astro";
 import SearchFiltersIsland from "../SearchFilters/SearchFiltersIsland";
 import type SearchFilters from "../SearchFilters";
-import type { RouteState } from "@/lib/routing/RouteContext";
 import type { ComponentProps } from "react";
 import styles from "./SearchLayout.module.css";
 
@@ -22,12 +21,14 @@ interface Props {
   scope: "global" | "collection" | "community";
   slug?: string;
   searchFilters?: ComponentProps<typeof SearchFilters>["data"] | null;
-  route: Partial<RouteState> & { pathname: string; search: string };
+  // The search page's own location.
+  pathname: string;
+  search: string;
 }
 
-const { scope, slug, searchFilters, route } = Astro.props;
+const { scope, slug, searchFilters, pathname, search } = Astro.props;
 
-const sp = new URLSearchParams(route.search);
+const sp = new URLSearchParams(search);
 const q = sp.get("q") ?? undefined;
 const noSearchQuery = !q && !sp.get("filters") && !sp.get("schema");
 
@@ -45,7 +46,7 @@ const preserved = (["filters", "schema", "order"] as const)
   <section class="a-bg-neutral00">
     <div class:list={["l-container-wide", styles.inner]}>
       <div class={styles.search}>
-        <form action={route.pathname} method="get">
+        <form action={pathname} method="get">
           {
             preserved.map(([name, value]) => (
               <input type="hidden" name={name} value={value} />
@@ -66,7 +67,8 @@ const preserved = (["filters", "schema", "order"] as const)
               client:load
               id="sidebarFilters"
               data={searchFilters}
-              route={route}
+              pathname={pathname}
+              search={search}
             />
           )
         }
@@ -80,8 +82,7 @@ const preserved = (["filters", "schema", "order"] as const)
               server:defer
               scope={scope}
               slug={slug}
-              pathname={route.pathname}
-              search={route.search}
+              search={search}
             >
               <LoadingBlock slot="fallback" />
             </SearchResults>
@@ -103,7 +104,8 @@ const preserved = (["filters", "schema", "order"] as const)
                 client:load
                 id="mobileFilters"
                 data={searchFilters}
-                route={route}
+                pathname={pathname}
+                search={search}
               />
             )
           }

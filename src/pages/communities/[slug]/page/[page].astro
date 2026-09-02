@@ -4,7 +4,7 @@ import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { communityPageQuery } from "~/lib/queries/community";
+import { communityPageQuery } from "~/pages/communities/_components/graphql";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
 import CommunityShell from "../../_components/CommunityShell.astro";
 import CommunityPageLayout from "@/components/composed/community/CommunityPageLayout";
@@ -32,6 +32,7 @@ cacheEntity(Astro, "community", slug);
   routeParams={{ slug, page: pageSlug }}
 >
   <CommunityShell
+    pageSlug={pageSlug}
     data={community}
     communityRef={data?.communityRef}
     draftModeEnabled={draftModeEnabled}

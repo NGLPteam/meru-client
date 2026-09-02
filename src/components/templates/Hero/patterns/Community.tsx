@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { usePathname } from "@/lib/routing/hooks";
 import {
   graphql,
   useFragment,
@@ -23,7 +22,7 @@ const isMainPath = (pathname: string) =>
 
 export default function CommunityHeroHeader({
   data,
-  pathname: pathnameProp,
+  pathname = "/",
   hideSearchHero,
 }: {
   data?: FragmentType<typeof fragment> | null;
@@ -33,9 +32,6 @@ export default function CommunityHeroHeader({
   hideSearchHero?: boolean;
 }) {
   const { t } = useTranslation();
-
-  const routePathname = usePathname();
-  const pathname = pathnameProp ?? routePathname;
 
   const isMain = isMainPath(pathname);
 
@@ -85,7 +81,7 @@ export default function CommunityHeroHeader({
         </section>
       )}
       {showBigSearchPrompt && !hideSearchHero && (
-        <SearchHero prompt={bigSearchPrompt?.content} />
+        <SearchHero prompt={bigSearchPrompt?.content} pathname={pathname} />
       )}
     </>
   ) : null;

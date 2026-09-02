@@ -18,6 +18,7 @@ export default function PromoListBlock({
 }: {
   data?: FragmentType<typeof sharedListTemplateFragment> | null;
   basePath?: string | null;
+  slug?: string;
   bgOverride?: HeroBackground | null;
 }) {
   const {

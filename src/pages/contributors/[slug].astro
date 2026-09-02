@@ -6,7 +6,7 @@ import {
   contributorDetailQuery,
   contributorItemQuery,
   contributorCollectionQuery,
-} from "~/lib/queries/contributor";
+} from "~/pages/contributors/_components/graphql";
 import ContributorPage from "./_components/ContributorPage";
 
 const { slug } = Astro.params;
@@ -41,20 +41,9 @@ if (item) {
 
 if (!contributor) return Astro.rewrite("/404");
 
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
-
 cacheEntity(Astro, "contributor", slug);
 ---
 
 <BaseLayout community={community} routeParams={{ slug }}>
-  <ContributorPage
-    client:load
-    contributor={contributor}
-    navData={navData}
-    route={route}
-  />
+  <ContributorPage client:load contributor={contributor} navData={navData} />
 </BaseLayout>

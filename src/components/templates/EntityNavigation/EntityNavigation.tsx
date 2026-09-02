@@ -11,9 +11,9 @@ export default function EntityNavigationTemplate({
   renderMainLayout,
 }: {
   data?: FragmentType<typeof fragment> | null;
-  slug?: string;
-  pathname?: string;
-  renderMainLayout?: boolean;
+  slug: string;
+  pathname: string;
+  renderMainLayout: boolean;
 }) {
   const { template } = useFragment(fragment, data) ?? {};
 

@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { useParams } from "@/lib/routing/hooks";
 import {
   useSharedListTemplateFragment,
   listTemplateFragment as sharedListTemplateFragment,
@@ -22,14 +21,16 @@ export default function SummaryListBlock({
   data,
   basePath,
   bgOverride,
+  slug,
 }: {
   data?: FragmentType<typeof sharedListTemplateFragment> | null;
   basePath?: string | null;
   bgOverride?: HeroBackground | null;
+  // The current page's entity slug — suppresses the block's self-link when the
+  // listed entity IS the page being viewed.
+  slug?: string;
 }) {
   const { t } = useTranslation();
-
-  const { slug } = useParams();
 
   const {
     linksDefinition,

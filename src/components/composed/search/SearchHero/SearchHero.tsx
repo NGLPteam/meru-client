@@ -2,37 +2,32 @@ import "@/i18n";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
-import { usePathname } from "@/lib/routing/hooks";
-import { useRouter, useSearchParams } from "@/lib/routing/hooks";
+import { navigate } from "astro:transitions/client";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./SearchHero.module.css";
 
 export default function SearchHero({
   prompt,
-  pathname: pathnameProp,
+  pathname,
 }: {
   prompt?: string | null;
-  pathname?: string;
+  // The mounting page's pathname — the search route is scoped beneath it.
+  pathname: string;
 }) {
   const { t } = useTranslation();
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const routePathname = usePathname();
-  const pathname = pathnameProp ?? routePathname;
 
   const { register, handleSubmit } = useForm({
     shouldUseNativeValidation: true,
   });
 
   const onSubmit = async (data: { q?: string }) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams();
     if (data.q) params.set("q", data.q);
     const url = `${
       pathname !== "/" ? pathname : ""
     }/search?${params.toString()}`;
 
-    router.push(url);
+    navigate(url);
   };
 
   return (

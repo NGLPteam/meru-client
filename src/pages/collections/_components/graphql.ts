@@ -58,7 +58,7 @@ export const collectionQuery = graphql(`
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       layouts {
         main {
@@ -80,7 +80,7 @@ export const collectionPageQuery = graphql(`
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       page(slug: $pageSlug) {
         ...EntityPageLayoutFragment
@@ -95,25 +95,7 @@ export const collectionBrowseQuery = graphql(`
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
-        ...CommunityContextFragment
-      }
-    }
-  }
-`);
-
-// The ordering page itself is fetched separately by the OrderingList server
-// island: it is by far the slowest selection on browse pages, so the shell
-// renders immediately and the list streams in behind a loading fallback.
-export const collectionOrderingQuery = graphql(`
-  query collectionOrderingQuery(
-    $slug: Slug!
-    $identifier: String!
-    $page: Int
-  ) {
-    collection(slug: $slug) {
-      ordering(identifier: $identifier) {
-        disabled
-        ...EntityOrderingLayoutFragment
+        ...ActiveCommunityFragment
       }
     }
   }
@@ -125,7 +107,7 @@ export const collectionSearchQuery = graphql(`
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       ...SearchLayoutEntityFragment
     }
@@ -138,7 +120,7 @@ export const collectionAnnouncementQuery = graphql(`
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       announcement(slug: $announcementSlug) {
         ...EntityAnnouncementLayoutFragment
@@ -153,7 +135,7 @@ export const collectionContributorsQuery = graphql(`
       ...CollectionShellFragment
       ...CollectionMetaFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
       ...CollectionContributionsBlockFragment
     }

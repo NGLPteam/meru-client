@@ -7,30 +7,32 @@ import CommunityNavList from "@/components/composed/community/CommunityNavList";
 import { SearchButton } from "@/components/atomic";
 import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
 import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
-import type { FragmentType } from "@/lib/api/gql";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
 
 type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 type Props = {
   searchData?: FragmentType<typeof SearchButtonFragment> | null;
   globalData?: IslandProviderProps["globalData"];
-  community?: IslandProviderProps["community"];
-  route?: IslandProviderProps["route"];
+  community?: ActiveCommunityRef;
+  // The current route's community-page slug, for the nav's active-page state.
+  pageSlug?: string;
 };
 
 export default function HeaderNavIsland({
   searchData,
   globalData,
   community,
-  route,
+  pageSlug,
 }: Props) {
+  const activeCommunity = useFragment(ActiveCommunityFragment, community);
   return (
-    <GlobalIslandProviders
-      globalData={globalData}
-      community={community}
-      route={route}
-    >
-      <CommunityNavList condensed />
+    <GlobalIslandProviders globalData={globalData}>
+      <CommunityNavList condensed data={activeCommunity} pageSlug={pageSlug} />
       <SearchButton size="sm" data={searchData} />
     </GlobalIslandProviders>
   );

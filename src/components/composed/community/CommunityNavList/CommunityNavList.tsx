@@ -1,15 +1,15 @@
-import { useContext } from "react";
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import { CommunityContext } from "@/contexts/CommunityContext";
 import CommunityNavListContent from "./CommunityNavListContent";
 import styles from "./CommunityNavlist.module.css";
 
-export default function CommunityNavList({ condensed, mobile, data }: Props) {
-  // Mounted from .astro the community arrives as a prop; inside legacy islands
-  // it still comes from CommunityContext.
-  const contextData = useContext(CommunityContext);
-  const community = useFragment(fragment, data ?? contextData);
+export default function CommunityNavList({
+  condensed,
+  mobile,
+  data,
+  pageSlug,
+}: Props) {
+  const community = useFragment(fragment, data);
 
   const listClasses = mobile
     ? styles.mobileList
@@ -18,7 +18,11 @@ export default function CommunityNavList({ condensed, mobile, data }: Props) {
   return (
     <ul className={listClasses} data-condensed={condensed}>
       {community && (
-        <CommunityNavListContent data={community} mobile={mobile} />
+        <CommunityNavListContent
+          data={community}
+          mobile={mobile}
+          pageSlug={pageSlug}
+        />
       )}
     </ul>
   );
@@ -28,6 +32,7 @@ interface Props {
   condensed?: boolean;
   mobile?: boolean;
   data?: FragmentType<typeof fragment> | null;
+  pageSlug?: string;
 }
 
 const fragment = graphql(`

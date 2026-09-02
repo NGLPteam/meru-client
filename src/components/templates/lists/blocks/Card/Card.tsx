@@ -18,6 +18,7 @@ export default function CardListBlock({
 }: {
   data?: FragmentType<typeof sharedListTemplateFragment>;
   basePath?: string | null;
+  slug?: string;
   bgOverride?: HeroBackground | null;
 }) {
   const { linksDefinition, descendantsDefinition, entityList, seeAllOrdering } =

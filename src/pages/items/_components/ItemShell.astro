@@ -5,7 +5,7 @@
 // components (preview gate, processing check) runs here in frontmatter.
 import "@/i18n";
 import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
-import { itemShellFragment } from "@/lib/queries/item";
+import { itemShellFragment } from "@/pages/items/_components/graphql";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import HeroTemplate, {
   getHeroBreadcrumbProps,

@@ -4,8 +4,8 @@ import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
-import { communitySearchQuery } from "~/lib/queries/community";
-import { searchLayoutEntityFragment } from "~/lib/queries/search";
+import { communitySearchQuery } from "~/pages/communities/_components/graphql";
+import { searchLayoutEntityFragment } from "~/components/composed/search/graphql";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
 import CommunityShell from "../_components/CommunityShell.astro";
 import SearchLayout from "@/components/composed/search/SearchLayout/SearchLayout.astro";
@@ -25,11 +25,6 @@ const layout = readFragment(searchLayoutEntityFragment, community);
 
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 ---
 
 <BaseLayout meta={meta} community={data?.communityRef} routeParams={{ slug }}>
@@ -42,7 +37,8 @@ const route = {
       scope="community"
       slug={slug}
       searchFilters={layout.searchFilters}
-      route={route}
+      pathname={Astro.url.pathname}
+      search={Astro.url.search}
     />
   </CommunityShell>
 </BaseLayout>

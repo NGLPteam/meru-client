@@ -1,24 +1,18 @@
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { Dropdown, NamedLink } from "@/components/atomic";
-import { CommunityContext } from "@/contexts/CommunityContext";
 import Button from "@/components/atomic/Button";
 import styles from "./CommunityPicker.module.css";
 
 type Props = {
   data?: FragmentType<typeof fragment> | null;
+  // The active community, for the disclosure label on community pages.
   activeData?: FragmentType<typeof communityNameFragment> | null;
 };
 
-export default function CommunityPicker({ data }: Props) {
+export default function CommunityPicker({ data, activeData }: Props) {
   const communityData = useFragment(fragment, data);
-
-  const activeCommunityData = useContext(CommunityContext);
-  const activeCommunity = useFragment(
-    communityNameFragment,
-    activeCommunityData,
-  );
+  const activeCommunity = useFragment(communityNameFragment, activeData);
 
   const { t } = useTranslation();
 
@@ -67,7 +61,7 @@ export default function CommunityPicker({ data }: Props) {
   );
 }
 
-export const communityNameFragment = graphql(`
+const communityNameFragment = graphql(`
   fragment CommunityPickerCommunityNameFragment on Community {
     title
   }

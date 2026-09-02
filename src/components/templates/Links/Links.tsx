@@ -21,9 +21,11 @@ const VARIANT_TO_COMPONENT = {
 export default function Links({
   data,
   bgOverride,
+  slug,
 }: {
   data: FragmentType<typeof fragment>;
   bgOverride?: HeroBackground | null;
+  slug?: string;
 }) {
   const template = useFragment(fragment, data);
 
@@ -38,7 +40,9 @@ export default function Links({
       : null;
 
   return (
-    BlockComponent && <BlockComponent data={template} bgOverride={bgOverride} />
+    BlockComponent && (
+      <BlockComponent data={template} bgOverride={bgOverride} slug={slug} />
+    )
   );
 }
 

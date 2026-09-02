@@ -1,12 +1,10 @@
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import useRouteSlug from "@/hooks/useRouteSlug";
 import { FileThumbnail, NamedLink } from "@/components/atomic";
 import styles from "./AssetThumbnail.module.css";
 
-export default function AssetThumbnail({ data }: Props) {
+export default function AssetThumbnail({ data, slug }: Props) {
   const asset = useFragment(fragment, data);
   const image = asset?.preview?.storage ? asset.preview.image?.webp : null;
-  const slug = useRouteSlug();
 
   function renderThumbnail() {
     return asset ? (
@@ -32,6 +30,8 @@ export default function AssetThumbnail({ data }: Props) {
 
 interface Props {
   data?: FragmentType<typeof fragment> | null;
+  // The owning item's slug — the thumbnail links into its files route.
+  slug?: string;
 }
 
 const fragment = graphql(`

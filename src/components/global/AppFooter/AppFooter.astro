@@ -4,10 +4,10 @@
 // `server:defer` island: the footer body is cache-safe and viewer-free, while
 // FooterNav renders per-request and opts out of the cache. Grid placement is by
 // named areas, so body and nav can be separate siblings in any DOM order.
-import { communityNameFragment } from "@/components/composed/instance/CommunityPicker/CommunityPicker";
 import type { FragmentType } from "@/lib/api/gql";
 import type { AppFooterFragment } from "./graphql";
 import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
+import type { ActiveCommunityRef } from "@/components/global/graphql";
 import FooterBodyIsland from "./FooterBodyIsland";
 import FooterNav from "./FooterNav.astro";
 import FooterNavIsland from "./FooterNavIsland";
@@ -17,13 +17,11 @@ type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppFooterFragment> | null;
-  communityData?: FragmentType<typeof communityNameFragment> | null;
   globalData?: IslandProviderProps["globalData"];
-  community?: IslandProviderProps["community"];
-  route?: IslandProviderProps["route"];
+  community?: ActiveCommunityRef;
 }
 
-const { data, communityData, globalData, community, route } = Astro.props;
+const { data, globalData, community } = Astro.props;
 ---
 
 <footer class:list={["a-bg-custom20", styles.footer]}>
@@ -31,10 +29,8 @@ const { data, communityData, globalData, community, route } = Astro.props;
     <FooterBodyIsland
       client:load
       data={data}
-      communityData={communityData}
       globalData={globalData}
       community={community}
-      route={route}
     />
     <FooterNav server:defer>
       <FooterNavIsland slot="fallback" />

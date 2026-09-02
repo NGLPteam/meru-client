@@ -13,7 +13,7 @@ import {
   globalSearchResultsQuery,
   collectionSearchResultsQuery,
   communitySearchResultsQuery,
-} from "~/lib/queries/search";
+} from "../graphql";
 import SearchResults from "./SearchResults";
 import PaginationIsland from "@/components/atomic/Pagination/PaginationIsland";
 import { useFragment as readFragment } from "@/lib/api/gql";
@@ -23,12 +23,11 @@ import type { EntityOrder } from "@/types/graphql-schema";
 interface Props {
   scope: "global" | "collection" | "community";
   slug?: string;
-  // The search PAGE's location (not the island request URL).
-  pathname: string;
+  // The search PAGE's query string (not the island request URL's).
   search: string;
 }
 
-const { scope, slug, pathname, search } = Astro.props;
+const { scope, slug, search } = Astro.props;
 
 const sp = new URLSearchParams(search);
 const q = sp.get("q") ?? undefined;
@@ -70,12 +69,7 @@ const results =
 
 const resultsData = readFragment(searchResultsFragment, results ?? null);
 const hasResults = !!resultsData && resultsData.nodes.length > 0;
-const route = { pathname, search, params: { slug } };
 ---
 
 <SearchResults data={results ?? undefined} q={q} />
-{
-  hasResults && (
-    <PaginationIsland client:load data={resultsData.pageInfo} route={route} />
-  )
-}
+{hasResults && <PaginationIsland client:load data={resultsData.pageInfo} />}

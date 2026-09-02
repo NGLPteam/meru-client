@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import flatMap from "lodash/flatMap";
 import uniqBy from "lodash/uniqBy";
 import isEmpty from "lodash/isEmpty";
-import { useRouter, useSearchParams, usePathname } from "@/lib/routing/hooks";
+import { navigate } from "astro:transitions/client";
 import {
   graphql,
   useFragment,
@@ -23,14 +23,14 @@ export default function SearchFilters({
   data,
   id,
   onSubmit: onSubmitCallback,
+  pathname,
+  search,
 }: Props) {
   const searchData = useFragment(fragment, data);
 
   const { t } = useTranslation();
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const searchParams = new URLSearchParams(search);
 
   const defaultValues = {
     ...(searchParams.get("filters") && {
@@ -60,7 +60,7 @@ export default function SearchFilters({
 
     const url = `${pathname}?${params.toString()}`;
 
-    router.push(url);
+    navigate(url);
 
     if (onSubmitCallback) onSubmitCallback(params);
   };
@@ -74,7 +74,7 @@ export default function SearchFilters({
 
     const url = `${pathname}?${params.toString()}`;
 
-    router.push(url);
+    navigate(url);
 
     if (onSubmitCallback) onSubmitCallback(params);
   };
@@ -101,7 +101,11 @@ export default function SearchFilters({
       {({ form: { reset } }) => (
         <>
           <div className={styles.filters} id={id}>
-            <SearchOrderBy onSubmit={onSubmitCallback} />
+            <SearchOrderBy
+              onSubmit={onSubmitCallback}
+              pathname={pathname}
+              search={search}
+            />
             {searchData && (
               <Fieldset legend={t("filter.results_header")}>
                 <SearchSchemaFilter data={searchData} />
@@ -144,6 +148,9 @@ interface Props {
    * Used for closing the filter drawer after submission.
    */
   onSubmit?: (params: URLSearchParams) => void;
+  // The search page's location; submits push a new query string onto it.
+  pathname: string;
+  search: string;
 }
 
 type FilterNode = DocumentType<typeof fragment>["coreProperties"][number];

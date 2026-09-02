@@ -2,7 +2,7 @@ import { graphql } from "@/lib/api/gql";
 
 // Shared community shell selection (hero + nav bar + processing check) reused by
 // the landing and every sub-route, so they all render the same community shell.
-// CommunityContext + metadata are spread directly on each query (not nested
+// The active-community bundle + metadata are spread directly on each query (not nested
 // here) so the .astro can read them without unmasking.
 export const communityShellFragment = graphql(`
   fragment CommunityShellFragment on Community {
@@ -72,7 +72,7 @@ export const communityQuery = graphql(`
     # this data — passing the community above would serialize its entire
     # layouts (all template slot content) into island props.
     communityRef: community(slug: $slug) {
-      ...CommunityContextFragment
+      ...ActiveCommunityFragment
       ...CommunityNavBarFragment
       ...CommunityNavBarEntityFragment
     }
@@ -89,7 +89,7 @@ export const communityPageQuery = graphql(`
       }
     }
     communityRef: community(slug: $slug) {
-      ...CommunityContextFragment
+      ...ActiveCommunityFragment
       ...CommunityNavBarFragment
       ...CommunityNavBarEntityFragment
     }
@@ -103,22 +103,9 @@ export const communityBrowseQuery = graphql(`
       ...CommunityMetaFragment
     }
     communityRef: community(slug: $slug) {
-      ...CommunityContextFragment
+      ...ActiveCommunityFragment
       ...CommunityNavBarFragment
       ...CommunityNavBarEntityFragment
-    }
-  }
-`);
-
-// See collectionOrderingQuery: fetched by the OrderingList server island so
-// the browse shell renders without waiting on the slow ordering selection.
-export const communityOrderingQuery = graphql(`
-  query communityOrderingQuery($slug: Slug!, $identifier: String!, $page: Int) {
-    community(slug: $slug) {
-      ordering(identifier: $identifier) {
-        disabled
-        ...EntityOrderingLayoutFragment
-      }
     }
   }
 `);
@@ -131,7 +118,7 @@ export const communitySearchQuery = graphql(`
       ...SearchLayoutEntityFragment
     }
     communityRef: community(slug: $slug) {
-      ...CommunityContextFragment
+      ...ActiveCommunityFragment
       ...CommunityNavBarFragment
       ...CommunityNavBarEntityFragment
     }

@@ -16,10 +16,13 @@ export default function MainLayout({
   data,
   computedBgStart,
   fallback = false,
+  slug,
 }: {
   data?: FragmentType<typeof fragment> | null;
   computedBgStart?: HeroBackground;
   fallback?: boolean;
+  // The current page's entity slug, threaded through the template factory.
+  slug?: string;
 }) {
   const { allHidden, templates, entity } = useFragment(fragment, data) ?? {};
 
@@ -46,6 +49,7 @@ export default function MainLayout({
               key={i}
               data={t}
               bgOverride={bgOverride !== "hidden" ? bgOverride : undefined}
+              slug={slug}
             />
           );
         })}

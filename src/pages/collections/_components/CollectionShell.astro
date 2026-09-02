@@ -3,7 +3,7 @@
 // islands (breadcrumbs bar, entity nav, view counter). See ItemShell.astro.
 import "@/i18n";
 import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
-import { collectionShellFragment } from "@/lib/queries/collection";
+import { collectionShellFragment } from "@/pages/collections/_components/graphql";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
 import HeroTemplate, {
   getHeroBreadcrumbProps,

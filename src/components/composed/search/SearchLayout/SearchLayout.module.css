@@ -60,6 +60,7 @@
   display: flex;
   flex-direction: column;
   min-block-size: 100%;
+  align-items: center;
 }
 
 .drawerHeader {
@@ -69,6 +70,7 @@
   min-height: 100px;
   padding-inline-start: var(--container-v-padding-sm);
   padding-inline-end: var(--container-v-padding-sm);
+  min-inline-size: 100%;
 }
 
 .drawerContent {

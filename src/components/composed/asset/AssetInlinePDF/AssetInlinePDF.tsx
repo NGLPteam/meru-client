@@ -5,7 +5,7 @@ import { useState, useRef, useCallback } from "react";
 import { Document } from "react-pdf";
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
-import { useRouter } from "@/lib/routing/hooks";
+import refresh from "@/lib/routing/refresh";
 import { ErrorBlock } from "@/components/layout";
 import { NoContent } from "@/components/layout";
 import { BackToTopButton, LoadingBlock } from "@/components/atomic";
@@ -20,8 +20,6 @@ type Props = {
 
 export default function AssetInlinePDF({ url, size }: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const router = useRouter();
 
   const { t } = useTranslation();
 
@@ -44,10 +42,8 @@ export default function AssetInlinePDF({ url, size }: Props) {
     // Log error
     console.error("Error rendering PDF", state.error);
 
-    return (
-      <ErrorBlock heading={heading} message={message} reset={router.refresh} />
-    );
-  }, [state, t, router]);
+    return <ErrorBlock heading={heading} message={message} reset={refresh} />;
+  }, [state, t]);
 
   const handleBackToTop = () => {
     if (!wrapperRef || !wrapperRef.current || !document) return;

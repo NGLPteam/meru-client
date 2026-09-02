@@ -4,7 +4,7 @@ import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
 import { getTruncatedText } from "@/helpers/strings";
 import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
-import { collectionMetaFragment } from "../queries/collection";
+import { collectionMetaFragment } from "@/pages/collections/_components/graphql";
 
 const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
 

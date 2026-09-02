@@ -2,24 +2,23 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import { useFragment as readFragment } from "@/lib/api/gql";
-import { globalSearchQuery, searchLayoutFragment } from "~/lib/queries/search";
+import {
+  globalSearchQuery,
+  searchLayoutFragment,
+} from "~/components/composed/search/graphql";
 import SearchLayout from "@/components/composed/search/SearchLayout/SearchLayout.astro";
 
 const { data } = await query(globalSearchQuery, {});
 if (!data) return Astro.rewrite("/404");
 
 const layout = readFragment(searchLayoutFragment, data);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 ---
 
 <BaseLayout meta={{ title: "Search" }}>
   <SearchLayout
     scope="global"
     searchFilters={layout.searchFilters}
-    route={route}
+    pathname={Astro.url.pathname}
+    search={Astro.url.search}
   />
 </BaseLayout>

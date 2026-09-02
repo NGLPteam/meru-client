@@ -1,6 +1,6 @@
 import * as React from "react";
 import classNames from "classnames";
-import Link from "@/lib/routing/Link";
+import Link from "@/components/atomic/links/BaseLink";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "../Link.module.css";
 

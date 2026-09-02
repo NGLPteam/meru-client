@@ -1,19 +1,12 @@
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { ErrorBoundary } from "react-error-boundary";
-import useIsMounted from "@/hooks/useIsMounted";
 import { Alert } from "@/components/atomic";
 
-export default function BaseMarkdown({
-  children,
-  skipMountCheck = false,
-  ...props
-}: Props) {
+export default function BaseMarkdown({ children, ...props }: Props) {
   const rehypePlugins = [rehypeRaw];
 
-  const isMounted = useIsMounted();
-
-  return children && (isMounted || skipMountCheck) ? (
+  return children ? (
     <ErrorBoundary
       fallbackRender={() => (
         <Alert message="Invalid markdown content" color="red" badge icon />
@@ -34,5 +27,4 @@ type MarkdownProps = Pick<
 interface Props extends MarkdownProps {
   className?: string;
   children?: string | null;
-  skipMountCheck?: boolean;
 }

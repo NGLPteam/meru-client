@@ -5,8 +5,8 @@ import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
-import { collectionSearchQuery } from "~/lib/queries/collection";
-import { searchLayoutEntityFragment } from "~/lib/queries/search";
+import { collectionSearchQuery } from "~/pages/collections/_components/graphql";
+import { searchLayoutEntityFragment } from "~/components/composed/search/graphql";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
 import CollectionShell from "../_components/CollectionShell.astro";
 import SearchLayout from "@/components/composed/search/SearchLayout/SearchLayout.astro";
@@ -27,11 +27,6 @@ const { data: globalData } = await query(globalStaticQuery, {});
 const installationName =
   globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const meta = buildCollectionMeta(collection, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 const draftModeEnabled = isDraftModeEnabled(Astro);
 ---
 
@@ -46,7 +41,8 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
       scope="collection"
       slug={slug}
       searchFilters={layout.searchFilters}
-      route={route}
+      pathname={Astro.url.pathname}
+      search={Astro.url.search}
     />
   </CollectionShell>
 </BaseLayout>

@@ -1,5 +1,4 @@
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import useRouteSlug from "@/hooks/useRouteSlug";
 import { NamedLink } from "@/components/atomic";
 import styles from "./Pages.module.css";
 
@@ -8,9 +7,7 @@ export default function List({
 }: {
   data?: FragmentType<typeof fragment> | null;
 }) {
-  const slug = useRouteSlug();
-
-  const { pages } = useFragment(fragment, data) ?? {};
+  const { slug, pages } = useFragment(fragment, data) ?? {};
 
   const canRender =
     !!pages?.edges?.length && pages.edges.some((e) => !!e.node.slug);
@@ -23,7 +20,7 @@ export default function List({
         {pages.edges.map((p) =>
           p.node.slug ? (
             <li className={styles.item} key={p.node.slug}>
-              <NamedLink href={`/collections/${slug}/page/${p.node.slug}}`}>
+              <NamedLink href={`/collections/${slug}/page/${p.node.slug}`}>
                 <span className="t-label-sm t-copy-light">{p.node.title}</span>
               </NamedLink>
             </li>
@@ -36,6 +33,9 @@ export default function List({
 
 const fragment = graphql(`
   fragment ListPagesTemplateFragment on Entity {
+    ... on Sluggable {
+      slug
+    }
     ... on Item {
       pages {
         edges {

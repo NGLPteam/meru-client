@@ -19,6 +19,7 @@ import HeaderPrintName from "./HeaderPrintName";
 import AccountNav from "@/components/global/AccountNav/AccountNav.astro";
 import AccountDropdownIsland from "@/components/global/AccountNav/AccountDropdownIsland";
 import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
+import type { ActiveCommunityRef } from "@/components/global/graphql";
 import styles from "./AppHeader.module.css";
 
 type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
@@ -27,11 +28,12 @@ interface Props {
   data?: FragmentType<typeof AppHeaderFragment> | null;
   searchData?: FragmentType<typeof SearchButtonFragment> | null;
   globalData?: IslandProviderProps["globalData"];
-  community?: IslandProviderProps["community"];
-  route?: IslandProviderProps["route"];
+  community?: ActiveCommunityRef;
+  // The current route's community-page slug, for the nav's active-page state.
+  pageSlug?: string;
 }
 
-const { data, searchData, globalData, community, route } = Astro.props;
+const { data, searchData, globalData, community, pageSlug } = Astro.props;
 
 const appData = useFragment(AppHeaderFragment, data);
 
@@ -55,7 +57,6 @@ const showNav = !isCommunityRoot && !hideSearch;
             data={data}
             globalData={globalData}
             community={community}
-            route={route}
           />
         )
       }
@@ -68,7 +69,7 @@ const showNav = !isCommunityRoot && !hideSearch;
             searchData={searchData}
             globalData={globalData}
             community={community}
-            route={route}
+            pageSlug={pageSlug}
           />
         )
       }
@@ -91,15 +92,11 @@ const showNav = !isCommunityRoot && !hideSearch;
         data={data}
         globalData={globalData}
         community={community}
-        route={route}
+        pageSlug={pageSlug}
       />
     </div>
   </div>
 </header>
 <div class={styles.printHeader} aria-hidden>
-  <HeaderPrintName
-    globalData={globalData}
-    community={community}
-    route={route}
-  />
+  <HeaderPrintName community={community} />
 </div>

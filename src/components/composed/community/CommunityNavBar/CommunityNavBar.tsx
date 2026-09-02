@@ -8,7 +8,7 @@ import CommunityName from "../CommunityName";
 import CommunityNavList from "../CommunityNavList";
 import styles from "./CommunityNavBar.module.css";
 
-export default function CommunityNavBar({ data, entityData }: Props) {
+export default function CommunityNavBar({ data, entityData, pageSlug }: Props) {
   const community = useFragment(fragment, data);
   const entity = useFragment(entityFragment, entityData);
 
@@ -19,7 +19,7 @@ export default function CommunityNavBar({ data, entityData }: Props) {
           <CommunityName data={community} />
         </div>
         <div className={styles.right}>
-          <CommunityNavList data={community} />
+          <CommunityNavList data={community} pageSlug={pageSlug} />
           <SearchButton size="lg" data={entity} />
         </div>
       </nav>
@@ -30,6 +30,8 @@ export default function CommunityNavBar({ data, entityData }: Props) {
 interface Props {
   data?: FragmentType<typeof fragment> | null;
   entityData?: FragmentType<typeof entityFragment> | null;
+  // The current route's community-page slug, for the nav's active-page state.
+  pageSlug?: string;
 }
 
 const fragment = graphql(`

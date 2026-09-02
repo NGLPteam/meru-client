@@ -1,26 +1,27 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter, usePathname, useSearchParams } from "@/lib/routing/hooks";
+import { navigate } from "astro:transitions/client";
 import { Fieldset, Select } from "@/components/forms";
 
 export default function SearchOrderBy({
   onSubmit,
+  pathname,
+  search,
 }: {
   onSubmit?: (params: URLSearchParams) => void;
+  // The search page's location; order changes push a new query string onto it.
+  pathname: string;
+  search: string;
 }) {
   const { t } = useTranslation();
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(search);
     params.set("order", e.target.value);
 
     const url = `${pathname}?${params.toString()}`;
 
-    router.push(url);
+    navigate(url);
 
     if (onSubmit) onSubmit(params);
   };
@@ -34,7 +35,9 @@ export default function SearchOrderBy({
         block
         hideLabel
         onChange={onChange}
-        defaultValue={searchParams.get("order") || "PUBLISHED_ASCENDING"}
+        defaultValue={
+          new URLSearchParams(search).get("order") || "PUBLISHED_ASCENDING"
+        }
       >
         <option disabled>{t("list.order_by_label")}</option>
         <option value="PUBLISHED_ASCENDING">Publish Date, Ascending</option>

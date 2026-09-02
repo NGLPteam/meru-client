@@ -27,6 +27,7 @@
   button:focus-visible &,
   a:focus-visible &,
   &:focus-visible,
+  a[aria-current] &,
   &[aria-current] {
     color: var(--color-base);
 

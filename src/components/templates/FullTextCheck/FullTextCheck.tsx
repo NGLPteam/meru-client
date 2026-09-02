@@ -1,15 +1,8 @@
-"use client";
-
-import { createContext, useContext } from "react";
 import {
   graphql,
   useFragment as readFragment,
   type FragmentType,
 } from "@/lib/api/gql";
-
-// Default true: NavigationTabs falls back to this context only inside legacy
-// islands; .astro shells pass renderMainLayout as a prop.
-const FullTextCheckContext = createContext(true);
 
 // Whether the item's main layout should render: a FULL detail template with
 // showBody requires valid full-text body content. Not a hook (readFragment is
@@ -31,10 +24,6 @@ export function shouldRenderMainLayout(
 
   return showBody ? hasFullText : true;
 }
-
-export const useFullTextCheck = () => {
-  return useContext(FullTextCheckContext);
-};
 
 // Whether the item's full-text body is a PDF embed. The .astro item page uses
 // this to hydrate MainLayout as an island for PDF items: the PDF viewer is a

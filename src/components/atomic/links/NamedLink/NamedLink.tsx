@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Link } from "@/lib/vendor/react-transition-progress/link";
+import Link from "@/components/atomic/links/BaseLink";
 type LinkProps = React.ComponentProps<typeof Link>;
 import styles from "./NamedLink.module.css";
 

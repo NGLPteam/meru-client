@@ -2,7 +2,6 @@
 
 import "@/i18n";
 import classNames from "classnames";
-import { useParams } from "@/lib/routing/hooks";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { formatFileSize } from "@/helpers/strings";
@@ -15,10 +14,8 @@ import {
 import AssetPDFPreview from "../AssetPDFPreview";
 import styles from "./AssetDetailBlock.module.css";
 
-export default function AssetDetailBlock({ data, slug: slugProp }: Props) {
+export default function AssetDetailBlock({ data, slug }: Props) {
   const asset = useFragment(fragment, data);
-  const { slug: routeSlug } = useParams();
-  const slug = slugProp ?? routeSlug;
 
   return asset ? (
     <section className={classNames("l-container-wide", styles.section)}>

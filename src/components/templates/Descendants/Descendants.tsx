@@ -22,9 +22,11 @@ const VARIANT_TO_COMPONENT = {
 export default function Descendants({
   data,
   bgOverride,
+  slug,
 }: {
   data: FragmentType<typeof fragment>;
   bgOverride?: HeroBackground | null;
+  slug?: string;
 }) {
   const template = useFragment(fragment, data);
 
@@ -50,6 +52,7 @@ export default function Descendants({
         data={template}
         basePath={basePath}
         bgOverride={bgOverride}
+        slug={slug}
       />
     )
   );

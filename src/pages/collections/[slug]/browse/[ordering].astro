@@ -4,7 +4,7 @@ import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
-import { collectionBrowseQuery } from "~/lib/queries/collection";
+import { collectionBrowseQuery } from "~/pages/collections/_components/graphql";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
 import CollectionShell from "../../_components/CollectionShell.astro";
 import OrderingList from "@/components/composed/entity/EntityOrderingLayout/OrderingList.astro";
@@ -31,11 +31,6 @@ const { data: globalData } = await query(globalStaticQuery, {});
 const installationName =
   globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const meta = buildCollectionMeta(collection, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 const draftModeEnabled = isDraftModeEnabled(Astro);
 ---
 
@@ -57,8 +52,6 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
       identifier={ordering}
       page={page}
       showContext={showContext}
-      pathname={route.pathname}
-      search={route.search}
     >
       <LoadingBlock
         slot="fallback"

@@ -2,20 +2,17 @@ import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { formatFileSize } from "@/helpers/strings";
-import useRouteSlug from "@/hooks/useRouteSlug";
 import { DownloadLink, NamedLink } from "@/components/atomic";
 import AssetThumbnail from "../../AssetThumbnail";
 import styles from "./AssetBlockItem.module.css";
 
-export default function AssetBlockItem({ data, slug: slugProp }: Props) {
+export default function AssetBlockItem({ data, slug }: Props) {
   const file = useFragment(fragment, data);
-  const routeSlug = useRouteSlug();
-  const slug = slugProp ?? routeSlug;
 
   return file ? (
     <div className={styles.wrapper}>
       <div className={styles.image}>
-        <AssetThumbnail data={file} />
+        <AssetThumbnail data={file} slug={slug} />
       </div>
       <div className={styles.text}>
         <h4>

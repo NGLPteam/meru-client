@@ -7,11 +7,11 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemMetricsQuery } from "~/lib/queries/item";
+import { itemMetricsQuery } from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "../_components/ItemShell.astro";
 import ItemMetricsIsland from "../_components/ItemMetricsIsland";
-import { layoutThemeQuery } from "~/lib/queries/layout";
+import { layoutThemeQuery } from "~/layouts/graphql";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
 

@@ -7,7 +7,10 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemMetadataQuery, itemShellFragment } from "~/lib/queries/item";
+import {
+  itemMetadataQuery,
+  itemShellFragment,
+} from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "../_components/ItemShell.astro";
 import MetadataTemplate from "@/components/templates/Metadata";
@@ -50,7 +53,9 @@ cacheEntity(Astro, "item", slug);
       template && (
         <>
           <MetadataTemplate data={template} />
-          {showMainFallback && <MainLayout data={item.layouts.main} fallback />}
+          {showMainFallback && (
+            <MainLayout data={item.layouts.main} fallback slug={slug} />
+          )}
         </>
       )
     }

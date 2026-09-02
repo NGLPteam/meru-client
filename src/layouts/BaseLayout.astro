@@ -17,18 +17,15 @@ import CopyLink from "../components/client/CopyLink.astro";
 import query from "../lib/query";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import DraftModeBannerIsland from "../components/global/DraftModeBanner/DraftModeBannerIsland";
-import { layoutThemeQuery, globalLayoutQuery } from "../lib/queries/layout";
+import { layoutThemeQuery, globalLayoutQuery } from "./graphql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import getSiteMetadata from "../lib/metadata/siteMetadata";
 import resolvePageMeta from "../lib/metadata/resolvePageMeta";
 import PageHead from "../components/head/PageHead.astro";
 import AppHeader from "../components/global/AppHeader/AppHeader.astro";
 import AppFooter from "../components/global/AppFooter/AppFooter.astro";
-import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
-import type { ComponentProps } from "react";
+import type { ActiveCommunityRef } from "@/components/global/graphql";
 import type { PageMeta } from "@/lib/metadata/types";
-
-type CommunityRef = ComponentProps<typeof GlobalIslandProviders>["community"];
 
 interface Props {
   // Page-level metadata (title, description, og:images…). Merged over the
@@ -37,11 +34,9 @@ interface Props {
   // Present on entity/community/collection pages — the page knows the active
   // community server-side and threads it into the header/footer. Undefined
   // elsewhere.
-  community?: CommunityRef;
-  // Route params (e.g. { slug }) for the routing shim's useParams. Pathname and
-  // search come from Astro.url; params are page-supplied. Threaded into the
-  // header/footer islands' RouteProvider so route-dependent SSR matches
-  // hydration.
+  community?: ActiveCommunityRef;
+  // Route params (e.g. { slug, page }). Only `page` is consumed today — the
+  // header's community nav highlights the active community page.
   routeParams?: Record<string, string | undefined>;
   // Optional override; by default draft mode is read from the cookie here, since
   // it is a global toggle that must surface the banner + preview UI on every
@@ -54,14 +49,7 @@ const { meta, community, routeParams } = Astro.props;
 const draftModeEnabled =
   Astro.props.draftModeEnabled ?? isDraftModeEnabled(Astro);
 
-// Server-known route, seeded into the header/footer islands so pathname-dependent
-// markup (e.g. the header's community-vs-home variant) renders identically on
-// the server and after hydration.
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: routeParams ?? {},
-};
+const pageSlug = routeParams?.page;
 
 const [themeRes, globalLayoutRes, globalStaticRes, siteMeta] =
   await Promise.all([
@@ -106,7 +94,7 @@ const head = resolvePageMeta(siteMeta, meta);
         data={globalLayoutData}
         globalData={globalData}
         community={community}
-        route={route}
+        pageSlug={pageSlug}
       />
       <main id="main" tabindex="-1">
         <slot />
@@ -115,7 +103,6 @@ const head = resolvePageMeta(siteMeta, meta);
         data={globalLayoutData}
         globalData={globalData}
         community={community}
-        route={route}
       />
     </div>
   </body>

@@ -1,20 +1,13 @@
 "use client";
 
-// Hydrated Pagination mounted from .astro pages, wrapped in its own
-// RouteProvider so its URL pushes read the page's route rather than the empty
-// context default.
-import { RouteProvider, type RouteState } from "@/lib/routing/RouteContext";
+// Island entry for Pagination mounted directly from .astro pages: initializes
+// the i18next singleton for BasePagination's labels.
+import "@/i18n";
 import Pagination from "./Pagination";
 import type { ComponentProps } from "react";
 
-type Props = ComponentProps<typeof Pagination> & {
-  route?: Partial<RouteState>;
-};
+type Props = ComponentProps<typeof Pagination>;
 
-export default function PaginationIsland({ route, ...props }: Props) {
-  return (
-    <RouteProvider route={route}>
-      <Pagination {...props} />
-    </RouteProvider>
-  );
+export default function PaginationIsland(props: Props) {
+  return <Pagination {...props} />;
 }

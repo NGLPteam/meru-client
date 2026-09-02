@@ -13,6 +13,7 @@ import { MobilePicker, MobileNav, MobileFooter } from "./HeaderMobileParts";
 import type { FragmentType } from "@/lib/api/gql";
 import type { AppHeaderFragment } from "./graphql";
 import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
+import type { ActiveCommunityRef } from "@/components/global/graphql";
 import styles from "./HeaderMobileMenu.module.css";
 
 type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
@@ -20,11 +21,11 @@ type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 interface Props {
   data?: FragmentType<typeof AppHeaderFragment> | null;
   globalData?: IslandProviderProps["globalData"];
-  community?: IslandProviderProps["community"];
-  route?: IslandProviderProps["route"];
+  community?: ActiveCommunityRef;
+  pageSlug?: string;
 }
 
-const { data, globalData, community, route } = Astro.props;
+const { data, globalData, community, pageSlug } = Astro.props;
 
 // Keep in sync with MENU_ID in HeaderMobileParts.tsx.
 const MENU_ID = "app-header-menu";
@@ -43,7 +44,6 @@ const MENU_ID = "app-header-menu";
           data={data}
           globalData={globalData}
           community={community}
-          route={route}
         />
         <form method="dialog">
           <CloseModalButton />
@@ -56,7 +56,7 @@ const MENU_ID = "app-header-menu";
               client:load
               globalData={globalData}
               community={community}
-              route={route}
+              pageSlug={pageSlug}
             />
             <AccountNav server:defer mobile>
               <AccountDropdownIsland slot="fallback" mobile />
@@ -65,13 +65,7 @@ const MENU_ID = "app-header-menu";
         </div>
       </div>
       <footer class:list={["a-bg-custom10", styles.footer]}>
-        <MobileFooter
-          client:load
-          data={data}
-          globalData={globalData}
-          community={community}
-          route={route}
-        />
+        <MobileFooter client:load data={data} globalData={globalData} />
       </footer>
     </div>
   </dialog>

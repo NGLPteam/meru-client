@@ -9,6 +9,10 @@ import { useFragment, type FragmentType } from "@/lib/api/gql";
 import InstallationName from "@/components/composed/instance/InstallationName";
 import CommunityPicker from "@/components/composed/instance/CommunityPicker";
 import GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
 import { AppHeaderFragment } from "./graphql";
 import styles from "./AppHeader.module.css";
 
@@ -17,25 +21,20 @@ type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 type Props = {
   data?: FragmentType<typeof AppHeaderFragment> | null;
   globalData?: IslandProviderProps["globalData"];
-  community?: IslandProviderProps["community"];
-  route?: IslandProviderProps["route"];
+  community?: ActiveCommunityRef;
 };
 
 export default function HeaderBrandIsland({
   data,
   globalData,
   community,
-  route,
 }: Props) {
   const appData = useFragment(AppHeaderFragment, data);
+  const activeCommunity = useFragment(ActiveCommunityFragment, community);
   const withText = appData?.globalConfiguration?.site?.logoMode === "WITH_TEXT";
 
   return (
-    <GlobalIslandProviders
-      globalData={globalData}
-      community={community}
-      route={route}
-    >
+    <GlobalIslandProviders globalData={globalData}>
       <span
         className={classNames(styles.installatioName, {
           [styles["installatioName--with-text"]]: withText,
@@ -43,7 +42,7 @@ export default function HeaderBrandIsland({
       >
         <InstallationName data={appData?.globalConfiguration} />
       </span>
-      <CommunityPicker data={appData} />
+      <CommunityPicker data={appData} activeData={activeCommunity} />
     </GlobalIslandProviders>
   );
 }

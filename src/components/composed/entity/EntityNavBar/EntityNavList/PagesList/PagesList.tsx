@@ -1,4 +1,3 @@
-import { usePathname } from "@/lib/routing/hooks";
 import { NamedLink, NavMenuLink } from "@/components/atomic";
 import { fragment as EntityNavListFragment } from "@/components/composed/entity/EntityNavBar/EntityNavList/EntityNavList";
 import { type DocumentType } from "@/lib/api/gql";
@@ -12,15 +11,12 @@ type Page = DocumentType<
 export default function PagesList({
   pages,
   basePath,
-  pathname: pathnameProp,
+  pathname,
 }: {
   pages: readonly Page[];
   basePath: string;
   pathname?: string;
 }) {
-  const routePathname = usePathname();
-  const pathname = pathnameProp ?? routePathname;
-
   const count = pages.length;
 
   if (count > 4)

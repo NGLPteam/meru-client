@@ -1,20 +1,17 @@
-import { usePathname, useSearchParams, useRouter } from "@/lib/routing/hooks";
+import { navigate } from "astro:transitions/client";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import BasePagination from "./BasePagination";
 
 export default function Pagination({ data, onPageChange }: Props) {
   const pageData = useFragment(fragment, data);
 
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  // Push query changes
+  // Push query changes. Runs only on user interaction, so the location is read
+  // from the window at click time rather than threaded down as props.
   const onSubmit = (val: Record<string, string | number>) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(window.location.search);
     params.set("page", val.page.toString());
-    const url = `${pathname}?${params.toString()}`;
-    router.push(url);
+    const url = `${window.location.pathname}?${params.toString()}`;
+    navigate(url);
   };
 
   return pageData?.pageCount && pageData.pageCount > 1 ? (

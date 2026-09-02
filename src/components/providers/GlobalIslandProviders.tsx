@@ -20,43 +20,22 @@ import {
   GlobalStaticContextProvider,
   type GlobalStaticData,
 } from "@/contexts/GlobalStaticContext/GlobalStaticContext";
-import { CommunityContextProvider } from "@/contexts/CommunityContext";
 import ThemeProvider from "@/contexts/ThemeProvider";
-import { RouteProvider, type RouteState } from "@/lib/routing/RouteContext";
 import type { PropsWithChildren } from "react";
-
-type CommunityRef = React.ComponentProps<
-  typeof CommunityContextProvider
->["data"];
 
 type Props = PropsWithChildren & {
   globalData?: GlobalStaticData;
-  community?: CommunityRef;
-  // Server-known route (pathname/search/params) so route-dependent hooks render
-  // the same markup on the server and after hydration — no reflow.
-  route?: Partial<RouteState>;
 };
 
-export default function GlobalIslandProviders({
-  children,
-  globalData,
-  community,
-  route,
-}: Props) {
+export default function GlobalIslandProviders({ children, globalData }: Props) {
   // Global site theme (color/font) — drives useTheme() consumers. Sourced from
   // globalData so it reaches every island without per-page plumbing; the server
   // also applies it as <html> classes.
   const theme = globalData?.globalConfiguration?.theme ?? undefined;
 
   return (
-    <RouteProvider route={route}>
-      <GlobalStaticContextProvider globalData={globalData}>
-        <ThemeProvider theme={theme}>
-          <CommunityContextProvider data={community}>
-            {children}
-          </CommunityContextProvider>
-        </ThemeProvider>
-      </GlobalStaticContextProvider>
-    </RouteProvider>
+    <GlobalStaticContextProvider globalData={globalData}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </GlobalStaticContextProvider>
   );
 }

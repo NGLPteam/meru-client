@@ -5,7 +5,7 @@ import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
-import { collectionPageQuery } from "~/lib/queries/collection";
+import { collectionPageQuery } from "~/pages/collections/_components/graphql";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
 import CollectionShell from "../../_components/CollectionShell.astro";
 import EntityPageLayout from "@/components/composed/entity/EntityPageLayout";

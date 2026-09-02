@@ -19,7 +19,7 @@ export const contributorItemQuery = graphql(`
     item(slug: $item) {
       ...ContributorDetailNavFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
     }
   }
@@ -37,7 +37,7 @@ export const contributorCollectionQuery = graphql(`
     collection(slug: $collection) {
       ...ContributorDetailNavFragment
       community {
-        ...CommunityContextFragment
+        ...ActiveCommunityFragment
       }
     }
   }

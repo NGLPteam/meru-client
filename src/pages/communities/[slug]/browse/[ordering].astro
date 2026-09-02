@@ -3,7 +3,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { communityBrowseQuery } from "~/lib/queries/community";
+import { communityBrowseQuery } from "~/pages/communities/_components/graphql";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
 import CommunityShell from "../../_components/CommunityShell.astro";
 import OrderingList from "@/components/composed/entity/EntityOrderingLayout/OrderingList.astro";
@@ -24,11 +24,6 @@ if (!community) return Astro.rewrite("/404");
 
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 ---
 
 <BaseLayout
@@ -48,8 +43,6 @@ const route = {
       identifier={ordering}
       page={page}
       showContext="FULL"
-      pathname={route.pathname}
-      search={route.search}
     >
       <LoadingBlock
         slot="fallback"

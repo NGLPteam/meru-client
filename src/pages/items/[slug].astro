@@ -7,7 +7,10 @@ import { isDraftModeEnabled } from "~/lib/request/draftMode";
 import { useFragment as readFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
-import { itemQuery, itemShellFragment } from "~/lib/queries/item";
+import {
+  itemQuery,
+  itemShellFragment,
+} from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "./_components/ItemShell.astro";
 import MainLayout from "@/components/templates/MainLayout";
@@ -41,11 +44,6 @@ const scholar = readFragment(googleScholarFragment, item);
 
 // PDF full text must hydrate (clientOnly react-pdf viewer); prose stays static.
 const pdfBody = hasPDFFullText(shell.layouts);
-const route = {
-  pathname: Astro.url.pathname,
-  search: Astro.url.search,
-  params: Astro.params,
-};
 
 cacheEntity(Astro, "item", slug);
 ---
@@ -60,9 +58,9 @@ cacheEntity(Astro, "item", slug);
   >
     {
       pdfBody ? (
-        <MainLayoutIsland client:load data={item.layouts.main} route={route} />
+        <MainLayoutIsland client:load data={item.layouts.main} slug={slug} />
       ) : (
-        <MainLayout data={item.layouts.main} />
+        <MainLayout data={item.layouts.main} slug={slug} />
       )
     }
   </ItemShell>
