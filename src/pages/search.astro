@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
-import { useFragment as readFragment } from "@/lib/api/gql";
+import { useFragment } from "@/lib/api/gql";
 import {
   globalSearchQuery,
   searchLayoutFragment,
@@ -11,7 +11,7 @@ import SearchLayout from "@/components/composed/search/SearchLayout/SearchLayout
 const { data } = await query(globalSearchQuery, {});
 if (!data) return Astro.rewrite("/404");
 
-const layout = readFragment(searchLayoutFragment, data);
+const layout = useFragment(searchLayoutFragment, data);
 ---
 
 <BaseLayout meta={{ title: "Search" }}>

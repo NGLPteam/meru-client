@@ -7,5 +7,11 @@ declare namespace App {
   interface Locals {
     isAuthenticated: boolean;
     session?: import("~/lib/auth/session").Session;
+    // Attached by attachRequestContext (src/lib/middleware/attachRequestContext.ts).
+    t: import("i18next").TFunction<"translation", undefined>;
+    // Entity route params — undefined on non-entity routes and on
+    // /_server-islands/* requests (which carry the island URL, not the page's).
+    slug?: string;
+    pageSlug?: string;
   }
 }

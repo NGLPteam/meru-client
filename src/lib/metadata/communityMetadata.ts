@@ -1,7 +1,7 @@
 // useFragment from the client-preset is a pure identity function (not a React
 // hook); alias it so it can run in this server-side helper without tripping the
 // rules-of-hooks lint.
-import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { getTruncatedText } from "@/helpers/strings";
 import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
@@ -13,7 +13,7 @@ export default function buildCommunityMeta(
   data: FragmentType<typeof communityMetaFragment>,
   slug: string,
 ): PageMeta {
-  const community = readFragment(communityMetaFragment, data);
+  const community = useFragment(communityMetaFragment, data);
 
   const title = community.title ?? undefined;
 

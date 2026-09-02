@@ -3,7 +3,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { useFragment as readFragment } from "@/lib/api/gql";
+import { useFragment } from "@/lib/api/gql";
 import { communitySearchQuery } from "~/pages/communities/_components/graphql";
 import { searchLayoutEntityFragment } from "~/components/composed/search/graphql";
 import buildCommunityMeta from "~/lib/metadata/communityMetadata";
@@ -21,7 +21,7 @@ const { data } = await query(
 const community = data?.community;
 if (!community) return Astro.rewrite("/404");
 
-const layout = readFragment(searchLayoutEntityFragment, community);
+const layout = useFragment(searchLayoutEntityFragment, community);
 
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);

@@ -650,7 +650,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.26.10":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.26.10":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
   checksum: 10c0/792ce7af9750fb9b93879cc9d1db175701c4689da890e6ced242ea0207c9da411ccf16dc04e689cc01158b28d7898c40d75598f4559109f761c12ce01e959bf7
@@ -7273,15 +7273,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^8.2.1":
-  version: 8.2.1
-  resolution: "i18next-browser-languagedetector@npm:8.2.1"
-  dependencies:
-    "@babel/runtime": "npm:^7.23.2"
-  checksum: 10c0/d200847a79b4cb2764ef59b33e5399085d4d56b2b038e884bb54fffe17953b467899142a6ef6e985592234f10049d14d06b80f2c56441ae80648c5a6717704f3
-  languageName: node
-  linkType: hard
-
 "i18next@npm:^24.2.2":
   version: 24.2.3
   resolution: "i18next@npm:24.2.3"
@@ -8754,7 +8745,6 @@ __metadata:
     globals: "npm:^17.6.0"
     graphql: "npm:^16.8.1"
     i18next: "npm:^24.2.2"
-    i18next-browser-languagedetector: "npm:^8.2.1"
     knip: "npm:^6.32.0"
     lodash: "npm:^4.17.21"
     markdown-to-txt: "npm:^2.0.1"

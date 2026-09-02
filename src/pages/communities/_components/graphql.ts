@@ -25,7 +25,7 @@ export const communityShellFragment = graphql(`
   }
 `);
 
-// Metadata fields, unmasked in buildCommunityMeta (server-side, via readFragment).
+// Metadata fields, unmasked in buildCommunityMeta (server-side, via useFragment).
 export const communityMetaFragment = graphql(`
   fragment CommunityMetaFragment on Community {
     title

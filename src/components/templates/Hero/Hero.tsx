@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  graphql,
-  useFragment,
-  useFragment as readFragment,
-  type FragmentType,
-} from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import CommunityHeroHeader, { getSearchHeroProps } from "./patterns/Community";
 import EntityHeroHeader, { getBreadcrumbsBarProps } from "./patterns/Entity";
 
@@ -45,7 +40,7 @@ export default function HeroTemplate({
 export function getHeroBreadcrumbProps(
   data: FragmentType<typeof fragment> | null,
 ) {
-  const layout = readFragment(fragment, data);
+  const layout = useFragment(fragment, data);
   if (!layout || layout.entity?.__typename === "Community") return null;
   return getBreadcrumbsBarProps(layout);
 }
@@ -56,7 +51,7 @@ export function getHeroSearchProps(
   data: FragmentType<typeof fragment> | null,
   pathname: string,
 ) {
-  const layout = readFragment(fragment, data);
+  const layout = useFragment(fragment, data);
   if (!layout || layout.entity?.__typename !== "Community") return null;
   return getSearchHeroProps(layout, pathname);
 }

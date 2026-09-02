@@ -1,10 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  graphql,
-  useFragment,
-  useFragment as readFragment,
-  type FragmentType,
-} from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
 import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar";
 import { getBgClass } from "@/components/templates/helpers/bgColor";
@@ -86,7 +81,7 @@ export default function EntityHeroHeader({
 export function getBreadcrumbsBarProps(
   data?: FragmentType<typeof fragment> | null,
 ) {
-  const layout = readFragment(fragment, data);
+  const layout = useFragment(fragment, data);
   const { template, entity } = layout ?? {};
   const { background, showBreadcrumbs, showSharingLink } =
     template?.definition ?? {};

@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { markdownToTxt } from "markdown-to-txt";
 import {
   graphql,
-  useFragment as readFragment,
+  useFragment,
   type FragmentType,
   type DocumentType,
 } from "@/lib/api/gql";
@@ -38,23 +38,23 @@ export type EntityNavBarData = {
   pages: NavListData["pages"]["nodes"];
 };
 
-// Server-side extraction for the .astro shells (readFragment is codegen's
+// Server-side extraction for the .astro shells (useFragment is codegen's
 // identity unmask — not a hook).
 export function getEntityNavBarData(
   data?: FragmentType<typeof fragment> | null,
 ): EntityNavBarData | null {
-  const entity = readFragment(fragment, data);
+  const entity = useFragment(fragment, data);
   if (!entity || !entity.slug || !entity.title) return null;
 
   const { enableDescendantSearch, enableDescendantBrowsing } =
     entity.layouts?.hero?.template?.definition ?? {};
 
-  const prompt = readFragment(
+  const prompt = useFragment(
     templateSlotInlineFragment,
     entity.layouts?.hero?.template?.slots.descendantSearchPrompt,
   );
 
-  const navList = readFragment(entityNavListFragment, entity);
+  const navList = useFragment(entityNavListFragment, entity);
 
   return {
     slug: entity.slug,

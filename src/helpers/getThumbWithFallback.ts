@@ -1,13 +1,9 @@
-import {
-  graphql,
-  useFragment as readFragment,
-  type FragmentType,
-} from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 export default function getThumbWithFallback(
   data: FragmentType<typeof fragment>,
 ) {
-  const entity = readFragment(fragment, data);
+  const entity = useFragment(fragment, data);
 
   const { thumbnail, breadcrumbs } = entity;
 

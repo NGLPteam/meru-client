@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
-import UnauthorizedContent from "./_components/UnauthorizedContent";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
 
 const reason = Astro.url.searchParams.get("reason") ?? undefined;
 ---
 
 <BaseLayout meta={{ title: "Unauthorized" }}>
-  <UnauthorizedContent client:load reason={reason} />
+  <UnauthorizedMessage reason={reason} />
 </BaseLayout>

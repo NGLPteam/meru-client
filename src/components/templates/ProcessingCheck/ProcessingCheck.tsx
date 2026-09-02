@@ -1,12 +1,7 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import {
-  graphql,
-  useFragment,
-  useFragment as readFragment,
-  type FragmentType,
-} from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
 import EmptyMessage from "./EmptyMessage";
 import styles from "./ProcessingCheck.module.css";
@@ -16,13 +11,13 @@ type Props = PropsWithChildren & {
   entityType: "item" | "collection" | "community";
 };
 
-// Whether the entity has renderable main content. Not a hook (readFragment is
+// Whether the entity has renderable main content. Not a hook (useFragment is
 // codegen's identity unmask) — .astro shells call this server-side to decide
 // between the main layout and the empty message.
 export function hasMainContent(
   data?: FragmentType<typeof fragment> | null,
 ): boolean {
-  const { main } = readFragment(fragment, data) ?? {};
+  const { main } = useFragment(fragment, data) ?? {};
   return !main?.allHidden && !!main?.templates?.length;
 }
 

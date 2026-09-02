@@ -38,13 +38,28 @@ export default defineConfig({
     // ESM runtime can't resolve, so the standalone node server crashes at boot
     // with ERR_UNSUPPORTED_DIR_IMPORT unless these are bundled at build time.
     ssr: { noExternal: [/^reakit/] },
-    // Pre-bundle deps reached only through clientOnly() dynamic imports
-    // (ChartBlock → react-google-charts, AssetInlinePDF/AssetPDFPreview →
-    // react-pdf). Vite's startup scan doesn't see them, so without this the
-    // dev server discovers them on the first visit to a metrics/PDF page and
-    // re-optimizes mid-session: stale ?v= module URLs fail with empty-MIME
-    // errors (unmounting the chart island) and Vite forces a full page reload.
-    // Dev-only concern; production builds bundle everything up front.
-    optimizeDeps: { include: ["react-google-charts", "react-pdf"] },
+    // Pre-bundle deps Vite's startup scan can't see: some are reached only
+    // through clientOnly() dynamic imports (ChartBlock → react-google-charts,
+    // AssetInlinePDF/AssetPDFPreview → react-pdf), and island entry modules are
+    // themselves loaded dynamically by the hydration runtime, so their dep
+    // trees can also be discovered late. A late discovery re-optimizes
+    // mid-session: stale ?v= module URLs fail with empty-MIME errors, islands
+    // fail to hydrate, and Vite forces a full page reload. Add any dep that
+    // shows up in a "disallowed MIME type" console error here. Dev-only
+    // concern; production builds bundle everything up front.
+    optimizeDeps: {
+      include: [
+        "react-google-charts",
+        "react-pdf",
+        "urql",
+        "@urql/core",
+        "@urql/exchange-request-policy",
+        "markdown-to-txt",
+        "lodash/capitalize",
+        "@mdx-js/mdx",
+        "react-dom/server",
+        "remark-gfm",
+      ],
+    },
   },
 });

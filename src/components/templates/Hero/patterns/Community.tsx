@@ -1,11 +1,6 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import {
-  graphql,
-  useFragment,
-  useFragment as readFragment,
-  type FragmentType,
-} from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import SearchHero from "@/components/composed/search/SearchHero";
 import {
   useSharedInlineFragment,
@@ -93,10 +88,10 @@ export function getSearchHeroProps(
   data: FragmentType<typeof fragment> | null | undefined,
   pathname: string,
 ) {
-  const layout = readFragment(fragment, data);
+  const layout = useFragment(fragment, data);
   const { showBigSearchPrompt } = layout?.template?.definition ?? {};
   if (!isMainPath(pathname) || !showBigSearchPrompt) return null;
-  const prompt = readFragment(
+  const prompt = useFragment(
     templateSlotInlineFragment,
     layout?.template?.slots?.bigSearchPrompt,
   );

@@ -4,7 +4,7 @@ import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { useFragment as readFragment } from "@/lib/api/gql";
+import { useFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import {
@@ -30,9 +30,9 @@ const installationName =
   globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
-const scholar = readFragment(googleScholarFragment, item);
+const scholar = useFragment(googleScholarFragment, item);
 
-const shell = readFragment(itemShellFragment, item);
+const shell = useFragment(itemShellFragment, item);
 const template = item.layouts.metadata?.template;
 // The main layout renders here as a fallback only when the landing has no full
 // text (mirrors the FullTextFallback context behavior).

@@ -1,8 +1,8 @@
 ---
 import "@/i18n";
-import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { communityShellFragment } from "@/pages/communities/_components/graphql";
-import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
 import HeroTemplate, { getHeroSearchProps } from "@/components/templates/Hero";
 import SearchHero from "@/components/composed/search/SearchHero";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
@@ -24,7 +24,7 @@ interface Props {
 
 const { data, communityRef, draftModeEnabled, pageSlug } = Astro.props;
 
-const shell = readFragment(communityShellFragment, data);
+const shell = useFragment(communityShellFragment, data);
 
 const unauthorized = draftModeEnabled && !shell.canPreview?.value;
 

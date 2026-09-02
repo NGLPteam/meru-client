@@ -1,36 +1,14 @@
+// Transitional React i18n entry: initializes the DEFAULT i18next instance with
+// react-i18next for the remaining React islands' useTranslation/<Trans>.
+// Server-rendered .astro uses Astro.locals.t instead (same config via
+// src/lib/i18n/config.ts). This file is deleted when the last react-i18next
+// consumer converts (astroification Phase 8).
 import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-import get from "lodash/get";
-import * as resources from "@/lib/locales";
-
-const DEFAULT_LNG = "en-US";
-
-const SUPPORTED_LOCALES: Record<string, string | undefined> = {};
-
-Object.keys(resources).forEach(
-  (key) => (SUPPORTED_LOCALES[key] = get(resources, `${key}.translation.key`)),
-);
-
-// The browser LanguageDetector touches window/navigator/document at init, which
-// throws when React islands are server-rendered under Astro SSR. The app is
-// single-locale and pins the language explicitly (DEFAULT_LNG), so only wire the
-// detector up in the browser; the server just uses DEFAULT_LNG.
-if (typeof window !== "undefined") {
-  i18n.use(LanguageDetector);
-}
+import config from "@/lib/i18n/config";
 
 i18n.use(initReactI18next).init({
-  lng: DEFAULT_LNG,
-  resources,
-  interpolation: {
-    escapeValue: false,
-    format: (value, format, lng) =>
-      format === "number" ? new Intl.NumberFormat(lng).format(value) : value,
-  },
-  fallbackLng: {
-    default: [DEFAULT_LNG],
-  },
+  ...config,
   react: {
     transSupportBasicHtmlNodes: true,
   },

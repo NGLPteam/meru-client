@@ -4,7 +4,7 @@ import { cacheEntity } from "@/lib/caching/setCache";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { useFragment as readFragment } from "@/lib/api/gql";
+import { useFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContext/getStaticGoogleScholarData";
 import {
@@ -30,7 +30,7 @@ if (!item) return Astro.rewrite("/404");
 
 // An item whose FULL detail template wants a body but has no full text has no
 // landing content — 302 readers to the metadata sub-route instead.
-const shell = readFragment(itemShellFragment, item);
+const shell = useFragment(itemShellFragment, item);
 if (!shouldRenderMainLayout(shell.layouts)) {
   return Astro.redirect(`/items/${slug}/metadata`);
 }
@@ -40,7 +40,7 @@ const installationName =
   globalData?.globalConfiguration?.site?.installationName ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
-const scholar = readFragment(googleScholarFragment, item);
+const scholar = useFragment(googleScholarFragment, item);
 
 // PDF full text must hydrate (clientOnly react-pdf viewer); prose stays static.
 const pdfBody = hasPDFFullText(shell.layouts);

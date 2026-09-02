@@ -16,7 +16,7 @@ import {
 } from "../graphql";
 import SearchResults from "./SearchResults";
 import PaginationIsland from "@/components/atomic/Pagination/PaginationIsland";
-import { useFragment as readFragment } from "@/lib/api/gql";
+import { useFragment } from "@/lib/api/gql";
 import { fragment as searchResultsFragment } from "./SearchResults";
 import type { EntityOrder } from "@/types/graphql-schema";
 
@@ -67,7 +67,7 @@ const results =
           ).data?.community?.search?.results
         : null;
 
-const resultsData = readFragment(searchResultsFragment, results ?? null);
+const resultsData = useFragment(searchResultsFragment, results ?? null);
 const hasResults = !!resultsData && resultsData.nodes.length > 0;
 ---
 

@@ -1,8 +1,4 @@
-import {
-  graphql,
-  useFragment as readFragment,
-  type FragmentType,
-} from "@/lib/api/gql";
+import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityType } from "@/helpers/routes";
 
 export const hrefFromTypename = (
@@ -10,7 +6,7 @@ export const hrefFromTypename = (
 ) => {
   if (!data) return null;
 
-  const { entry, entrySlug } = readFragment(fragment, data);
+  const { entry, entrySlug } = useFragment(fragment, data);
 
   switch (entry.__typename) {
     case "Collection":

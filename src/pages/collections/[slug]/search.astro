@@ -3,7 +3,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import query from "~/lib/query";
 import { previewToken } from "~/lib/request/previewToken";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import { useFragment as readFragment } from "@/lib/api/gql";
+import { useFragment } from "@/lib/api/gql";
 import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
 import { collectionSearchQuery } from "~/pages/collections/_components/graphql";
 import { searchLayoutEntityFragment } from "~/components/composed/search/graphql";
@@ -22,7 +22,7 @@ const { data } = await query(
 const collection = data?.collection;
 if (!collection) return Astro.rewrite("/404");
 
-const layout = readFragment(searchLayoutEntityFragment, collection);
+const layout = useFragment(searchLayoutEntityFragment, collection);
 const { data: globalData } = await query(globalStaticQuery, {});
 const installationName =
   globalData?.globalConfiguration?.site?.installationName ?? undefined;

@@ -1,6 +1,6 @@
 // useFragment is a pure identity function (not a hook); alias it so it runs in
 // this server-side helper without tripping rules-of-hooks.
-import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { getTruncatedText } from "@/helpers/strings";
 import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
@@ -12,7 +12,7 @@ export default function buildCollectionMeta(
   data: FragmentType<typeof collectionMetaFragment>,
   slug: string,
 ): PageMeta {
-  const collection = readFragment(collectionMetaFragment, data);
+  const collection = useFragment(collectionMetaFragment, data);
 
   const title = collection.title ?? undefined;
 

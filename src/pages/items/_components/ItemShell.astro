@@ -1,8 +1,8 @@
 ---
 import "@/i18n";
-import { useFragment as readFragment, type FragmentType } from "@/lib/api/gql";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { itemShellFragment } from "@/pages/items/_components/graphql";
-import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage";
+import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
 import HeroTemplate, {
   getHeroBreadcrumbProps,
 } from "@/components/templates/Hero";
@@ -26,7 +26,7 @@ interface Props {
 
 const { data, slug, draftModeEnabled, installationName } = Astro.props;
 
-const shell = readFragment(itemShellFragment, data);
+const shell = useFragment(itemShellFragment, data);
 
 const unauthorized = draftModeEnabled && !shell.canPreview?.value;
 
