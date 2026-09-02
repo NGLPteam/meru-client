@@ -1,4 +1,4 @@
-import { graphql } from "@/lib/api/gql";
+import { graphql, type DocumentType } from "@/lib/api/gql";
 
 // The GlobalStaticContext query, kept in its own queryApi-free module so
 // importing the document never drags the server urql client into a
@@ -34,3 +34,5 @@ export const query = graphql(`
     }
   }
 `);
+
+export type GlobalStaticData = DocumentType<typeof query>;

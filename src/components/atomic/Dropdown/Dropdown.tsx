@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import BaseDropdown from "@/components/atomic/BaseDropdown";
-import DropdownLink from "./DropdownLink";
 import styles from "./Dropdown.module.css";
 
 type BaseProps = React.ComponentProps<typeof BaseDropdown>;
@@ -36,5 +35,4 @@ interface Props extends Omit<BaseProps, "children"> {
   menuItems: (React.ReactNode | null)[];
 }
 
-Dropdown.Link = DropdownLink;
 export default Dropdown;

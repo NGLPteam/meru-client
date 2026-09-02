@@ -1,29 +1,32 @@
 ---
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import CommunityNavListContent from "./CommunityNavListContent.astro";
-import { fragment } from "./CommunityNavList";
+import { communityNavListFragment } from "./graphql";
 import styles from "./CommunityNavlist.module.css";
 
 interface Props {
   condensed?: boolean;
-  data?: FragmentType<typeof fragment> | null;
+  mobile?: boolean;
+  data?: FragmentType<typeof communityNavListFragment> | null;
   pageSlug?: string;
 }
 
-const { condensed, data, pageSlug } = Astro.props;
+const { condensed, mobile, data, pageSlug } = Astro.props;
 
-const community = useFragment(fragment, data);
+const community = useFragment(communityNavListFragment, data);
+
+const listClasses = mobile
+  ? styles.mobileList
+  : [styles.list, { [styles["list--condensed"]]: condensed }];
 ---
 
-<ul
-  class:list={[styles.list, { [styles["list--condensed"]]: condensed }]}
-  data-condensed={condensed}
->
+<ul class:list={listClasses} data-condensed={condensed}>
   {
     community && (
       <CommunityNavListContent
         data={community}
         condensed={condensed}
+        mobile={mobile}
         pageSlug={pageSlug}
       />
     )

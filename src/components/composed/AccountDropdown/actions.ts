@@ -2,18 +2,6 @@
 
 import { actions } from "astro:actions";
 
-function currentReturnTo(): string {
-  if (typeof window === "undefined") return "/";
-  return window.location.pathname + window.location.search;
-}
-
-export async function signIn() {
-  if (typeof window === "undefined") return;
-  window.location.assign(
-    `/api/signin?returnTo=${encodeURIComponent(currentReturnTo())}`,
-  );
-}
-
 export async function signOut() {
   // Best-effort backchannel logout + cookie clear (server-side). Cookies are
   // cleared regardless of the Keycloak call's outcome, so a hard nav to "/"

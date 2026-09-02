@@ -43,7 +43,7 @@ const scholar = useFragment(googleScholarFragment, item);
 cacheEntity(Astro, "item", slug);
 ---
 
-<BaseLayout meta={meta} community={item.community} routeParams={{ slug }}>
+<BaseLayout meta={meta} community={item.community}>
   <GoogleScholarMetaTags slot="head" entity={scholar} />
   <ItemShell
     data={item}

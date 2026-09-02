@@ -23,19 +23,16 @@ import type { PageMeta } from "@/lib/metadata/types";
 interface Props {
   meta?: PageMeta;
   community?: ActiveCommunityRef;
-  // Transitional — locals.pageSlug (attachRequestContext) is preferred; the
-  // prop and its page-side threading retire in astroification Phase 5.
-  routeParams?: Record<string, string | undefined>;
   // Optional override; by default draft mode is read from the cookie here
   draftModeEnabled?: boolean;
 }
 
-const { meta, community, routeParams } = Astro.props;
+const { meta, community } = Astro.props;
 
 const draftModeEnabled =
   Astro.props.draftModeEnabled ?? isDraftModeEnabled(Astro);
 
-const pageSlug = Astro.locals.pageSlug ?? routeParams?.page;
+const pageSlug = Astro.locals.pageSlug;
 
 const [themeRes, globalLayoutRes, globalStaticRes, siteMeta] =
   await Promise.all([
@@ -78,7 +75,6 @@ const head = resolvePageMeta(siteMeta, meta);
     <div class="app-shell">
       <AppHeader
         data={globalLayoutData}
-        globalData={globalData}
         community={community}
         pageSlug={pageSlug}
       />

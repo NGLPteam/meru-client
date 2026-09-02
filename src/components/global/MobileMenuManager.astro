@@ -40,6 +40,9 @@ const { class: className } = Astro.props;
         signal,
       });
       this.dialog?.addEventListener("close", this.handleClose, { signal });
+      // GET form submits (e.g. the menu's search) soft-navigate; close so the
+      // dialog's top layer doesn't cover the loading bar during the swap.
+      this.dialog?.addEventListener("submit", this.handleSubmit, { signal });
     }
 
     disconnectedCallback() {
@@ -58,6 +61,12 @@ const { class: className } = Astro.props;
 
     handleClose = () => {
       this.toggle?.setAttribute("aria-expanded", "false");
+    };
+
+    handleSubmit = (event: SubmitEvent) => {
+      if ((event.target as HTMLFormElement).method !== "dialog") {
+        this.dialog?.close();
+      }
     };
 
     // Native modal dialogs don't close on backdrop click by default. The dialog

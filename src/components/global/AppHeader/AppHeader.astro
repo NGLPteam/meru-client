@@ -1,41 +1,34 @@
 ---
-// Global header composition (Astro). Replaces the former monolithic AppHeader.tsx
-// client island so the per-viewer account nav can be a `server:defer` island: the
-// page shell (logo, community picker, nav, search) is cache-safe and viewer-free,
-// while AccountNav renders per-request and opts out of the cache.
-//
 // Route-based visibility (community-root vs. elsewhere) is computed here from
-// Astro.url and re-evaluated on every navigation, so the header no longer needs a
-// client usePathname() for gating. Interactive parts stay React islands; their
-// <astro-island> wrappers are display:contents, so the flex layout is unaffected.
+// Astro.url and re-evaluated on every navigation.
 import SkipLink from "@/components/global/SkipLink";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
+import CommunityName from "@/components/composed/community/CommunityName";
 import { AppHeaderFragment } from "./graphql";
-import HeaderBrandIsland from "./HeaderBrandIsland";
-import HeaderNavIsland from "./HeaderNavIsland";
+import HeaderBrand from "./HeaderBrand.astro";
+import HeaderNav from "./HeaderNav.astro";
 import HeaderMobileMenu from "./HeaderMobileMenu.astro";
-import HeaderPrintName from "./HeaderPrintName";
 import AccountNav from "@/components/global/AccountNav/AccountNav.astro";
-import AccountDropdownIsland from "@/components/global/AccountNav/AccountDropdownIsland";
-import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
-import type { ActiveCommunityRef } from "@/components/global/graphql";
+import AccountMenu from "@/components/global/AccountNav/AccountMenu.astro";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
 import styles from "./AppHeader.module.css";
-
-type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppHeaderFragment> | null;
   searchData?: FragmentType<typeof SearchButtonFragment> | null;
-  globalData?: IslandProviderProps["globalData"];
   community?: ActiveCommunityRef;
   // The current route's community-page slug, for the nav's active-page state.
   pageSlug?: string;
 }
 
-const { data, searchData, globalData, community, pageSlug } = Astro.props;
+const { data, searchData, community, pageSlug } = Astro.props;
 
 const appData = useFragment(AppHeaderFragment, data);
+const activeCommunity = useFragment(ActiveCommunityFragment, community);
 
 const pathname = Astro.url.pathname;
 const isCommunityRoot = /^\/communities\/[A-Za-z0-9]{30,32}/.test(pathname);
@@ -50,24 +43,13 @@ const showNav = !isCommunityRoot && !hideSearch;
 <header class={styles.header}>
   <div class:list={["l-container-wide", styles.inner]}>
     <div class={styles.left}>
-      {
-        showBrand && (
-          <HeaderBrandIsland
-            client:load
-            data={data}
-            globalData={globalData}
-            community={community}
-          />
-        )
-      }
+      {showBrand && <HeaderBrand data={data} community={community} />}
     </div>
     <div class={styles.right}>
       {
         showNav && (
-          <HeaderNavIsland
-            client:load
+          <HeaderNav
             searchData={searchData}
-            globalData={globalData}
             community={community}
             pageSlug={pageSlug}
           />
@@ -84,19 +66,14 @@ const showNav = !isCommunityRoot && !hideSearch;
         transition:persist="account-nav"
         condensed={!isCommunityRoot}
       >
-        <AccountDropdownIsland slot="fallback" condensed={!isCommunityRoot} />
+        <AccountMenu slot="fallback" condensed={!isCommunityRoot} />
       </AccountNav>
     </div>
     <div class={styles.mobileRight}>
-      <HeaderMobileMenu
-        data={data}
-        globalData={globalData}
-        community={community}
-        pageSlug={pageSlug}
-      />
+      <HeaderMobileMenu data={data} community={community} pageSlug={pageSlug} />
     </div>
   </div>
 </header>
 <div class={styles.printHeader} aria-hidden>
-  <HeaderPrintName community={community} />
+  <CommunityName data={activeCommunity} />
 </div>

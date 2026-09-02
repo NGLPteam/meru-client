@@ -1,23 +1,20 @@
 ---
-// Global footer composition (Astro). Replaces the former AppFooter.tsx client
-// island so the per-viewer "Explore" nav (admin link / sign-in) can be a
-// `server:defer` island: the footer body is cache-safe and viewer-free, while
-// FooterNav renders per-request and opts out of the cache. Grid placement is by
-// named areas, so body and nav can be separate siblings in any DOM order.
+// The footer body is cache-safe and viewer-free; the per-viewer "Explore" nav
+// (admin link / sign-in) is a `server:defer` island that renders per-request
+// and opts out of the cache. Grid placement is by named areas, so body and nav
+// can be separate siblings in any DOM order.
 import type { FragmentType } from "@/lib/api/gql";
 import type { AppFooterFragment } from "./graphql";
-import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
 import type { ActiveCommunityRef } from "@/components/global/graphql";
-import FooterBodyIsland from "./FooterBodyIsland";
+import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import FooterBody from "./FooterBody.astro";
 import FooterNav from "./FooterNav.astro";
 import FooterNavContent from "./FooterNavContent.astro";
 import styles from "./AppFooter.module.css";
 
-type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
-
 interface Props {
   data?: FragmentType<typeof AppFooterFragment> | null;
-  globalData?: IslandProviderProps["globalData"];
+  globalData?: GlobalStaticData;
   community?: ActiveCommunityRef;
 }
 
@@ -26,12 +23,7 @@ const { data, globalData, community } = Astro.props;
 
 <footer class:list={["a-bg-custom20", styles.footer]}>
   <div class:list={["l-container-wide", styles.inner]}>
-    <FooterBodyIsland
-      client:load
-      data={data}
-      globalData={globalData}
-      community={community}
-    />
+    <FooterBody data={data} globalData={globalData} community={community} />
     <FooterNav server:defer>
       <FooterNavContent slot="fallback" />
     </FooterNav>

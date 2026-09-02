@@ -1,0 +1,84 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import InstallationName from "@/components/composed/instance/InstallationName";
+import Search from "@/components/forms/Search/Search.astro";
+import CommunityPicker from "@/components/composed/instance/CommunityPicker/CommunityPicker.astro";
+import CommunityName from "@/components/composed/community/CommunityName";
+import MarkdownContent from "@/components/atomic/Markdown/MarkdownContent";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
+import type { GlobalStaticData } from "@/contexts/GlobalStaticContext/getStaticGlobalContextData.query";
+import { AppFooterFragment } from "./graphql";
+import styles from "./AppFooter.module.css";
+
+interface Props {
+  data?: FragmentType<typeof AppFooterFragment> | null;
+  globalData?: GlobalStaticData;
+  community?: ActiveCommunityRef;
+}
+
+const { data, globalData, community } = Astro.props;
+
+const activeCommunity = useFragment(ActiveCommunityFragment, community);
+const footer = globalData?.globalConfiguration?.site?.footer;
+const app = useFragment(AppFooterFragment, data);
+const communityCount = app?.communities?.pageInfo?.totalCount || 0;
+---
+
+<div class={styles.communityName}>
+  {
+    activeCommunity ? (
+      <CommunityName data={activeCommunity} />
+    ) : (
+      <h4>
+        <InstallationName className="t-h4" data={app?.globalConfiguration} />
+      </h4>
+    )
+  }
+</div>
+<div class={styles.search}>
+  <Search id="footerSearch" />
+</div>
+<div class={styles.searchMobile}>
+  <Search mobile id="footerMobileSearch" />
+</div>
+<div class={styles.about}>
+  {
+    !!activeCommunity && (
+      <div class={styles.installationMobile}>
+        <InstallationName data={app?.globalConfiguration} />
+      </div>
+    )
+  }
+  {
+    footer?.description && (
+      <MarkdownContent
+        className="t-copy-sm t-copy-lighter"
+        content={footer.description}
+      />
+    )
+  }
+  <div class={styles.installationDesktop}>
+    {
+      !!activeCommunity && (
+        <div class={styles["installationDesktop__name"]}>
+          <InstallationName data={app?.globalConfiguration} />
+        </div>
+      )
+    }
+    {
+      communityCount > 1 && (
+        <CommunityPicker data={app} activeData={activeCommunity} />
+      )
+    }
+  </div>
+</div>
+{
+  footer?.copyrightStatement && (
+    <p class:list={["t-copy-sm t-copy-light", styles.copyright]}>
+      {`© ${footer?.copyrightStatement}`}
+    </p>
+  )
+}

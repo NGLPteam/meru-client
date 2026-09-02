@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 import { usePopoverState, PopoverDisclosure, Popover } from "reakit/Popover";
 import useIsMounted from "@/hooks/useIsMounted";
 import styles from "./BaseDropdown.module.css";
@@ -9,12 +9,6 @@ type ButtonProps = Partial<
 >;
 
 const DropdownContext = createContext<PopoverStateReturn | null>(null);
-
-const useDropdownContext = () => {
-  return useContext(DropdownContext);
-};
-
-export { useDropdownContext };
 
 /**
  * This component includes the base functionality for a dropdown.

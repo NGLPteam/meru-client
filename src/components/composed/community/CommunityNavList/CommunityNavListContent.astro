@@ -1,21 +1,23 @@
 ---
-// Desktop-only twin of CommunityNavListContent.tsx (which still serves the
-// React header islands until they convert). Both share the same fragment.
 import { useFragment, type FragmentType } from "@/lib/api/gql";
-import { NamedLink } from "@/components/atomic";
+import { Link, NamedLink } from "@/components/atomic";
+import IconFactory from "@/components/factories/IconFactory";
 import NavMenuLink from "@/components/atomic/links/NavMenuLink";
 import NavDropdown from "@/components/composed/entity/EntityNavBar/EntityNavList/NavDropdown.astro";
-import { fragment } from "./CommunityNavListContent";
+import { communityNavListContentFragment } from "./graphql";
+import accordionStyles from "./Accordion.module.css";
 
 interface Props {
   condensed?: boolean;
-  data: FragmentType<typeof fragment>;
+  mobile?: boolean;
+  data: FragmentType<typeof communityNavListContentFragment>;
   pageSlug?: string;
 }
 
-const { condensed, data, pageSlug } = Astro.props;
+const { condensed, mobile, data, pageSlug } = Astro.props;
+const { t } = Astro.locals;
 
-const community = useFragment(fragment, data);
+const community = useFragment(communityNavListContentFragment, data);
 
 const linkClassName = condensed ? "t-label-sm" : "t-label-lg";
 
@@ -31,14 +33,38 @@ const orderingItems = orderings.map((o) => ({
 {
   community && community.slug && (
     <>
-      {!!orderings.length && (
-        <NavDropdown
-          label="nav.explore"
-          disclosureComponent="NavMenuLink"
-          disclosureClassName={linkClassName}
-          items={orderingItems}
-        />
-      )}
+      {!!orderings.length &&
+        (mobile ? (
+          <li class="t-capitalize">
+            <details>
+              <summary class={accordionStyles.summary}>
+                <span>{t("nav.explore")}</span>
+                <IconFactory
+                  icon="chevronDown"
+                  role="presentation"
+                  data-closed
+                />
+                <IconFactory icon="chevronUp" role="presentation" data-open />
+              </summary>
+              <ul class={accordionStyles.list}>
+                {orderingItems.map(({ href, label }) => (
+                  <li class={accordionStyles.item}>
+                    <NamedLink href={href}>
+                      <Link as="span">{label}</Link>
+                    </NamedLink>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </li>
+        ) : (
+          <NavDropdown
+            label="nav.explore"
+            disclosureComponent="NavMenuLink"
+            disclosureClassName={linkClassName}
+            items={orderingItems}
+          />
+        ))}
       {!!pages?.length &&
         pages.map(({ slug, title }) => (
           <li>

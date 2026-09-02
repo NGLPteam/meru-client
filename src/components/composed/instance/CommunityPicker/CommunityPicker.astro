@@ -1,0 +1,63 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { Link, NamedLink } from "@/components/atomic";
+import Button from "@/components/atomic/Button";
+import Dropdown from "@/components/atomic/Dropdown/Dropdown.astro";
+import DropdownItem from "@/components/atomic/Dropdown/DropdownItem.astro";
+import {
+  communityPickerFragment,
+  communityPickerNameFragment,
+} from "./graphql";
+import styles from "./CommunityPicker.module.css";
+
+interface Props {
+  data?: FragmentType<typeof communityPickerFragment> | null;
+  // The active community, for the disclosure label on community pages.
+  activeData?: FragmentType<typeof communityPickerNameFragment> | null;
+}
+
+const { data, activeData } = Astro.props;
+const { t } = Astro.locals;
+
+const communityData = useFragment(communityPickerFragment, data);
+const activeCommunity = useFragment(communityPickerNameFragment, activeData);
+
+const menuItems = communityData?.pickerCommunities?.edges || [];
+---
+
+{
+  menuItems.length === 1 ? (
+    <NamedLink
+      href={
+        menuItems[0].node.slug
+          ? `/communities/${menuItems[0].node.slug}`
+          : "/communities"
+      }
+    >
+      <Button as="span" secondary size="sm">
+        {menuItems[0].node.title}
+      </Button>
+    </NamedLink>
+  ) : menuItems.length > 1 ? (
+    <Dropdown label={t("nav.communities")} placement="bottom-start">
+      <Fragment slot="disclosure">
+        <Button
+          as="div"
+          secondary
+          icon="chevronDown"
+          size="sm"
+          className={styles.disclosure}
+        >
+          <span>{activeCommunity?.title || t("nav.community_picker")}</span>
+        </Button>
+      </Fragment>
+      {menuItems.map(({ node }) => (
+        <DropdownItem>
+          <NamedLink href={`/communities/${node.slug}`}>
+            <Link as="span">{node.title}</Link>
+          </NamedLink>
+        </DropdownItem>
+      ))}
+    </Dropdown>
+  ) : null
+}

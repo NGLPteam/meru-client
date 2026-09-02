@@ -6,7 +6,7 @@
 // viewer's identity into the URL-keyed response cache.
 import getViewer from "~/lib/auth/viewer";
 import { isDraftModeEnabled } from "~/lib/request/draftMode";
-import AccountDropdownIsland from "./AccountDropdownIsland";
+import AccountMenu from "./AccountMenu.astro";
 
 interface Props {
   mobile?: boolean;
@@ -27,8 +27,7 @@ const isPreview = isDraftModeEnabled(Astro);
 if (Astro.cache.enabled) Astro.cache.set(false);
 ---
 
-<AccountDropdownIsland
-  client:load
+<AccountMenu
   viewer={viewer}
   isPreview={isPreview}
   condensed={condensed}

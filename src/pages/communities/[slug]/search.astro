@@ -27,7 +27,7 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildCommunityMeta(community, slug);
 ---
 
-<BaseLayout meta={meta} community={data?.communityRef} routeParams={{ slug }}>
+<BaseLayout meta={meta} community={data?.communityRef}>
   <CommunityShell
     data={community}
     communityRef={data?.communityRef}

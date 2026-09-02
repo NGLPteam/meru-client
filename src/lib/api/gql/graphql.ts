@@ -1006,9 +1006,9 @@ export type CommunityNavBarEntityFragmentFragment =
   | CommunityNavBarEntityFragment_Item_Fragment
 ;
 
-export type CommunityNavListFragmentFragment = { ' $fragmentRefs'?: { 'CommunityNavListContentFragmentFragment': CommunityNavListContentFragmentFragment } } & { ' $fragmentName'?: 'CommunityNavListFragmentFragment' };
-
 export type CommunityNavListContentFragmentFragment = { slug: string, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ slug: string, title: string }> } } & { ' $fragmentName'?: 'CommunityNavListContentFragmentFragment' };
+
+export type CommunityNavListFragmentFragment = { ' $fragmentRefs'?: { 'CommunityNavListContentFragmentFragment': CommunityNavListContentFragmentFragment } } & { ' $fragmentName'?: 'CommunityNavListFragmentFragment' };
 
 export type CommunityPageLayoutFragmentFragment = { title: string, body: string, heroImage: { hero: { webp: { url: string | null, alt: string | null, height: number | null, width: number | null } }, large: { webp: { url: string | null, width: number | null } }, medium: { webp: { url: string | null, width: number | null } }, small: { webp: { url: string | null, width: number | null } } } } & { ' $fragmentName'?: 'CommunityPageLayoutFragmentFragment' };
 

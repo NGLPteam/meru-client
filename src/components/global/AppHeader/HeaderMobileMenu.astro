@@ -1,36 +1,35 @@
 ---
-// Header mobile menu as a native <dialog> (the reakit BaseDrawer it replaced is
-// gone — reakit is React-19-incompatible). Authoring it in Astro lets the
-// per-viewer account nav be a real `server:defer` island placed as a sibling in
-// the dialog body, rather than baked into a client-only React tree.
-// MobileMenuManager (framework-free custom element) wires the toggle + close.
+// Header mobile menu as a native <dialog>. MobileMenuManager (framework-free
+// custom element) wires the toggle + close; the per-viewer account nav is a
+// `server:defer` island sibling in the dialog body.
 import MobileMenuToggle from "@/components/layout/MobileMenuToggle";
 import { CloseModalButton } from "@/components/atomic";
 import MobileMenuManager from "@/components/global/MobileMenuManager.astro";
 import AccountNav from "@/components/global/AccountNav/AccountNav.astro";
-import AccountDropdownIsland from "@/components/global/AccountNav/AccountDropdownIsland";
-import { MobilePicker, MobileNav } from "./HeaderMobileParts";
+import AccountMenu from "@/components/global/AccountNav/AccountMenu.astro";
+import CommunityPicker from "@/components/composed/instance/CommunityPicker/CommunityPicker.astro";
+import CommunityNavList from "@/components/composed/community/CommunityNavList/CommunityNavList.astro";
 import InstallationName from "@/components/composed/instance/InstallationName";
+import Search from "@/components/forms/Search/Search.astro";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { AppHeaderFragment } from "./graphql";
-import type GlobalIslandProviders from "@/components/providers/GlobalIslandProviders";
-import type { ActiveCommunityRef } from "@/components/global/graphql";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
 import styles from "./HeaderMobileMenu.module.css";
-
-type IslandProviderProps = React.ComponentProps<typeof GlobalIslandProviders>;
 
 interface Props {
   data?: FragmentType<typeof AppHeaderFragment> | null;
-  globalData?: IslandProviderProps["globalData"];
   community?: ActiveCommunityRef;
   pageSlug?: string;
 }
 
-const { data, globalData, community, pageSlug } = Astro.props;
+const { data, community, pageSlug } = Astro.props;
 
 const appData = useFragment(AppHeaderFragment, data);
+const activeCommunity = useFragment(ActiveCommunityFragment, community);
 
-// Keep in sync with MENU_ID in HeaderMobileParts.tsx.
 const MENU_ID = "app-header-menu";
 ---
 
@@ -42,12 +41,7 @@ const MENU_ID = "app-header-menu";
   <dialog id={MENU_ID} class={styles.dialog} aria-label="Menu">
     <div class={styles.panel}>
       <div class={styles.header}>
-        <MobilePicker
-          client:load
-          data={data}
-          globalData={globalData}
-          community={community}
-        />
+        <CommunityPicker data={appData} activeData={activeCommunity} />
         <form method="dialog">
           <CloseModalButton />
         </form>
@@ -55,14 +49,14 @@ const MENU_ID = "app-header-menu";
       <div class={styles.content}>
         <div class={styles.contentInner}>
           <div class={styles.list}>
-            <MobileNav
-              client:load
-              globalData={globalData}
-              community={community}
+            <CommunityNavList
+              mobile
+              data={activeCommunity}
               pageSlug={pageSlug}
             />
+            <Search id="headerSearch" mobile />
             <AccountNav server:defer mobile>
-              <AccountDropdownIsland slot="fallback" mobile />
+              <AccountMenu slot="fallback" mobile />
             </AccountNav>
           </div>
         </div>

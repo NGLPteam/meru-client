@@ -1,0 +1,23 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import SearchButtonIsland from "@/components/atomic/SearchButton/SearchButtonIsland";
+import { fragment as SearchButtonFragment } from "@/components/atomic/SearchButton/SearchButton";
+import CommunityNavList from "@/components/composed/community/CommunityNavList/CommunityNavList.astro";
+import {
+  ActiveCommunityFragment,
+  type ActiveCommunityRef,
+} from "@/components/global/graphql";
+
+interface Props {
+  searchData?: FragmentType<typeof SearchButtonFragment> | null;
+  community?: ActiveCommunityRef;
+  pageSlug?: string;
+}
+
+const { searchData, community, pageSlug } = Astro.props;
+
+const activeCommunity = useFragment(ActiveCommunityFragment, community);
+---
+
+<CommunityNavList condensed data={activeCommunity} pageSlug={pageSlug} />
+<SearchButtonIsland client:load size="sm" data={searchData} />

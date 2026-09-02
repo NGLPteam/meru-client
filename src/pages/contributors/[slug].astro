@@ -45,7 +45,7 @@ if (!contributor) return Astro.rewrite("/404");
 cacheEntity(Astro, "contributor", slug);
 ---
 
-<BaseLayout community={community} routeParams={{ slug }}>
+<BaseLayout community={community}>
   {navData && <ContributorDetailNav data={navData} />}
   <ContributorDetail data={contributor} />
 </BaseLayout>

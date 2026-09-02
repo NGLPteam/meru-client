@@ -1,4 +1,3 @@
-export { default as Accordion } from "./accordions/Accordion";
 export { default as Button } from "./Button";
 export * from "./Button/patterns";
 export { default as DotList } from "./DotList";
@@ -8,7 +7,6 @@ export * from "./links";
 export * from "./loading";
 export { default as PageCount } from "./PageCount";
 export * from "./properties";
-export { default as SearchButton } from "./SearchButton";
 export { default as CloseModalButton } from "./CloseModalButton";
 export { default as Markdown } from "./Markdown";
 export { default as Alert } from "./Alert";

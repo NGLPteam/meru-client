@@ -33,11 +33,7 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
 cacheEntity(Astro, "collection", slug);
 ---
 
-<BaseLayout
-  meta={meta}
-  community={collection.community}
-  routeParams={{ slug, announcement }}
->
+<BaseLayout meta={meta} community={collection.community}>
   <CollectionShell
     data={collection}
     slug={slug}

@@ -1,0 +1,126 @@
+---
+import { Avatar, Link } from "@/components/atomic";
+import Dropdown from "@/components/atomic/Dropdown/Dropdown.astro";
+import DropdownItem from "@/components/atomic/Dropdown/DropdownItem.astro";
+import IconFactory from "@/components/factories/IconFactory";
+import NamedLink from "@/components/atomic/links/NamedLink";
+import SignInButton from "@/components/client/SignInButton.astro";
+import { ADMIN_URL } from "@/lib/env/clientConfig";
+import type { ViewerContextProps } from "@/contexts/ViewerContext/ViewerContext";
+import navMenuStyles from "@/components/atomic/links/NavMenuLink/NavMenuLink.module.css";
+import styles from "@/components/composed/AccountDropdown/AccountDropdown.module.css";
+
+interface Props {
+  viewer?: ViewerContextProps;
+  isPreview?: boolean;
+  condensed?: boolean;
+  mobile?: boolean;
+}
+
+const { viewer, isPreview, condensed } = Astro.props;
+const { t } = Astro.locals;
+
+const { avatarUrl, name, isAuthenticated, canAccessAdmin } = viewer ?? {};
+const inPreview = isPreview ?? viewer?.isPreview;
+---
+
+<div class={styles.wrapper}>
+  {
+    isAuthenticated ? (
+      <account-menu>
+        <Dropdown label={t("nav.account")} placement="bottom-end">
+          <Fragment slot="disclosure">
+            <div class={styles.disclosure}>
+              <Avatar url={avatarUrl} />
+              {name && (
+                <span class={styles.name} data-condensed={condensed}>
+                  {name}
+                </span>
+              )}
+              <IconFactory className={styles.icon} icon="chevronDown" />
+            </div>
+          </Fragment>
+          {ADMIN_URL && canAccessAdmin && (
+            <DropdownItem>
+              <NamedLink href={ADMIN_URL}>
+                <Link as="span">{t("nav.admin")}</Link>
+              </NamedLink>
+            </DropdownItem>
+          )}
+          {!inPreview && canAccessAdmin && (
+            <DropdownItem closeOnClick>
+              <Link as="button" type="button" data-enter-preview>
+                {t("preview.preview_mode")}
+              </Link>
+            </DropdownItem>
+          )}
+          <DropdownItem>
+            <Link as="button" type="button" data-sign-out>
+              {t("common.sign_out")}
+            </Link>
+          </DropdownItem>
+        </Dropdown>
+      </account-menu>
+    ) : (
+      <SignInButton>
+        <button class:list={["t-label-lg", navMenuStyles.link]}>
+          <span>{t("common.sign_in")}</span>
+        </button>
+      </SignInButton>
+    )
+  }
+</div>
+
+<script>
+  import {
+    signOut,
+    enterPreviewMode,
+  } from "@/components/composed/AccountDropdown/actions";
+  import refresh from "@/lib/routing/refresh";
+
+  class AccountMenu extends HTMLElement {
+    abortController = new AbortController();
+
+    connectedCallback() {
+      const { signal } = this.abortController;
+
+      this.querySelector<HTMLButtonElement>(
+        "[data-sign-out]",
+      )?.addEventListener(
+        "click",
+        async (e) => {
+          (e.currentTarget as HTMLButtonElement).disabled = true;
+          await signOut();
+        },
+        { signal },
+      );
+
+      this.querySelector<HTMLButtonElement>(
+        "[data-enter-preview]",
+      )?.addEventListener(
+        "click",
+        async (e) => {
+          const button = e.currentTarget as HTMLButtonElement;
+          button.disabled = true;
+          try {
+            await enterPreviewMode();
+            // Soft navigation so the loading bar animates while the server
+            // re-renders with the new draft cookie.
+            refresh();
+          } finally {
+            button.disabled = false;
+          }
+        },
+        { signal },
+      );
+    }
+
+    disconnectedCallback() {
+      this.abortController.abort();
+    }
+  }
+
+  if (!customElements.get("account-menu")) {
+    customElements.define("account-menu", AccountMenu);
+  }
+</script>

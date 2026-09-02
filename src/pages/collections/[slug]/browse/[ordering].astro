@@ -34,11 +34,7 @@ const meta = buildCollectionMeta(collection, slug);
 const draftModeEnabled = isDraftModeEnabled(Astro);
 ---
 
-<BaseLayout
-  meta={meta}
-  community={collection.community}
-  routeParams={{ slug, ordering }}
->
+<BaseLayout meta={meta} community={collection.community}>
   <CollectionShell
     data={collection}
     slug={slug}

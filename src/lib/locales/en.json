@@ -85,7 +85,8 @@
       "item_other": "items",
       "files": "File",
       "files_other": "Files",
-      "abstract": "Abstract"
+      "abstract": "Abstract",
+      "table_of_contents": "Table of Contents"
     },
     "schema": {
       "nglp.journal": "journal",
