@@ -1,0 +1,115 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { NamedLink } from "@/components/atomic";
+import MarkdownContent from "@/components/atomic/Markdown/MarkdownContent";
+import Dropdown from "@/components/atomic/Dropdown/Dropdown.astro";
+import DropdownItem from "@/components/atomic/Dropdown/DropdownItem.astro";
+import { getRouteByEntityType } from "@/helpers";
+import BreadcrumbLink from "./BreadcrumbLink";
+import { breadcrumbsFragment } from "./graphql";
+import styles from "./Breadcrumbs.module.css";
+
+interface Props {
+  data?: FragmentType<typeof breadcrumbsFragment> | null;
+  pathname?: string;
+}
+
+const { data, pathname } = Astro.props;
+const { t } = Astro.locals;
+
+const entity = useFragment(breadcrumbsFragment, data);
+
+const breadcrumbs = entity?.breadcrumbs || [];
+
+const currentRoute = entity ? getRouteByEntityType(entity.__typename) : null;
+const currentHref =
+  entity && currentRoute && entity.slug
+    ? `/${currentRoute}/${entity.slug}`
+    : null;
+const isEntityMain = currentHref === pathname;
+---
+
+{
+  breadcrumbs.length > 0 && (
+    <>
+      <ul class:list={["t-copy-sm", styles.listMobile]}>
+        <li class={styles.item}>
+          <Dropdown
+            label={t("breadcrumbs_dropdown_label")}
+            placement="bottom-start"
+          >
+            <span slot="disclosure" class={styles.ellipsis}>
+              ...
+            </span>
+            {breadcrumbs.map((crumb) => (
+              <DropdownItem>
+                <BreadcrumbLink data={crumb} />
+              </DropdownItem>
+            ))}
+          </Dropdown>
+          <span class={styles.delimiter}>/</span>
+        </li>
+        <li>
+          {currentHref && entity && (
+            <NamedLink
+              className={styles.text}
+              href={currentHref}
+              aria-current={isEntityMain ? "page" : undefined}
+            >
+              <MarkdownContent variant="title" content={entity.title} />
+            </NamedLink>
+          )}
+        </li>
+      </ul>
+
+      <ul class:list={["t-copy-sm", styles.list]}>
+        {breadcrumbs.length <= 3 &&
+          breadcrumbs.map((crumb) => (
+            <li class={styles.item}>
+              <BreadcrumbLink data={crumb} />
+              <span class={styles.delimiter}>/</span>
+            </li>
+          ))}
+        {breadcrumbs.length > 3 && (
+          <>
+            <li class={styles.item}>
+              <BreadcrumbLink data={breadcrumbs[0]} />
+              <span class={styles.delimiter}>/</span>
+            </li>
+            <li class={styles.item}>
+              <Dropdown
+                label={t("breadcrumbs_dropdown_label")}
+                placement="bottom-start"
+              >
+                <span slot="disclosure" class={styles.ellipsis}>
+                  ...
+                </span>
+                {breadcrumbs.slice(1, breadcrumbs.length - 1).map((crumb) => (
+                  <DropdownItem>
+                    <BreadcrumbLink data={crumb} />
+                  </DropdownItem>
+                ))}
+              </Dropdown>
+              <span class={styles.delimiter}>/</span>
+            </li>
+            <li class={styles.item}>
+              <BreadcrumbLink data={breadcrumbs[breadcrumbs.length - 1]} />
+              <span class={styles.delimiter}>/</span>
+            </li>
+          </>
+        )}
+        <li>
+          {currentHref && entity && (
+            <NamedLink
+              className={styles.text}
+              href={currentHref}
+              aria-current={isEntityMain ? "page" : undefined}
+            >
+              <MarkdownContent variant="title" content={entity.title} />
+            </NamedLink>
+          )}
+        </li>
+      </ul>
+    </>
+  )
+}

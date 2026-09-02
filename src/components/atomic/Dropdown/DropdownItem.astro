@@ -1,0 +1,15 @@
+---
+import styles from "./Dropdown.module.css";
+
+interface Props {
+  // Close the menu when the item is clicked (links that don't navigate the
+  // page, e.g. mailto/share targets).
+  closeOnClick?: boolean;
+}
+
+const { closeOnClick } = Astro.props;
+---
+
+<li class={styles.item} data-close-menu={closeOnClick ? "" : undefined}>
+  <slot />
+</li>

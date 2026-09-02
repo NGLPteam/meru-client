@@ -35,7 +35,7 @@ interface Props {
   pageSlug?: string;
 }
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment CommunityNavListFragment on Community {
     ...CommunityNavListContentFragment
   }

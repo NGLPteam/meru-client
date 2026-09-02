@@ -1,5 +1,4 @@
 export { default as Accordion } from "./accordions/Accordion";
-export { default as Breadcrumbs } from "./Breadcrumbs";
 export { default as Button } from "./Button";
 export * from "./Button/patterns";
 export { default as DotList } from "./DotList";

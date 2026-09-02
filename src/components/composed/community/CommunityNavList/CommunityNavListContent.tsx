@@ -80,7 +80,7 @@ export default function CommunityNavList({
 
 type Ordering = DocumentType<typeof fragment>["orderings"]["nodes"][number];
 
-const fragment = graphql(`
+export const fragment = graphql(`
   fragment CommunityNavListContentFragment on Community {
     slug
     orderings(availability: ENABLED) {

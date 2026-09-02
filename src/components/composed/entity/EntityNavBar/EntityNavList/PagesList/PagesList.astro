@@ -1,0 +1,57 @@
+---
+import { NamedLink } from "@/components/atomic";
+import NavMenuLink from "@/components/atomic/links/NavMenuLink";
+import NavDropdown from "../NavDropdown.astro";
+import type { EntityNavBarData } from "../../getEntityNavBarData";
+import styles from "./PagesList.module.css";
+
+interface Props {
+  pages: EntityNavBarData["pages"];
+  basePath: string;
+  pathname?: string;
+}
+
+const { pages, basePath, pathname } = Astro.props;
+
+const withHrefs = pages.map((p) => ({
+  href: `${basePath}/page/${p.slug}`,
+  label: p.title,
+}));
+---
+
+{
+  withHrefs.length > 4 ? (
+    <NavDropdown label="nav.pages" items={withHrefs} />
+  ) : withHrefs.length === 1 ? (
+    <li>
+      <NamedLink href={withHrefs[0].href}>
+        <NavMenuLink
+          as="span"
+          aria-current={pathname === withHrefs[0].href ? "page" : undefined}
+        >
+          <span class="t-label-sm">{withHrefs[0].label}</span>
+        </NavMenuLink>
+      </NamedLink>
+    </li>
+  ) : (
+    <>
+      {withHrefs.map(({ href, label }) => (
+        <li class={styles.link}>
+          <NamedLink href={href}>
+            <NavMenuLink
+              as="span"
+              aria-current={pathname === href ? "page" : undefined}
+            >
+              <span class="t-label-sm">{label}</span>
+            </NavMenuLink>
+          </NamedLink>
+        </li>
+      ))}
+      <NavDropdown
+        label="nav.pages"
+        items={withHrefs}
+        class={styles.dropdown}
+      />
+    </>
+  )
+}

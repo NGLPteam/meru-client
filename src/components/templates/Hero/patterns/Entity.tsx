@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import Container from "@/components/layout/Container";
-import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar";
 import { getBgClass } from "@/components/templates/helpers/bgColor";
 import HeroDetail from "../Detail";
 import HeroHeader from "../Header";
@@ -9,10 +8,8 @@ import HeroImage from "../Image";
 
 export default function EntityHeroHeader({
   data,
-  hideBreadcrumbsBar,
 }: {
   data?: FragmentType<typeof fragment> | null;
-  hideBreadcrumbsBar?: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -20,13 +17,8 @@ export default function EntityHeroHeader({
 
   const { template, entity } = layout ?? {};
 
-  const {
-    showHeroImage,
-    background,
-    showBreadcrumbs,
-    showSharingLink,
-    showSplitDisplay,
-  } = template?.definition ?? {};
+  const { showHeroImage, background, showSplitDisplay } =
+    template?.definition ?? {};
 
   const visibility =
     entity && "visibility" in entity ? entity.visibility : undefined;
@@ -47,21 +39,10 @@ export default function EntityHeroHeader({
       })
     : undefined;
 
-  const renderBreadcrumbs = !!(showBreadcrumbs || showSharingLink);
-
-  const bgClass = getBgClass(background);
-
   const renderHeroImage = showHeroImage && heroImage?.storage;
 
   return (
     <>
-      {renderBreadcrumbs && !hideBreadcrumbsBar && (
-        <BreadcrumbsBar
-          data={entity}
-          showShare={showSharingLink ?? false}
-          className={bgClass}
-        />
-      )}
       <Container as="header" width="wide" bgColor={background} hideDivider>
         <HeroHeader data={layout?.template} hiddenAlert={hiddenAlert} />
       </Container>
@@ -75,8 +56,7 @@ export default function EntityHeroHeader({
   );
 }
 
-// What an .astro shell should pass its BreadcrumbsBar island when it hoists
-// the bar out of this statically-rendered hero (hideBreadcrumbsBar). See
+// What an .astro shell should pass its BreadcrumbsBar. See
 // getHeroBreadcrumbProps in ../Hero.tsx.
 export function getBreadcrumbsBarProps(
   data?: FragmentType<typeof fragment> | null,

@@ -1,0 +1,32 @@
+---
+import IconFactory from "@/components/factories/IconFactory";
+import styles from "./Search.module.css";
+
+interface Props {
+  pathname?: string;
+  placeholder?: string;
+  mobile?: boolean;
+  id: string;
+}
+
+const { pathname = "/search", placeholder, mobile, id } = Astro.props;
+const { t } = Astro.locals;
+---
+
+<form action={pathname} method="get" class={styles.form}>
+  <label class={styles.label} for={id}>
+    <span class="sr-only">{placeholder || t("search.label")}</span>
+    <IconFactory icon="search" role="presentation" />
+  </label>
+  <input
+    id={id}
+    type="search"
+    name="q"
+    placeholder={placeholder || t("search.label")}
+    class:list={[styles.input, { "t-copy-sm": mobile }]}
+  />
+  <button class={styles.submit} type="submit">
+    <IconFactory icon="arrowRight" role="presentation" />
+    <span class="sr-only">{t("search.submit")}</span>
+  </button>
+</form>

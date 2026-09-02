@@ -1,6 +1,7 @@
 ---
 import { useFragment, type FragmentType } from "@/lib/api/gql";
-import { ExternalLink, Markdown, ORCIDLink } from "@/components/atomic";
+import { ExternalLink, ORCIDLink } from "@/components/atomic";
+import MarkdownContent from "@/components/atomic/Markdown/MarkdownContent";
 import BrowseListLayout from "@/components/layout/BrowseListLayout/BrowseListLayout.astro";
 import ContributionSummary from "@/components/composed/contribution/ContributionSummary";
 import ContributorName from "../ContributorName";
@@ -42,7 +43,7 @@ const hasLinks = !!contributor?.links && contributor.links.length > 0;
           )}
           {contributor.bio && (
             <div class="t-copy-light t-rte">
-              <Markdown.Base>{contributor.bio}</Markdown.Base>
+              <MarkdownContent content={contributor.bio} />
             </div>
           )}
           {(hasLinks || contributor.orcid) && (

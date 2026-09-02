@@ -6,14 +6,13 @@ import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/Unaut
 import HeroTemplate, {
   getHeroBreadcrumbProps,
 } from "@/components/templates/Hero";
-import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar";
+import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar/BreadcrumbsBar.astro";
 import ProcessingCheck, {
   hasMainContent,
 } from "@/components/templates/ProcessingCheck";
 import NavigationTemplate from "@/components/templates/EntityNavigation";
-import EntityNavBar, {
-  getEntityNavBarData,
-} from "@/components/composed/entity/EntityNavBar";
+import EntityNavBar from "@/components/composed/entity/EntityNavBar/EntityNavBar.astro";
+import { getEntityNavBarData } from "@/components/composed/entity/EntityNavBar/getEntityNavBarData";
 import ViewCounter from "@/components/client/ViewCounter.astro";
 import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
 
@@ -45,19 +44,18 @@ const pathname = Astro.url.pathname;
     <>
       {breadcrumbs && (
         <BreadcrumbsBar
-          client:load
           {...breadcrumbs}
           installationName={installationName}
           pathname={pathname}
         />
       )}
-      {hero && <HeroTemplate data={hero} hideBreadcrumbsBar />}
+      {hero && <HeroTemplate data={hero} />}
       {empty ? (
         <ProcessingCheck data={shell.layouts} entityType="item" />
       ) : (
         <>
           <ViewCounter slug={slug} paused={draftModeEnabled} />
-          <EntityNavBar client:load data={navBarData} pathname={pathname} />
+          <EntityNavBar data={navBarData} pathname={pathname} />
           <NavigationTemplate
             data={navigation}
             slug={slug}

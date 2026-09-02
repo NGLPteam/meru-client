@@ -1,0 +1,58 @@
+---
+import { NamedLink } from "@/components/atomic";
+import Button from "@/components/atomic/Button";
+import NavDropdown from "./NavDropdown.astro";
+import PagesList from "./PagesList/PagesList.astro";
+import type { EntityNavBarData } from "../getEntityNavBarData";
+import styles from "./EntityNavList.module.css";
+
+interface Props {
+  basePath: string;
+  schemaIdentifier: string;
+  orderings: EntityNavBarData["orderings"];
+  pages: EntityNavBarData["pages"];
+  pathname?: string;
+}
+
+const { basePath, schemaIdentifier, orderings, pages, pathname } = Astro.props;
+const { t } = Astro.locals;
+
+const renderOrderingButton =
+  orderings.length === 1 &&
+  schemaIdentifier !== "journal_issue" &&
+  schemaIdentifier !== "journal_volume";
+
+const orderingItems = orderings.map((item) => {
+  const context =
+    schemaIdentifier === "journal" && item.identifier === "articles"
+      ? "ABBR"
+      : "NONE";
+
+  return {
+    href: `${basePath}/browse/${item.identifier}?context=${context}`,
+    label: `${item.name} (${item.count})`,
+    keepScroll: true,
+  };
+});
+---
+
+<ul class={styles.list}>
+  {
+    renderOrderingButton ? (
+      <li class="t-capitalize">
+        <NamedLink href={`${basePath}/browse/${orderings[0].identifier}`}>
+          <Button size="sm" secondary>
+            {t("nav.browse_schema", { schema: orderings[0].name })}
+          </Button>
+        </NamedLink>
+      </li>
+    ) : orderings.length > 1 ? (
+      <NavDropdown label="nav.browse" items={orderingItems} />
+    ) : null
+  }
+  {
+    !!pages?.length && (
+      <PagesList pages={pages} basePath={basePath} pathname={pathname} />
+    )
+  }
+</ul>

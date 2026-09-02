@@ -1,0 +1,54 @@
+---
+import Search from "@/components/forms/Search/Search.astro";
+import EntityNavList from "./EntityNavList/EntityNavList.astro";
+import type { EntityNavBarData } from "./getEntityNavBarData";
+import styles from "./EntityNavBar.module.css";
+
+interface Props {
+  data?: EntityNavBarData | null;
+  pathname: string;
+}
+
+const { data, pathname } = Astro.props;
+const { t } = Astro.locals;
+
+const hideSearch = pathname.includes("search");
+
+const canRender =
+  !!data && (data.enableDescendantSearch || data.enableDescendantBrowsing);
+
+const placeholder = data
+  ? (data.searchPrompt ?? t("search.placeholder_name", { name: data.title }))
+  : undefined;
+---
+
+{
+  canRender && data && (
+    <nav class:list={["a-bg-custom20", styles.nav]}>
+      <div class:list={["l-container-wide", styles.inner]}>
+        <div class={styles.left}>
+          {data.enableDescendantBrowsing && (
+            <EntityNavList
+              basePath={data.basePath}
+              schemaIdentifier={data.schemaIdentifier}
+              orderings={data.orderings}
+              pages={data.pages}
+              pathname={pathname}
+            />
+          )}
+        </div>
+        {!hideSearch && (
+          <div class={styles.right}>
+            {data.enableDescendantSearch && (
+              <Search
+                pathname={`/collections/${data.slug}/search`}
+                id="entitySearch"
+                placeholder={placeholder}
+              />
+            )}
+          </div>
+        )}
+      </div>
+    </nav>
+  )
+}

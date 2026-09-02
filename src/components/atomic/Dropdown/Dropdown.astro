@@ -1,0 +1,38 @@
+---
+import DisclosureMenu from "@/components/client/DisclosureMenu/DisclosureMenu.astro";
+import styles from "./Dropdown.module.css";
+
+interface Props {
+  label: string;
+  placement?: "bottom-start" | "bottom" | "bottom-end";
+  class?: string;
+}
+
+const { label, placement = "bottom", class: className } = Astro.props;
+
+const id = `dropdown-${crypto.randomUUID()}`;
+---
+
+<DisclosureMenu class:list={[styles.menu, className]}>
+  <button
+    type="button"
+    aria-controls={id}
+    aria-expanded="false"
+    class={styles.toggle}
+  >
+    <slot name="disclosure" />
+  </button>
+  <div
+    id={id}
+    class={styles.panel}
+    data-placement={placement}
+    aria-label={label}
+    inert
+  >
+    <div class:list={["a-bg-neutral00", styles.wrapper]}>
+      <ul class={styles.list}>
+        <slot />
+      </ul>
+    </div>
+  </div>
+</DisclosureMenu>

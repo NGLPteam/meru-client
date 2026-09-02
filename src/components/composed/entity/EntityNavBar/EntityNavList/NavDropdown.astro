@@ -1,0 +1,65 @@
+---
+import Dropdown from "@/components/atomic/Dropdown/Dropdown.astro";
+import DropdownItem from "@/components/atomic/Dropdown/DropdownItem.astro";
+import Button from "@/components/atomic/Button";
+import NavMenuLink from "@/components/atomic/links/NavMenuLink";
+import { Link, NamedLink } from "@/components/atomic";
+import styles from "./Dropdown/Dropdown.module.css";
+
+interface Props {
+  label: string;
+  items: { href: string; label: string; keepScroll?: boolean }[];
+  disclosureComponent?: "Button" | "NavMenuLink";
+  disclosureClassName?: string;
+  class?: string;
+}
+
+const {
+  label,
+  items,
+  disclosureComponent,
+  disclosureClassName,
+  class: className,
+} = Astro.props;
+const { t } = Astro.locals;
+---
+
+<li class:list={["t-capitalize", className]}>
+  <Dropdown label={t(label)} placement="bottom-start">
+    <Fragment slot="disclosure">
+      {
+        disclosureComponent === "NavMenuLink" ? (
+          <NavMenuLink
+            as="div"
+            icon="chevronDown"
+            className={disclosureClassName}
+          >
+            {t(label)}
+          </NavMenuLink>
+        ) : (
+          <Button
+            as="div"
+            icon="chevronDown"
+            secondary
+            size="sm"
+            className={styles.disclosure}
+          >
+            {t(label)}
+          </Button>
+        )
+      }
+    </Fragment>
+    {
+      items.map((item) => (
+        <DropdownItem>
+          <NamedLink
+            href={item.href}
+            scroll={item.keepScroll ? false : undefined}
+          >
+            <Link as="span">{item.label}</Link>
+          </NamedLink>
+        </DropdownItem>
+      ))
+    }
+  </Dropdown>
+</li>

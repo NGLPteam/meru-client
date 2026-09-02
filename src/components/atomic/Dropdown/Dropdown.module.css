@@ -23,3 +23,36 @@
     padding-block-end: var(--padding-sm);
   }
 }
+
+.menu {
+  position: relative;
+  display: inline-block;
+}
+
+.toggle {
+  display: block;
+}
+
+.panel {
+  position: absolute;
+  inset-block-start: calc(100% + 8px);
+  z-index: theme("zIndex.dropdown");
+  display: none;
+
+  &[data-open] {
+    display: block;
+  }
+
+  &[data-placement="bottom"] {
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+
+  &[data-placement="bottom-start"] {
+    inset-inline-start: 0;
+  }
+
+  &[data-placement="bottom-end"] {
+    inset-inline-end: 0;
+  }
+}

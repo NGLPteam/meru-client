@@ -1,0 +1,57 @@
+---
+// Desktop-only twin of CommunityNavListContent.tsx (which still serves the
+// React header islands until they convert). Both share the same fragment.
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { NamedLink } from "@/components/atomic";
+import NavMenuLink from "@/components/atomic/links/NavMenuLink";
+import NavDropdown from "@/components/composed/entity/EntityNavBar/EntityNavList/NavDropdown.astro";
+import { fragment } from "./CommunityNavListContent";
+
+interface Props {
+  condensed?: boolean;
+  data: FragmentType<typeof fragment>;
+  pageSlug?: string;
+}
+
+const { condensed, data, pageSlug } = Astro.props;
+
+const community = useFragment(fragment, data);
+
+const linkClassName = condensed ? "t-label-sm" : "t-label-lg";
+
+const orderings = community.orderings?.nodes?.filter((o) => !!o.count) || [];
+const pages = community.pages?.nodes;
+
+const orderingItems = orderings.map((o) => ({
+  href: `/communities/${community.slug}/browse/${o.identifier}`,
+  label: `${o.name} (${o.count})`,
+}));
+---
+
+{
+  community && community.slug && (
+    <>
+      {!!orderings.length && (
+        <NavDropdown
+          label="nav.explore"
+          disclosureComponent="NavMenuLink"
+          disclosureClassName={linkClassName}
+          items={orderingItems}
+        />
+      )}
+      {!!pages?.length &&
+        pages.map(({ slug, title }) => (
+          <li>
+            <NamedLink
+              href={`/communities/${community.slug}/page/${slug}`}
+              aria-current={pageSlug === slug ? "page" : undefined}
+            >
+              <NavMenuLink as="span" className={linkClassName}>
+                {title}
+              </NavMenuLink>
+            </NamedLink>
+          </li>
+        ))}
+    </>
+  )
+}

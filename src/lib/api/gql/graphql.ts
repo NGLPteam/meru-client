@@ -1167,6 +1167,18 @@ export type ContributorsListFragmentFragment =
 
 export type EntityAnnouncementLayoutFragmentFragment = { header: string, body: string, publishedOn: string, updatedAt: string } & { ' $fragmentName'?: 'EntityAnnouncementLayoutFragmentFragment' };
 
+type EntityNavListFragment_Collection_Fragment = { __typename: 'Collection', schemaVersion: { name: string, identifier: string }, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ title: string, slug: string }> } } & { ' $fragmentName'?: 'EntityNavListFragment_Collection_Fragment' };
+
+type EntityNavListFragment_Community_Fragment = { __typename: 'Community', schemaVersion: { name: string, identifier: string }, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ title: string, slug: string }> } } & { ' $fragmentName'?: 'EntityNavListFragment_Community_Fragment' };
+
+type EntityNavListFragment_Item_Fragment = { __typename: 'Item', schemaVersion: { name: string, identifier: string }, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ title: string, slug: string }> } } & { ' $fragmentName'?: 'EntityNavListFragment_Item_Fragment' };
+
+export type EntityNavListFragmentFragment =
+  | EntityNavListFragment_Collection_Fragment
+  | EntityNavListFragment_Community_Fragment
+  | EntityNavListFragment_Item_Fragment
+;
+
 type EntityNavBarFragment_Collection_Fragment = (
   { id: string, slug: string, title: string, layouts: { hero: { template: { definition: { enableDescendantBrowsing: boolean | null, enableDescendantSearch: boolean | null }, slots: { descendantSearchPrompt: { ' $fragmentRefs'?: { 'sharedInlineSlotFragmentFragment': sharedInlineSlotFragmentFragment } } | null } } | null } | null } }
   & { ' $fragmentRefs'?: { 'EntityNavListFragment_Collection_Fragment': EntityNavListFragment_Collection_Fragment } }
@@ -1186,18 +1198,6 @@ export type EntityNavBarFragmentFragment =
   | EntityNavBarFragment_Collection_Fragment
   | EntityNavBarFragment_Community_Fragment
   | EntityNavBarFragment_Item_Fragment
-;
-
-type EntityNavListFragment_Collection_Fragment = { __typename: 'Collection', schemaVersion: { name: string, identifier: string }, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ title: string, slug: string }> } } & { ' $fragmentName'?: 'EntityNavListFragment_Collection_Fragment' };
-
-type EntityNavListFragment_Community_Fragment = { __typename: 'Community', schemaVersion: { name: string, identifier: string }, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ title: string, slug: string }> } } & { ' $fragmentName'?: 'EntityNavListFragment_Community_Fragment' };
-
-type EntityNavListFragment_Item_Fragment = { __typename: 'Item', schemaVersion: { name: string, identifier: string }, orderings: { nodes: Array<{ name: string | null, slug: string, identifier: string, count: number }> }, pages: { nodes: Array<{ title: string, slug: string }> } } & { ' $fragmentName'?: 'EntityNavListFragment_Item_Fragment' };
-
-export type EntityNavListFragmentFragment =
-  | EntityNavListFragment_Collection_Fragment
-  | EntityNavListFragment_Community_Fragment
-  | EntityNavListFragment_Item_Fragment
 ;
 
 export type collectionOrderingQueryQueryVariables = Exact<{

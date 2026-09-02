@@ -1,0 +1,38 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import SearchButtonIsland from "@/components/atomic/SearchButton/SearchButtonIsland";
+import CommunityName from "../CommunityName";
+import CommunityNavList from "../CommunityNavList/CommunityNavList.astro";
+import {
+  communityNavBarFragment,
+  communityNavBarEntityFragment,
+} from "./graphql";
+import styles from "./CommunityNavBar.module.css";
+
+interface Props {
+  data?: FragmentType<typeof communityNavBarFragment> | null;
+  entityData?: FragmentType<typeof communityNavBarEntityFragment> | null;
+  pageSlug?: string;
+}
+
+const { data, entityData, pageSlug } = Astro.props;
+
+const community = useFragment(communityNavBarFragment, data);
+const entity = useFragment(communityNavBarEntityFragment, entityData);
+---
+
+{
+  community && (
+    <div class="a-bg-custom10">
+      <nav class:list={["l-container-wide", styles.nav]}>
+        <div>
+          <CommunityName data={community} />
+        </div>
+        <div class={styles.right}>
+          <CommunityNavList data={community} pageSlug={pageSlug} />
+          <SearchButtonIsland client:load size="lg" data={entity} />
+        </div>
+      </nav>
+    </div>
+  )
+}

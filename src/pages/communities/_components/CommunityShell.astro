@@ -5,18 +5,19 @@ import { communityShellFragment } from "@/pages/communities/_components/graphql"
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
 import HeroTemplate, { getHeroSearchProps } from "@/components/templates/Hero";
 import SearchHero from "@/components/composed/search/SearchHero/SearchHero.astro";
-import CommunityNavBar from "@/components/composed/community/CommunityNavBar";
+import CommunityNavBar from "@/components/composed/community/CommunityNavBar/CommunityNavBar.astro";
+import {
+  communityNavBarFragment,
+  communityNavBarEntityFragment,
+} from "@/components/composed/community/CommunityNavBar/graphql";
 import ProcessingCheck, {
   hasMainContent,
 } from "@/components/templates/ProcessingCheck";
-import type { ComponentProps } from "react";
-
-type NavBarProps = ComponentProps<typeof CommunityNavBar>;
-
 interface Props {
   data: FragmentType<typeof communityShellFragment>;
   // Aliased narrow re-selection (communityRef) — see communityQuery.
-  communityRef?: NavBarProps["data"] & NavBarProps["entityData"];
+  communityRef?: FragmentType<typeof communityNavBarFragment> &
+    FragmentType<typeof communityNavBarEntityFragment>;
   draftModeEnabled: boolean;
   // The current route's community-page slug, for the nav's active-page state.
   pageSlug?: string;
@@ -43,7 +44,6 @@ const searchHero = hero ? getHeroSearchProps(hero, pathname) : null;
     <>
       {showNavBar && (
         <CommunityNavBar
-          client:load
           data={communityRef}
           entityData={communityRef}
           pageSlug={pageSlug}

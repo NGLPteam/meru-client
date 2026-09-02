@@ -1,0 +1,119 @@
+---
+import capitalize from "lodash/capitalize";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { Button, Link, NamedLink } from "@/components/atomic";
+import Breadcrumbs from "@/components/atomic/Breadcrumbs/Breadcrumbs.astro";
+import Dropdown from "@/components/atomic/Dropdown/Dropdown.astro";
+import DropdownItem from "@/components/atomic/Dropdown/DropdownItem.astro";
+import { getRouteByEntityType } from "@/helpers";
+import { ADMIN_URL } from "@/lib/env/clientConfig";
+import { breadcrumbsBarFragment } from "./graphql";
+import styles from "./BreadcrumbsBar.module.css";
+
+interface Props {
+  data?: FragmentType<typeof breadcrumbsBarFragment> | null;
+  showShare?: boolean;
+  className?: string;
+  installationName?: string;
+  pathname?: string;
+}
+
+const {
+  data,
+  showShare = true,
+  className,
+  installationName,
+  pathname,
+} = Astro.props;
+const { t } = Astro.locals;
+
+const breadcrumbData = useFragment(breadcrumbsBarFragment, data);
+
+const origin = Astro.url.origin;
+
+let url: string | null = null;
+if (breadcrumbData) {
+  const { slug, __typename: type, permalinks } = breadcrumbData;
+  const canonical = permalinks?.find((p) => p.canonical);
+  const route = getRouteByEntityType(type);
+
+  if (canonical) {
+    url = `${origin}/permalink/${canonical.uri}`;
+  } else if (route && slug) {
+    url = `${origin}/${route}/${slug}`;
+  }
+}
+
+const installation = installationName || "WDP";
+
+const shareLinks = breadcrumbData
+  ? [
+      {
+        icon: "email",
+        label: t("share.email"),
+        href: `mailto:?subject=${breadcrumbData.title} - ${installation}&body=View ${breadcrumbData.title} published on ${installation}.%0d%0a%0d%0a${url}`,
+      },
+      {
+        icon: "facebook",
+        label: t("share.facebook"),
+        href: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      },
+      {
+        icon: "x",
+        label: t("share.x"),
+        href: `https://x.com/share?text=&url=${url}`,
+      },
+    ]
+  : [];
+---
+
+{
+  breadcrumbData && (
+    <nav class:list={[className ?? "a-bg-custom10", styles.outer]}>
+      <div class:list={["l-container-wide", styles.inner]}>
+        <Breadcrumbs data={breadcrumbData} pathname={pathname} />
+        <div class={styles.buttons}>
+          {breadcrumbData.submissionTarget?.state === "OPEN" && (
+            <Button
+              as="a"
+              size="sm"
+              icon="linkExternal"
+              href={`${ADMIN_URL}my-submissions/new?collection=${breadcrumbData.slug}`}
+              target="_blank"
+              secondary
+            >
+              {t("submission.submit_to", {
+                target: breadcrumbData.schemaVersion?.identifier
+                  ? capitalize(breadcrumbData.schemaVersion.identifier)
+                  : t("submission.default_target"),
+              })}
+            </Button>
+          )}
+          {showShare && (
+            <Dropdown label={t("share.label")} placement="bottom-end">
+              <Fragment slot="disclosure">
+                <Button as="div" size="sm" icon="share" secondary>
+                  {t("share.label")}
+                </Button>
+              </Fragment>
+              {shareLinks.map(({ icon, label, href }) => (
+                <DropdownItem closeOnClick>
+                  <NamedLink href={href}>
+                    <Link
+                      as="span"
+                      icon={icon as "email"}
+                      iconLeft
+                      className={`${styles.shareLink} share-link`}
+                    >
+                      {label}
+                    </Link>
+                  </NamedLink>
+                </DropdownItem>
+              ))}
+            </Dropdown>
+          )}
+        </div>
+      </div>
+    </nav>
+  )
+}

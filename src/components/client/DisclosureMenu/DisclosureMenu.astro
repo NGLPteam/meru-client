@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"div">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<disclosure-menu class={className} {...rest}>
+  <slot />
+</disclosure-menu>
+
+<script>
+  import DisclosureMenu from "./DisclosureMenu";
+
+  if (!customElements.get("disclosure-menu")) {
+    customElements.define("disclosure-menu", DisclosureMenu);
+  }
+</script>
