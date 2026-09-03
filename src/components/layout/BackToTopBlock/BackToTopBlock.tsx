@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { t } from "@/lib/i18n";
 import { BackToTopButton } from "@/components/atomic";
 import styles from "./BackToTopBlock.module.css";
 
@@ -14,7 +15,9 @@ export default function BackToTopBlock({ className, children }: Props) {
         {children}
       </div>
       <div className={styles.button} data-back-to-top-wrapper hidden>
-        <BackToTopButton data-back-to-top-button />
+        <BackToTopButton data-back-to-top-button>
+          {t("common.back_to_top")}
+        </BackToTopButton>
       </div>
     </back-to-top-block>
   );

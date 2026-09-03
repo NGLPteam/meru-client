@@ -1,6 +1,6 @@
 import { type ComponentProps } from "react";
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { MaybeButtonRef } from "@castiron/common-types";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./MobileMenuToggle.module.css";
@@ -10,8 +10,6 @@ function MobileMenuToggle({
   ref,
   ...props
 }: ComponentProps<"button"> & { ref?: MaybeButtonRef }) {
-  const { t } = useTranslation();
-
   return (
     <button
       className={classNames(styles.toggle, className)}

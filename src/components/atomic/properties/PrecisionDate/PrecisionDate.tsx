@@ -1,11 +1,9 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getPrecisionDateDisplay } from "@/helpers";
 
 export default function PrecisionDate({ data, label }: Props) {
   const date = useFragment(fragment, data);
-  const { t } = useTranslation();
-
   return date && date.value ? (
     <>{`${label ? t(label) : ""} ${getPrecisionDateDisplay(
       date.precision,

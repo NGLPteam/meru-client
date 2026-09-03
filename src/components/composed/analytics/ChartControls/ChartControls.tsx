@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
 import dropdownStyles from "@/components/atomic/Dropdown/Dropdown.module.css";
 import Switch from "./Switch";
 import DateRangeDisclosure from "./DateRangeDisclosure";
@@ -29,6 +28,8 @@ type Props = {
   chartType: string;
   dateLabel: string;
   dispatchSettingsUpdate: (args: { type: string; value: string }) => void;
+  // Translated strings keyed by i18n key — see metrics.astro.
+  labels: Record<string, string>;
 };
 
 export default function ChartControls({
@@ -38,26 +39,23 @@ export default function ChartControls({
   chartType,
   dateLabel,
   dispatchSettingsUpdate,
+  labels,
 }: Props) {
-  const { t } = useTranslation();
-
   const regions = [
-    { label: "analytics.regions.world", value: "world" },
-    { label: "analytics.regions.united_states", value: "US" },
+    { label: labels["analytics.regions.world"], value: "world" },
+    { label: labels["analytics.regions.united_states"], value: "US" },
   ];
-  const dateRanges = [
-    { label: "analytics.date_ranges.all", value: "all" },
-    { label: "analytics.date_ranges.week", value: "week" },
-    { label: "analytics.date_ranges.month", value: "month" },
-    { label: "analytics.date_ranges.year", value: "year" },
-  ];
+  const dateRanges = ["all", "week", "month", "year"].map((value) => ({
+    label: labels[`analytics.date_ranges.${value}`],
+    value,
+  }));
 
   return (
     <div className={styles.wrapper}>
       <Switch
         options={[
-          { label: "analytics.views", value: "views" },
-          { label: "analytics.downloads", value: "downloads" },
+          { label: labels["analytics.views"], value: "views" },
+          { label: labels["analytics.downloads"], value: "downloads" },
         ]}
         onClick={setMode}
         active={mode}
@@ -69,13 +67,13 @@ export default function ChartControls({
           aria-expanded="false"
           className={dropdownStyles.toggle}
         >
-          <DateRangeDisclosure active={dateLabel} />
+          <DateRangeDisclosure active={dateLabel} labels={labels} />
         </button>
         <div
           id={MENU_ID}
           className={dropdownStyles.panel}
           data-placement="bottom-end"
-          aria-label={t("analytics.date_ranges.dropdown_label")}
+          aria-label={labels["analytics.date_ranges.dropdown_label"]}
           inert
         >
           <div className={classNames("a-bg-neutral00", dropdownStyles.wrapper)}>
@@ -91,9 +89,7 @@ export default function ChartControls({
                       })
                     }
                   >
-                    <span className={styles.linkText}>
-                      {t(dateRange.label)}
-                    </span>
+                    <span className={styles.linkText}>{dateRange.label}</span>
                   </button>
                 </li>
               ))}
@@ -103,8 +99,8 @@ export default function ChartControls({
       </disclosure-menu>
       <Switch
         options={[
-          { label: "analytics.map", value: "map" },
-          { label: "analytics.chart", value: "chart" },
+          { label: labels["analytics.map"], value: "map" },
+          { label: labels["analytics.chart"], value: "chart" },
         ]}
         active={chartType}
         onClick={(val) => dispatchSettingsUpdate({ type: "chart", value: val })}

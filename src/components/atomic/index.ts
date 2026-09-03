@@ -3,7 +3,6 @@ export * from "./Button/patterns";
 export { default as DotList } from "./DotList";
 export * from "./images";
 export * from "./links";
-export * from "./loading";
 export { default as PageCount } from "./PageCount";
 export * from "./properties";
 export { default as CloseModalButton } from "./CloseModalButton";

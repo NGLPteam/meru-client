@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import useWindowSize from "@/hooks/useWindowSize";
 import NamedLink from "@/components/atomic/links/NamedLink";
@@ -19,8 +19,6 @@ export default function ContributorsList({
     fragmentData && "attributions" in fragmentData
       ? fragmentData.attributions
       : undefined;
-
-  const { t } = useTranslation();
 
   const size = useWindowSize();
 

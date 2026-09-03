@@ -1,5 +1,5 @@
 import { Ref } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./SearchBar.module.css";
 
@@ -9,8 +9,6 @@ type InputProps = Pick<
 >;
 
 function SearchBar({ id, ref, ...inputProps }: Props & InputProps) {
-  const { t } = useTranslation();
-
   return (
     <div className={styles.wrapper}>
       <label className={styles.label} htmlFor={id}>

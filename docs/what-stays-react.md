@@ -55,8 +55,22 @@ React; replacing them means reimplementing pdf.js / Google Charts integration.
   `PrevNextButton`'s `label` prop.
 - `templates/lists/items/Tree/Accordions.tsx` — recursive tree passing
   `SummaryComponent={<Item/>}` into `TreeAccordion`.
-- `templates/ProcessingCheck/EmptyMessage.tsx` — `<Trans>` with component
-  interpolation (Phase 8 restructures this to keys + split markup).
+
+### The island-graph purity rule (Phase 8)
+
+No module reachable from a client island may import i18next (`@/lib/i18n` or
+otherwise) — `grep -rl i18next dist/client` must stay empty. Two consequences:
+
+- Atoms rendered both server-side and inside islands are **prop-only** (no
+  i18n import; labels arrive already translated): NoContent, ErrorBlock,
+  SkipLink, BackToTopButton, AssetPDFPage. Islands get their labels from the
+  mounting .astro (`metrics.astro` → key-indexed record for the charts;
+  `getAssetInlinePDFLabels` for the PDF viewer); interpolated labels travel as
+  `"...{number}..."` template strings the island substitutes.
+- Island-graph files import atoms by **direct path**, never through the
+  `@/components/atomic` / `@/components/layout` barrels — a barrel re-export
+  whose module imports the server `t` drags i18next into the client chunk
+  (CSS-import side effects defeat tree-shaking).
 
 ## Tier 2 — stays React by the twin policy (shared atoms)
 
@@ -75,8 +89,9 @@ both worlds. Converting any of them would require duplicating it, not moving it.
 - `atomic/properties/*` — DOI, ViewCount, DownloadCount, PrecisionDate.
 - `atomic/Markdown/*` — BaseMarkdown (react-markdown) + patterns and the
   prop-based `MarkdownContent` wrapper .astro callers use (react-markdown needs
-  a string CHILD, which .astro slots can't provide). Phase 8 assesses replacing
-  with a server `renderMarkdown()` + `set:html`.
+  a string CHILD, which .astro slots can't provide). Kept deliberately in
+  Phase 8: it renders server-side only (never in dist/client), and replacing it
+  means a raw remark pipeline + dangerouslySetInnerHTML for zero runtime gain.
 - `atomic` misc — Alert, DotList, PageCount, CloseModalButton,
   TreeAccordion, loading (LoadingBlock, LoadingSpinner).
 - `layout` shared wrappers — Container, BackToTopBlock (static markup for the
@@ -117,13 +132,11 @@ change. Convert opportunistically only when already rewriting one.
 
 Installed permanently: `react`, `react-dom`, `@astrojs/react`, `@mdx-js/mdx`,
 `react-pdf`, `pdfjs-dist`, `react-google-charts`, `react-error-boundary`,
-`react-intersection-observer`, `i18next`, `@urql/core`,
-`@urql/exchange-request-policy`.
+`react-intersection-observer`, `i18next` (server-only), `react-markdown` (+
+`rehype-raw`; server-only), `@urql/core`, `@urql/exchange-request-policy`.
 
-Removed when they hit grep-zero (Phase 7): `reakit` (+ the `ssr.noExternal`
-hack), `urql` (React bindings), `react-hook-form` (Phase 6),
-`i18next-browser-languagedetector` (Phase 1).
-
-Going in Phase 8: `react-i18next` (server-rendered React switches to direct
-`import { t }`; islands take translated label props); `react-markdown` only if
-BaseMarkdown's callers can all move to server-rendered HTML.
+Removed when they hit grep-zero: `reakit` (+ the `ssr.noExternal` hack) and
+`urql` React bindings (Phase 7), `react-hook-form` (Phase 6),
+`i18next-browser-languagedetector` (Phase 1), `react-i18next` (Phase 8 —
+server-rendered React imports `t` from `@/lib/i18n` directly; islands take
+translated label props; the four `<Trans>` markup keys were split in en.json).

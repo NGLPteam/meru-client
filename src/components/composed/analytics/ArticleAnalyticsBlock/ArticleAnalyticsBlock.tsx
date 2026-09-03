@@ -1,8 +1,5 @@
 "use client";
 
-// Island entry: initializes i18n in the browser bundle for the useTranslation
-// calls in the controls/stat blocks (until the Phase 8 label-prop cut).
-import "@/i18n";
 import { useEffect, useState, useReducer } from "react";
 import clientOnly from "@/lib/clientOnly";
 import makeUrqlClient from "@/lib/api/makeUrqlClient";
@@ -20,6 +17,9 @@ type Props = {
   // The instance theme's color name, threaded to the charts (replaces the
   // retired ThemeProvider context).
   themeColor?: string;
+  // Translated strings keyed by i18n key, built by the mounting .astro
+  // (metrics.astro) — no i18next ships in the island bundle.
+  labels: Record<string, string>;
 };
 
 const ChartBlock = clientOnly(() => import("../ChartBlock"));
@@ -31,7 +31,11 @@ let client: ReturnType<typeof makeUrqlClient> | undefined;
 const getClient = () =>
   (client ??= makeUrqlClient(getAPIURL(), "network-only"));
 
-export default function ArticleAnalyticsBlock({ data, themeColor }: Props) {
+export default function ArticleAnalyticsBlock({
+  data,
+  themeColor,
+  labels,
+}: Props) {
   const base = useFragment(fragment, data);
   const id = base?.id;
 
@@ -103,6 +107,7 @@ export default function ArticleAnalyticsBlock({ data, themeColor }: Props) {
           chartType={settings.chartType}
           dispatchSettingsUpdate={dispatchSettingsUpdate}
           dateLabel={settings.dateLabel}
+          labels={labels}
         />
         {isPending ? (
           <div className={styles.loading}>
@@ -123,6 +128,7 @@ export default function ArticleAnalyticsBlock({ data, themeColor }: Props) {
           region={region}
           mode={mode}
           dateLabel={settings.dateLabel}
+          labels={labels}
         />
       </div>
     </div>

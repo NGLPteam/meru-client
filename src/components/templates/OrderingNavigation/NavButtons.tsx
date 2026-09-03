@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import classNames from "classnames";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { PrevNextButton } from "@/components/atomic/Button/patterns";
@@ -13,8 +13,6 @@ export default function NavButtons({
 }: {
   data?: FragmentType<typeof fragment> | null;
 }) {
-  const { t } = useTranslation();
-
   const template = useFragment(fragment, data);
 
   const { orderingPair, slots } = template ?? {};

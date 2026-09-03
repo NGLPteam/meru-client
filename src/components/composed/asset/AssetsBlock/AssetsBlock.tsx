@@ -1,13 +1,12 @@
 "use client";
 
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import AssetBlockItem from "./AssetBlockItem";
 import styles from "./AssetsBlock.module.css";
 
 const AssetsBlock = ({ data, slug }: Props) => {
-  const { t } = useTranslation();
   const files = useFragment(fragment, data);
 
   return (

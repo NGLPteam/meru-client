@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import Button from "..";
 import type { MaybeButtonRef } from "@castiron/common-types";
 
@@ -9,8 +9,6 @@ type Props = ComponentProps<typeof Button> & {
 };
 
 function BackButton({ children, as = "a", ref, ...props }: Props) {
-  const { t } = useTranslation();
-
   return (
     <Button
       ref={ref}

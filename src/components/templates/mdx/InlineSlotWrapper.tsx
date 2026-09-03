@@ -3,8 +3,7 @@
 // Inline counterpart of BlockSlotWrapper (see its header comment): synchronous
 // compile, no remark-gfm (parity with the previous serialize() call), and a
 // p→span override since inline slots render inside heading/span elements.
-import "@/i18n";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { evaluateSync } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -26,8 +25,6 @@ export default function InlineSlotWrapper({
 }: {
   content?: string | null;
 }) {
-  const { t } = useTranslation();
-
   const { allowedActions } = useViewerContext();
 
   const isAdmin = allowedActions?.includes("admin.access");

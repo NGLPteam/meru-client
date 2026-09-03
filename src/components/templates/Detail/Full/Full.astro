@@ -8,6 +8,7 @@ import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
 import { getPDFViewerProps } from "@/components/templates/mdx/getPDFViewerProps";
 import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
 import AssetInlinePDFIsland from "@/components/composed/asset/AssetInlinePDF/AssetInlinePDFIsland";
+import { getAssetInlinePDFLabels } from "@/components/composed/asset/AssetInlinePDF/getLabels";
 import type { HeroBackground } from "@/types/graphql-schema";
 import TOC from "./TOC/TOC.astro";
 import { fullDetailFragment } from "./graphql";
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const { data, bgColor } = Astro.props;
+const { t } = Astro.locals;
 
 const template = useFragment(fullDetailFragment, data);
 
@@ -38,6 +40,9 @@ const pdfProps =
   !hideTemplate && isPDF && hasBody
     ? await getPDFViewerProps(body!.content!)
     : null;
+
+// Translated strings for the PDF island (it ships without i18next).
+const pdfLabels = pdfProps && getAssetInlinePDFLabels(t);
 ---
 
 {
@@ -45,11 +50,12 @@ const pdfProps =
     <Container width="wide" bgColor={bgColor}>
       {isPDF ? (
         <div class={styles.outer}>
-          {pdfProps ? (
+          {pdfProps && pdfLabels ? (
             <AssetInlinePDFIsland
               client:only="react"
               url={pdfProps.url}
               size={pdfProps.size}
+              labels={pdfLabels}
             />
           ) : (
             <EmptyMessage entityType={entity?.__typename.toLowerCase()} />

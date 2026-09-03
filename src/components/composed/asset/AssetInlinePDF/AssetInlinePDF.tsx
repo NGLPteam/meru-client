@@ -3,25 +3,45 @@
 import "@/lib/pdfsupport";
 import { useState, useRef, useCallback } from "react";
 import { Document } from "react-pdf";
-import { useTranslation } from "react-i18next";
-import { Trans } from "react-i18next";
 import refresh from "@/lib/routing/refresh";
-import { ErrorBlock } from "@/components/layout";
-import { NoContent } from "@/components/layout";
-import { BackToTopButton, LoadingBlock } from "@/components/atomic";
+import ErrorBlock from "@/components/layout/messages/ErrorBlock";
+import NoContent from "@/components/layout/messages/NoContent";
+import BackToTopButton from "@/components/atomic/Button/patterns/BackToTopButton";
+import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import AssetInlinePDFNav from "./AssetInlinePDFNav";
 import AssetInlinePDFPage from "./AssetInlinePDFPage";
 import styles from "./AssetInlinePDF.module.css";
 
+// Translated strings built by the mounting .astro (Detail/Full.astro) — no
+// i18next ships in the island bundle. *Template strings carry a literal
+// placeholder the island substitutes at render time.
+export type AssetInlinePDFLabels = {
+  noContent: string;
+  cannotBeDisplayedPrefix: string;
+  cannotBeDisplayedLink: string;
+  cannotBeDisplayedSuffix: string;
+  viewFullPdfPrefix: string;
+  viewFullPdfLink: string;
+  viewFullPdfSuffix: string;
+  /** contains "{code}" */
+  serverErrorTemplate: string;
+  renderError: string;
+  errorHeading: string;
+  serverErrorHeading: string;
+  backToTop: string;
+  skipToPdfContent: string;
+  /** contains "{number}" */
+  pageNumberTemplate: string;
+};
+
 type Props = {
   url?: string | null;
   size?: string | null;
+  labels: AssetInlinePDFLabels;
 };
 
-export default function AssetInlinePDF({ url, size }: Props) {
+export default function AssetInlinePDF({ url, size, labels }: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const { t } = useTranslation();
 
   const [state, setState] = useState<{
     numPages: number;
@@ -32,18 +52,22 @@ export default function AssetInlinePDF({ url, size }: Props) {
   });
 
   const renderError = useCallback(() => {
-    const message =
-      state.error && "status" in state.error
-        ? t("asset.pdf_server_error", { code: state.error?.status })
-        : t("asset.pdf_render_error");
-    const heading =
-      state.error && "status" in state.error ? t("messages.error") : undefined;
+    const isStatusError = !!state.error && "status" in state.error;
+    const message = isStatusError
+      ? labels.serverErrorTemplate.replace(
+          "{code}",
+          String((state.error as Error & { status?: unknown })?.status),
+        )
+      : labels.renderError;
+    const heading = isStatusError
+      ? labels.errorHeading
+      : labels.serverErrorHeading;
 
     // Log error
     console.error("Error rendering PDF", state.error);
 
     return <ErrorBlock heading={heading} message={message} reset={refresh} />;
-  }, [state, t]);
+  }, [state, labels]);
 
   const handleBackToTop = () => {
     if (!wrapperRef || !wrapperRef.current || !document) return;
@@ -71,26 +95,23 @@ export default function AssetInlinePDF({ url, size }: Props) {
 
   const fileMb = size ? parseInt(size, 10) / 1024 ** 2 : 0;
 
-  if (!url) return <NoContent message={"common.no_content"} />;
+  if (!url) return <NoContent message={labels.noContent} />;
 
   return fileMb > 100 ? (
     <NoContent
       message={
-        <Trans
-          i18nKey="asset.pdf_cannot_be_displayed"
-          components={{
-            downloadLink: (
-              <a
-                className="no-hover-shadow hover:text-neutral-90"
-                style={{ marginInline: "5px" }}
-                href={url || ""}
-                download
-              >
-                Download it instead
-              </a>
-            ),
-          }}
-        />
+        <>
+          {labels.cannotBeDisplayedPrefix}
+          <a
+            className="no-hover-shadow hover:text-neutral-90"
+            style={{ marginInline: "5px" }}
+            href={url || ""}
+            download
+          >
+            {labels.cannotBeDisplayedLink}
+          </a>
+          {labels.cannotBeDisplayedSuffix}
+        </>
       }
     />
   ) : (
@@ -107,39 +128,45 @@ export default function AssetInlinePDF({ url, size }: Props) {
             numPages={numPages > 25 ? 25 : numPages}
             pageId="page"
             contentId="pdfContent"
+            skipLinkLabel={labels.skipToPdfContent}
+            pageLabel={labels.pageNumberTemplate}
           />
           <div className={styles.pages} id="pdfContent" tabIndex={-1}>
             {Array.from(new Array(numPages > 25 ? 25 : numPages), (_el, i) => {
               return (
-                <AssetInlinePDFPage key={i} pageId="page" pageNumber={i + 1} />
+                <AssetInlinePDFPage
+                  key={i}
+                  pageId="page"
+                  pageNumber={i + 1}
+                  pageLabel={labels.pageNumberTemplate}
+                />
               );
             })}
             {numPages > 25 && (
               <NoContent
                 message={
-                  <Trans
-                    i18nKey="asset.view_full_pdf"
-                    components={{
-                      downloadLink: (
-                        <a
-                          key="no-content"
-                          className="no-hover-shadow hover:text-neutral-90"
-                          style={{
-                            marginInlineStart: "5px",
-                          }}
-                          href={url || ""}
-                          download
-                        >
-                          Download PDF
-                        </a>
-                      ),
-                    }}
-                  />
+                  <>
+                    {labels.viewFullPdfPrefix}
+                    <a
+                      key="no-content"
+                      className="no-hover-shadow hover:text-neutral-90"
+                      style={{
+                        marginInlineStart: "5px",
+                      }}
+                      href={url || ""}
+                      download
+                    >
+                      {labels.viewFullPdfLink}
+                    </a>
+                    {labels.viewFullPdfSuffix}
+                  </>
                 }
               />
             )}
             <div className={styles.backToTop}>
-              <BackToTopButton onClick={handleBackToTop} />
+              <BackToTopButton onClick={handleBackToTop}>
+                {labels.backToTop}
+              </BackToTopButton>
             </div>
           </div>
         </div>

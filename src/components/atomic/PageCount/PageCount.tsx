@@ -1,4 +1,4 @@
-import { Trans } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 export default function PageCount({ data, className, name }: Props) {
@@ -16,16 +16,9 @@ export default function PageCount({ data, className, name }: Props) {
 
   return (
     <div className={className}>
-      <Trans
-        i18nKey="list.showing_count_out_of_total"
-        values={{
-          start,
-          end,
-          total: totalCount,
-          name,
-        }}
-        components={[<span key="text" className="t-copy-lighter"></span>]}
-      />
+      <span className="t-copy-lighter">{t("list.showing")}</span> {start} -{" "}
+      {end} <span className="t-copy-lighter">{t("list.out_of")}</span>{" "}
+      {new Intl.NumberFormat("en-US").format(totalCount)} {name}
     </div>
   );
 }

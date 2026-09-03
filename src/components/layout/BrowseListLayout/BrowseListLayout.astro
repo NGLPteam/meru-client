@@ -51,7 +51,7 @@ const header =
             <slot />
           </ul>
         ) : (
-          <NoContent />
+          <NoContent message={t("common.no_content")} />
         )}
         <div class={styles.footer}>
           <Pagination data={pageInfo} pathname={pathname} search={search} />

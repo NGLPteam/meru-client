@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import Button from "@/components/atomic/Button";
 import styles from "./components.module.css";
 import type { PropsWithChildren } from "react";
@@ -10,8 +10,6 @@ type Props = PropsWithChildren & {
 // Static markup only; the <copy-link> custom element (src/components/client/CopyLink.astro)
 // copies the rendered value's text to the clipboard on click.
 export default function CopyLink({ children, label }: Props) {
-  const { t } = useTranslation();
-
   return children ? (
     <copy-link className={styles.copyLink}>
       <p data-copy-source>{children}</p>

@@ -1,19 +1,19 @@
-import { useTranslation } from "react-i18next";
-import { Alert } from "@/components/atomic";
+import Alert from "@/components/atomic/Alert";
 import styles from "./SkipLink.module.css";
 
+// Prop-only (no i18n import): renders inside client islands
+// (AssetInlinePDFNav), so the label must arrive already translated.
 interface Props {
   toId: string;
-  label?: string;
+  label: string;
 }
 
 export default function SkipLink({ toId, label }: Props) {
-  const { t } = useTranslation();
   const href = `#${toId}`;
 
   return (
     <a className={styles.link} href={href}>
-      <Alert message={label ?? t("nav.skip_to_content")} color="blue" badge />
+      <Alert message={label} color="blue" badge />
     </a>
   );
 }

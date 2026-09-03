@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import Link from "..";
 
 type BaseProps = Omit<React.ComponentProps<typeof Link>, "children">;
@@ -10,7 +10,6 @@ export default function ExternalLink({
   children,
   ...props
 }: BaseProps & PropsWithChildren) {
-  const { t } = useTranslation();
   return children ? (
     <Link {...props} target="_blank" rel="noreferrer" icon="linkExternal">
       {children}

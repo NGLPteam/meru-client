@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import Button from "@/components/atomic/Button";
 import NamedLink from "@/components/atomic/links/NamedLink";
 import styles from "./SeeAll.module.css";
@@ -14,8 +14,6 @@ export type SeeAllProps = {
 };
 
 export default function SeeAll(props: SeeAllProps) {
-  const { t } = useTranslation();
-
   return (
     <div
       className={classNames("see-all-button", props.className, styles.seeAll, {

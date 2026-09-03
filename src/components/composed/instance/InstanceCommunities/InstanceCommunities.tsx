@@ -1,15 +1,13 @@
 "use client";
 
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import InstanceCommunitySummary from "../InstanceCommunitySummary/InstanceCommunitySummary";
 import styles from "./InstanceCommunities.module.css";
 
 export default function InstanceCommunities({ data }: Props) {
   const communities = useFragment(fragment, data);
-
-  const { t } = useTranslation();
 
   return communities.edges?.length > 0 ? (
     <section className={classNames("a-bg-neutral90", styles.inner)}>

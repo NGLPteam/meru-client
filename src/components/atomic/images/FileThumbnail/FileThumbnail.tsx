@@ -1,12 +1,10 @@
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import FileIconFactory from "@/components/factories/FileIconFactory";
 import { SquareThumbnailBase } from "../SquareThumbnail";
 import styles from "./FileThumbnail.module.css";
 
 export default function FileThumbnail({ alt, url, kind, size }: BaseProps) {
-  const { t } = useTranslation();
-
   return (
     <figure
       className={classNames(styles.figure, {

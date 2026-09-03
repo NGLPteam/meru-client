@@ -9,6 +9,8 @@ type Props = {
   region: string;
   mode: string;
   dateLabel: string;
+  // Translated strings keyed by i18n key — see metrics.astro.
+  labels: Record<string, string>;
 };
 
 export default function StatBlocks({
@@ -16,6 +18,7 @@ export default function StatBlocks({
   region: map,
   mode,
   dateLabel,
+  labels,
 }: Props) {
   const total =
     mode === "views"
@@ -69,22 +72,30 @@ export default function StatBlocks({
         <StatBlock
           stat={total}
           label={
-            mode === "views" ? "analytics.views_all" : "analytics.downloads_all"
+            labels[
+              mode === "views"
+                ? "analytics.views_all"
+                : "analytics.downloads_all"
+            ]
           }
         />
       )}
       <StatBlock
         stat={filteredTotal}
         label={
-          mode === "views"
-            ? `analytics.views_${dateLabel}`
-            : `analytics.downloads_${dateLabel}`
+          labels[
+            mode === "views"
+              ? `analytics.views_${dateLabel}`
+              : `analytics.downloads_${dateLabel}`
+          ]
         }
       />
       <StatBlock
         headingLevel={3}
         stat={regionName ?? "--"}
-        label={map === "US" ? "analytics.top_state" : "analytics.top_country"}
+        label={
+          labels[map === "US" ? "analytics.top_state" : "analytics.top_country"]
+        }
       />
     </div>
   );

@@ -5,7 +5,6 @@
 // a soft navigation, and the page re-renders server-side (SSR-on-navigation).
 // The mobile drawer opens via the <search-drawer> custom element; closing is
 // native <dialog> behavior.
-import "@/i18n";
 import SearchDrawer from "@/components/client/SearchDrawer.astro";
 import { Button, CloseModalButton } from "@/components/atomic";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
@@ -28,6 +27,7 @@ interface Props {
 }
 
 const { scope, slug, searchFilters, pathname, search } = Astro.props;
+const { t } = Astro.locals;
 
 const sp = new URLSearchParams(search);
 const q = sp.get("q") ?? undefined;
@@ -75,7 +75,7 @@ const preserved = [...sp].filter(([name]) => name !== "q" && name !== "page");
       <div class={styles.results}>
         {
           noSearchQuery ? (
-            <NoContent message="search.start_search" />
+            <NoContent message={t("search.start_search")} />
           ) : (
             <SearchResults
               server:defer

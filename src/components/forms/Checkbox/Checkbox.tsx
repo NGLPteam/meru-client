@@ -1,12 +1,10 @@
 import { Ref } from "react";
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import IconFactory from "@/components/factories/IconFactory";
 import styles from "./Checkbox.module.css";
 
 function Checkbox({ label, defaultChecked, ref, ...props }: Props) {
-  const { t } = useTranslation();
-
   return (
     <label
       className={styles.label}

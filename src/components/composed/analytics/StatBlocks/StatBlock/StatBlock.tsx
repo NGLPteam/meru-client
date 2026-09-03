@@ -1,19 +1,17 @@
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
 import styles from "./StatBlock.module.css";
 
 type Props = {
   stat: string | number;
+  /** Already-translated label */
   label: string;
   headingLevel?: 1 | 3;
 };
 
 export default function StatBlock({ stat, label, headingLevel = 1 }: Props) {
-  const { t } = useTranslation();
-
   return (
     <div className={styles.outer}>
-      <span className={styles.label}>{t(label)}</span>
+      <span className={styles.label}>{label}</span>
       <span
         className={classNames(styles.stat, {
           [styles["stat--lg"]]: headingLevel === 1,

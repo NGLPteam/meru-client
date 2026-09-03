@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { data, header, pathname, search } = Astro.props;
+const { t } = Astro.locals;
 
 const listData = useFragment(browseTreeLayoutFragment, data);
 ---
@@ -33,7 +34,7 @@ const listData = useFragment(browseTreeLayoutFragment, data);
           {listData.nodes.length > 0 ? (
             <BrowseTreeList nodes={listData.nodes} />
           ) : (
-            <NoContent />
+            <NoContent message={t("common.no_content")} />
           )}
         </div>
         <footer class={styles.footer}>

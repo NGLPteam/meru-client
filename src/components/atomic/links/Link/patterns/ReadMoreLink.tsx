@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import classNames from "classnames";
 import { MaybeLinkRef } from "@castiron/common-types";
 import Link from "../Link";
@@ -12,8 +12,6 @@ function ReadMoreLink({
   className?: string;
   ref?: MaybeLinkRef;
 }) {
-  const { t } = useTranslation();
-
   return (
     <Link
       ref={ref}

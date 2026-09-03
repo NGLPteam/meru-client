@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { DotList, PrecisionDate, SquareThumbnail } from "@/components/atomic";
 import { getRouteByEntityType } from "@/helpers";
@@ -7,8 +7,6 @@ import Summary from "@/components/layout/Summary";
 
 export default function ContributionSummary({ data }: Props) {
   const contribution = useFragment(fragment, data);
-
-  const { t } = useTranslation();
 
   const entity = useFragment(entityFragment, contribution?.entity);
 

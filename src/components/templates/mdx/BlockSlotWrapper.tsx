@@ -4,8 +4,7 @@
 // server rendering — both static trees and island SSR — instead of appearing
 // only after hydration. The same string compiles to the same tree on server and
 // client, so hydration is mismatch-free.
-import "@/i18n";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { evaluateSync } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -26,8 +25,6 @@ export default function BlockSlotWrapper({
   content?: string | null;
   assetAsButton?: boolean;
 }) {
-  const { t } = useTranslation();
-
   const { allowedActions } = useViewerContext();
 
   const isAdmin = allowedActions?.includes("admin.access");

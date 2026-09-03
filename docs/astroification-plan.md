@@ -358,3 +358,25 @@ Recorded after each phase; the plan text above is left as approved.
   HTMLElement, which doesn't exist during island SSR). `reakit` and `urql`
   (React bindings) hit grep-zero during Phase 7 and were removed then (knip
   flags unused deps), ahead of the Phase 8 sweep; `@urql/core` stays.
+- **Phase 8**: `reakit`/`urql` were already gone (Phase 7). The i18n cut went as
+  planned with one structural addition: atoms rendered BOTH server-side and
+  inside islands (NoContent, ErrorBlock, SkipLink, BackToTopButton,
+  AssetPDFPage) became prop-only — no i18n import at all — and island-graph
+  files import atoms by direct path, never through the `@/components/atomic` /
+  `@/components/layout` barrels (a barrel re-export whose module imports the
+  server `t` drags i18next into the client chunk via CSS-import side effects).
+  Verified: `grep -rl i18next dist/client` is empty. Interpolated island labels
+  travel as template strings (`"Page {number}"`, built with
+  `t(key, { number: "{number}" })`) that the island substitutes at render time.
+  The four `<Trans>` markup keys were split in en.json (messages.empty*,
+  asset.view_full_pdf*, asset.pdf_cannot_be_displayed*,
+  search.count_results* → results_label*, list.showing_count_out_of_total →
+  showing/out_of); pluralization stays on i18next (`_other` suffixes).
+  **Kept, deliberately**: `react-markdown`/`BaseMarkdown` — its remaining
+  callers are the SearchResults/EntitySummary React tree and the .astro
+  `MarkdownContent` mounts, it never ships to the client, and replacing it
+  means a raw remark pipeline + dangerouslySetInnerHTML for zero runtime gain.
+  **Dropped, deliberately**: strict i18next `CustomTypeOptions` key typing —
+  dynamic keys are load-bearing throughout (`t(label)` in NavigationTabs,
+  ``t(`glossary.${entity}`)``, the islands' key-indexed label records), so
+  strict keys would mean casts at most call sites.

@@ -26,6 +26,7 @@ interface Props {
 }
 
 const { data, searchData, community, pageSlug } = Astro.props;
+const { t } = Astro.locals;
 
 const appData = useFragment(AppHeaderFragment, data);
 const activeCommunity = useFragment(ActiveCommunityFragment, community);
@@ -39,7 +40,7 @@ const showBrand = !isCommunityRoot || totalCommunities > 1;
 const showNav = !isCommunityRoot && !hideSearch;
 ---
 
-<SkipLink toId="main" />
+<SkipLink toId="main" label={t("nav.skip_to_content")} />
 <header class={styles.header}>
   <div class:list={["l-container-wide", styles.inner]}>
     <div class={styles.left}>

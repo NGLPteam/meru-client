@@ -1,12 +1,9 @@
 "use client";
 
-// client:only leaf island (react-pdf). The i18n import initializes the browser
-// bundle for useTranslation in descendants until the Phase 8 label-prop cut.
-import "@/i18n";
 import "@/lib/pdfsupport";
 import { useState } from "react";
 import { Document, Page } from "react-pdf";
-import { LoadingBlock } from "@/components/atomic";
+import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import AssetPDFPage from "../AssetPDFPage";
 
 export default function AssetPDFPreview({ url }: Props) {

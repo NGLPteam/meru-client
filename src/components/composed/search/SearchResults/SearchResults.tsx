@@ -1,7 +1,7 @@
 // Statically rendered results list. The query term arrives as a prop from the
 // hosting .astro page, and Pagination is mounted there as a sibling island —
 // see SearchLayout.astro.
-import { Trans, useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { NoContent } from "@/components/layout";
 import EntitySummary from "@/components/composed/entity/EntitySummary";
@@ -10,26 +10,23 @@ import styles from "./SearchResults.module.css";
 export default function SearchResults({ data, q }: Props) {
   const results = useFragment(fragment, data);
 
-  const { t } = useTranslation();
-
-  const resultsI18nKey = q
-    ? "search.count_results_for_name"
-    : "search.count_results";
+  const count = results?.pageInfo?.totalCount ?? 0;
 
   return (
     <>
       <header className={styles.header}>
-        <Trans
-          i18nKey={resultsI18nKey}
-          values={{
-            count: results?.pageInfo?.totalCount,
-            name: q,
-          }}
-          components={[
-            <span key="text" className="t-copy-light"></span>,
-            <em key="name"></em>,
-          ]}
-        />
+        {count}{" "}
+        <span className="t-copy-light">
+          {t(q ? "search.results_for_label" : "search.results_label", {
+            count,
+          })}
+        </span>
+        {q && (
+          <>
+            {" "}
+            <em>&quot;{q}&quot;</em>
+          </>
+        )}
       </header>
       {results && results.nodes.length > 0 ? (
         <ul>

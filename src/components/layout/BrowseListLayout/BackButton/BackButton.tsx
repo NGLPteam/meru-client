@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { getRouteByEntityType } from "@/helpers";
 import { NamedLink, Button } from "@/components/atomic";
@@ -9,8 +9,6 @@ export default function BackButton({
 }: {
   data: FragmentType<typeof fragment>;
 }) {
-  const { t } = useTranslation();
-
   const entity = useFragment(fragment, data);
 
   const schemaName = entity?.schemaVersion?.name;

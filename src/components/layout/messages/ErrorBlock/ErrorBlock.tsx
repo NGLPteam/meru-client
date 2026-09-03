@@ -1,23 +1,19 @@
-"use client";
-
-import { useTranslation } from "react-i18next";
-import { Button } from "@/components/atomic";
+import Button from "@/components/atomic/Button";
 import styles from "./ErrorBlock.module.css";
 
+// Prop-only (no i18n import): renders inside client islands (AssetInlinePDF),
+// so heading/message must arrive already translated.
 interface Props {
-  /** Optional heading. Default is "A server error occured." */
-  heading?: string;
+  heading: string;
   /** The error message */
   message?: string;
   reset?: () => void;
 }
 
 export default function ErrorMessage({ heading, message, reset }: Props) {
-  const { t } = useTranslation();
-
   return (
     <div className={styles.wrapper}>
-      <p className="t-h3">{heading ?? t("messages.server_error")}</p>
+      <p className="t-h3">{heading}</p>
       <p className="a-color-light">{message}</p>
       {reset && (
         <Button onClick={reset} size="sm">

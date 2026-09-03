@@ -1,9 +1,7 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 
 export default function DOI({ data }: Props) {
-  const { t } = useTranslation();
-
   const { doiData } = useFragment(fragment, data) ?? {};
 
   const { doi, url } = doiData ?? {};

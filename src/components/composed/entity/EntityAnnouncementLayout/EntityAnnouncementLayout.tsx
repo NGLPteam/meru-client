@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import { formatDate } from "@/helpers/dates";
 import { Markdown } from "@/components/atomic";
@@ -9,8 +9,6 @@ import styles from "./EntityAnnouncementLayout.module.css";
 
 export default function EntityAnnouncementLayout({ data }: Props) {
   const announcement = useFragment(fragment, data);
-  const { t } = useTranslation();
-
   return announcement ? (
     <div
       className={classNames(

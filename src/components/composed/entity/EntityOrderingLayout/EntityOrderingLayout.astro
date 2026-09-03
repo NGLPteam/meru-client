@@ -18,6 +18,7 @@ interface Props {
 }
 
 const { data, showContext, pathname, search } = Astro.props;
+const { t } = Astro.locals;
 
 const ordering = useFragment(entityOrderingLayoutFragment, data);
 
@@ -27,7 +28,7 @@ const mode = ordering?.render?.mode;
 {
   !ordering ? (
     <div class="l-container-wide l-container-wide--p-lg">
-      <NoContent />
+      <NoContent message={t("common.no_content")} />
     </div>
   ) : mode === "TREE" ? (
     <BrowseTreeLayout

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Page } from "react-pdf";
 import SkipLink from "@/components/global/SkipLink";
 import AssetPDFPage from "../../AssetPDFPage";
@@ -9,9 +8,9 @@ export default function AssetInlinePDFNav({
   numPages,
   pageId,
   contentId,
+  skipLinkLabel,
+  pageLabel,
 }: Props) {
-  const { t } = useTranslation();
-
   const [pagesRendered, setPagesRendered] = useState<number>(0);
 
   const onRenderSuccess = () => setPagesRendered(pagesRendered + 1);
@@ -24,7 +23,7 @@ export default function AssetInlinePDFNav({
 
   return (
     <div className={styles.thumbnails}>
-      <SkipLink toId={contentId} label={t("nav.skip_to_pdf_content")} />
+      <SkipLink toId={contentId} label={skipLinkLabel} />
       <ol className={styles.inner}>
         {Array.from(new Array(pagesRenderedPlusOne), (_el, i) => {
           const isCurrentlyRendering = pagesRenderedPlusOne === i + 1;
@@ -35,7 +34,7 @@ export default function AssetInlinePDFNav({
           return (
             <li key={i}>
               <a className={styles.link} href={`#${pageId}${i + 1}`}>
-                <AssetPDFPage pageNumber={i + 1}>
+                <AssetPDFPage pageNumber={i + 1} pageLabel={pageLabel}>
                   <Page
                     key={`page_${i + 1}`}
                     onRenderSuccess={
@@ -62,4 +61,8 @@ interface Props {
   numPages: number;
   pageId: string;
   contentId: string;
+  /** Already-translated skip-link label */
+  skipLinkLabel: string;
+  /** Translated page-number template containing "{number}" */
+  pageLabel: string;
 }

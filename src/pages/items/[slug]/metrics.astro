@@ -37,6 +37,36 @@ const installationName =
 const { data: themeData } = await query(layoutThemeQuery, {});
 const theme = themeData?.globalConfiguration?.theme ?? undefined;
 const draftModeEnabled = isDraftModeEnabled(Astro);
+
+// Translated strings for the charts island, keyed by i18n key — the island
+// ships without i18next and looks its labels up in this record.
+const { t } = Astro.locals;
+const ANALYTICS_LABEL_KEYS = [
+  "analytics.views",
+  "analytics.downloads",
+  "analytics.map",
+  "analytics.chart",
+  "analytics.regions.world",
+  "analytics.regions.united_states",
+  "analytics.date_ranges.dropdown_label",
+  "analytics.date_ranges.all",
+  "analytics.date_ranges.week",
+  "analytics.date_ranges.month",
+  "analytics.date_ranges.year",
+  "analytics.views_all",
+  "analytics.views_week",
+  "analytics.views_month",
+  "analytics.views_year",
+  "analytics.downloads_all",
+  "analytics.downloads_week",
+  "analytics.downloads_month",
+  "analytics.downloads_year",
+  "analytics.top_state",
+  "analytics.top_country",
+];
+const analyticsLabels = Object.fromEntries(
+  ANALYTICS_LABEL_KEYS.map((key) => [key, t(key)]),
+);
 const meta = buildItemMeta(item, slug);
 const scholar = useFragment(googleScholarFragment, item);
 
@@ -55,6 +85,7 @@ cacheEntity(Astro, "item", slug);
       client:load
       data={data?.analytics}
       themeColor={theme?.color}
+      labels={analyticsLabels}
     />
   </ItemShell>
 </BaseLayout>

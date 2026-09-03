@@ -1,25 +1,23 @@
-"use client";
-
-import { Trans } from "react-i18next";
+import { t } from "@/lib/i18n";
 import NoContent from "@/components/layout/messages/NoContent";
 
 export default function EmptyMessage({ entityType }: { entityType?: string }) {
-  const i18nKey =
-    entityType === "item" ? "messages.empty_item" : "messages.empty";
-  const noContentMessage = (
-    <div className="t-rte t-h4">
-      <Trans
-        i18nKey={i18nKey}
-        values={{ entity: entityType ?? "entity" }}
-        components={[
-          // eslint-disable-next-line jsx-a11y/heading-has-content
-          <h1 key="heading" className="t-h3 font-medium"></h1>,
-          <p key="p1" className="max-w-[850px]"></p>,
-          <p key="p2"></p>,
-        ]}
-      />
-    </div>
-  );
+  const headingKey =
+    entityType === "item"
+      ? "messages.empty_item_heading"
+      : "messages.empty_heading";
 
-  return <NoContent message={noContentMessage} />;
+  return (
+    <NoContent
+      message={
+        <div className="t-rte t-h4">
+          <h1 className="t-h3 font-medium">
+            {t(headingKey, { entity: entityType ?? "entity" })}
+          </h1>
+          <p className="max-w-[850px]">{t("messages.empty_body")}</p>
+          <p>{t("messages.empty_support")}</p>
+        </div>
+      }
+    />
+  );
 }

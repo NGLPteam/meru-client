@@ -1,11 +1,9 @@
-import { useTranslation } from "react-i18next";
+import { t } from "@/lib/i18n";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import IconFactory from "@/components/factories/IconFactory";
 
 export default function ViewCount({ data }: Props) {
   const summary = useFragment(fragment, data);
-
-  const { t } = useTranslation();
 
   return summary?.total ? (
     <li className="l-flex l-flex--gap">
