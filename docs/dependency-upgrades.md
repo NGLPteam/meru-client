@@ -61,6 +61,16 @@ yarn up astro @astrojs/node @astrojs/react @astrojs/check react-pdf \
 
 ## Hold — deliberate, with reasons
 
+**`astro` is re-pinned to `~7.2.10`** (2026-09-03, after Batch 1 briefly took
+7.3.1): 7.3.0/7.3.1 shipped the same day we upgraded and their reworked dev
+server (persistent daemon + cache pipeline in dev) breaks `/_server-islands/*`
+requests on a fresh process — `TypeError: serverIslandMap?.get is not a
+function` from the placeholder manifest module (hit on the post-login page;
+hcc-client is pinned to 7.2.x for the same reason). Prod builds were
+unaffected. Revisit at 7.3.2+ once a server-islands/dev-cache fix lands; the
+`~` range takes 7.2.x patches but not 7.3.
+
+
 | Package                     | Held at      | Why                                                                                                                                                                                                                                               |
 | --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tailwindcss` 3 → 4         | 3.4.x        | A real migration: CSS-first config, `@tailwindcss/postcss` split, `theme()` calls in module CSS (e.g. `zIndex.dropdown`), and v4's own native cascade layers would interact with our `meru-base`/`meru-components` layer scheme. Its own project. |
