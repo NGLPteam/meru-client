@@ -58,7 +58,9 @@ export default function InlineSlotWrapper({
           inline
           message={
             isAdmin
-              ? t("messages.admin_content", { error: error.message })
+              ? t("messages.admin_content", {
+                  error: error instanceof Error ? error.message : String(error),
+                })
               : t("messages.content")
           }
         />

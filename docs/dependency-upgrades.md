@@ -4,10 +4,10 @@ Compiled 2026-09-03 against the npm registry. Every batch gates on
 `yarn check` + `yarn build` + the headless suite (PDF item, metrics
 interactions, search, community/collection) with zero console errors.
 
-**Status: the env rename and Batch 1 are APPLIED and verified (2026-09-03).**
+**Status: the env rename, Batch 1, and Batch 2 are APPLIED and verified (2026-09-03).**
 The rename's local side is done (`git grep -i NEXT_` is clean; sign-in 302s to
 Keycloak from the new names); the deploy config still needs the matching
-rename before this ships. Batch 2 and the holds below remain open.
+rename before this ships. Only the holds below remain open.
 
 ## Batch 1 — tooling + minors/patches (one PR, low risk) — APPLIED
 
@@ -31,7 +31,7 @@ yarn up astro @astrojs/node @astrojs/react @astrojs/check react-pdf \
   @typescript-eslint/parser @typescript-eslint/eslint-plugin globals postcss
 ```
 
-## Batch 2 — majors worth taking now (verify each; can split into 2–3 PRs)
+## Batch 2 — majors worth taking now — APPLIED
 
 - **i18next 24 → 26** — server-only since the Phase 8 cut; we use only
   `createInstance`/`init`/`t`/`getFixedT`/`remove|addResourceBundle` on a

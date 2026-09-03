@@ -2095,7 +2095,7 @@ interface ChildEntity implements Accessible & CommonPermissions & Entity & Entit
   """Configurable metadata for the hero_image attachment"""
   heroImageMetadata: ImageMetadata
   """
-  Whether the entity's visibility is set to `HIDDEN`
+  Whether the entity's visibility is set to `HIDDEN`.
   
   """
   hidden: Boolean!
@@ -2110,7 +2110,10 @@ interface ChildEntity implements Accessible & CommonPermissions & Entity & Entit
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp the entity was hidden at"""
+  """
+  If present, this is the timestamp the entity was hidden at.
+  
+  """
   hiddenAt: ISO8601DateTime
   """
   The depth of the hierarchical entity, taking into account any parent types.
@@ -2344,14 +2347,20 @@ interface ChildEntity implements Accessible & CommonPermissions & Entity & Entit
   updatedAt: ISO8601DateTime!
   """The date this record was last updated within the API (date only)."""
   updatedOn: ISO8601Date!
-  """If an entity is available in the frontend"""
+  """
+  If an entity is available in the frontend.
+  
+  """
   visibility: EntityVisibility!
   """
   Whether the entity's visibility is set to `VISIBLE`.
   
   """
   visible: Boolean!
-  """If present, this is the timestamp an entity is visible after"""
+  """
+  If present, this is the timestamp an entity is visible after.
+  
+  """
   visibleAfterAt: ISO8601DateTime
   """
   Specify a time to check to see if the entity will be visible.
@@ -2364,7 +2373,10 @@ interface ChildEntity implements Accessible & CommonPermissions & Entity & Entit
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp an entity is visible until"""
+  """
+  If present, this is the timestamp an entity is visible until.
+  
+  """
   visibleUntilAt: ISO8601DateTime
 }
 
@@ -2887,7 +2899,7 @@ type Collection implements Accessible & Attachable & Attributable & ChildEntity 
   """Configurable metadata for the hero_image attachment"""
   heroImageMetadata: ImageMetadata
   """
-  Whether the entity's visibility is set to `HIDDEN`
+  Whether the entity's visibility is set to `HIDDEN`.
   
   """
   hidden: Boolean!
@@ -2902,7 +2914,10 @@ type Collection implements Accessible & Attachable & Attributable & ChildEntity 
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp the entity was hidden at"""
+  """
+  If present, this is the timestamp the entity was hidden at.
+  
+  """
   hiddenAt: ISO8601DateTime
   """
   The depth of the hierarchical entity, taking into account any parent types.
@@ -3257,14 +3272,20 @@ type Collection implements Accessible & Attachable & Attributable & ChildEntity 
     """The amount of edges / nodes to fetch per page"""
     perPage: Int
   ): UserGroupCollectionAccessGrantConnection!
-  """If an entity is available in the frontend"""
+  """
+  If an entity is available in the frontend.
+  
+  """
   visibility: EntityVisibility!
   """
   Whether the entity's visibility is set to `VISIBLE`.
   
   """
   visible: Boolean!
-  """If present, this is the timestamp an entity is visible after"""
+  """
+  If present, this is the timestamp an entity is visible after.
+  
+  """
   visibleAfterAt: ISO8601DateTime
   """
   Specify a time to check to see if the entity will be visible.
@@ -3277,7 +3298,10 @@ type Collection implements Accessible & Attachable & Attributable & ChildEntity 
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp an entity is visible until"""
+  """
+  If present, this is the timestamp an entity is visible until.
+  
+  """
   visibleUntilAt: ISO8601DateTime
 }
 
@@ -10536,6 +10560,11 @@ type HarvestAttempt implements CommonModel & CommonPermissions & HasDefaultTimes
   """
   slug: Slug!
   """
+  This specifies the time the attempt is sorted by, which is either the `scheduledAt` or `beganAt` time, depending on the `mode` of the attempt.
+  
+  """
+  sortedAt: ISO8601DateTime!
+  """
   The target entity for the attempt. All harvest entities will be nested under this entity, unless otherwise specified.
   
   """
@@ -14576,7 +14605,7 @@ type Item implements Accessible & Attachable & Attributable & ChildEntity & Comm
   """Configurable metadata for the hero_image attachment"""
   heroImageMetadata: ImageMetadata
   """
-  Whether the entity's visibility is set to `HIDDEN`
+  Whether the entity's visibility is set to `HIDDEN`.
   
   """
   hidden: Boolean!
@@ -14591,7 +14620,10 @@ type Item implements Accessible & Attachable & Attributable & ChildEntity & Comm
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp the entity was hidden at"""
+  """
+  If present, this is the timestamp the entity was hidden at.
+  
+  """
   hiddenAt: ISO8601DateTime
   """
   The depth of the hierarchical entity, taking into account any parent types.
@@ -14945,14 +14977,20 @@ type Item implements Accessible & Attachable & Attributable & ChildEntity & Comm
     """The amount of edges / nodes to fetch per page"""
     perPage: Int
   ): UserGroupCollectionAccessGrantConnection!
-  """If an entity is available in the frontend"""
+  """
+  If an entity is available in the frontend.
+  
+  """
   visibility: EntityVisibility!
   """
   Whether the entity's visibility is set to `VISIBLE`.
   
   """
   visible: Boolean!
-  """If present, this is the timestamp an entity is visible after"""
+  """
+  If present, this is the timestamp an entity is visible after.
+  
+  """
   visibleAfterAt: ISO8601DateTime
   """
   Specify a time to check to see if the entity will be visible.
@@ -14965,7 +15003,10 @@ type Item implements Accessible & Attachable & Attributable & ChildEntity & Comm
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp an entity is visible until"""
+  """
+  If present, this is the timestamp an entity is visible until.
+  
+  """
   visibleUntilAt: ISO8601DateTime
 }
 
@@ -21393,7 +21434,7 @@ interface ReferencesEntityVisibility {
   """
   currentlyVisible: Boolean!
   """
-  Whether the entity's visibility is set to `HIDDEN`
+  Whether the entity's visibility is set to `HIDDEN`.
   
   """
   hidden: Boolean!
@@ -21408,16 +21449,25 @@ interface ReferencesEntityVisibility {
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp the entity was hidden at"""
+  """
+  If present, this is the timestamp the entity was hidden at.
+  
+  """
   hiddenAt: ISO8601DateTime
-  """If an entity is available in the frontend"""
+  """
+  If an entity is available in the frontend.
+  
+  """
   visibility: EntityVisibility!
   """
   Whether the entity's visibility is set to `VISIBLE`.
   
   """
   visible: Boolean!
-  """If present, this is the timestamp an entity is visible after"""
+  """
+  If present, this is the timestamp an entity is visible after.
+  
+  """
   visibleAfterAt: ISO8601DateTime
   """
   Specify a time to check to see if the entity will be visible.
@@ -21430,7 +21480,10 @@ interface ReferencesEntityVisibility {
     """
     time: ISO8601DateTime
   ): Boolean!
-  """If present, this is the timestamp an entity is visible until"""
+  """
+  If present, this is the timestamp an entity is visible until.
+  
+  """
   visibleUntilAt: ISO8601DateTime
 }
 

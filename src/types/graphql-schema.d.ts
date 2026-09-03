@@ -1,11 +1,6 @@
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -1941,7 +1936,7 @@ export type ChildEntity = {
   /** Configurable metadata for the hero_image attachment */
   heroImageMetadata?: Maybe<ImageMetadata>;
   /**
-   * Whether the entity's visibility is set to `HIDDEN`
+   * Whether the entity's visibility is set to `HIDDEN`.
    *
    */
   hidden: Scalars['Boolean']['output'];
@@ -1950,7 +1945,10 @@ export type ChildEntity = {
    *
    */
   hiddenAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp the entity was hidden at */
+  /**
+   * If present, this is the timestamp the entity was hidden at.
+   *
+   */
   hiddenAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * The depth of the hierarchical entity, taking into account any parent types.
@@ -2079,21 +2077,30 @@ export type ChildEntity = {
   updatedAt: Scalars['ISO8601DateTime']['output'];
   /** The date this record was last updated within the API (date only). */
   updatedOn: Scalars['ISO8601Date']['output'];
-  /** If an entity is available in the frontend */
+  /**
+   * If an entity is available in the frontend.
+   *
+   */
   visibility: EntityVisibility;
   /**
    * Whether the entity's visibility is set to `VISIBLE`.
    *
    */
   visible: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible after */
+  /**
+   * If present, this is the timestamp an entity is visible after.
+   *
+   */
   visibleAfterAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * Specify a time to check to see if the entity will be visible.
    *
    */
   visibleAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible until */
+  /**
+   * If present, this is the timestamp an entity is visible until.
+   *
+   */
   visibleUntilAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
 };
 
@@ -2593,7 +2600,7 @@ export type Collection = Accessible & Attachable & Attributable & ChildEntity & 
   /** Configurable metadata for the hero_image attachment */
   heroImageMetadata?: Maybe<ImageMetadata>;
   /**
-   * Whether the entity's visibility is set to `HIDDEN`
+   * Whether the entity's visibility is set to `HIDDEN`.
    *
    */
   hidden: Scalars['Boolean']['output'];
@@ -2602,7 +2609,10 @@ export type Collection = Accessible & Attachable & Attributable & ChildEntity & 
    *
    */
   hiddenAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp the entity was hidden at */
+  /**
+   * If present, this is the timestamp the entity was hidden at.
+   *
+   */
   hiddenAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * The depth of the hierarchical entity, taking into account any parent types.
@@ -2753,21 +2763,30 @@ export type Collection = Accessible & Attachable & Attributable & ChildEntity & 
   userAccessGrants: UserCollectionAccessGrantConnection;
   /** Not presently used */
   userGroupAccessGrants: UserGroupCollectionAccessGrantConnection;
-  /** If an entity is available in the frontend */
+  /**
+   * If an entity is available in the frontend.
+   *
+   */
   visibility: EntityVisibility;
   /**
    * Whether the entity's visibility is set to `VISIBLE`.
    *
    */
   visible: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible after */
+  /**
+   * If present, this is the timestamp an entity is visible after.
+   *
+   */
   visibleAfterAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * Specify a time to check to see if the entity will be visible.
    *
    */
   visibleAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible until */
+  /**
+   * If present, this is the timestamp an entity is visible until.
+   *
+   */
   visibleUntilAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
 };
 
@@ -10307,6 +10326,11 @@ export type HarvestAttempt = CommonModel & CommonPermissions & HasDefaultTimesta
    */
   slug: Scalars['Slug']['output'];
   /**
+   * This specifies the time the attempt is sorted by, which is either the `scheduledAt` or `beganAt` time, depending on the `mode` of the attempt.
+   *
+   */
+  sortedAt: Scalars['ISO8601DateTime']['output'];
+  /**
    * The target entity for the attempt. All harvest entities will be nested under this entity, unless otherwise specified.
    *
    */
@@ -14081,7 +14105,7 @@ export type Item = Accessible & Attachable & Attributable & ChildEntity & Common
   /** Configurable metadata for the hero_image attachment */
   heroImageMetadata?: Maybe<ImageMetadata>;
   /**
-   * Whether the entity's visibility is set to `HIDDEN`
+   * Whether the entity's visibility is set to `HIDDEN`.
    *
    */
   hidden: Scalars['Boolean']['output'];
@@ -14090,7 +14114,10 @@ export type Item = Accessible & Attachable & Attributable & ChildEntity & Common
    *
    */
   hiddenAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp the entity was hidden at */
+  /**
+   * If present, this is the timestamp the entity was hidden at.
+   *
+   */
   hiddenAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * The depth of the hierarchical entity, taking into account any parent types.
@@ -14242,21 +14269,30 @@ export type Item = Accessible & Attachable & Attributable & ChildEntity & Common
   userAccessGrants: UserCollectionAccessGrantConnection;
   /** Not presently used */
   userGroupAccessGrants: UserGroupCollectionAccessGrantConnection;
-  /** If an entity is available in the frontend */
+  /**
+   * If an entity is available in the frontend.
+   *
+   */
   visibility: EntityVisibility;
   /**
    * Whether the entity's visibility is set to `VISIBLE`.
    *
    */
   visible: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible after */
+  /**
+   * If present, this is the timestamp an entity is visible after.
+   *
+   */
   visibleAfterAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * Specify a time to check to see if the entity will be visible.
    *
    */
   visibleAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible until */
+  /**
+   * If present, this is the timestamp an entity is visible until.
+   *
+   */
   visibleUntilAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
 };
 
@@ -21550,7 +21586,7 @@ export type ReferencesEntityVisibility = {
    */
   currentlyVisible: Scalars['Boolean']['output'];
   /**
-   * Whether the entity's visibility is set to `HIDDEN`
+   * Whether the entity's visibility is set to `HIDDEN`.
    *
    */
   hidden: Scalars['Boolean']['output'];
@@ -21559,23 +21595,35 @@ export type ReferencesEntityVisibility = {
    *
    */
   hiddenAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp the entity was hidden at */
+  /**
+   * If present, this is the timestamp the entity was hidden at.
+   *
+   */
   hiddenAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  /** If an entity is available in the frontend */
+  /**
+   * If an entity is available in the frontend.
+   *
+   */
   visibility: EntityVisibility;
   /**
    * Whether the entity's visibility is set to `VISIBLE`.
    *
    */
   visible: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible after */
+  /**
+   * If present, this is the timestamp an entity is visible after.
+   *
+   */
   visibleAfterAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
    * Specify a time to check to see if the entity will be visible.
    *
    */
   visibleAsOf: Scalars['Boolean']['output'];
-  /** If present, this is the timestamp an entity is visible until */
+  /**
+   * If present, this is the timestamp an entity is visible until.
+   *
+   */
   visibleUntilAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
 };
 
@@ -34161,6 +34209,7 @@ export type HarvestAttemptResolvers<ContextType = any, ParentType extends Resolv
   recordStatus?: Resolver<Maybe<ResolversTypes['HarvestAttemptRecordStatus']>, ParentType, ContextType>;
   scheduledAt?: Resolver<Maybe<ResolversTypes['ISO8601DateTime']>, ParentType, ContextType>;
   slug?: Resolver<ResolversTypes['Slug'], ParentType, ContextType>;
+  sortedAt?: Resolver<ResolversTypes['ISO8601DateTime'], ParentType, ContextType>;
   targetEntity?: Resolver<ResolversTypes['HarvestTarget'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['ISO8601DateTime'], ParentType, ContextType>;
   updatedOn?: Resolver<ResolversTypes['ISO8601Date'], ParentType, ContextType>;

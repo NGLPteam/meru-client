@@ -29,7 +29,8 @@ module.exports = {
       },
     },
     "postcss-import": {},
-    "tailwindcss/nesting": require("postcss-nested")({
+    // postcss-nested 8 is ESM-only; require(esm) returns the namespace object.
+    "tailwindcss/nesting": require("postcss-nested").default({
       bubble: ["container", "starting-style"],
     }),
     tailwindcss: { config: path.join(__dirname, "./tailwind.config.js") },

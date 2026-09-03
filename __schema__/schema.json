@@ -10548,7 +10548,7 @@
           },
           {
             "name": "hidden",
-            "description": "Whether the entity's visibility is set to `HIDDEN`\n",
+            "description": "Whether the entity's visibility is set to `HIDDEN`.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -10593,7 +10593,7 @@
           },
           {
             "name": "hiddenAt",
-            "description": "If present, this is the timestamp the entity was hidden at",
+            "description": "If present, this is the timestamp the entity was hidden at.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -11621,7 +11621,7 @@
           },
           {
             "name": "visibility",
-            "description": "If an entity is available in the frontend",
+            "description": "If an entity is available in the frontend.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -11653,7 +11653,7 @@
           },
           {
             "name": "visibleAfterAt",
-            "description": "If present, this is the timestamp an entity is visible after",
+            "description": "If present, this is the timestamp an entity is visible after.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -11694,7 +11694,7 @@
           },
           {
             "name": "visibleUntilAt",
-            "description": "If present, this is the timestamp an entity is visible until",
+            "description": "If present, this is the timestamp an entity is visible until.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -14176,7 +14176,7 @@
           },
           {
             "name": "hidden",
-            "description": "Whether the entity's visibility is set to `HIDDEN`\n",
+            "description": "Whether the entity's visibility is set to `HIDDEN`.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -14221,7 +14221,7 @@
           },
           {
             "name": "hiddenAt",
-            "description": "If present, this is the timestamp the entity was hidden at",
+            "description": "If present, this is the timestamp the entity was hidden at.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -15870,7 +15870,7 @@
           },
           {
             "name": "visibility",
-            "description": "If an entity is available in the frontend",
+            "description": "If an entity is available in the frontend.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -15902,7 +15902,7 @@
           },
           {
             "name": "visibleAfterAt",
-            "description": "If present, this is the timestamp an entity is visible after",
+            "description": "If present, this is the timestamp an entity is visible after.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -15943,7 +15943,7 @@
           },
           {
             "name": "visibleUntilAt",
-            "description": "If present, this is the timestamp an entity is visible until",
+            "description": "If present, this is the timestamp an entity is visible until.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -48322,6 +48322,22 @@
             "deprecationReason": null
           },
           {
+            "name": "sortedAt",
+            "description": "This specifies the time the attempt is sorted by, which is either the `scheduledAt` or `beganAt` time, depending on the `mode` of the attempt.\n",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "targetEntity",
             "description": "The target entity for the attempt. All harvest entities will be nested under this entity, unless otherwise specified.\n",
             "args": [],
@@ -64431,7 +64447,7 @@
           },
           {
             "name": "hidden",
-            "description": "Whether the entity's visibility is set to `HIDDEN`\n",
+            "description": "Whether the entity's visibility is set to `HIDDEN`.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -64476,7 +64492,7 @@
           },
           {
             "name": "hiddenAt",
-            "description": "If present, this is the timestamp the entity was hidden at",
+            "description": "If present, this is the timestamp the entity was hidden at.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -66125,7 +66141,7 @@
           },
           {
             "name": "visibility",
-            "description": "If an entity is available in the frontend",
+            "description": "If an entity is available in the frontend.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -66157,7 +66173,7 @@
           },
           {
             "name": "visibleAfterAt",
-            "description": "If present, this is the timestamp an entity is visible after",
+            "description": "If present, this is the timestamp an entity is visible after.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -66198,7 +66214,7 @@
           },
           {
             "name": "visibleUntilAt",
-            "description": "If present, this is the timestamp an entity is visible until",
+            "description": "If present, this is the timestamp an entity is visible until.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -94598,7 +94614,7 @@
           },
           {
             "name": "hidden",
-            "description": "Whether the entity's visibility is set to `HIDDEN`\n",
+            "description": "Whether the entity's visibility is set to `HIDDEN`.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -94643,7 +94659,7 @@
           },
           {
             "name": "hiddenAt",
-            "description": "If present, this is the timestamp the entity was hidden at",
+            "description": "If present, this is the timestamp the entity was hidden at.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -94655,7 +94671,7 @@
           },
           {
             "name": "visibility",
-            "description": "If an entity is available in the frontend",
+            "description": "If an entity is available in the frontend.\n",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -94687,7 +94703,7 @@
           },
           {
             "name": "visibleAfterAt",
-            "description": "If present, this is the timestamp an entity is visible after",
+            "description": "If present, this is the timestamp an entity is visible after.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -94728,7 +94744,7 @@
           },
           {
             "name": "visibleUntilAt",
-            "description": "If present, this is the timestamp an entity is visible until",
+            "description": "If present, this is the timestamp an entity is visible until.\n",
             "args": [],
             "type": {
               "kind": "SCALAR",
