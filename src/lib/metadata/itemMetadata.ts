@@ -6,7 +6,7 @@ import type { PageMeta } from "@/lib/metadata/types";
 import serverEnv from "../env/serverEnv";
 import { itemMetaFragment } from "@/pages/items/_components/graphql";
 
-const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
+const BASE_URL = serverEnv("SITE_URL");
 
 export default function buildItemMeta(
   data: FragmentType<typeof itemMetaFragment>,

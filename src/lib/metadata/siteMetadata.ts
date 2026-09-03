@@ -6,7 +6,7 @@ import serverEnv from "../env/serverEnv";
 
 // Builds the site-level PageMeta defaults — title/description/OG that every
 // page inherits (and the title template applied to child pages).
-const BASE_URL = serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL");
+const BASE_URL = serverEnv("SITE_URL");
 
 export default async function getSiteMetadata(): Promise<PageMeta> {
   const { data } = await query(siteMetadataQuery, {});

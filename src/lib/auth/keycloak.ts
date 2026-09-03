@@ -2,21 +2,17 @@
 // raw Keycloak token response and the caller writes cookies.
 //
 // Env (server-only; this file is never client-bundled) via serverEnv
-// (process.env runtime-first, import.meta.env in dev). The NEXT_* names are the
-// legacy deploy fallbacks — drop them once the deploy config is renamed.
+// (process.env runtime-first, import.meta.env in dev).
 import joinURL from "url-join";
 import serverEnv from "../env/serverEnv";
 
-const KEYCLOAK_URL =
-  serverEnv("KEYCLOAK_URL", "NEXT_PUBLIC_KEYCLOAK_URL") ?? "";
-const REALM = serverEnv("KEYCLOAK_REALM", "NEXT_PUBLIC_KEYCLOAK_REALM") ?? "";
-const CLIENT_SECRET =
-  serverEnv("KEYCLOAK_CLIENT_SECRET", "NEXT_KEYCLOAK_CLIENT_SECRET") ?? "";
+const KEYCLOAK_URL = serverEnv("KEYCLOAK_URL") ?? "";
+const REALM = serverEnv("KEYCLOAK_REALM") ?? "";
+const CLIENT_SECRET = serverEnv("KEYCLOAK_CLIENT_SECRET") ?? "";
 
 const ISSUER = joinURL(KEYCLOAK_URL, "realms", REALM);
 
-export const CLIENT_ID =
-  serverEnv("KEYCLOAK_CLIENT_ID", "NEXT_PUBLIC_KEYCLOAK_CLIENT_ID") ?? "";
+export const CLIENT_ID = serverEnv("KEYCLOAK_CLIENT_ID") ?? "";
 export const AUTH_URL = joinURL(ISSUER, "/protocol/openid-connect/auth");
 const TOKEN_URL = joinURL(ISSUER, "/protocol/openid-connect/token");
 const LOGOUT_URL = joinURL(ISSUER, "/protocol/openid-connect/logout");

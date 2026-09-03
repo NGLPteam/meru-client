@@ -4,8 +4,8 @@
 //     runtime, which is authoritative (import.meta.env is baked at build time).
 //   - dev (astro dev): Vite loads .env into `import.meta.env` (server-side, all
 //     vars) but NOT into `process.env`, so the fallback supplies them.
-// Accepts multiple names so renamed vars can keep a legacy fallback during the
-// deploy-config transition, e.g. serverEnv("SITE_URL", "NEXT_PUBLIC_FE_URL").
+// Accepts multiple names so a renamed var can keep a fallback during a
+// deploy-config transition.
 const ime = import.meta.env as unknown as Record<string, string | undefined>;
 
 export default function serverEnv(...keys: string[]): string | undefined {

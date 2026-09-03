@@ -7,9 +7,7 @@ export default defineConfig({
   output: "server",
   // Canonical site origin for absolute URLs (sitemap/robots). Empty in dev, so
   // those endpoints fall back to the request origin. No trailing slash needed.
-  // NEXT_PUBLIC_FE_URL is the legacy deploy name — drop the fallback once the
-  // deploy config is renamed.
-  site: process.env.SITE_URL || process.env.NEXT_PUBLIC_FE_URL || undefined,
+  site: process.env.SITE_URL || undefined,
   adapter: node({ mode: "standalone" }),
   integrations: [react()],
   server: { port: 4321 },
@@ -29,10 +27,8 @@ export default defineConfig({
     // Expose the app's public deploy vars to the client bundle via
     // import.meta.env — Astro's PUBLIC_ convention; everything else stays
     // server-only. Client code reads them through lib/env/clientConfig.ts —
-    // the single client swap point. The legacy NEXT_PUBLIC_/GOOGLE_MAPS_KEY
-    // entries keep the old deploy names working during the rename transition —
-    // drop them (and clientConfig's fallbacks) once the deploy config is renamed.
-    envPrefix: ["PUBLIC_", "NEXT_PUBLIC_", "GOOGLE_MAPS_KEY"],
+    // the single client swap point.
+    envPrefix: ["PUBLIC_"],
     // Pre-bundle deps Vite's startup scan can't see: some are reached only
     // through clientOnly() dynamic imports (ChartBlock → react-google-charts,
     // AssetInlinePDF/AssetPDFPreview → react-pdf), and island entry modules are

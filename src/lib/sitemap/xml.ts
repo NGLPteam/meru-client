@@ -4,16 +4,8 @@
 // size so index and child page numbers line up.
 import serverEnv from "../env/serverEnv";
 
-// NEXT_PUBLIC_* are the legacy deploy names — drop the fallbacks once the
-// deploy config is renamed.
-const MAXAGE =
-  serverEnv("SITEMAP_CACHE_MAXAGE", "NEXT_PUBLIC_SITEMAP_CACHE_MAXAGE") ??
-  "86400";
-const REVALIDATE =
-  serverEnv(
-    "SITEMAP_CACHE_REVALIDATE",
-    "NEXT_PUBLIC_SITEMAP_CACHE_REVALIDATE",
-  ) ?? "59";
+const MAXAGE = serverEnv("SITEMAP_CACHE_MAXAGE") ?? "86400";
+const REVALIDATE = serverEnv("SITEMAP_CACHE_REVALIDATE") ?? "59";
 
 // Prefer the configured `site` (astro.config), fall back to the request origin
 // (dev, or when the env is unset). No trailing slash.
