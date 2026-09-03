@@ -1,7 +1,6 @@
 export { default as Button } from "./Button";
 export * from "./Button/patterns";
 export { default as DotList } from "./DotList";
-export { default as Dropdown } from "./Dropdown";
 export * from "./images";
 export * from "./links";
 export * from "./loading";

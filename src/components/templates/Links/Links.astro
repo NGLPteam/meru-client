@@ -1,0 +1,41 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import type { HeroBackground } from "@/types/graphql-schema";
+import CompactListBlock from "../lists/blocks/Compact/Compact.astro";
+import GridListBlock from "../lists/blocks/Grid/Grid.astro";
+import CardListBlock from "../lists/blocks/Card/Card.astro";
+import SummaryListBlock from "../lists/blocks/Summary/Summary.astro";
+import PromoListBlock from "../lists/blocks/Promo/Promo.astro";
+import TreeListBlock from "../lists/blocks/Tree/Tree.astro";
+import { linksTemplateFragment } from "./graphql";
+
+const VARIANT_TO_COMPONENT = {
+  COMPACT: CompactListBlock,
+  CARDS: CardListBlock,
+  GRID: GridListBlock,
+  SUMMARY: SummaryListBlock,
+  PROMOS: PromoListBlock,
+  TREE: TreeListBlock,
+};
+
+interface Props {
+  data: FragmentType<typeof linksTemplateFragment>;
+  bgOverride?: HeroBackground | null;
+}
+
+const { data, bgOverride } = Astro.props;
+
+const template = useFragment(linksTemplateFragment, data);
+
+const variant =
+  template && "linksDefinition" in template
+    ? template.linksDefinition?.variant
+    : undefined;
+
+const BlockComponent =
+  variant && variant !== "%future added value"
+    ? VARIANT_TO_COMPONENT[variant]
+    : null;
+---
+
+{BlockComponent && <BlockComponent data={template} bgOverride={bgOverride} />}

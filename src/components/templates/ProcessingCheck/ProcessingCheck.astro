@@ -1,0 +1,30 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+import EmptyMessage from "./EmptyMessage";
+import { processingCheckFragment } from "./graphql";
+import styles from "./ProcessingCheck.module.css";
+
+interface Props {
+  data?: FragmentType<typeof processingCheckFragment> | null;
+  entityType: "item" | "collection" | "community";
+}
+
+const { data, entityType } = Astro.props;
+
+const { main } = useFragment(processingCheckFragment, data) ?? {};
+
+const { allHidden, templates } = main ?? {};
+
+const empty = allHidden || !templates?.length;
+---
+
+{
+  empty ? (
+    <Container className={styles.container}>
+      <EmptyMessage entityType={entityType} />
+    </Container>
+  ) : (
+    <slot />
+  )
+}

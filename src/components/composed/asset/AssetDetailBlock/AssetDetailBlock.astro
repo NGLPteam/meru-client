@@ -1,0 +1,65 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { formatDate } from "@/helpers/dates";
+import { formatFileSize } from "@/helpers/strings";
+import {
+  BackButton,
+  ContentImage,
+  DownloadLink,
+  NamedLink,
+} from "@/components/atomic";
+import AssetPDFPreview from "../AssetPDFPreview/AssetPDFPreview";
+import { assetDetailBlockFragment } from "./graphql";
+import styles from "./AssetDetailBlock.module.css";
+
+interface Props {
+  data?: FragmentType<typeof assetDetailBlockFragment> | null;
+  slug?: string;
+}
+
+const { data, slug } = Astro.props;
+
+const asset = useFragment(assetDetailBlockFragment, data);
+---
+
+{
+  asset && (
+    <section class={classNames("l-container-wide", styles.section)}>
+      {slug && (
+        <NamedLink href={`/items/${slug}/files`}>
+          <BackButton as="div">Back to Files</BackButton>
+        </NamedLink>
+      )}
+      <div class={styles.content}>
+        {asset.preview?.storage ? (
+          <ContentImage data={asset.preview} />
+        ) : asset.downloadUrl && asset.kind === "image" ? (
+          <img
+            alt={asset.altText ?? ""}
+            src={asset.downloadUrl}
+            width={1160}
+            height={640}
+            class={styles.image}
+            loading="eager"
+            decoding="async"
+          />
+        ) : asset.kind === "pdf" ? (
+          <AssetPDFPreview client:only="react" url={asset.downloadUrl} />
+        ) : null}
+        <h3>{asset.name}</h3>
+        <div class={styles.info}>
+          <p class="t-label-lg">{asset.kind}</p>
+          <ul class="t-copy-lighter">
+            {asset.fileSize && <li>{formatFileSize(asset.fileSize)}</li>}
+            {"updatedAt" in asset && asset.updatedAt && (
+              <li>{formatDate(asset.updatedAt, "MMM d, yyyy")}</li>
+            )}
+          </ul>
+        </div>
+        {asset.caption && <div class="t-copy-light">{asset.caption}</div>}
+      </div>
+      {asset.downloadUrl && <DownloadLink href={asset.downloadUrl} />}
+    </section>
+  )
+}

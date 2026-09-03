@@ -7,12 +7,14 @@ import {
 // (top-level require + module.exports), so it exposes no ESM export to the
 // browser bundle. JSON imports work in both webpack and Vite.
 import colors from "@/styles/colors.json";
-import { useTheme } from "@/contexts/ThemeProvider";
 
 type Props = Partial<ReactGoogleChartProps> &
   Partial<ChartWrapperOptions> & {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any[];
+    // The instance theme's color name, passed down from the mounting .astro
+    // (replaces the retired ThemeProvider context).
+    themeColor?: string;
   };
 
 export default function LineColChart({
@@ -20,12 +22,11 @@ export default function LineColChart({
   curveType,
   legend = "none",
   chartType = "ColumnChart",
+  themeColor,
 }: Props) {
-  const { color: colorName } = useTheme();
-
   const handleZero = data?.length === 1 ? [...data, [0, 0]] : data;
 
-  const color = (colorName as "cream" | "blue" | "gray") ?? "cream";
+  const color = (themeColor as "cream" | "blue" | "gray") ?? "cream";
 
   const chartOptions = {
     curveType,

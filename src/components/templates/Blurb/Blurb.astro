@@ -1,0 +1,56 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+import {
+  useSharedInlineFragment,
+  useSharedBlockFragment,
+} from "@/components/templates/shared/shared.slots.graphql";
+import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
+import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
+import { blurbTemplateFragment } from "./graphql";
+import styles from "./Blurb.module.css";
+
+interface Props {
+  data?: FragmentType<typeof blurbTemplateFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const template = useFragment(blurbTemplateFragment, data);
+
+const { blurbDefinition, slots, hidden } = template ?? {};
+
+const { width, background } = blurbDefinition ?? {};
+
+const header = useSharedInlineFragment(slots?.header);
+const subheader = useSharedInlineFragment(slots?.subheader);
+const body = useSharedBlockFragment(slots?.body);
+---
+
+{
+  !hidden && (
+    <Container
+      className={styles.container}
+      bgColor={background}
+      halfWidthTemplate={width === "HALF"}
+    >
+      <div class={styles.content}>
+        {header?.valid && !!header.content && (
+          <h3 class="t-h4">
+            <InlineSlotWrapper content={header.content} />
+          </h3>
+        )}
+        {subheader?.valid && !!subheader.content && (
+          <span class="t-h5">
+            <InlineSlotWrapper content={subheader.content} />
+          </span>
+        )}
+        {body?.valid && !!body.content && (
+          <div class="t-rte t-copy-sm t-copy-lighter">
+            <BlockSlotWrapper content={body.content} />
+          </div>
+        )}
+      </div>
+    </Container>
+  )
+}

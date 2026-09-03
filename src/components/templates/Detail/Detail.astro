@@ -1,0 +1,34 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import type { HeroBackground } from "@/types/graphql-schema";
+import Summary from "./Summary/Summary.astro";
+import Full from "./Full/Full.astro";
+import Columns from "./Columns/Columns.astro";
+import { detailTemplateFragment } from "./graphql";
+
+const VARIANT_MAP = {
+  FULL: Full,
+  SUMMARY: Summary,
+  COLUMNS: Columns,
+};
+
+interface Props {
+  data?: FragmentType<typeof detailTemplateFragment> | null;
+  bgOverride?: HeroBackground | null;
+}
+
+const { data, bgOverride } = Astro.props;
+
+const template = useFragment(detailTemplateFragment, data);
+
+const { detailDefinition, hidden } = template ?? {};
+
+const { background, variant } = detailDefinition ?? {};
+
+const Variant =
+  !hidden && variant && variant !== "%future added value"
+    ? VARIANT_MAP[variant]
+    : null;
+---
+
+{Variant && <Variant data={template} bgColor={bgOverride ?? background} />}

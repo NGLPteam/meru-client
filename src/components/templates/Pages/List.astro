@@ -1,0 +1,33 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { NamedLink } from "@/components/atomic";
+import { listPagesTemplateFragment } from "./graphql";
+import styles from "./Pages.module.css";
+
+interface Props {
+  data?: FragmentType<typeof listPagesTemplateFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const { slug, pages } = useFragment(listPagesTemplateFragment, data) ?? {};
+
+const canRender =
+  !!pages?.edges?.length && pages.edges.some((e) => !!e.node.slug);
+---
+
+{
+  canRender && slug && (
+    <ul class={styles.list}>
+      {pages!.edges.map((p) =>
+        p.node.slug ? (
+          <li class={styles.item}>
+            <NamedLink href={`/collections/${slug}/page/${p.node.slug}`}>
+              <span class="t-label-sm t-copy-light">{p.node.title}</span>
+            </NamedLink>
+          </li>
+        ) : null,
+      )}
+    </ul>
+  )
+}

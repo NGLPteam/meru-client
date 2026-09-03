@@ -1,0 +1,54 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import NamedLink from "@/components/atomic/links/NamedLink";
+import ContributorName from "@/components/composed/contributor/ContributorName";
+import ContributorAvatar from "@/components/composed/contributor/ContributorAvatar";
+import DotList from "@/components/atomic/DotList";
+import { contributorFragment } from "./graphql";
+import styles from "./Contributor.module.css";
+
+interface Props {
+  data?: FragmentType<typeof contributorFragment> | null;
+  backParams?: URLSearchParams;
+}
+
+const { data, backParams } = Astro.props;
+
+const attribution = useFragment(contributorFragment, data);
+
+const { roles, contributor } = attribution ?? {};
+
+const href = contributor?.slug
+  ? backParams
+    ? `/contributors/${contributor.slug}?${backParams?.toString()}`
+    : `/contributors/${contributor.slug}`
+  : "#";
+---
+
+{
+  roles && contributor && (
+    <li class={styles.item}>
+      <span>
+        <ContributorAvatar data={contributor.image} />
+      </span>
+      <div>
+        <NamedLink href={href} className="default-link-styles">
+          <strong>
+            <ContributorName data={contributor} />
+          </strong>
+        </NamedLink>
+        <div class:list={["t-copy-lighter t-copy-sm", styles.metadata]}>
+          {!!roles?.length && (
+            <DotList>
+              {roles.map((r) => (
+                <li>{r.label}</li>
+              ))}
+            </DotList>
+          )}
+          {contributor.affiliation && <p>{contributor.affiliation}</p>}
+          {contributor.title && <p>{contributor.title}</p>}
+        </div>
+      </div>
+    </li>
+  )
+}

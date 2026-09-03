@@ -1,0 +1,83 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { BackToTopBlock } from "@/components/layout";
+import ContentImage from "@/components/atomic/images/ContentImage";
+import Container from "@/components/layout/Container";
+import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
+import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
+import { getPDFViewerProps } from "@/components/templates/mdx/getPDFViewerProps";
+import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
+import AssetInlinePDFIsland from "@/components/composed/asset/AssetInlinePDF/AssetInlinePDFIsland";
+import type { HeroBackground } from "@/types/graphql-schema";
+import TOC from "./TOC/TOC.astro";
+import { fullDetailFragment } from "./graphql";
+import styles from "./Full.module.css";
+
+interface Props {
+  data?: FragmentType<typeof fullDetailFragment> | null;
+  bgColor?: HeroBackground | null;
+}
+
+const { data, bgColor } = Astro.props;
+
+const template = useFragment(fullDetailFragment, data);
+
+const { entity, slots, detailDefinition } = template ?? {};
+
+const body = useSharedBlockFragment(slots?.body);
+
+const other = (entity?.__typename as string | undefined) === "%other";
+
+const { showHeroImage, showBody } = detailDefinition ?? {};
+
+const hideTemplate = other || (typeof showBody === "boolean" && !showBody);
+
+const hasBody = !!body?.valid && !!body?.content;
+const isPDF = !!body?.content?.startsWith("<PDFViewer");
+const pdfProps =
+  !hideTemplate && isPDF && hasBody
+    ? await getPDFViewerProps(body!.content!)
+    : null;
+---
+
+{
+  !hideTemplate && (
+    <Container width="wide" bgColor={bgColor}>
+      {isPDF ? (
+        <div class={styles.outer}>
+          {pdfProps ? (
+            <AssetInlinePDFIsland
+              client:only="react"
+              url={pdfProps.url}
+              size={pdfProps.size}
+            />
+          ) : (
+            <EmptyMessage entityType={entity?.__typename.toLowerCase()} />
+          )}
+        </div>
+      ) : (
+        <BackToTopBlock className={styles.outer}>
+          <div class={styles.inner} data-toc-scope>
+            <TOC />
+            {hasBody ? (
+              <div class={styles.text} data-toc-source>
+                {showHeroImage && entity?.heroImage?.storage && (
+                  <div class={styles.image}>
+                    <ContentImage data={entity.heroImage} />
+                  </div>
+                )}
+                <div class="t-rte">
+                  <BlockSlotWrapper content={body!.content} />
+                </div>
+              </div>
+            ) : (
+              <div class={styles.noContent}>
+                <EmptyMessage entityType={entity?.__typename.toLowerCase()} />
+              </div>
+            )}
+          </div>
+        </BackToTopBlock>
+      )}
+    </Container>
+  )
+}

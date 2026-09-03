@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useReducer } from "react";
-import { useQuery } from "urql";
+// Island entry: initializes i18n in the browser bundle for the useTranslation
+// calls in the controls/stat blocks (until the Phase 8 label-prop cut).
+import "@/i18n";
+import { useEffect, useState, useReducer } from "react";
 import clientOnly from "@/lib/clientOnly";
-import UrqlProvider from "@/lib/api/UrqlProvider";
+import makeUrqlClient from "@/lib/api/makeUrqlClient";
+import { getAPIURL } from "@/lib/api/client";
 import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
 import LoadingBlock from "@/components/atomic/loading/LoadingBlock";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
@@ -14,21 +17,21 @@ import styles from "./ArticleAnalyticsBlock.module.css";
 
 type Props = {
   data: FragmentType<typeof fragment>;
+  // The instance theme's color name, threaded to the charts (replaces the
+  // retired ThemeProvider context).
+  themeColor?: string;
 };
 
 const ChartBlock = clientOnly(() => import("../ChartBlock"));
 
-// Provides its own (anonymous) urql client — analytics widgets are the only
-// client-side GraphQL left.
-export default function ArticleAnalyticsBlock(props: Props) {
-  return (
-    <UrqlProvider>
-      <ArticleAnalyticsBlockInner {...props} />
-    </UrqlProvider>
-  );
-}
+// Anonymous @urql/core client — analytics widgets are the only client-side
+// GraphQL left, and they never send auth (public counts only). Lazy so merely
+// importing this module doesn't demand an API URL.
+let client: ReturnType<typeof makeUrqlClient> | undefined;
+const getClient = () =>
+  (client ??= makeUrqlClient(getAPIURL(), "network-only"));
 
-function ArticleAnalyticsBlockInner({ data }: Props) {
+export default function ArticleAnalyticsBlock({ data, themeColor }: Props) {
   const base = useFragment(fragment, data);
   const id = base?.id;
 
@@ -45,27 +48,48 @@ function ArticleAnalyticsBlockInner({ data }: Props) {
 
   // Analytics is always fetched client-side (views/downloads must not be
   // counted for server fetches). Refetch whenever the selected range/precision/
-  // region change. `settings.dateRange` is undefined for "all time".
-  const [result] = useQuery({
-    query: analyticsQuery,
-    variables: {
-      id: id ?? "",
-      dateRange: settings.dateRange ?? {},
-      precision: settings.precision,
-      usOnly: settings.usOnly,
-    },
-    pause: !id,
-  });
+  // region change. `settings.dateRange` is undefined for "all time". Pending
+  // state is derived (last-applied key vs. current key) rather than set
+  // synchronously inside the effect.
+  const variables = {
+    id: id ?? "",
+    dateRange: settings.dateRange ?? {},
+    precision: settings.precision,
+    usOnly: settings.usOnly,
+  };
+  const variablesKey = JSON.stringify(variables);
 
-  const refetched = useFragment(
-    fragment,
-    result.data?.node?.__typename
-      ? (result.data.node as FragmentType<typeof fragment>)
-      : null,
-  );
+  const [applied, setApplied] = useState<{
+    key: string;
+    data: FragmentType<typeof fragment> | null;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    getClient()
+      .query(analyticsQuery, JSON.parse(variablesKey))
+      .toPromise()
+      .then((result) => {
+        if (cancelled) return;
+        const node = result.data?.node;
+        setApplied({
+          key: variablesKey,
+          data: node?.__typename
+            ? (node as FragmentType<typeof fragment>)
+            : null,
+        });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, variablesKey]);
+
+  const isPending = !!id && applied?.key !== variablesKey;
+
+  const refetched = useFragment(fragment, applied?.data ?? null);
 
   const chartData = refetched ?? base;
-  const isPending = result.fetching;
 
   const region = settings.usOnly ? "US" : "world";
 
@@ -91,6 +115,7 @@ function ArticleAnalyticsBlockInner({ data }: Props) {
             region={region}
             mode={mode}
             precision={settings.precision}
+            themeColor={themeColor}
           />
         )}
         <StatBlocks

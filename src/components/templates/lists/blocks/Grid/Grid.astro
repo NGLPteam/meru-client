@@ -1,0 +1,101 @@
+---
+import {
+  useSharedListTemplateFragment,
+  listTemplateFragment as sharedListTemplateFragment,
+} from "@/components/templates/shared/shared.list.graphql";
+import { type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
+import type { HeroBackground } from "@/types/graphql-schema";
+import List from "../../List";
+import SeeAll from "../../SeeAll";
+import { getSeeAllHref } from "../../SeeAll/helpers";
+import styles from "./Grid.module.css";
+
+interface Props {
+  data?: FragmentType<typeof sharedListTemplateFragment> | null;
+  basePath?: string | null;
+  bgOverride?: HeroBackground | null;
+}
+
+const { data, basePath, bgOverride } = Astro.props;
+
+const {
+  linksDefinition,
+  descendantsDefinition,
+  entityList,
+  slots,
+  seeAllOrdering,
+} = useSharedListTemplateFragment(data);
+
+const { empty, listItemLayouts } = entityList ?? {};
+
+const {
+  background,
+  seeAllOrderingIdentifier,
+  seeAllButtonLabel,
+  showHeroImage,
+  width,
+  showContributors,
+  selectionLimit,
+} = linksDefinition ?? descendantsDefinition ?? {};
+
+const { showEntityContext } = linksDefinition ?? {};
+
+const { entityContext } = descendantsDefinition ?? {};
+
+const seeAllHref = descendantsDefinition
+  ? getSeeAllHref(
+      basePath,
+      seeAllOrderingIdentifier as string | null | undefined,
+      undefined,
+    )
+  : null;
+
+const renderSeeAll =
+  !!seeAllOrderingIdentifier && !!seeAllHref
+    ? seeAllOrdering?.count && selectionLimit
+      ? seeAllOrdering.count > selectionLimit
+      : true
+    : false;
+
+const { blockHeader } = slots ?? {};
+
+const normalizedContext =
+  !!descendantsDefinition && entityContext
+    ? entityContext
+    : showEntityContext
+      ? "FULL"
+      : "NONE";
+---
+
+{
+  !empty && (
+    <Container
+      className={styles.container}
+      bgColor={bgOverride ?? background}
+      halfWidthTemplate={width === "HALF"}
+    >
+      {showHeroImage && <div class={styles.heroImage} />}
+      {!!blockHeader?.content && blockHeader?.valid && (
+        <h3>
+          <InlineSlotWrapper content={blockHeader.content} />
+        </h3>
+      )}
+      <List
+        variant="GRID"
+        bgColor={bgOverride ?? background}
+        items={listItemLayouts}
+        showContributors={showContributors}
+        showContext={normalizedContext}
+      />
+      {!!renderSeeAll && !!seeAllHref && (
+        <SeeAll
+          alignment="center"
+          buttonLabel={seeAllButtonLabel}
+          href={seeAllHref}
+        />
+      )}
+    </Container>
+  )
+}

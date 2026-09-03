@@ -1,0 +1,22 @@
+---
+import styles from "./TOC.module.css";
+
+// Static markup only; the <table-of-contents> custom element (defined in
+// src/components/client/) scans the prose marked data-toc-source within the
+// shared data-toc-scope ancestor, assigns heading ids, fills the list, and
+// unhides the block.
+const { t } = Astro.locals;
+---
+
+<table-of-contents
+  hidden
+  class={styles.toc}
+  data-item-class={styles["toc__item"]}
+>
+  <div class={styles["toc__inner"]}>
+    <h3 class:list={["t-label-sm t-copy-light", styles["toc__header"]]}>
+      {t("glossary.table_of_contents")}
+    </h3>
+    <ul class={styles["toc__list"]} data-toc-list></ul>
+  </div>
+</table-of-contents>

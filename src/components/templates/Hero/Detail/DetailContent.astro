@@ -1,0 +1,87 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import ContributorsList from "@/components/composed/contributor/ContributorsList";
+import {
+  useSharedBlockFragment,
+  useSharedInlineFragment,
+} from "@/components/templates/shared/shared.slots.graphql";
+import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
+import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
+import { detailContentFragment } from "./graphql";
+import styles from "./Detail.module.css";
+
+interface Props {
+  data?: FragmentType<typeof detailContentFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const template = useFragment(detailContentFragment, data);
+
+const { entity, slots, definition } = template ?? {};
+
+const subheader = useSharedInlineFragment(slots?.subheader);
+const subheaderSubtitle = useSharedInlineFragment(slots?.subheaderSubtitle);
+const subheaderAside = useSharedInlineFragment(slots?.subheaderAside);
+const metadata = useSharedInlineFragment(slots?.metadata);
+const summary = useSharedBlockFragment(slots?.subheaderSummary);
+const cta = useSharedBlockFragment(slots?.callToAction);
+---
+
+<div>
+  <div class={styles.titleWrapper}>
+    {
+      (subheader?.valid || subheaderAside?.valid) && (
+        <h2 class={classNames("t-h3", styles.subheader)}>
+          {!!subheader?.content && (
+            <InlineSlotWrapper content={subheader.content} />
+          )}
+          {!!subheaderAside?.content && (
+            <span class={styles["subheader__aside"]}>
+              <InlineSlotWrapper content={subheaderAside.content} />
+            </span>
+          )}
+        </h2>
+      )
+    }
+    {
+      !!subheaderSubtitle?.content && subheaderSubtitle.valid && (
+        <span class={styles.subtitle}>
+          <InlineSlotWrapper content={subheaderSubtitle.content} />
+        </span>
+      )
+    }
+  </div>
+  <div class={styles.contributors}>
+    {
+      definition?.listContributors && (
+        <ContributorsList
+          className="t-copy-medium"
+          data={entity}
+          itemSlug={entity?.slug}
+          filterRole="author"
+        />
+      )
+    }
+  </div>
+  {
+    metadata?.valid && !!metadata?.content && (
+      <span class={styles.metadata}>
+        <InlineSlotWrapper content={metadata.content} />
+      </span>
+    )
+  }
+  {
+    summary?.valid && !!summary?.content && (
+      <div class={styles.summary}>
+        <BlockSlotWrapper content={summary.content} />
+      </div>
+    )
+  }
+  {
+    cta?.valid && !!cta?.content && (
+      <BlockSlotWrapper content={cta.content} assetAsButton />
+    )
+  }
+</div>

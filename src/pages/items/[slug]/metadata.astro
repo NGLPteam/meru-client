@@ -13,8 +13,8 @@ import {
 } from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "../_components/ItemShell.astro";
-import MetadataTemplate from "@/components/templates/Metadata";
-import MainLayout from "@/components/templates/MainLayout";
+import MetadataTemplate from "@/components/templates/Metadata/Metadata.astro";
+import MainLayout from "@/components/templates/MainLayout/MainLayout.astro";
 import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 
@@ -53,9 +53,7 @@ cacheEntity(Astro, "item", slug);
       template && (
         <>
           <MetadataTemplate data={template} />
-          {showMainFallback && (
-            <MainLayout data={item.layouts.main} fallback slug={slug} />
-          )}
+          {showMainFallback && <MainLayout data={item.layouts.main} fallback />}
         </>
       )
     }

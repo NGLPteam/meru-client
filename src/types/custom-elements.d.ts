@@ -16,6 +16,7 @@ declare module "react" {
       "table-of-contents": CustomElementProps;
       "back-to-top-block": CustomElementProps;
       "copy-link": CustomElementProps;
+      "disclosure-menu": CustomElementProps;
     }
   }
 }

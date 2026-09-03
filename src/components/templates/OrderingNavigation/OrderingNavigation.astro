@@ -1,0 +1,28 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+// NavButtons stays React: its prev/next labels are MDX slots passed as element
+// props into PrevNextButton, which .astro templates can't express.
+import NavButtons from "./NavButtons";
+import { orderingNavigationTemplateFragment } from "./graphql";
+
+interface Props {
+  data?: FragmentType<typeof orderingNavigationTemplateFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const template = useFragment(orderingNavigationTemplateFragment, data);
+
+const { orderingDefinition, orderingPair } = template ?? {};
+
+const { background, width } = orderingDefinition ?? {};
+---
+
+{
+  orderingPair?.exists && (
+    <Container bgColor={background} halfWidthTemplate={width === "HALF"}>
+      <NavButtons data={template} />
+    </Container>
+  )
+}

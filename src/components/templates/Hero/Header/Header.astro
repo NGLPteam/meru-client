@@ -1,0 +1,44 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import type { HeroImageLayout } from "@/types/graphql-schema";
+import Alert from "@/components/atomic/Alert";
+import TitleBlock from "./HeaderTitleBlock.astro";
+import Sidebar from "./HeaderSidebar.astro";
+import { headerHeroFragment } from "./graphql";
+import styles from "./Header.module.css";
+
+interface Props {
+  data?: FragmentType<typeof headerHeroFragment> | null;
+  layout?: HeroImageLayout;
+  hiddenAlert?: string;
+}
+
+const { data, layout, hiddenAlert } = Astro.props;
+
+const template = useFragment(headerHeroFragment, data);
+
+const { definition } = template ?? {};
+---
+
+{
+  template && (
+    <>
+      {!!hiddenAlert && <Alert message={hiddenAlert} badge color="blue" />}
+      <div
+        class={
+          layout
+            ? classNames(styles.columns, {
+                [styles["columns--two-column"]]: layout === "TWO_COLUMN",
+              })
+            : classNames(styles.inner, {
+                [styles["inner--split"]]: definition?.showSplitDisplay,
+              })
+        }
+      >
+        <TitleBlock layout={layout} data={template} />
+        <Sidebar data={template} />
+      </div>
+    </>
+  )
+}

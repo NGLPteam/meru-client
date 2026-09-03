@@ -1,0 +1,26 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import CommunityHeroHeader from "./patterns/Community.astro";
+import EntityHeroHeader from "./patterns/Entity.astro";
+import { heroTemplateFragment } from "./graphql";
+
+interface Props {
+  data: FragmentType<typeof heroTemplateFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const layout = useFragment(heroTemplateFragment, data);
+
+const { entity } = layout ?? {};
+
+const isCommunity = entity?.__typename === "Community";
+---
+
+{
+  isCommunity ? (
+    <CommunityHeroHeader data={layout} />
+  ) : (
+    <EntityHeroHeader data={layout} />
+  )
+}

@@ -1,0 +1,120 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import type { HeroImageLayout } from "@/types/graphql-schema";
+import {
+  useSharedBlockFragment,
+  useSharedInlineFragment,
+} from "@/components/templates/shared/shared.slots.graphql";
+import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
+import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
+import ContributorsList from "@/components/composed/contributor/ContributorsList";
+import CoverImage from "@/components/atomic/images/CoverImage";
+import { headerTitleBlockFragment } from "./graphql";
+import styles from "./Header.module.css";
+
+interface Props {
+  data?: FragmentType<typeof headerTitleBlockFragment> | null;
+  layout?: HeroImageLayout;
+}
+
+const { data, layout } = Astro.props;
+
+const template = useFragment(headerTitleBlockFragment, data);
+
+const { slots, entity, definition } = template ?? {};
+
+const header = useSharedInlineFragment(slots?.header);
+const headerSubtitle = useSharedInlineFragment(slots?.headerSubtitle);
+const headerAside = useSharedInlineFragment(slots?.headerAside);
+const headerSummary = useSharedBlockFragment(slots?.headerSummary);
+const headerParent = useSharedInlineFragment(slots?.headerParent);
+const cta = useSharedBlockFragment(slots?.callToAction);
+
+const { listContributors, showThumbnailImage, showSplitDisplay } =
+  definition ?? {};
+
+const entityId = entity && "id" in entity ? entity.id : undefined;
+const entityTitle = entity && "title" in entity ? entity.title : undefined;
+const entityThumbnail =
+  entity && "thumbnail" in entity ? entity.thumbnail : undefined;
+const entitySlug = entity && "slug" in entity ? entity.slug : undefined;
+
+const compact = showThumbnailImage && !showSplitDisplay;
+---
+
+<div class={styles.left}>
+  {
+    compact && (
+      <span class={styles.thumbColumn}>
+        <CoverImage
+          id={entityId ?? ""}
+          title={entityTitle ?? ""}
+          data={entityThumbnail}
+          maxWidth={225}
+          maxHeight={300}
+        />
+      </span>
+    )
+  }
+  <div class={styles.textColumn}>
+    {
+      headerParent?.valid && !!headerParent.content && (
+        <span class={layout ? "" : "t-h3"}>
+          <InlineSlotWrapper content={headerParent.content} />
+        </span>
+      )
+    }
+    {
+      header?.valid && !!header.content && (
+        <h1 class={layout ? "" : `t-h2 ${styles.title}`}>
+          <InlineSlotWrapper content={header.content} />
+        </h1>
+      )
+    }
+    {
+      !!headerAside?.content && headerAside.valid && (
+        <span
+          class={classNames(styles.aside, {
+            [styles["aside--in-columns"]]: !!layout,
+          })}
+        >
+          <InlineSlotWrapper content={headerAside.content} />
+        </span>
+      )
+    }
+    {
+      !!headerSubtitle?.content && headerSubtitle.valid && (
+        <span class={styles.subtitle}>
+          <InlineSlotWrapper content={headerSubtitle.content} />
+        </span>
+      )
+    }
+    {
+      !compact && !!headerSummary?.content && headerSummary.valid && (
+        <p class="t-h3">
+          <InlineSlotWrapper content={headerSummary.content} />
+        </p>
+      )
+    }
+    {
+      listContributors && !showSplitDisplay && (
+        <div class={styles.contributors}>
+          <ContributorsList
+            className="t-copy-medium"
+            data={entity}
+            collectionSlug={entitySlug}
+            filterRole="author"
+          />
+        </div>
+      )
+    }
+    {
+      cta?.valid && !!cta?.content && !showSplitDisplay && (
+        <div class={styles.cta}>
+          <BlockSlotWrapper content={cta.content} assetAsButton />
+        </div>
+      )
+    }
+  </div>
+</div>

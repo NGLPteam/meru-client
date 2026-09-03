@@ -1,36 +1,21 @@
 "use client";
 
+// client:only leaf island (react-pdf). The i18n import initializes the browser
+// bundle for useTranslation in descendants until the Phase 8 label-prop cut.
+import "@/i18n";
 import "@/lib/pdfsupport";
-import { useState, useMemo, useCallback } from "react";
+import { useState } from "react";
 import { Document, Page } from "react-pdf";
-import { graphql, useFragment, type FragmentType } from "@/lib/api/gql";
-import useIsMounted from "@/hooks/useIsMounted";
 import { LoadingBlock } from "@/components/atomic";
 import AssetPDFPage from "../AssetPDFPage";
 
-export default function AssetPDFPreview({ data }: Props) {
-  const pdf = useFragment(fragment, data);
-
+export default function AssetPDFPreview({ url }: Props) {
   const [numPages, setNumPages] = useState<number | null>(null);
 
-  const file = useMemo(
-    () => (pdf && "downloadUrl" in pdf ? pdf.downloadUrl : undefined),
-    [pdf],
-  );
-
-  const isMounted = useIsMounted();
-
-  const onLoadSuccess = useCallback(
-    ({ numPages }: { numPages: number }) => {
-      setNumPages(numPages);
-    },
-    [setNumPages],
-  );
-
-  return isMounted && file ? (
+  return url ? (
     <Document
-      file={file}
-      onLoadSuccess={onLoadSuccess}
+      file={url}
+      onLoadSuccess={({ numPages }) => setNumPages(numPages)}
       loading={<LoadingBlock />}
       onLoadError={(err) => console.info(err.message)}
     >
@@ -44,14 +29,5 @@ export default function AssetPDFPreview({ data }: Props) {
 }
 
 type Props = {
-  data?: FragmentType<typeof fragment> | null;
+  url?: string | null;
 };
-
-const fragment = graphql(`
-  fragment AssetPDFPreviewFragment on Asset {
-    __typename
-    ... on AssetPDF {
-      downloadUrl
-    }
-  }
-`);

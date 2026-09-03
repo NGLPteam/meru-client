@@ -1,0 +1,87 @@
+---
+import capitalize from "lodash/capitalize";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
+import InlineSlotWrapper from "@/components/templates/mdx/InlineSlotWrapper";
+import Container from "@/components/layout/Container";
+import SeeAll from "@/components/templates/lists/SeeAll";
+import Contributor from "./Contributor/Contributor.astro";
+import { contributorsTemplateFragment } from "./graphql";
+import styles from "./Contributors.module.css";
+
+interface Props {
+  data?: FragmentType<typeof contributorsTemplateFragment> | null;
+}
+
+const { data } = Astro.props;
+const { t } = Astro.locals;
+
+const template = useFragment(contributorsTemplateFragment, data);
+
+const { entity, contributorsDefinition, slots } = template ?? {};
+
+const { background, width, limit } = contributorsDefinition ?? {};
+
+const header = useSharedInlineFragment(slots?.header);
+
+const mdxHeader = header?.valid && !!header.content;
+
+const attributions =
+  entity && (entity.__typename as string) !== "%other"
+    ? entity.attributions
+    : [];
+
+const shouldRender = !!template && !!entity && !!attributions?.length;
+
+const renderedContributors = limit
+  ? attributions?.slice(0, limit)
+  : attributions;
+
+const showSeeAll =
+  !!entity &&
+  limit &&
+  attributions &&
+  attributions.length > limit &&
+  entity.__typename === "Collection";
+
+const backParams =
+  entity && (entity.__typename as string) !== "%other"
+    ? new URLSearchParams({
+        ...(entity?.slug && {
+          [entity.__typename.toLowerCase()]: entity.slug,
+        }),
+      })
+    : new URLSearchParams();
+---
+
+{
+  shouldRender && (
+    <Container
+      className={styles.container}
+      bgColor={background}
+      halfWidthTemplate={width === "HALF"}
+    >
+      <h3 class={styles?.testClass}>
+        {mdxHeader ? (
+          <InlineSlotWrapper content={header.content} />
+        ) : (
+          capitalize(t("glossary.contributor_other"))
+        )}
+      </h3>
+      <ul class={styles.list}>
+        {renderedContributors?.map((c) => (
+          <Contributor data={c} backParams={backParams} />
+        ))}
+      </ul>
+      {showSeeAll && (
+        <SeeAll
+          alignment="left"
+          size="sm"
+          icon="linkExternal"
+          href={`/collections/${entity.slug}/contributors`}
+          className={styles.seeAll}
+        />
+      )}
+    </Container>
+  )
+}

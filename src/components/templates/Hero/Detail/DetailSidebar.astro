@@ -1,0 +1,50 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { useSharedBlockFragment } from "@/components/templates/shared/shared.slots.graphql";
+import BlockSlotWrapper from "@/components/templates/mdx/BlockSlotWrapper";
+import DownloadCount from "@/components/atomic/properties/DownloadCount";
+import ViewCount from "@/components/atomic/properties/ViewCount";
+import { detailSidebarFragment } from "./graphql";
+import styles from "./Detail.module.css";
+
+interface Props {
+  data?: FragmentType<typeof detailSidebarFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const template = useFragment(detailSidebarFragment, data);
+
+const { entity, definition, slots } = template ?? {};
+
+const slot = useSharedBlockFragment(slots?.sidebar);
+
+const { showBasicViewMetrics } = definition ?? {};
+
+const shouldRender = showBasicViewMetrics || slot?.valid;
+---
+
+{
+  shouldRender && (
+    <div class={styles.right}>
+      <ul class={classNames("t-label-sm", styles.sidebar)}>
+        {slot?.valid && !!slot.content && (
+          <BlockSlotWrapper content={slot.content} />
+        )}
+        {showBasicViewMetrics && (
+          <>
+            <ViewCount data={entity?.entityViews} />
+            <DownloadCount
+              data={
+                entity && "assetDownloads" in entity
+                  ? entity.assetDownloads
+                  : undefined
+              }
+            />
+          </>
+        )}
+      </ul>
+    </div>
+  )
+}

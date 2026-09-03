@@ -1,0 +1,26 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+import List from "./List.astro";
+import { pagesTemplateFragment } from "./graphql";
+
+interface Props {
+  data?: FragmentType<typeof pagesTemplateFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const template = useFragment(pagesTemplateFragment, data);
+
+const { pagesDefinition, entity, hidden } = template ?? {};
+
+const { width, background } = pagesDefinition ?? {};
+---
+
+{
+  !hidden && (
+    <Container bgColor={background} halfWidthTemplate={width === "HALF"}>
+      <List data={entity} />
+    </Container>
+  )
+}

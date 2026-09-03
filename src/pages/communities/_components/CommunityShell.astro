@@ -3,16 +3,16 @@ import "@/i18n";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { communityShellFragment } from "@/pages/communities/_components/graphql";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
-import HeroTemplate, { getHeroSearchProps } from "@/components/templates/Hero";
+import HeroTemplate from "@/components/templates/Hero/Hero.astro";
+import { getHeroSearchProps } from "@/components/templates/Hero/getHeroProps";
 import SearchHero from "@/components/composed/search/SearchHero/SearchHero.astro";
 import CommunityNavBar from "@/components/composed/community/CommunityNavBar/CommunityNavBar.astro";
 import {
   communityNavBarFragment,
   communityNavBarEntityFragment,
 } from "@/components/composed/community/CommunityNavBar/graphql";
-import ProcessingCheck, {
-  hasMainContent,
-} from "@/components/templates/ProcessingCheck";
+import ProcessingCheck from "@/components/templates/ProcessingCheck/ProcessingCheck.astro";
+import { hasMainContent } from "@/components/templates/ProcessingCheck/graphql";
 interface Props {
   data: FragmentType<typeof communityShellFragment>;
   // Aliased narrow re-selection (communityRef) — see communityQuery.
@@ -53,7 +53,7 @@ const searchHero = hero ? getHeroSearchProps(hero, pathname) : null;
         <ProcessingCheck data={shell.layouts} entityType="community" />
       ) : (
         <>
-          {hero && <HeroTemplate data={hero} pathname={pathname} />}
+          {hero && <HeroTemplate data={hero} />}
           {searchHero && (
             <SearchHero prompt={searchHero.prompt} pathname={pathname} />
           )}

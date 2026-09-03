@@ -10,7 +10,7 @@ import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContex
 import { itemFileDetailQuery } from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "../../_components/ItemShell.astro";
-import AssetDetailBlock from "@/components/composed/asset/AssetDetailBlock";
+import AssetDetailBlock from "@/components/composed/asset/AssetDetailBlock/AssetDetailBlock.astro";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 
 const { slug, file } = Astro.params;
@@ -43,6 +43,6 @@ cacheEntity(Astro, "item", slug);
     draftModeEnabled={draftModeEnabled}
     installationName={installationName}
   >
-    <AssetDetailBlock client:load data={asset} slug={slug} />
+    <AssetDetailBlock data={asset} slug={slug} />
   </ItemShell>
 </BaseLayout>

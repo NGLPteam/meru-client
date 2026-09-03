@@ -10,7 +10,7 @@ import { fragment as googleScholarFragment } from "@/contexts/GlobalStaticContex
 import { itemMetricsQuery } from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "../_components/ItemShell.astro";
-import ItemMetricsIsland from "../_components/ItemMetricsIsland";
+import ArticleAnalyticsBlock from "@/components/composed/analytics/ArticleAnalyticsBlock";
 import { layoutThemeQuery } from "~/layouts/graphql";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
 import type { AnalyticsPrecision } from "@/types/graphql-schema";
@@ -51,6 +51,10 @@ cacheEntity(Astro, "item", slug);
     draftModeEnabled={draftModeEnabled}
     installationName={installationName}
   >
-    <ItemMetricsIsland client:load data={data?.analytics} theme={theme} />
+    <ArticleAnalyticsBlock
+      client:load
+      data={data?.analytics}
+      themeColor={theme?.color}
+    />
   </ItemShell>
 </BaseLayout>

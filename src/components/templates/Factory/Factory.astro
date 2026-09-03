@@ -1,0 +1,62 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import type { HeroBackground } from "@/types/graphql-schema";
+import Descendants from "../Descendants/Descendants.astro";
+import Detail from "../Detail/Detail.astro";
+import Contributors from "../Contributors/Contributors.astro";
+import Links from "../Links/Links.astro";
+import OrderingNavigation from "../OrderingNavigation/OrderingNavigation.astro";
+import Pages from "../Pages/Pages.astro";
+import Blurb from "../Blurb/Blurb.astro";
+import { factoryTemplatesFragment } from "./graphql";
+
+const TEMPLATE_COMPONENT_MAP = {
+  DESCENDANT_LIST: Descendants,
+  DETAIL: Detail,
+  CONTRIBUTOR_LIST: Contributors,
+  LINK_LIST: Links,
+  PAGE_LIST: Pages,
+  ORDERING: OrderingNavigation,
+  BLURB: Blurb,
+  METADATA: null,
+  HERO: null,
+  LIST_ITEM: null,
+  SUPPLEMENTARY: null,
+  NAVIGATION: null,
+};
+
+interface Props {
+  data: FragmentType<typeof factoryTemplatesFragment> | null;
+  bgOverride?: HeroBackground | null;
+}
+
+const { data, bgOverride } = Astro.props;
+
+const template = useFragment(factoryTemplatesFragment, data);
+
+const kind =
+  template && template.templateKind !== "%future added value"
+    ? template.templateKind
+    : null;
+
+// The concrete component is chosen dynamically by templateKind; each expects
+// its own fragment ref, so type the dispatched component loosely and hand it
+// the template data (correct at runtime for the selected kind).
+const Template = kind
+  ? (TEMPLATE_COMPONENT_MAP[kind] as
+      | ((props: {
+          data: unknown;
+          bgOverride?: HeroBackground | null;
+        }) => unknown)
+      | null)
+  : null;
+
+const emptyList =
+  !!template &&
+  (template.templateKind === "DESCENDANT_LIST" ||
+    template.templateKind === "LINK_LIST") &&
+  "entityList" in template &&
+  template.entityList?.empty;
+---
+
+{Template && !emptyList && <Template data={template} bgOverride={bgOverride} />}

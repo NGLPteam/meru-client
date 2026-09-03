@@ -7,20 +7,23 @@ import {
 // (top-level require + module.exports), so it exposes no ESM export to the
 // browser bundle. JSON imports work in both webpack and Vite.
 import colors from "@/styles/colors.json";
-import { useTheme } from "@/contexts/ThemeProvider";
 import { GOOGLE_MAPS_KEY as MAPS_KEY } from "@/lib/env/clientConfig";
 
-type Props = Partial<ReactGoogleChartProps> & Partial<ChartWrapperOptions>;
+type Props = Partial<ReactGoogleChartProps> &
+  Partial<ChartWrapperOptions> & {
+    // The instance theme's color name, passed down from the mounting .astro
+    // (replaces the retired ThemeProvider context).
+    themeColor?: string;
+  };
 
 export default function GeoChart({
   region,
   data,
   displayMode = "regions",
   legend = "none",
+  themeColor,
 }: Props) {
-  const { color: colorName } = useTheme();
-
-  const color = (colorName as "blue" | "cream" | "gray") ?? "cream";
+  const color = (themeColor as "blue" | "cream" | "gray") ?? "cream";
 
   const chartOptions = {
     region,

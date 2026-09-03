@@ -1,0 +1,56 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import { getRouteByEntityType } from "@/helpers/routes";
+import type { HeroBackground } from "@/types/graphql-schema";
+import CompactListBlock from "../lists/blocks/Compact/Compact.astro";
+import GridListBlock from "../lists/blocks/Grid/Grid.astro";
+import CardListBlock from "../lists/blocks/Card/Card.astro";
+import SummaryListBlock from "../lists/blocks/Summary/Summary.astro";
+import PromoListBlock from "../lists/blocks/Promo/Promo.astro";
+import TreeListBlock from "../lists/blocks/Tree/Tree.astro";
+import { descendantsTemplateFragment } from "./graphql";
+
+const VARIANT_TO_COMPONENT = {
+  COMPACT: CompactListBlock,
+  CARDS: CardListBlock,
+  GRID: GridListBlock,
+  SUMMARY: SummaryListBlock,
+  PROMOS: PromoListBlock,
+  TREE: TreeListBlock,
+};
+
+interface Props {
+  data: FragmentType<typeof descendantsTemplateFragment>;
+  bgOverride?: HeroBackground | null;
+}
+
+const { data, bgOverride } = Astro.props;
+
+const template = useFragment(descendantsTemplateFragment, data);
+
+const entity = template && "entity" in template ? template.entity : undefined;
+const descendantsDefinition =
+  template && "descendantsDefinition" in template
+    ? template.descendantsDefinition
+    : undefined;
+
+const variant = descendantsDefinition?.variant;
+
+const basePath = entity
+  ? `/${getRouteByEntityType(entity.__typename)}/${"slug" in entity ? entity.slug : ""}`
+  : null;
+
+const BlockComponent = variant
+  ? VARIANT_TO_COMPONENT[variant as keyof typeof VARIANT_TO_COMPONENT]
+  : null;
+---
+
+{
+  BlockComponent && (
+    <BlockComponent
+      data={template}
+      basePath={basePath}
+      bgOverride={bgOverride}
+    />
+  )
+}

@@ -325,3 +325,36 @@ disconnectedCallback, `customElements.get()` guard, `data-*` slot contracts.
   form submissions produce expected URLs, zero console errors.
 - Manual QA rotation: auth states, mobile menu, search filter matrix, PDF paging,
   chart settings, view transitions (LoadingBar/KeepScroll unaffected).
+
+## As-executed deviations
+
+Recorded after each phase; the plan text above is left as approved.
+
+- **Phase 4**: `NavMenuManager` was never built — coordinated single-open
+  emerges from each `DisclosureMenu`'s window-level outside-click close, so a
+  coordinator adds nothing. `SearchButton`/search modal converted in Phase 6
+  (with the other search forms), not later.
+- **Phase 6**: the `forms/` atoms needed no .astro twins — they render
+  statically from .astro as-is; only `selected`/`defaultChecked` moved onto the
+  .astro-rendered options/inputs (React can't mark slotted children).
+  `SearchOrderBy` later switched from its own mini-form to hcc-style form
+  association (`form=` attribute + `<dynamic-form>` auto-submit against the
+  filter form), so sorting commits pending filter edits and the URL always
+  matches the panel.
+- **Conversion recipe addendum**: any `is:global` default for a custom element
+  (e.g. `display: block`) MUST be wrapped in `@layer meru-base` — unlayered
+  rules beat all layered module CSS. React components that INSPECT children
+  (react-markdown, `<Select defaultValue>`) break silently on .astro children;
+  use prop-based wrappers (`MarkdownContent`) or set attributes in the template.
+- **Phase 7**: the PDF leaf needed no hydrated layout — `Full.astro` extracts
+  the `<PDFViewer>` props by evaluating the body slot through the real MDX
+  pipeline with a capturing component (`mdx/getPDFViewerProps.ts`) and mounts
+  `AssetInlinePDF` as `client:only`. `templates/lists/List`, the list-item
+  components, `SeeAll`, NavButtons (MDX labels as element props), and
+  `EmptyMessage` (`<Trans>`) stay React, rendered statically — items/Summary is
+  also a React-tree dependency of SearchResults/EntitySummary. ChartControls
+  renders the `<disclosure-menu>` element markup directly from React 19 and
+  defines the element via a browser-only dynamic import (the class extends
+  HTMLElement, which doesn't exist during island SSR). `reakit` and `urql`
+  (React bindings) hit grep-zero during Phase 7 and were removed then (knip
+  flags unused deps), ahead of the Phase 8 sweep; `@urql/core` stays.

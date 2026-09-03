@@ -1,0 +1,55 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+import HeroDetail from "../Detail/Detail.astro";
+import HeroHeader from "../Header/Header.astro";
+import HeroImage from "../Image/Image.astro";
+import { entityHeroHeaderFragment } from "./graphql";
+
+interface Props {
+  data?: FragmentType<typeof entityHeroHeaderFragment> | null;
+}
+
+const { data } = Astro.props;
+const { t } = Astro.locals;
+
+const layout = useFragment(entityHeroHeaderFragment, data);
+
+const { template, entity } = layout ?? {};
+
+const { showHeroImage, background, showSplitDisplay } =
+  template?.definition ?? {};
+
+const visibility =
+  entity && "visibility" in entity ? entity.visibility : undefined;
+const currentlyHidden =
+  entity && "currentlyHidden" in entity ? entity.currentlyHidden : undefined;
+const schemaIdentifier =
+  entity && "schemaDefinition" in entity
+    ? entity.schemaDefinition?.identifier
+    : undefined;
+const heroImage =
+  entity && "heroImage" in entity ? entity.heroImage : undefined;
+
+const hidden = !!(visibility === "HIDDEN" || currentlyHidden);
+
+const hiddenAlert = hidden
+  ? t("messages.hidden", {
+      schema: schemaIdentifier?.replaceAll("_", " "),
+    })
+  : undefined;
+
+const renderHeroImage = showHeroImage && heroImage?.storage;
+---
+
+<Container as="header" width="wide" bgColor={background} hideDivider>
+  <HeroHeader data={layout?.template} hiddenAlert={hiddenAlert} />
+</Container>
+{
+  showSplitDisplay && (
+    <Container bgColor={background} hideDivider>
+      <HeroDetail data={layout?.template} />
+    </Container>
+  )
+}
+{renderHeroImage && <HeroImage data={heroImage} />}

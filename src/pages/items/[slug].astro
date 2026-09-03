@@ -13,13 +13,9 @@ import {
 } from "~/pages/items/_components/graphql";
 import buildItemMeta from "~/lib/metadata/itemMetadata";
 import ItemShell from "./_components/ItemShell.astro";
-import MainLayout from "@/components/templates/MainLayout";
-import MainLayoutIsland from "@/components/templates/MainLayout/MainLayoutIsland";
+import MainLayout from "@/components/templates/MainLayout/MainLayout.astro";
 import GoogleScholarMetaTags from "@/components/global/GoogleScholarMetaTags";
-import {
-  shouldRenderMainLayout,
-  hasPDFFullText,
-} from "@/components/templates/FullTextCheck/FullTextCheck";
+import { shouldRenderMainLayout } from "@/components/templates/FullTextCheck/FullTextCheck";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -42,9 +38,6 @@ const draftModeEnabled = isDraftModeEnabled(Astro);
 const meta = buildItemMeta(item, slug);
 const scholar = useFragment(googleScholarFragment, item);
 
-// PDF full text must hydrate (clientOnly react-pdf viewer); prose stays static.
-const pdfBody = hasPDFFullText(shell.layouts);
-
 cacheEntity(Astro, "item", slug);
 ---
 
@@ -56,12 +49,6 @@ cacheEntity(Astro, "item", slug);
     draftModeEnabled={draftModeEnabled}
     installationName={installationName}
   >
-    {
-      pdfBody ? (
-        <MainLayoutIsland client:load data={item.layouts.main} slug={slug} />
-      ) : (
-        <MainLayout data={item.layouts.main} slug={slug} />
-      )
-    }
+    <MainLayout data={item.layouts.main} />
   </ItemShell>
 </BaseLayout>

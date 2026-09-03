@@ -3,14 +3,12 @@ import "@/i18n";
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { itemShellFragment } from "@/pages/items/_components/graphql";
 import UnauthorizedMessage from "@/components/composed/UnauthorizedMessage/UnauthorizedMessage.astro";
-import HeroTemplate, {
-  getHeroBreadcrumbProps,
-} from "@/components/templates/Hero";
+import HeroTemplate from "@/components/templates/Hero/Hero.astro";
+import { getHeroBreadcrumbProps } from "@/components/templates/Hero/getHeroProps";
 import BreadcrumbsBar from "@/components/layout/BreadcrumbsBar/BreadcrumbsBar.astro";
-import ProcessingCheck, {
-  hasMainContent,
-} from "@/components/templates/ProcessingCheck";
-import NavigationTemplate from "@/components/templates/EntityNavigation";
+import ProcessingCheck from "@/components/templates/ProcessingCheck/ProcessingCheck.astro";
+import { hasMainContent } from "@/components/templates/ProcessingCheck/graphql";
+import NavigationTemplate from "@/components/templates/EntityNavigation/EntityNavigation.astro";
 import EntityNavBar from "@/components/composed/entity/EntityNavBar/EntityNavBar.astro";
 import { getEntityNavBarData } from "@/components/composed/entity/EntityNavBar/getEntityNavBarData";
 import ViewCounter from "@/components/client/ViewCounter.astro";

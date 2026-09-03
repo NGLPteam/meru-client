@@ -33,11 +33,6 @@ export default defineConfig({
     // entries keep the old deploy names working during the rename transition —
     // drop them (and clientConfig's fallbacks) once the deploy config is renamed.
     envPrefix: ["PUBLIC_", "NEXT_PUBLIC_", "GOOGLE_MAPS_KEY"],
-    // Bundle the reakit family into the SSR build. reakit ships bare directory
-    // imports (`reakit/Popover`, `reakit-system/createComponent`, …) that Node's
-    // ESM runtime can't resolve, so the standalone node server crashes at boot
-    // with ERR_UNSUPPORTED_DIR_IMPORT unless these are bundled at build time.
-    ssr: { noExternal: [/^reakit/] },
     // Pre-bundle deps Vite's startup scan can't see: some are reached only
     // through clientOnly() dynamic imports (ChartBlock → react-google-charts,
     // AssetInlinePDF/AssetPDFPreview → react-pdf), and island entry modules are
@@ -51,7 +46,6 @@ export default defineConfig({
       include: [
         "react-google-charts",
         "react-pdf",
-        "urql",
         "@urql/core",
         "@urql/exchange-request-policy",
         "markdown-to-txt",

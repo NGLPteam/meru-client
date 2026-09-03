@@ -1,0 +1,53 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Contributor from "@/components/templates/Contributors/Contributor/Contributor.astro";
+import BackButton from "@/components/layout/BrowseListLayout/BackButton";
+import Container from "@/components/layout/Container";
+import BaseContributionsBlock from "../BaseContributionsBlock/BaseContributionsBlock.astro";
+import { collectionContributionsBlockFragment } from "./graphql";
+import styles from "./CollectionContributionsBlock.module.css";
+
+interface Props {
+  data?: FragmentType<typeof collectionContributionsBlockFragment> | null;
+  slug: string;
+  /** Filter by a role, example: author */
+  filterRole?: string;
+  /** Block background color */
+  background?: string;
+  /** Header translation key, default is Contributors */
+  header?: string;
+}
+
+const { data, filterRole, slug, background, header } = Astro.props;
+
+const collection = useFragment(collectionContributionsBlockFragment, data);
+
+const { attributions } = collection ?? {};
+
+const filtered = attributions?.filter(
+  (node) =>
+    !filterRole ||
+    (!!node.roles.length &&
+      node.roles.find(
+        (r) => r.label.toLowerCase() === filterRole.toLowerCase(),
+      )),
+);
+
+const backParams = new URLSearchParams({ item: slug });
+---
+
+<Container width="wide" bgColor="NONE" className={styles.container}>
+  {collection && <BackButton data={collection} />}
+  <BaseContributionsBlock
+    background={background}
+    header={header}
+    innerClassName={styles.inner}
+  >
+    {
+      !!filtered?.length &&
+        filtered.map((node) => (
+          <Contributor data={node} backParams={backParams} />
+        ))
+    }
+  </BaseContributionsBlock>
+</Container>

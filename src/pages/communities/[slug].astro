@@ -7,7 +7,7 @@ import { isDraftModeEnabled } from "../../lib/request/draftMode";
 import { communityQuery } from "./_components/graphql";
 import buildCommunityMeta from "../../lib/metadata/communityMetadata";
 import CommunityShell from "./_components/CommunityShell.astro";
-import MainLayout from "@/components/templates/MainLayout";
+import MainLayout from "@/components/templates/MainLayout/MainLayout.astro";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");
@@ -32,10 +32,6 @@ cacheEntity(Astro, "community", slug);
     communityRef={communityRef}
     draftModeEnabled={draftModeEnabled}
   >
-    <MainLayout
-      data={community.layouts.main}
-      computedBgStart="NONE"
-      slug={slug}
-    />
+    <MainLayout data={community.layouts.main} computedBgStart="NONE" />
   </CommunityShell>
 </BaseLayout>

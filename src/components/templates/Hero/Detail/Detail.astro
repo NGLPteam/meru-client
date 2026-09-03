@@ -1,0 +1,37 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import CoverImage from "./DetailCoverImage.astro";
+import Content from "./DetailContent.astro";
+import Sidebar from "./DetailSidebar.astro";
+import { detailHeroFragment } from "./graphql";
+import styles from "./Detail.module.css";
+
+interface Props {
+  data?: FragmentType<typeof detailHeroFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const template = useFragment(detailHeroFragment, data);
+
+const { definition, entity } = template ?? {};
+---
+
+<div class={styles.columns}>
+  <div
+    class={classNames(styles.left, {
+      [styles["left--wide"]]: !!definition?.showThumbnailImage,
+    })}
+  >
+    {
+      definition?.showThumbnailImage && (
+        <div class={styles.thumbnail}>
+          <CoverImage data={entity} />
+        </div>
+      )
+    }
+    <Content data={template} />
+  </div>
+  <Sidebar data={template} />
+</div>

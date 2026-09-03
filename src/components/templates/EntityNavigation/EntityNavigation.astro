@@ -1,0 +1,32 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Container from "@/components/layout/Container";
+import NavigationTabs from "./NavigationTabs.astro";
+import { entityNavigationTemplateFragment } from "./graphql";
+
+interface Props {
+  data?: FragmentType<typeof entityNavigationTemplateFragment> | null;
+  slug: string;
+  pathname: string;
+  renderMainLayout: boolean;
+}
+
+const { data, slug, pathname, renderMainLayout } = Astro.props;
+
+const { template } = useFragment(entityNavigationTemplateFragment, data) ?? {};
+
+const { definition } = template ?? {};
+---
+
+{
+  template && (
+    <Container bgColor={definition?.background}>
+      <NavigationTabs
+        data={template}
+        slug={slug}
+        pathname={pathname}
+        renderMainLayout={renderMainLayout}
+      />
+    </Container>
+  )
+}

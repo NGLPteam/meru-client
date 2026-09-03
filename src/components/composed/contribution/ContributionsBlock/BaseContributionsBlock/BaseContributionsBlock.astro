@@ -1,0 +1,21 @@
+---
+import styles from "./BaseContributionsBlock.module.css";
+
+interface Props {
+  /** Block background color */
+  background?: string;
+  /** Header translation key, default is Contributors */
+  header?: string;
+  innerClassName?: string;
+}
+
+const { background = "custom10", header, innerClassName } = Astro.props;
+const { t } = Astro.locals;
+---
+
+<section class={`a-bg-${background}`} id="contributors">
+  <div class:list={["l-container-wide", innerClassName, styles.inner]}>
+    <h3 class="t-capitalize">{t(header || "glossary.contributor_other")}</h3>
+    <ul class={styles.list}><slot /></ul>
+  </div>
+</section>

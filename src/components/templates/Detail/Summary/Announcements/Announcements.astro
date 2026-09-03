@@ -1,0 +1,47 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import NamedLink from "@/components/atomic/links/NamedLink";
+import ReadMoreLink from "@/components/atomic/links/Link/patterns/ReadMoreLink";
+import { announcementsFragment } from "./graphql";
+import styles from "./Announcements.module.css";
+
+interface Props {
+  data: FragmentType<typeof announcementsFragment>;
+  // The announcements' owning entity — hrefs live under its route.
+  slug?: string | null;
+}
+
+const { data, slug } = Astro.props;
+const { t } = Astro.locals;
+
+const announcements = useFragment(announcementsFragment, data);
+---
+
+{
+  !!announcements.nodes.length && slug && (
+    <aside class:list={["a-bg-neutral00", styles.block]}>
+      <h4 class={styles.header}>{t("layouts.announcements_header")}</h4>
+      <ul class="t-unstyled-list">
+        {announcements.nodes.map((announcement) => (
+          <li class={styles.item}>
+            <h5 class="t-copy-medium">
+              <NamedLink
+                href={`/collections/${slug}/announcements/${announcement.slug}`}
+              >
+                <span>{announcement.header}</span>
+              </NamedLink>
+            </h5>
+            <div class:list={["t-rte", styles.itemContent]}>
+              <p>{announcement.teaser}</p>
+            </div>
+            <NamedLink
+              href={`/collections/${slug}/announcements/${announcement.slug}`}
+            >
+              <ReadMoreLink className="t-label-mix" />
+            </NamedLink>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}

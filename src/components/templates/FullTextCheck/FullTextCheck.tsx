@@ -21,19 +21,6 @@ export function shouldRenderMainLayout(
   return showBody ? hasFullText : true;
 }
 
-// Whether the item's full-text body is a PDF embed. The .astro item page uses
-// this to hydrate MainLayout as an island for PDF items: the PDF viewer is a
-// clientOnly component (react-pdf), so it renders nothing in a static tree.
-export function hasPDFFullText(
-  data?: FragmentType<typeof fragment> | null,
-): boolean {
-  const { main } = useFragment(fragment, data) ?? {};
-  const fullDetailTemplate = main?.templates?.find(
-    (t) => t.definition?.variant === "FULL",
-  );
-  return !!fullDetailTemplate?.slots?.body?.content?.startsWith("<PDFViewer");
-}
-
 const fragment = graphql(`
   fragment FullTextCheckFragment on EntityLayouts {
     main {

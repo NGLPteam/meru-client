@@ -8,7 +8,7 @@ import { query as globalStaticQuery } from "@/contexts/GlobalStaticContext/getSt
 import { collectionContributorsQuery } from "~/pages/collections/_components/graphql";
 import buildCollectionMeta from "~/lib/metadata/collectionMetadata";
 import CollectionShell from "../_components/CollectionShell.astro";
-import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock";
+import CollectionContributionsBlock from "@/components/composed/contribution/ContributionsBlock/CollectionContributionsBlock/CollectionContributionsBlock.astro";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.rewrite("/404");

@@ -14,6 +14,7 @@ type Props = {
   region: string;
   mode: string;
   precision: string;
+  themeColor?: string;
 };
 
 export default function ChartBlock({
@@ -22,6 +23,7 @@ export default function ChartBlock({
   region,
   mode,
   precision,
+  themeColor,
 }: Props) {
   const formatMapData = useCallback(
     (data: DocumentType<typeof ArticleAnalyticsBlockFragment>) => {
@@ -101,9 +103,16 @@ export default function ChartBlock({
       })}
     >
       {chartType === "map" ? (
-        <GeoChart data={formatMapData(data)} region={region} />
+        <GeoChart
+          data={formatMapData(data)}
+          region={region}
+          themeColor={themeColor}
+        />
       ) : (
-        <LineColChart data={formatLineChartData(data)} />
+        <LineColChart
+          data={formatLineChartData(data)}
+          themeColor={themeColor}
+        />
       )}
     </div>
   ) : null;

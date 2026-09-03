@@ -1,0 +1,41 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import Contributor from "@/components/templates/Contributors/Contributor/Contributor.astro";
+import BaseContributionsBlock from "./BaseContributionsBlock/BaseContributionsBlock.astro";
+import { contributionsBlockFragment } from "./graphql";
+
+interface Props {
+  data?: FragmentType<typeof contributionsBlockFragment> | null;
+  slug: string;
+  /** Filter by a role, example: author */
+  filterRole?: string;
+  /** Block background color */
+  background?: string;
+  /** Header translation key, default is Contributors */
+  header?: string;
+}
+
+const { data, filterRole, slug, background, header } = Astro.props;
+
+const { attributions } = useFragment(contributionsBlockFragment, data) ?? {};
+
+const filtered = attributions?.filter(
+  (node) =>
+    !filterRole ||
+    (!!node.roles.length &&
+      node.roles.find(
+        (r) => r.label.toLowerCase() === filterRole.toLowerCase(),
+      )),
+);
+
+const backParams = new URLSearchParams({ item: slug });
+---
+
+<BaseContributionsBlock background={background} header={header}>
+  {
+    !!filtered?.length &&
+      filtered.map((node) => (
+        <Contributor data={node} backParams={backParams} />
+      ))
+  }
+</BaseContributionsBlock>

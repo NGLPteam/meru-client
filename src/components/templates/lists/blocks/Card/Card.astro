@@ -1,0 +1,72 @@
+---
+import classNames from "classnames";
+import {
+  useSharedListTemplateFragment,
+  listTemplateFragment as sharedListTemplateFragment,
+} from "@/components/templates/shared/shared.list.graphql";
+import { type FragmentType } from "@/lib/api/gql";
+import { getBgClass } from "@/components/templates/helpers/bgColor";
+import type { HeroBackground } from "@/types/graphql-schema";
+import SeeAll from "../../SeeAll";
+import { getSeeAllHref } from "../../SeeAll/helpers";
+import List from "../../List";
+import styles from "./Card.module.css";
+
+interface Props {
+  data?: FragmentType<typeof sharedListTemplateFragment>;
+  basePath?: string | null;
+  bgOverride?: HeroBackground | null;
+}
+
+const { data, basePath, bgOverride } = Astro.props;
+
+const { linksDefinition, descendantsDefinition, entityList, seeAllOrdering } =
+  useSharedListTemplateFragment(data);
+
+const { empty, listItemLayouts } = entityList ?? {};
+
+const {
+  background,
+  seeAllOrderingIdentifier,
+  seeAllButtonLabel,
+  showHeroImage,
+  selectionLimit,
+} = linksDefinition ?? descendantsDefinition ?? {};
+
+const bgClass = getBgClass(bgOverride ?? background);
+
+const seeAllHref = descendantsDefinition
+  ? getSeeAllHref(
+      basePath,
+      seeAllOrderingIdentifier as string | null | undefined,
+      undefined,
+    )
+  : null;
+
+const renderSeeAll =
+  !!seeAllOrderingIdentifier && !!seeAllHref
+    ? seeAllOrdering?.count && selectionLimit
+      ? seeAllOrdering.count > selectionLimit
+      : true
+    : false;
+---
+
+{
+  !empty && (
+    <div class={classNames(bgClass, styles.wrapper)}>
+      {showHeroImage && <div class={styles.heroImage} />}
+      <List
+        variant="CARDS"
+        bgColor={bgOverride ?? background}
+        items={listItemLayouts}
+      />
+      {!!renderSeeAll && !!seeAllHref && (
+        <SeeAll
+          alignment="center"
+          buttonLabel={seeAllButtonLabel}
+          href={seeAllHref}
+        />
+      )}
+    </div>
+  )
+}

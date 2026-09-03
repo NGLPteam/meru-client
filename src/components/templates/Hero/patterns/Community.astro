@@ -1,0 +1,59 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import HeroHeader from "../Header/Header.astro";
+import HeroImage from "../Image/Image.astro";
+import { communityHeroHeaderFragment } from "./graphql";
+import { isMainPath } from "./helpers";
+import styles from "./patterns.module.css";
+
+interface Props {
+  data?: FragmentType<typeof communityHeroHeaderFragment> | null;
+}
+
+const { data } = Astro.props;
+
+const isMain = isMainPath(Astro.url.pathname);
+
+const layout = useFragment(communityHeroHeaderFragment, data);
+
+const { template, entity } = layout ?? {};
+
+const { heroImageLayout } = entity ?? {};
+
+const { definition, slots } = template ?? {};
+
+const { showHeroImage } = definition ?? {};
+
+const hasTextContent =
+  slots &&
+  ((slots.header && !slots.header.empty) ||
+    (slots.headerSummary && !slots.headerSummary.empty));
+
+const hasHeroImage = !!entity?.heroImage?.hero?.webp?.url;
+
+const bgClass = hasHeroImage
+  ? showHeroImage && heroImageLayout === "ONE_COLUMN"
+    ? "a-bg-neutral90"
+    : "a-bg-custom20"
+  : "a-bg-custom10";
+---
+
+{
+  isMain && (hasTextContent || hasHeroImage) && (
+    <section class={bgClass}>
+      <div
+        class={classNames(styles.grid, {
+          [styles["grid--noImage"]]: !hasHeroImage,
+        })}
+      >
+        {hasTextContent && (
+          <HeroHeader data={template} layout={heroImageLayout} />
+        )}
+        {showHeroImage && hasHeroImage && (
+          <HeroImage data={entity?.heroImage} layout={heroImageLayout} />
+        )}
+      </div>
+    </section>
+  )
+}

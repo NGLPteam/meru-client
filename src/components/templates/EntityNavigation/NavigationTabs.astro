@@ -1,0 +1,90 @@
+---
+import classNames from "classnames";
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import NamedLink from "@/components/atomic/links/NamedLink";
+import { useSharedInlineFragment } from "@/components/templates/shared/shared.slots.graphql";
+import { getRouteByEntityType } from "@/helpers/routes";
+import { navigationTabsFragment } from "./graphql";
+import styles from "./EntityNavigation.module.css";
+
+interface Props {
+  data?: FragmentType<typeof navigationTabsFragment> | null;
+  slug: string;
+  pathname: string;
+  renderMainLayout: boolean;
+}
+
+const { data, slug, pathname, renderMainLayout } = Astro.props;
+const { t } = Astro.locals;
+
+const template = useFragment(navigationTabsFragment, data);
+
+const { slots, entity, definition } = template ?? {};
+
+const entityLabel = useSharedInlineFragment(slots?.entityLabel);
+
+const renderable = !!entity && (entity.__typename as string) !== "%other";
+
+const basePath = renderable
+  ? `/${getRouteByEntityType(entity.__typename)}/${slug}`
+  : "";
+
+type LabelInput = typeof entityLabel | string | null | undefined;
+
+const makeLink = (href: string, label?: LabelInput) => {
+  const renderedLabel =
+    typeof label === "string"
+      ? t(label)
+      : label?.valid
+        ? label?.content
+        : t("glossary.item");
+  return renderedLabel ? { href, label: renderedLabel } : null;
+};
+
+const links = renderable
+  ? [
+      renderMainLayout ? makeLink(basePath, entityLabel) : null,
+      !definition?.hideMetadata
+        ? makeLink(`${basePath}/metadata`, "nav.metadata")
+        : null,
+      entity.assets?.pageInfo.totalCount > 0
+        ? makeLink(`${basePath}/files`, "nav.files")
+        : null,
+      "contributions" in entity && entity.contributions?.pageInfo.totalCount > 0
+        ? makeLink(`${basePath}/contributors`, "nav.contributors")
+        : null,
+      entity.__typename === "Item"
+        ? makeLink(`${basePath}/metrics`, "nav.metrics")
+        : null,
+      ...(entity.pages && entity.pages.edges.length > 0
+        ? entity.pages.edges.map(({ node }) =>
+            makeLink(`${basePath}/page/${node.slug}`, node.title),
+          )
+        : []),
+    ].filter((link) => !!link)
+  : [];
+---
+
+{
+  renderable && (
+    <nav
+      class={classNames("l-container-wide", styles.nav)}
+      aria-label={t("nav.content_navigation_label")}
+    >
+      <ul class={styles.list}>
+        {links.map(({ href, label }) => (
+          <li class={styles.item}>
+            <NamedLink href={href} scroll={false}>
+              <span
+                class={styles.tab}
+                aria-current={pathname === href ? "page" : undefined}
+              >
+                {label}
+              </span>
+            </NamedLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

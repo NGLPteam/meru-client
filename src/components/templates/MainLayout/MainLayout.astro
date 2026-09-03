@@ -1,0 +1,51 @@
+---
+import { useFragment, type FragmentType } from "@/lib/api/gql";
+import EmptyMessage from "@/components/templates/ProcessingCheck/EmptyMessage";
+import Container from "@/components/layout/Container";
+import TemplateFactory from "@/components/templates/Factory/Factory.astro";
+import type { HeroBackground } from "@/types/graphql-schema";
+import { mainLayoutFragment } from "./graphql";
+import { generateBgMap } from "./generateBgMap";
+import styles from "./MainLayout.module.css";
+
+interface Props {
+  data?: FragmentType<typeof mainLayoutFragment> | null;
+  computedBgStart?: HeroBackground;
+  fallback?: boolean;
+}
+
+const { data, computedBgStart, fallback = false } = Astro.props;
+
+const { allHidden, templates, entity } =
+  useFragment(mainLayoutFragment, data) ?? {};
+
+const bgMap =
+  computedBgStart && templates?.length
+    ? generateBgMap(computedBgStart, templates[0], templates[1])
+    : null;
+
+const renderedTemplates = fallback
+  ? templates?.filter((t) => t.templateKind !== "DETAIL")
+  : templates;
+---
+
+{
+  allHidden || !renderedTemplates ? (
+    <Container className="my-5">
+      <EmptyMessage entityType={entity?.__typename.toLowerCase()} />
+    </Container>
+  ) : (
+    <div class={styles.grid}>
+      {!!renderedTemplates?.length &&
+        renderedTemplates.map((t, i) => {
+          const bgOverride = bgMap?.[i];
+          return (
+            <TemplateFactory
+              data={t}
+              bgOverride={bgOverride !== "hidden" ? bgOverride : undefined}
+            />
+          );
+        })}
+    </div>
+  )
+}
