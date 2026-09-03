@@ -58,10 +58,12 @@ export default [
     settings: { react: { version: "19.2" } },
   },
 
-  // 5c) react-hooks also lints plain .ts hook files — the shared reactConfig only
-  //     covers jsx/tsx, but meru keeps hooks in .ts (e.g. src/hooks/*.ts).
+  // 5c) react-hooks also lints the .ts hook files (src/hooks/*.ts) — the shared
+  //     reactConfig only covers jsx/tsx. Deliberately NOT extended to other .ts
+  //     files: those are data helpers where codegen's useFragment (the identity
+  //     fragment unmask, not a hook) falsely trips rules-of-hooks.
   {
-    files: ["**/*.ts"],
+    files: ["src/hooks/**/*.ts"],
     plugins: { "react-hooks": reactHooks },
     rules: { ...reactHooks.configs.recommended.rules },
   },
@@ -69,7 +71,7 @@ export default [
   //     long-standing posture for rules-of-hooks). set-state-in-effect is a v7
   //     perf hint that flags intentional hydration / preview-sync effects.
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["src/hooks/**/*.ts", "**/*.tsx"],
     rules: {
       "react-hooks/rules-of-hooks": "warn",
       "react-hooks/set-state-in-effect": "warn",

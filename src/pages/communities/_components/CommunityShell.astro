@@ -15,8 +15,10 @@ import { hasMainContent } from "@/components/templates/ProcessingCheck/graphql";
 interface Props {
   data: FragmentType<typeof communityShellFragment>;
   // Aliased narrow re-selection (communityRef) — see communityQuery.
-  communityRef?: FragmentType<typeof communityNavBarFragment> &
-    FragmentType<typeof communityNavBarEntityFragment>;
+  communityRef?:
+    | (FragmentType<typeof communityNavBarFragment> &
+        FragmentType<typeof communityNavBarEntityFragment>)
+    | null;
   draftModeEnabled: boolean;
   // The current route's community-page slug, for the nav's active-page state.
   pageSlug?: string;

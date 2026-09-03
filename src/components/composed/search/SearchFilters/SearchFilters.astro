@@ -39,19 +39,13 @@ const clearParams = new URLSearchParams();
 if (q) clearParams.set("q", q);
 const clearHref = `${pathname}${clearParams.size ? `?${clearParams}` : ""}`;
 
-type FilterNode = Parameters<typeof filterSearchableProperties>[0][number] & {
-  searchPath: string;
-};
-
 const schemaProps = filterSearchableProperties(
   uniqBy(
     flatMap(searchData.schemas, (args) => args.searchableProperties),
     "searchPath",
-  ) as FilterNode[],
+  ),
 );
-const coreProps = filterSearchableProperties(
-  searchData.coreProperties as FilterNode[],
-);
+const coreProps = filterSearchableProperties(searchData.coreProperties);
 ---
 
 <div class={styles.filters} id={id}>

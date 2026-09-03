@@ -2,7 +2,7 @@
 import { useFragment, type FragmentType } from "@/lib/api/gql";
 import { Checkbox, Input, Select } from "@/components/forms";
 import { getFilterInputLabel, getFilterInputType } from "@/helpers/search";
-import { searchFilterFragment, searchFilterSelectFragment } from "./graphql";
+import { searchFilterFragment } from "./graphql";
 
 interface Props {
   data: FragmentType<typeof searchFilterFragment>;
@@ -18,10 +18,7 @@ const type = "type" in filter ? filter.type : undefined;
 const fieldName = (operator: string) =>
   `${filter.searchPath.replace(".", "-")}--${operator}`;
 
-const selectFilter =
-  type === "SELECT" ? useFragment(searchFilterSelectFragment, data) : null;
-const selectOptions =
-  selectFilter && "options" in selectFilter ? (selectFilter.options ?? []) : [];
+const selectOptions = "options" in filter ? (filter.options ?? []) : [];
 ---
 
 {

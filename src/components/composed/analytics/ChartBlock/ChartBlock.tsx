@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import { useCallback } from "react";
 import { format, parseISO } from "date-fns";
-import useIsMounted from "@/hooks/useIsMounted";
 import { fragment as ArticleAnalyticsBlockFragment } from "@/components/composed/analytics/ArticleAnalyticsBlock/ArticleAnalyticsBlock";
 import { type DocumentType } from "@/lib/api/gql";
 import GeoChart from "../GeoChart";
@@ -94,9 +93,7 @@ export default function ChartBlock({
     [mode, precision],
   );
 
-  const isMounted = useIsMounted();
-
-  return isMounted && data ? (
+  return data ? (
     <div
       className={classNames(styles.wrapper, {
         [styles["wrapper--chart"]]: chartType !== "map",

@@ -15,15 +15,13 @@ export default function CoverPlaceholder({
   const uid = useId();
   const randomState = mkState(seed);
   const nextBool: (state: AleaState) => boolean = nextT((n) => n < 0.5);
-  const mkNext0toMax = (
-    state: AleaState,
-    max: number,
-  ): ((state: AleaState) => number) => nextT((n) => Math.floor(n * max));
+  const mkNext0toMax = (max: number): ((state: AleaState) => number) =>
+    nextT((n) => Math.floor(n * max));
 
   const { random } = mkAlea(seed);
 
   const mkNextElement = <T,>(values: T[]): (() => T) => {
-    const nextIndex = mkNext0toMax(randomState, values.length);
+    const nextIndex = mkNext0toMax(values.length);
     return () => values[nextIndex(randomState)];
   };
 

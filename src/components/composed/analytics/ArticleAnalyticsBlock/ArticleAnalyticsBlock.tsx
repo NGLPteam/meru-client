@@ -13,7 +13,7 @@ import { chartSettingsReducer } from "./settingsReducer";
 import styles from "./ArticleAnalyticsBlock.module.css";
 
 type Props = {
-  data: FragmentType<typeof fragment>;
+  data?: FragmentType<typeof fragment> | null;
   // The instance theme's color name, threaded to the charts (replaces the
   // retired ThemeProvider context).
   themeColor?: string;
