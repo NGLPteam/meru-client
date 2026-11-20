@@ -2,12 +2,23 @@
 
 ## Development Environment
 
+Install [mise](https://mise.jdx.dev/) and run `mise install` in the project root. This installs the Node and Yarn versions pinned in `mise.toml`.
+
 ```sh
+mise install
 yarn install
 yarn dev -p 3001 # to start dev client
 ```
 
 That's it! Now go to http://localhost:3001/
+
+### Changing the Node or Yarn version
+
+`mise.toml` is the single source of truth for the Node and Yarn versions. Local development, GitHub Actions, and the Docker image all use the versions pinned there.
+
+1. Edit `node_version` or `yarn_version` in `mise.toml`.
+2. Run `mise install`. A postinstall hook (`mise/tasks/sync-tool-versions`) rewrites `packageManager` and `engines.node` in `package.json` and the `FROM` line in `Dockerfile` to match.
+3. Commit the synced files alongside `mise.toml`.
 
 ### Client architecture
 

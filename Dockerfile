@@ -1,4 +1,8 @@
-FROM node:24-bullseye AS base
+# The Node version in the FROM line below is managed from mise.toml by
+# mise/tasks/sync-tool-versions. Change it there, not here.
+FROM node:24.22.3-trixie-slim AS base
+
+RUN corepack enable
 
 FROM base AS deps
 ENV NODE_ENV=production
@@ -6,7 +10,6 @@ ENV WDP_APP=frontend
 WORKDIR /app
 COPY package.json yarn.lock* .yarnrc.yml ./
 
-RUN corepack enable
 RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn install
 
 FROM base AS builder
@@ -36,8 +39,6 @@ ENV REDIS_CACHE="enabled"
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . ./
-
-RUN corepack enable
 
 RUN --mount=type=cache,target=/app/.next/cache yarn build
 
